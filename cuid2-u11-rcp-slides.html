@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RCP Intrahospitalaria — UDP v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b1520;
+      --bg2:#111e2e;
+      --card:rgba(22,38,58,.78);
+      --card-2:rgba(18,29,45,.72);
+      --text:#e8f1fb;
+      --muted:#8aa4c2;
+      --accent:#f87171;
+      --accent-2:#38bdf8;
+      --ok:#4ade80;
+      --warn:#fbbf24;
+      --border:rgba(248,113,113,.2);
+      --shadow:0 12px 40px rgba(0,0,0,.24);
+      --r:22px;
+      --pad:clamp(1.2rem,3vw,3rem);
+      --title:clamp(2rem,5vw,4rem);
+      --h2:clamp(1.2rem,2.8vw,2.2rem);
+      --body:clamp(.92rem,1.4vw,1.08rem);
+      --small:clamp(.72rem,1vw,.85rem);
+      --mono:'Space Mono', monospace;
+      --font:'Manrope', system-ui, sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+    body{font-family:var(--font);background:radial-gradient(circle at top right, rgba(248,113,113,.12), transparent 22%),linear-gradient(135deg,var(--bg) 0%, #0e1a2a 50%, var(--bg) 100%);color:var(--text);overflow-x:hidden}
+    .slide{min-height:100vh;min-height:100dvh;scroll-snap-align:start;position:relative;display:flex;align-items:center;justify-content:center;padding:var(--pad);overflow:hidden}
+    .slide::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:42px 42px;pointer-events:none;opacity:.25}
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none}
+    .orb.red{background:var(--accent)} .orb.blue{background:var(--accent-2)} .orb.green{background:var(--ok)}
+    .shell{position:relative;z-index:1;max-width:1150px;width:min(100%,1150px)}
+    .badge{display:inline-flex;gap:.5rem;align-items:center;padding:.55rem .9rem;border:1px solid var(--border);background:rgba(248,113,113,.08);border-radius:999px;font-size:var(--small);font-weight:700;color:#ffc4c4;letter-spacing:.02em}
+    h1{font-size:var(--title);line-height:1.02;font-weight:800;letter-spacing:-.03em}
+    h2{font-size:var(--h2);font-weight:800;line-height:1.1}
+    p,li{font-size:var(--body);line-height:1.6;color:var(--text)}
+    .muted{color:var(--muted)}
+    .lede{max-width:760px;margin-top:1rem;color:var(--muted)}
+    .grid{display:grid;gap:1rem}
+    .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card,.panel,.metric,.step,.alert,.quiz,.role{background:var(--card);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);box-shadow:var(--shadow)}
+    .card,.panel,.metric,.step,.alert,.quiz,.role{padding:1.1rem}
+    .section-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:1rem}
+    .section-num{font-family:var(--mono);font-size:var(--small);color:var(--muted)}
+    ul.clean{list-style:none;display:grid;gap:.8rem}
+    ul.clean li{position:relative;padding-left:1.3rem}
+    ul.clean li::before{content:'•';position:absolute;left:0;top:0;color:var(--accent)}
+    .metric h3,.role h3{font-size:1rem;color:#ffd6d6;margin-bottom:.45rem}
+    .metric strong{display:block;font-size:clamp(1.3rem,2vw,2rem);line-height:1.1;margin-top:.2rem}
+    .timeline{display:grid;gap:.9rem;margin-top:1rem}
+    .step{display:grid;grid-template-columns:64px 1fr;gap:1rem;align-items:start;background:var(--card-2)}
+    .step-num{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg, rgba(248,113,113,.22), rgba(56,189,248,.18));border:1px solid var(--border);font-family:var(--mono);font-weight:700}
+    .step h3{font-size:1.05rem;margin-bottom:.35rem}
+    .tag-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.8rem}
+    .tag{padding:.4rem .7rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:var(--small);color:var(--muted)}
+    .alert{border-left:4px solid var(--accent)}
+    .alert.warn{border-left-color:var(--warn)}
+    .alert.ok{border-left-color:var(--ok)}
+    .algo{display:grid;gap:.8rem}
+    .algo .node{padding:1rem 1.05rem;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .algo .node strong{display:block;margin-bottom:.35rem;color:#ffd6d6}
+    .quiz q{display:block;font-size:1.05rem;font-weight:700;line-height:1.45;margin-bottom:.8rem}
+    .options{display:grid;gap:.55rem}
+    .opt{padding:.85rem 1rem;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
+    .opt.correct{border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.12);color:#d5ffe2}
+    .columns{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem}
+    .cover-box{padding:1.5rem 0}
+    .cover-stats{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:1.4rem}
+    .mini{min-width:170px;padding:1rem 1.1rem;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .mini span{display:block;font-size:var(--small);color:var(--muted);margin-bottom:.35rem}
+    .mini strong{font-size:1.1rem}
+    #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0;z-index:50;transition:width .25s ease}
+    #dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:60}
+    .dot{width:8px;height:8px;border-radius:999px;border:none;background:rgba(255,255,255,.18);cursor:pointer;transition:.2s}
+    .dot.active{height:18px;background:var(--accent)}
+    #counter{position:fixed;right:24px;bottom:18px;z-index:60;font-family:var(--mono);font-size:var(--small);color:var(--muted)}
+    .footer-note{margin-top:1rem;font-size:var(--small);color:var(--muted)}
+    .decision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .decision{padding:1rem;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .decision strong{display:block;margin-bottom:.45rem}
+    .hero-line{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-top:1rem}
+    .hero-line .tag{color:#ffd6d6}
+    @media (max-width:900px){
+      .g2,.g3,.columns,.decision-grid{grid-template-columns:1fr}
+      #dots{display:none}
+    }
+  </style>
+
+<style id="ultra-slide-style">
+:root{
+  --ultra-accent:#22d3ee;
+  --ultra-accent-2:#818cf8;
+  --ultra-accent-3:#f472b6;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(900px 400px at 0% 0%, rgba(34,211,238,.08), transparent 55%),
+    radial-gradient(900px 400px at 100% 0%, rgba(244,114,182,.07), transparent 55%),
+    radial-gradient(900px 500px at 50% 100%, rgba(129,140,248,.08), transparent 60%);
+}
+.ultra-slide-shell{
+  position:fixed; inset:16px 16px auto 16px; z-index:9999;
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  pointer-events:none;
+}
+.ultra-slide-pill, .ultra-slide-actions{
+  pointer-events:auto;
+  display:flex; align-items:center; gap:10px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(15,23,41,.68);
+  backdrop-filter:blur(14px);
+  color:#eff7ff; border-radius:999px;
+  padding:10px 14px; box-shadow:0 14px 40px rgba(2,6,23,.26);
+}
+.ultra-slide-progress{
+  position:fixed; left:0; top:0; z-index:9998;
+  width:0%; height:4px;
+  background:linear-gradient(90deg, var(--ultra-accent), var(--ultra-accent-2), var(--ultra-accent-3));
+  box-shadow:0 0 16px rgba(34,211,238,.45);
+}
+.ultra-slide-btn{
+  cursor:pointer; border:none; border-radius:999px;
+  background:rgba(255,255,255,.07); color:#eff7ff;
+  padding:8px 12px; font-weight:700;
+}
+.ultra-slide-btn:hover{background:rgba(255,255,255,.14)}
+body.ultra-focus .ultra-slide-shell{opacity:.22}
+body.ultra-focus .slide{filter:saturate(1.08) contrast(1.03)}
+@media (max-width:760px){
+  .ultra-slide-shell{inset:12px 12px auto 12px; flex-direction:column; align-items:stretch}
+  .ultra-slide-pill,.ultra-slide-actions{justify-content:center}
+}
+</style>
+
+
+<style id="slide-v4-shell">
+.slide-shell-v4{
+  position:fixed; inset:14px 14px auto 14px; z-index:9999;
+  display:flex; justify-content:space-between; gap:10px; align-items:center;
+  pointer-events:none;
+}
+.slide-shell-v4 .pill{
+  pointer-events:auto;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(8,17,31,.70);
+  color:#eff7ff;
+  border-radius:999px;
+  padding:10px 14px;
+  backdrop-filter: blur(14px);
+  box-shadow:0 18px 44px rgba(2,6,23,.28);
+  font-size:.9rem;
+}
+.slide-shell-v4 .actions{
+  display:flex; gap:8px;
+}
+.slide-shell-v4 button{
+  pointer-events:auto;
+  border:none; border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:#eff7ff; cursor:pointer;
+  padding:9px 12px; font-weight:700;
+}
+.slide-shell-v4 button:hover{ background:rgba(255,255,255,.14); }
+.slide-v4-progress{
+  position:fixed; left:0; top:0; z-index:9998;
+  width:0%; height:4px;
+  background:linear-gradient(90deg,#22d3ee,#818cf8,#f472b6);
+  box-shadow:0 0 16px rgba(34,211,238,.45);
+}
+</style>
+
+</head>
+<body>
+  <div id="progress"></div>
+  <nav id="dots" aria-label="Navegación"></nav>
+  <div id="counter">1 / 12</div>
+
+  <section class="slide">
+    <div class="orb red" style="width:420px;height:420px;top:-120px;right:-80px"></div>
+    <div class="orb blue" style="width:300px;height:300px;bottom:-80px;left:-50px"></div>
+    <div class="shell cover-box">
+      <span class="badge">Cuidados de Enfermería II · UDP</span>
+      <h1 style="margin-top:1rem">RCP Intrahospitalaria<br><span style="color:var(--accent)">actuar rápido, actuar bien</span></h1>
+      <p class="lede">Versión docente reforzada: menos relleno, más toma de decisiones, más rol de enfermería y más seguridad clínica.</p>
+      <div class="hero-line">
+        <span class="tag">Reconocimiento precoz</span>
+        <span class="tag">≤ 10 segundos</span>
+        <span class="tag">100–120 cpm</span>
+        <span class="tag">5–6 cm</span>
+      </div>
+      <div class="cover-stats">
+        <div class="mini"><span>Objetivo central</span><strong>Iniciar maniobras correctas sin retraso</strong></div>
+        <div class="mini"><span>Error crítico</span><strong>Demorar activación y compresiones</strong></div>
+        <div class="mini"><span>Foco docente</span><strong>Algoritmo + priorización</strong></div>
+      </div>
+      <p class="footer-note">Uso educativo. No reemplaza protocolos institucionales ni juicio clínico.</p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">01 · Resultados de aprendizaje</span><h2 style="margin-top:.8rem">Qué debe lograr el estudiante al terminar</h2></div><span class="section-num">slide 2</span></div>
+      <div class="grid g2">
+        <div class="card">
+          <ul class="clean">
+            <li>Reconocer un probable paro intrahospitalario y activar ayuda sin pérdida de tiempo.</li>
+            <li>Aplicar la evaluación inicial en menos de 10 segundos con foco en respiración y pulso.</li>
+            <li>Describir compresiones torácicas de calidad y los errores que las invalidan.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <ul class="clean">
+            <li>Identificar el rol de enfermería dentro del equipo y del carro de paro.</li>
+            <li>Priorizar seguridad, desfibrilación precoz y continuidad de RCP.</li>
+            <li>Resolver un caso breve integrando decisión, técnica y comunicación.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">02 · Visión global</span><h2 style="margin-top:.8rem">Cadena de supervivencia intrahospitalaria</h2></div><span class="section-num">slide 3</span></div>
+      <div class="timeline">
+        <div class="step"><div class="step-num">01</div><div><h3>Vigilancia y prevención</h3><p class="muted">Reconocer deterioro precoz y escalar antes del paro.</p></div></div>
+        <div class="step"><div class="step-num">02</div><div><h3>Activar sistema de emergencia</h3><p class="muted">Clave institucional o equipo de respuesta rápida.</p></div></div>
+        <div class="step"><div class="step-num">03</div><div><h3>RCP precoz</h3><p class="muted">Compresiones efectivas, mínimas interrupciones, relevo ordenado.</p></div></div>
+        <div class="step"><div class="step-num">04</div><div><h3>Desfibrilación temprana</h3><p class="muted">Ideal antes de 3 minutos en zona cardioprotegida.</p></div></div>
+        <div class="step"><div class="step-num">05</div><div><h3>SVA y post-PCR</h3><p class="muted">Continuidad del manejo avanzado y cuidados posteriores.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">03 · Primeros 10 segundos</span><h2 style="margin-top:.8rem">Secuencia inicial sin errores</h2></div><span class="section-num">slide 4</span></div>
+      <div class="grid g2">
+        <div class="panel">
+          <div class="metric"><h3>Orden mental</h3><strong>Seguridad → responde → ayuda → respira/pulso</strong></div>
+          <div class="tag-row">
+            <span class="tag">Jadeo = no respiración normal</span>
+            <span class="tag">Pulso carotídeo ≤ 10 s</span>
+          </div>
+        </div>
+        <div class="alert warn">
+          <h3 style="margin-bottom:.5rem">Error frecuente del alumno</h3>
+          <p>Quedarse demasiado tiempo “confirmando” si el paciente está en paro. En sospecha razonable, se actúa y se activa ayuda.</p>
+        </div>
+      </div>
+      <div class="decision-grid" style="margin-top:1rem">
+        <div class="decision"><strong>1. Seguridad de escena</strong><p class="muted">No inicies maniobras si hay riesgo eléctrico, fluidos o entorno inseguro.</p></div>
+        <div class="decision"><strong>2. Respuesta y ayuda</strong><p class="muted">Estimulación verbal y táctil, luego pedir apoyo inmediato.</p></div>
+        <div class="decision"><strong>3. Respira / pulso</strong><p class="muted">Si no respira normal o no hay pulso en ≤10 s, iniciar RCP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">04 · Técnica esencial</span><h2 style="margin-top:.8rem">Compresiones torácicas de calidad</h2></div><span class="section-num">slide 5</span></div>
+      <div class="grid g3">
+        <div class="metric"><h3>Frecuencia</h3><strong>100–120 cpm</strong><p class="muted">Ni menos ni más.</p></div>
+        <div class="metric"><h3>Profundidad</h3><strong>5–6 cm</strong><p class="muted">Adulto.</p></div>
+        <div class="metric"><h3>Interrupciones</h3><strong>&lt; 10 s</strong><p class="muted">Cada pausa cuenta.</p></div>
+      </div>
+      <div class="grid g2" style="margin-top:1rem">
+        <div class="card"><h3 style="margin-bottom:.55rem">Sí o sí</h3><ul class="clean"><li>Mitad inferior del esternón.</li><li>Retroceso completo entre compresiones.</li><li>Relevo precoz si el reanimador se fatiga.</li></ul></div>
+        <div class="card"><h3 style="margin-bottom:.55rem">No hacer</h3><ul class="clean"><li>Apoyarse sobre el tórax.</li><li>Pausas largas por monitor, vía venosa o discusión del equipo.</li><li>Compresiones superficiales o demasiado rápidas.</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell columns">
+      <div>
+        <div class="section-head"><div><span class="badge">05 · Soporte ventilatorio</span><h2 style="margin-top:.8rem">BVM y relación compresión–ventilación</h2></div><span class="section-num">slide 6</span></div>
+        <div class="card">
+          <ul class="clean">
+            <li>Sin vía aérea avanzada: relación 30:2.</li>
+            <li>Con BVM, sellado correcto y elevación visible del tórax.</li>
+            <li>Evitar hiperventilación: reduce retorno venoso y empeora perfusión.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="alert ok"><h3 style="margin-bottom:.45rem">Clave docente</h3><p>En alumnos, la ventilación falla más por mal sellado que por falta de fuerza. Entrena técnica, no “soplar más”.</p></div>
+        <div class="alert" style="margin-top:1rem"><h3 style="margin-bottom:.45rem">Prioridad</h3><p>Si el equipo es pequeño, primero compresiones de calidad; después optimizar ventilación.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">06 · Pensamiento clínico</span><h2 style="margin-top:.8rem">Ritmos y decisión inmediata</h2></div><span class="section-num">slide 7</span></div>
+      <div class="grid g2">
+        <div class="card">
+          <h3 style="margin-bottom:.6rem;color:#ffd6d6">Desfibrilables</h3>
+          <ul class="clean">
+            <li>FV</li>
+            <li>TV sin pulso</li>
+          </ul>
+          <p class="footer-note">Conducta: desfibrilar precoz + reiniciar RCP inmediatamente.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:.6rem;color:#d9ecff">No desfibrilables</h3>
+          <ul class="clean">
+            <li>Asistolia</li>
+            <li>AESP</li>
+          </ul>
+          <p class="footer-note">Conducta: RCP continua + búsqueda de causa reversible.</p>
+        </div>
+      </div>
+      <div class="alert warn" style="margin-top:1rem"><p><strong>Error crítico:</strong> perder tiempo discutiendo el ritmo mientras nadie comprime.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">07 · Enfermería en acción</span><h2 style="margin-top:.8rem">Roles que sí cambian el desenlace</h2></div><span class="section-num">slide 8</span></div>
+      <div class="grid g3">
+        <div class="role"><h3>Activador</h3><p>Reconoce, pide ayuda y no retrasa el inicio.</p></div>
+        <div class="role"><h3>Compresor</h3><p>Mantiene técnica y pide relevo antes de fatigarse.</p></div>
+        <div class="role"><h3>Gestor del carro</h3><p>Prepara desfibrilador, vía aérea y fármacos sin desorden.</p></div>
+      </div>
+      <div class="grid g2" style="margin-top:1rem">
+        <div class="alert"><p><strong>Comunicación cerrada:</strong> “Yo comprimo. Tú activas clave. Tú traes carro.”</p></div>
+        <div class="alert ok"><p><strong>Meta docente:</strong> que el alumno verbalice rol y prioridad antes de actuar.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">08 · Seguridad del entorno</span><h2 style="margin-top:.8rem">Carro de paro: no basta con “saber que existe”</h2></div><span class="section-num">slide 9</span></div>
+      <div class="algo">
+        <div class="node"><strong>Cajón de medicamentos</strong><span class="muted">Adrenalina, amiodarona y otros según estándar institucional.</span></div>
+        <div class="node"><strong>Vía aérea</strong><span class="muted">BVM, cánulas, dispositivos y apoyo para manejo avanzado.</span></div>
+        <div class="node"><strong>Circulación / acceso</strong><span class="muted">Material para acceso vascular y soluciones.</span></div>
+        <div class="node"><strong>Desfibrilador</strong><span class="muted">Debe estar operativo, con palas/parches y cables disponibles.</span></div>
+      </div>
+      <p class="footer-note">Mejora docente: esta slide debe enseñar ubicación lógica y uso práctico, no solo enumerar cajones.</p>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">09 · Prevención de error</span><h2 style="margin-top:.8rem">Cinco fallas que quiero borrar del alumno</h2></div><span class="section-num">slide 10</span></div>
+      <div class="grid g2">
+        <div class="card"><ol style="display:grid;gap:.7rem;padding-left:1.2rem"><li>Confirmar demasiado y actuar tarde.</li><li>Interrumpir compresiones por tareas secundarias.</li><li>Ventilar en exceso.</li></ol></div>
+        <div class="card"><ol start="4" style="display:grid;gap:.7rem;padding-left:1.2rem"><li>Olvidar pedir relevo.</li><li>No asignar roles claros dentro del equipo.</li></ol></div>
+      </div>
+      <div class="alert" style="margin-top:1rem"><p><strong>Adecuación docente:</strong> cada error debe acompañarse de su conducta correctiva observable en simulación.</p></div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">10 · Caso aplicado</span><h2 style="margin-top:.8rem">Microcaso de integración</h2></div><span class="section-num">slide 11</span></div>
+      <div class="quiz">
+        <q>Paciente hospitalizado, 68 años, súbitamente no responde. Presenta boqueo. Un alumno dice: “esperemos el monitor para estar seguros”. ¿Cuál es la conducta correcta?</q>
+        <div class="options">
+          <div class="opt">A. Esperar a confirmar ritmo antes de iniciar maniobras.</div>
+          <div class="opt correct">B. Evaluar pulso carotídeo y respiración ≤10 s, activar ayuda e iniciar RCP si no hay pulso o no respira normal.</div>
+          <div class="opt">C. Administrar oxígeno primero y observar respuesta.</div>
+          <div class="opt">D. Buscar la ficha clínica antes de decidir.</div>
+        </div>
+        <p class="footer-note">Retroalimentación: el boqueo no es respiración normal. El retraso mata más que la duda.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide">
+    <div class="shell">
+      <div class="section-head"><div><span class="badge">11 · Cierre docente</span><h2 style="margin-top:.8rem">Lo que quiero que el estudiante recuerde</h2></div><span class="section-num">slide 12</span></div>
+      <div class="grid g3">
+        <div class="metric"><h3>Primero</h3><strong>Reconoce y activa</strong></div>
+        <div class="metric"><h3>Después</h3><strong>Comprime bien</strong></div>
+        <div class="metric"><h3>Siempre</h3><strong>Roles claros</strong></div>
+      </div>
+      <div class="alert ok" style="margin-top:1rem"><p><strong>Mejora docente incorporada:</strong> esta versión transforma una slide deck informativa en una secuencia de entrenamiento, con objetivos, errores críticos, decisiones y evaluación breve.</p></div>
+    </div>
+  </section>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = document.getElementById('dots');
+    const progress = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    let current = 0;
+    slides.forEach((_,i)=>{
+      const b=document.createElement('button');
+      b.className='dot'+(i===0?' active':'');
+      b.addEventListener('click',()=>go(i));
+      dots.appendChild(b);
+    });
+    function update(){
+      const pct=((current+1)/slides.length)*100;
+      progress.style.width=pct+'%';
+      counter.textContent=`${current+1} / ${slides.length}`;
+      [...dots.children].forEach((d,i)=>d.classList.toggle('active',i===current));
+    }
+    function go(i){
+      current=Math.max(0,Math.min(i,slides.length-1));
+      slides[current].scrollIntoView({behavior:'smooth'});
+      update();
+    }
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ current=slides.indexOf(e.target); update(); } });
+    },{threshold:.45});
+    slides.forEach(s=>obs.observe(s));
+    let lock=false;
+    addEventListener('wheel',e=>{
+      if(lock) return;
+      lock=true;
+      setTimeout(()=>lock=false,420);
+      if(e.deltaY>0) go(current+1); else go(current-1);
+    },{passive:true});
+    addEventListener('keydown',e=>{
+      if(['ArrowDown','ArrowRight',' '].includes(e.key)) go(current+1);
+      if(['ArrowUp','ArrowLeft'].includes(e.key)) go(current-1);
+    });
+    let sy=0;
+    addEventListener('touchstart',e=>sy=e.touches[0].clientY,{passive:true});
+    addEventListener('touchend',e=>{
+      const ey=e.changedTouches[0].clientY;
+      if(sy-ey>45) go(current+1);
+      if(ey-sy>45) go(current-1);
+    },{passive:true});
+    update();
+  </script>
+
+<script id="ultra-slide-script">
+(function(){
+  if (window.__ultraSlides) return;
+  window.__ultraSlides = true;
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const shell = document.createElement('div');
+  shell.className = 'ultra-slide-shell';
+  shell.innerHTML = `
+    <div class="ultra-slide-pill">
+      <strong id="ultra-slide-counter">1 / ${slides.length}</strong>
+      <span style="opacity:.8">· J/K o flechas para navegar</span>
+    </div>
+    <div class="ultra-slide-actions">
+      <button class="ultra-slide-btn" id="ultra-prev-btn">←</button>
+      <button class="ultra-slide-btn" id="ultra-focus-btn">Focus</button>
+      <button class="ultra-slide-btn" id="ultra-next-btn">→</button>
+    </div>`;
+  document.body.appendChild(shell);
+  const bar = document.createElement('div');
+  bar.className = 'ultra-slide-progress';
+  document.body.appendChild(bar);
+
+  function currentIndex(){
+    let best = 0, bestDist = Infinity;
+    slides.forEach((slide, idx)=>{
+      const dist = Math.abs(slide.getBoundingClientRect().top);
+      if (dist < bestDist){ bestDist = dist; best = idx; }
+    });
+    return best;
+  }
+  function update(){
+    const idx = currentIndex();
+    const counter = document.getElementById('ultra-slide-counter');
+    if (counter) counter.textContent = `${idx+1} / ${slides.length}`;
+    const pct = slides.length > 1 ? (idx/(slides.length-1))*100 : 100;
+    bar.style.width = pct + '%';
+  }
+  function go(delta){
+    const idx = currentIndex();
+    const next = Math.max(0, Math.min(slides.length-1, idx + delta));
+    slides[next].scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  document.getElementById('ultra-prev-btn').onclick = ()=>go(-1);
+  document.getElementById('ultra-next-btn').onclick = ()=>go(1);
+  document.getElementById('ultra-focus-btn').onclick = ()=>document.body.classList.toggle('ultra-focus');
+  document.addEventListener('keydown', e=>{
+    if (['ArrowDown','PageDown','j','J'].includes(e.key)) { e.preventDefault(); go(1); }
+    if (['ArrowUp','PageUp','k','K'].includes(e.key)) { e.preventDefault(); go(-1); }
+    if (e.key.toLowerCase() === 'f') document.body.classList.toggle('ultra-focus');
+  });
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('load', update);
+  update();
+})();
+</script>
+
+
+<script id="slide-v4-script">
+(function(){
+  if (window.__slideV4Loaded) return;
+  window.__slideV4Loaded = true;
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  if (!slides.length) return;
+  const shell = document.createElement('div');
+  shell.className = 'slide-shell-v4';
+  shell.innerHTML = `
+    <div class="pill"><strong id="slide-v4-count">1 / ${slides.length}</strong> · repaso visual intensivo</div>
+    <div class="actions pill">
+      <button onclick="window.scrollBy({top:-window.innerHeight,behavior:'smooth'})">↑</button>
+      <button onclick="window.scrollBy({top:window.innerHeight,behavior:'smooth'})">↓</button>
+    </div>`;
+  document.body.appendChild(shell);
+  const bar = document.createElement('div');
+  bar.className = 'slide-v4-progress';
+  document.body.appendChild(bar);
+
+  function currentIndex(){
+    let best = 0, bestDist = Infinity;
+    slides.forEach((slide, idx) => {
+      const d = Math.abs(slide.getBoundingClientRect().top);
+      if (d < bestDist){ bestDist = d; best = idx; }
+    });
+    return best;
+  }
+  function update(){
+    const idx = currentIndex();
+    const el = document.getElementById('slide-v4-count');
+    if (el) el.textContent = `${idx+1} / ${slides.length}`;
+    bar.style.width = slides.length > 1 ? ((idx/(slides.length-1))*100)+'%' : '100%';
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('load', update);
+  update();
+})();
+</script>
+
+
+<section class="slide">
+  <div class="shell">
+    <div class="section-head">
+      <div><span class="badge">Adecuación clínica v5</span><h2 style="margin-top:.8rem">Aplicación práctica para MQ / 2° año</h2></div>
+      <span class="section-num">slide 13</span>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Qué observar primero</h3>
+        <ul class="clean">
+          <li>Identificación correcta del paciente y contexto del procedimiento.</li>
+          <li>Riesgo inmediato para seguridad, higiene o confort.</li>
+          <li>Signos básicos que obligan a detenerse o avisar.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Qué no debe hacer el estudiante</h3>
+        <ul class="clean">
+          <li>Improvisar una conducta por apuro.</li>
+          <li>Seguir si hay duda de identidad, técnica o indicación.</li>
+          <li>Normalizar un hallazgo alterado sin comunicarlo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="slide">
+  <div class="shell">
+    <div class="section-head">
+      <div><span class="badge">Microcaso</span><h2 style="margin-top:.8rem">Decisión segura al final de la unidad</h2></div>
+      <span class="section-num">slide 14</span>
+    </div>
+    <div class="quiz">
+      <q>Durante la actividad clínica el alumno detecta una discrepancia, duda de la técnica o identifica un signo alterado que no comprende completamente. ¿Cuál es la mejor conducta inicial?</q>
+      <div class="options">
+        <div class="opt">A. Seguir rápido para no interrumpir el flujo de atención.</div>
+        <div class="opt correct">B. Detenerse, verificar el estándar seguro y avisar/supervisar si corresponde.</div>
+        <div class="opt">C. Hacer solo una parte y omitir el resto.</div>
+        <div class="opt">D. Esperar sin registrar ni comunicar.</div>
+      </div>
+      <p class="footer-note">Retroalimentación: la respuesta segura para 2° año es reconocer límites, evitar el error y escalar oportunamente.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1729">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ConsultaENF">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Consulta Rápida ENF — UDP Legacy Modernizada</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="ultra.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="logo" onclick="showHome()" title="Ir al inicio" style="cursor:pointer">⚕ Consulta <span>Rápida</span></div>
+  <div class="subtitle">ENF3013 · ENF3014 · Cuidados — UDP 2026</div>
+  <div id="search-box">
+    <span class="icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Buscar concepto, fármaco, patología..." oninput="onSearch(this.value)" onfocus="onSearch(this.value)" onblur="setTimeout(()=>closeSearch(),200)">
+    <div id="search-results"></div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile tap-to-close) -->
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <!-- Branding header con nodos animados -->
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">⚕</div>
+    <div class="sidebar-brand-nodes">
+      <div class="sb-node n1"></div>
+      <div class="sb-node n2"></div>
+      <div class="sb-node n3"></div>
+      <div class="sb-node n4"></div>
+    </div>
+    <div class="sidebar-brand-label">ENF · UDP</div>
+  </div>
+  <!-- Tabs de navegación -->
+  <div class="sidebar-tabs">
+    <div class="sidebar-tab active" data-subject="farm" onclick="switchSidebarTab('farm',this)">💊 Farm</div>
+    <div class="sidebar-tab" data-subject="fisio" onclick="switchSidebarTab('fisio',this)">🫀 Fisio</div>
+    <div class="sidebar-tab" data-subject="cuid" onclick="switchSidebarTab('cuid',this)">💙 Cuid</div>
+    <div class="sidebar-tab" data-subject="tools" onclick="showCalculator()">🧩 Anexos</div>
+    <div class="sidebar-tab" data-subject="extra" onclick="showProgress()">📊</div>
+    <div class="sidebar-tab" data-subject="extra" onclick="showBibliography()">📚</div>
+  </div>
+  <div id="sidebar-farm" class="sidebar-content active"></div>
+  <div id="sidebar-fisio" class="sidebar-content"></div>
+  <div id="sidebar-cuid" class="sidebar-content"></div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- HOME -->
+  <div id="home">
+
+    <!-- ── HERO SECTION con red neuronal ─────────────── -->
+    <div class="home-hero-section">
+      <canvas id="home-canvas"></canvas>
+
+      <!-- Icono red neuronal SVG -->
+      <div class="home-net-icon">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- conexiones -->
+          <line x1="50" y1="12" x2="20" y2="38" stroke="rgba(96,165,250,.5)" stroke-width="1.5"/>
+          <line x1="50" y1="12" x2="80" y2="38" stroke="rgba(96,165,250,.5)" stroke-width="1.5"/>
+          <line x1="20" y1="38" x2="50" y2="55" stroke="rgba(52,211,153,.45)" stroke-width="1.5"/>
+          <line x1="80" y1="38" x2="50" y2="55" stroke="rgba(52,211,153,.45)" stroke-width="1.5"/>
+          <line x1="20" y1="38" x2="10" y2="68" stroke="rgba(167,139,250,.4)" stroke-width="1.2"/>
+          <line x1="80" y1="38" x2="90" y2="68" stroke="rgba(167,139,250,.4)" stroke-width="1.2"/>
+          <line x1="50" y1="55" x2="30" y2="80" stroke="rgba(96,165,250,.4)" stroke-width="1.2"/>
+          <line x1="50" y1="55" x2="70" y2="80" stroke="rgba(52,211,153,.4)" stroke-width="1.2"/>
+          <line x1="10" y1="68" x2="30" y2="80" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          <line x1="90" y1="68" x2="70" y2="80" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          <!-- nodos -->
+          <circle cx="50" cy="12" r="6" fill="white" opacity=".95"/>
+          <circle cx="20" cy="38" r="5" fill="#60a5fa" opacity=".9"/>
+          <circle cx="80" cy="38" r="5" fill="#34d399" opacity=".9"/>
+          <circle cx="50" cy="55" r="7" fill="white" opacity=".9"/>
+          <circle cx="10" cy="68" r="4" fill="#a78bfa" opacity=".85"/>
+          <circle cx="90" cy="68" r="4" fill="#a78bfa" opacity=".85"/>
+          <circle cx="30" cy="80" r="4.5" fill="#60a5fa" opacity=".8"/>
+          <circle cx="70" cy="80" r="4.5" fill="#34d399" opacity=".8"/>
+          <!-- glow nodo central -->
+          <circle cx="50" cy="55" r="12" fill="rgba(96,165,250,.12)"/>
+        </svg>
+      </div>
+
+      <!-- Badge versión -->
+      <div class="home-hero-badge">✦ v3.0 · Universidad Diego Portales · 2026</div>
+
+      <!-- Título principal -->
+      <h1 class="home-main-title">Consulta Rápida de Enfermería</h1>
+
+      <!-- Subtítulo -->
+      <p class="home-sub">
+        Farmacología · Fisiopatología · Cuidados de Enfermería<br>
+        Referencias cruzadas · Scores clínicos · Patologías GES Chile
+      </p>
+
+      <!-- Pill CTA buttons -->
+      <div class="home-pills">
+        <div class="home-pill pill-farm" onclick="showSubject('farm')">💊 Farmacología</div>
+        <div class="home-pill pill-fisio" onclick="showSubject('fisio')">🫀 Fisiopatología</div>
+        <div class="home-pill pill-cuid" onclick="showSubject('cuid')">💙 Cuidados</div>
+        <div class="home-pill pill-tools" onclick="showCalculator()">🧩 Anexos Clínicos</div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="home-scroll-hint">
+        <span>↓</span>
+        <span style="font-size:10px;letter-spacing:.8px">EXPLORAR</span>
+      </div>
+    </div>
+
+    <!-- ── WAVE DIVIDER ───────────────────────────────── -->
+    <div class="home-wave-divider">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#172039"/>
+      </svg>
+    </div>
+
+    <!-- ── INFO SECTION (below wave) ─────────────────── -->
+    <div class="home-info">
+
+      <!-- Cards asignaturas -->
+      <div class="subject-cards">
+        <div class="subject-card sc-farm" onclick="showSubject('farm')">
+          <div class="sc-icon">💊</div>
+          <h2>Farmacología en Enfermería</h2>
+          <div class="sc-code">ENF3013 · 3° semestre</div>
+          <p>Bases farmacológicas, mecanismos de acción, alertas de seguridad, interacciones y aplicación clínica por sistema.</p>
+          <div class="sc-count">6 unidades · 16 sesiones · 26 referencias cruzadas <span class="sc-arrow">→</span></div>
+        </div>
+        <div class="subject-card sc-fisio" onclick="showSubject('fisio')">
+          <div class="sc-icon">🫀</div>
+          <h2>Fisiopatología en Enfermería</h2>
+          <div class="sc-code">ENF3014 · 4° semestre</div>
+          <p>Mecanismos fisiopatológicos por sistemas, integración clínica y conexiones bidireccionales con farmacología.</p>
+          <div class="sc-count">7 unidades · 20 clases · integración bidireccional <span class="sc-arrow">→</span></div>
+        </div>
+        <div class="subject-card sc-cuid" onclick="showSubject('cuid')">
+          <div class="sc-icon">💙</div>
+          <h2>Cuidados de Enfermería 2</h2>
+          <div class="sc-code">ENF3015 · 3°–4° semestre</div>
+          <p>PAE/NANDA/NIC-NOC, IAAS, TMSV, cálculo de dosis, hidratación, vía inhalatoria, RCP y procedimientos clínicos esenciales.</p>
+          <div class="sc-count">13 clases · 39+ referencias cruzadas <span class="sc-arrow">→</span></div>
+        </div>
+      </div>
+
+      <!-- Quick tools -->
+      <div class="home-quick">
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('cincinnati',document.querySelectorAll('.cdss-mode')[3]),50)"><span class="qb-icon">🧠</span> Cincinnati</div>
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('gsa',document.querySelectorAll('.cdss-mode')[4]),50)"><span class="qb-icon">🫁</span> GSA</div>
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('glasgow',document.querySelectorAll('.cdss-mode')[2]),50)"><span class="qb-icon">🧠</span> Glasgow</div>
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('ges',document.querySelectorAll('.cdss-mode')[6]),50)"><span class="qb-icon">🇨🇱</span> GES Chile</div>
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('ricarte',document.querySelectorAll('.cdss-mode')[7]),50)"><span class="qb-icon">🧬</span> Ley Ricarte Soto</div>
+        <div class="quick-btn" onclick="showCalculator();setTimeout(()=>switchCDSSMode('interactions',document.querySelectorAll('.cdss-mode')[0]),50)"><span class="qb-icon">⚠️</span> Interacciones</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-box" style="animation-delay:.1s"><div class="sv">49</div><div class="sl">Clases / Sesiones</div></div>
+        <div class="stat-box" style="animation-delay:.25s"><div class="sv">65+</div><div class="sl">Referencias cruzadas</div></div>
+        <div class="stat-box" style="animation-delay:.4s"><div class="sv">300+</div><div class="sl">Palabras clave</div></div>
+        <div class="stat-box" style="animation-delay:.55s"><div class="sv">30+</div><div class="sl">Alertas farmacológicas</div></div>
+      </div>
+
+    </div><!-- /home-info -->
+  </div><!-- /home -->
+
+  <!-- CONTENT VIEW -->
+  <div id="content-view">
+    <div class="cv-header">
+      <div class="cv-breadcrumb" id="cv-breadcrumb"></div>
+      <div class="cv-title" id="cv-title"></div>
+      <div class="cv-meta" id="cv-meta"></div>
+    </div>
+    <div class="content-tabs" id="content-tabs"></div>
+    <div id="tab-contenido" class="tab-pane active"></div>
+    <div id="tab-keywords" class="tab-pane"></div>
+    <div id="tab-alertas" class="tab-pane"></div>
+    <div id="tab-conexiones" class="tab-pane"></div>
+    <div id="tab-diagramas" class="tab-pane"></div>
+    <div id="tab-quiz" class="tab-pane"></div>
+    <div id="tab-caso" class="tab-pane"></div>
+  </div>
+
+  <!-- SUBJECT INDEX -->
+  <div id="subject-view" style="display:none"></div>
+
+  <!-- ANEXOS PANEL -->
+  <div id="calc-view" style="display:none">
+    <div class="panel-hero teal">
+      <div class="panel-hero-node"></div>
+      <div class="panel-hero-node2"></div>
+      <div class="panel-hero-content">
+        <div class="panel-hero-badge">🧩 Módulo Clínico</div>
+        <div class="panel-hero-title">Anexos Clínicos</div>
+        <div class="panel-hero-sub">Scores · Calculadoras hemodinámicas · GES Chile · Ley Ricarte Soto · Cincinnati · GSA · Interacciones</div>
+        <div class="panel-hero-line"></div>
+        <div class="panel-hero-dots">
+          <div class="ph-dot" style="background:#67e8f9;animation-delay:.1s"></div>
+          <div class="ph-dot" style="background:#34d399;animation-delay:.2s"></div>
+          <div class="ph-dot" style="background:#a78bfa;animation-delay:.3s"></div>
+          <div class="ph-dot" style="background:#60a5fa;animation-delay:.4s"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cdss-modes">
+      <div class="cdss-mode active" onclick="switchCDSSMode('interactions',this)">⚠️ Interacciones</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('dosevalidator',this)">💊 Validar Dosis</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('glasgow',this)">🧠 Glasgow</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('cincinnati',this)">🧠 Cincinnati</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('gsa',this)">🫁 GSA</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('calculos',this)">🧮 Hemo/Goteo</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('ges',this)">🇨🇱 GES</div>
+      <div class="cdss-mode" onclick="switchCDSSMode('ricarte',this)">🧬 Ley Ricarte Soto</div>
+    </div>
+    <div id="cdss-panel"></div>
+    <div class="calc-warning" style="margin-top:16px">⚠️ <strong>Advertencia:</strong> Estas herramientas son de apoyo educativo. NO reemplazan el juicio clínico ni los protocolos institucionales. Las alertas de interacciones cubren los fármacos más frecuentes en enfermería — siempre consulte fuentes adicionales.</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div id="progress-view" style="display:none">
+    <div class="panel-hero green">
+      <div class="panel-hero-node"></div>
+      <div class="panel-hero-node2"></div>
+      <div class="panel-hero-content">
+        <div class="panel-hero-badge">📊 Dashboard Personal</div>
+        <div class="panel-hero-title">Mi Progreso de Estudio</div>
+        <div class="panel-hero-sub">Sesiones visitadas · Quizzes resueltos · Datos almacenados en tu dispositivo</div>
+        <div class="panel-hero-line"></div>
+        <div class="panel-hero-dots">
+          <div class="ph-dot" style="background:#34d399;animation-delay:.1s"></div>
+          <div class="ph-dot" style="background:#6ee7b7;animation-delay:.2s"></div>
+          <div class="ph-dot" style="background:#a7f3d0;animation-delay:.3s"></div>
+        </div>
+      </div>
+    </div>
+    <div id="progress-content"></div>
+  </div>
+
+  <!-- BIBLIOGRAFÍA -->
+  <div id="biblio-view" style="display:none">
+    <div class="panel-hero blue">
+      <div class="panel-hero-node"></div>
+      <div class="panel-hero-node2"></div>
+      <div class="panel-hero-content">
+        <div class="panel-hero-badge">📚 Bibliografía Científica</div>
+        <div class="panel-hero-title">Guías Clínicas 2024–2026</div>
+        <div class="panel-hero-sub">50+ referencias verificadas · IDSA · ADA · ESC · ACC/AHA · WHO · MINSAL · Actualización Abril 2026</div>
+        <div class="panel-hero-line"></div>
+        <div class="panel-hero-dots">
+          <div class="ph-dot" style="background:#60a5fa;animation-delay:.1s"></div>
+          <div class="ph-dot" style="background:#93c5fd;animation-delay:.2s"></div>
+          <div class="ph-dot" style="background:#bfdbfe;animation-delay:.3s"></div>
+        </div>
+      </div>
+    </div>
+    <div id="biblio-content"></div>
+  </div>
+
+  <!-- CROSS REFERENCES -->
+  <div id="xref-view" style="display:none">
+    <div class="panel-hero purple">
+      <div class="panel-hero-node"></div>
+      <div class="panel-hero-node2"></div>
+      <div class="panel-hero-content">
+        <div class="panel-hero-badge">🔗 Integración Curricular</div>
+        <div class="panel-hero-title">Referencias Cruzadas</div>
+        <div class="panel-hero-sub">Fisiopatología ↔ Farmacología · ENF3013 + ENF3014 · Situaciones clínicas en común</div>
+        <div class="panel-hero-line"></div>
+        <div class="panel-hero-dots">
+          <div class="ph-dot" style="background:#a78bfa;animation-delay:.1s"></div>
+          <div class="ph-dot" style="background:#c4b5fd;animation-delay:.2s"></div>
+          <div class="ph-dot" style="background:#34d399;animation-delay:.3s"></div>
+          <div class="ph-dot" style="background:#60a5fa;animation-delay:.4s"></div>
+        </div>
+      </div>
+    </div>
+    <div id="xref-content"></div>
+  </div>
+
+
+  <!-- VISOR DE SLIDES -->
+  <div id="slides-view" style="display:none">
+    <div class="panel-hero cyan">
+      <div class="panel-hero-node"></div>
+      <div class="panel-hero-node2"></div>
+      <div class="panel-hero-content">
+        <div class="panel-hero-badge">🖥️ Visor de Presentación</div>
+        <div class="panel-hero-title" id="slides-title">Slides</div>
+        <div class="panel-hero-sub">Modo inmersivo para la presentación de la sesión</div>
+        <div class="panel-hero-line"></div>
+      </div>
+    </div>
+    <div class="slides-toolbar">
+      <button class="tool-btn" onclick="backToSession()">← Volver a la sesión</button>
+      <a class="tool-btn" id="slides-open-new" href="#" target="_blank" rel="noopener">Abrir en pestaña nueva ↗</a>
+    </div>
+    <div class="slides-frame-wrap">
+      <iframe id="slides-frame" title="Visor de slides" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<div id="demo-footer">
+  <span class="demo-badge">DEMO 6.0</span><br>
+  <strong>Desarrollado por RPG - Elon - Cowork</strong><br>
+  · Universidad Diego Portales · 2026
+</div>
+
+<script src="data.js"></script>
+<script src="extras.js"></script>
+<script src="cdss.js"></script>
+<script src="session-map.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="ultra.js"></script>
+<script>
+  // Registro del Service Worker (PWA offline)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .catch(err => console.warn('SW no registrado:', err));
+    });
+  }
+</script>
+</body>
+</html>
