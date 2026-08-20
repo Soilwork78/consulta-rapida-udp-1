@@ -13,6 +13,8 @@ repositorio. No requieren instalar nada más.
 | 46 skills `omni-*` / `cli-*` / `config-codex-cli` / `ponytail` | [diegosouzapw/OmniRoute](https://github.com/diegosouzapw/OmniRoute) `skills/` | MIT |
 | `task-observer` (+ `references/`) | [rebelytics/one-skill-to-rule-them-all](https://github.com/rebelytics/one-skill-to-rule-them-all) | CC BY 4.0 |
 | `claude-automation-recommender` (+ `references/`) | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) → `plugins/claude-code-setup` | Apache-2.0 |
+| `landing-page` | [jezweb/claude-skills](https://github.com/jezweb/claude-skills) → `plugins/frontend/skills/landing-page` | MIT |
+| 12 skills `remotion-*` | [remotion-dev/skills](https://github.com/remotion-dev/skills) | ver nota abajo |
 
 Notas:
 
@@ -21,6 +23,12 @@ Notas:
   el cwd. En un contenedor efímero el log no sobrevive a la sesión.
 - **claude-automation-recommender** es de solo lectura: analiza el
   código y recomienda automatizaciones, no modifica archivos.
+- **remotion-\*** son 271 archivos (3.4 MB) versionados y acoplados a la
+  version de Remotion (4.0.513 al copiarlas). El repo de origen NO trae
+  archivo LICENSE; Remotion se distribuye bajo la Remotion License
+  (gratis para individuos y empresas de hasta 3 personas, de pago por
+  encima). La via mantenida y que ademas las mantiene al dia es:
+  `npx skills add remotion-dev/skills`
 
 ## NO instalado: requieren instalación como plugin
 
@@ -79,3 +87,24 @@ oficial (recibe actualizaciones automáticas):
 ```
 
 Página oficial: https://claude.com/plugins/claude-code-setup
+
+### Open Carrusel — https://github.com/Hainrixz/open-carrusel
+
+(Enlace original: https://www.tododeia.com/community/open-carrusel — ese
+dominio esta bloqueado por el proxy de red de esta sesion, el repo se
+localizo por busqueda.)
+
+**No es una skill.** Es una aplicacion Next.js completa: constructor de
+carruseles de Instagram donde se disena conversando con Claude y se
+exporta a PNG en las dimensiones exactas de Instagram. Se usa clonando
+el repo y abriendolo como proyecto propio, no copiandolo aqui.
+
+```bash
+git clone https://github.com/Hainrixz/open-carrusel
+cd open-carrusel
+# dentro de Claude Code, en esa carpeta:
+/start
+```
+
+Aporta 4 slash commands propios: `/start`, `/stop`, `/reset`, `/doctor`.
+Requiere Node >= 20. Licencia MIT.
