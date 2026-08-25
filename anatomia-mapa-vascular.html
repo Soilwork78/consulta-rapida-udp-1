@@ -9,10 +9,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Karla:wght@400;500;700&display=swap">
 <style>
 :root{
-  --paper:#F7F3E7; --paper-2:#FBF8EF; --dot:#D3C9AF;
+  --paper:#FCFAF4; --paper-2:#FFFEFB; --well:#F5F1E6; --dot:#DCD3BC;
   --ink:#33302A; --ink-2:#6E6553;
   --c-art:#A63A2C; --c-ven:#2E3E96; --c-ink:#6E6553; --c-sepia:#8B7448;
-  --c-paper:#FBF8EF; --rule:#DCD2B8;
+  --c-paper:#FFFEFB; --rule:#E6DEC9;
   --f-hand:'Patrick Hand', 'Segoe Print', cursive;
   --f-disp:'Caveat', 'Segoe Script', cursive;
   --f-body:'Karla', ui-sans-serif, system-ui, sans-serif;
@@ -20,14 +20,14 @@
 :root:not([data-theme="light"]){ }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#15171C; --paper-2:#1B1E25; --dot:#2C313B;
+    --paper:#15171C; --paper-2:#1B1E25; --well:#0F1115; --dot:#2C313B;
     --ink:#EAE5D7; --ink-2:#A79E8B;
     --c-art:#EF8A79; --c-ven:#98A9F6; --c-ink:#A79E8B; --c-sepia:#C4AC80;
     --c-paper:#1B1E25; --rule:#2E333D;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#15171C; --paper-2:#1B1E25; --dot:#2C313B;
+  --paper:#15171C; --paper-2:#1B1E25; --well:#0F1115; --dot:#2C313B;
   --ink:#EAE5D7; --ink-2:#A79E8B;
   --c-art:#EF8A79; --c-ven:#98A9F6; --c-ink:#A79E8B; --c-sepia:#C4AC80;
   --c-paper:#1B1E25; --rule:#2E333D;
@@ -40,6 +40,7 @@ body{
 }
 .wrap{max-width:1180px; margin:0 auto; padding:clamp(20px,4vw,56px) clamp(16px,3vw,32px) 72px;}
 figure.map + .wrap{padding-top:4px;}
+.wrap:has(+ figure.map){padding-bottom:22px;}
 
 /* ── cabecera ── */
 .eyebrow{
@@ -89,17 +90,52 @@ h1 .a{color:var(--c-art);} h1 .v{color:var(--c-ven);}
 
 /* ── mapa ── */
 figure.map{margin:0 0 8px;}
-.canvas{
-  border-block:1px solid var(--rule); border-inline:0;
+.mapbar{
+  max-width:1180px; margin:0 auto; padding:0 clamp(16px,3vw,32px) 10px;
+  display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; justify-content:space-between;
+}
+.hint{font-size:13px; color:var(--ink-2);}
+.ctrls{display:flex; gap:6px;}
+.ctrls button{
+  font-family:var(--f-body); font-size:13px; font-weight:700; color:var(--ink-2);
+  background:var(--paper-2); border:1px solid var(--rule); border-radius:2px;
+  padding:6px 11px; cursor:pointer; line-height:1.25; touch-action:manipulation;
+}
+.ctrls button:hover{color:var(--ink); border-color:var(--c-sepia);}
+.ctrls button:focus-visible{outline:2px solid var(--c-art); outline-offset:2px;}
+.ctrls .zbtn{min-width:36px; font-size:17px; padding:3px 10px;}
+
+.viewport{
+  position:relative; overflow:hidden; background:var(--well);
+  border-block:1px solid var(--rule);
+  height:clamp(440px,80vh,1060px);
+  cursor:grab; touch-action:pan-y; overscroll-behavior:contain;
+}
+.viewport:focus-visible{outline:2px solid var(--c-art); outline-offset:-3px;}
+.viewport.grabbing{cursor:grabbing;}
+.viewport.fs{position:fixed; inset:0; z-index:9998; height:100dvh; border:0;}
+html.fs-on, html.fs-on body{overflow:hidden;}
+html.fs-on .mapbar{
+  position:fixed; z-index:9999; top:12px; right:12px; left:auto;
+  width:auto; max-width:none; padding:7px 9px;
+  background:var(--paper-2); border:1px solid var(--rule); border-radius:3px;
+}
+html.fs-on .hint{display:none;}
+.stage{
+  position:absolute; top:0; left:0; transform-origin:0 0;
+  width:2000px; height:3012px;
   background-color:var(--paper-2);
   background-image:radial-gradient(var(--dot) 1.15px, transparent 1.15px);
   background-size:24px 24px; background-position:12px 12px;
-  overflow-x:auto; overflow-y:hidden;
-  padding:20px clamp(14px,3vw,44px);
-  scrollbar-color:var(--rule) transparent;
+  box-shadow:0 0 0 1px var(--rule);
 }
-.canvas:focus-visible{outline:2px solid var(--c-art); outline-offset:-2px;}
-.canvas svg{display:block; width:100%; min-width:1300px; height:auto;}
+.stage svg{display:block; width:100%; height:100%;}
+.stage.anim{transition:transform .2s cubic-bezier(.25,.8,.35,1);}
+/* sin JS el mapa se mantiene desplazable */
+html:not(.js) .viewport{height:auto; overflow-x:auto; cursor:auto; touch-action:auto;}
+html:not(.js) .stage{position:static; width:auto; height:auto; min-width:1300px; box-shadow:none;}
+html:not(.js) .stage svg{width:100%; height:auto;}
+html:not(.js) .ctrls{display:none;}
 figcaption{
   max-width:1180px; margin:14px auto 0; padding:0 clamp(16px,3vw,32px);
   font-size:13.5px; color:var(--ink-2);
@@ -179,11 +215,13 @@ footer{
   margin-top:44px; padding-top:20px; border-top:1px solid var(--rule);
   font-size:13px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:6px 18px;
 }
-@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}
+  .stage.anim{transition:none !important;}}
 </style>
 </head>
 <body>
 
+<script>if(window.PointerEvent)document.documentElement.className+=' js';</script>
 <div class="wrap">
 <header>
   <p class="eyebrow">Anatomía · Sistema circulatorio</p>
@@ -212,7 +250,17 @@ footer{
 </div>
 
 <figure class="map">
-  <div class="canvas" tabindex="0" role="region" aria-label="Mapa vascular, desplazable en horizontal">
+  <div class="mapbar">
+    <p class="hint">Pellizca con dos dedos para acercar y arrastra para desplazarte. En computador, Ctrl o ⌘ + scroll.</p>
+    <div class="ctrls">
+      <button type="button" class="zbtn" data-z="out" aria-label="Alejar">−</button>
+      <button type="button" class="zbtn" data-z="in" aria-label="Acercar">+</button>
+      <button type="button" data-z="fit">Ver todo</button>
+      <button type="button" data-z="full" id="fsbtn" aria-pressed="false">Ampliar</button>
+    </div>
+  </div>
+  <div class="viewport" id="vp" tabindex="0" role="application" aria-label="Mapa vascular con zoom: pellizca o usa los botones para acercar, arrastra para desplazarte">
+    <div class="stage" id="stage">
 <svg id="mapa" viewBox="0 0 2000 3012" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa de flujo de la circulación sistémica y pulmonar: arterias en rojo desde el ventrículo izquierdo hasta manos y pies, y venas en azul de vuelta a las cavas.">
 <defs>
 <marker id="ah-art" viewBox="0 0 10 10" refX="8.4" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" class="fill-art"/></marker>
@@ -544,12 +592,13 @@ footer{
 <text class="lbl-ven" x="1300" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="22">PLANTA · plano profundo</text>
 <text class="lbl-ven" x="1780" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="22">DORSO · plano superficial</text>
 </svg>
+    </div>
   </div>
   <figcaption>Circuito completo: ventrículo izquierdo → aorta → arcos palmares y arcos del pie →
   retorno venoso profundo y superficial → cavas → aurícula derecha → circuito pulmonar → aurícula izquierda.
   Los dos recuadros punteados aíslan los circuitos que se enredaban en el centro del apunte original:
   la irrigación del propio corazón y el paso por el pulmón.
-  <b>En pantallas angostas el mapa se desliza en horizontal.</b></figcaption>
+  <b>Acércate con los dedos para leer cualquier zona.</b></figcaption>
 </figure>
 
 <div class="wrap">
@@ -652,6 +701,141 @@ Cada ficha muestra qué decía y qué dice ahora.</p>
   <span>Vista anterior, patrón bilateral simétrico</span>
 </footer>
 </div>
+
+<script>
+(function () {
+  var vp = document.getElementById('vp'), stage = document.getElementById('stage');
+  var bar = document.querySelector('.ctrls'), fsbtn = document.getElementById('fsbtn');
+  if (!vp || !stage || !window.PointerEvent) { document.documentElement.className =
+    document.documentElement.className.replace(/\bjs\b/, ''); return; }
+
+  var W = 2000, H = 3012;
+  var scale = 1, tx = 0, ty = 0, minS = 0.1, maxS = 4, fitS = 1, initS = 1;
+  var pts = new Map(), pinch = null, moved = false, lastTap = 0, animT = 0;
+
+  function measure() {
+    var w = vp.clientWidth, h = vp.clientHeight;
+    fitS = Math.min(w / W, h / H);
+    initS = Math.max(w / W, Math.min(1, 1300 / W));
+    minS = Math.min(fitS * 0.85, initS);
+    return { w: w, h: h };
+  }
+  function apply() {
+    var m = measure(), cw = W * scale, ch = H * scale;
+    tx = cw <= m.w ? (m.w - cw) / 2 : Math.min(0, Math.max(m.w - cw, tx));
+    ty = ch <= m.h ? (m.h - ch) / 2 : Math.min(0, Math.max(m.h - ch, ty));
+    stage.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) +
+                            'px) scale(' + scale.toFixed(4) + ')';
+    vp.style.touchAction = scale > initS * 1.02 ? 'none' : 'pan-y';
+  }
+  function anim(fn) {
+    stage.classList.add('anim'); fn();
+    clearTimeout(animT);
+    animT = setTimeout(function () { stage.classList.remove('anim'); }, 260);
+  }
+  function zoomAt(f, cx, cy) {
+    var ns = Math.max(minS, Math.min(maxS, scale * f)), k = ns / scale;
+    if (k === 1) return;
+    tx = cx - (cx - tx) * k; ty = cy - (cy - ty) * k; scale = ns; apply();
+  }
+  function reset(mode) {
+    var m = measure();
+    scale = mode === 'fit' ? fitS : initS;
+    tx = (m.w - W * scale) / 2;
+    ty = mode === 'fit' ? (m.h - H * scale) / 2 : 0;
+    apply();
+  }
+  function toggleZoom(cx, cy) {
+    anim(function () {
+      if (scale > initS * 1.05) reset('init'); else zoomAt(2.2, cx, cy);
+    });
+  }
+  function rel(e) { var r = vp.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+
+  vp.addEventListener('pointerdown', function (e) {
+    try { vp.setPointerCapture(e.pointerId); } catch (err) {}
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    moved = false; pinch = null;
+    if (e.pointerType === 'mouse') vp.classList.add('grabbing');
+  });
+  vp.addEventListener('pointermove', function (e) {
+    if (!pts.has(e.pointerId)) return;
+    var prev = pts.get(e.pointerId);
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) {
+      if (e.pointerType !== 'mouse' && scale <= initS * 1.02) return;
+      e.preventDefault();
+      tx += e.clientX - prev.x; ty += e.clientY - prev.y; moved = true; apply();
+    } else if (pts.size === 2) {
+      e.preventDefault();
+      var a = []; pts.forEach(function (v) { a.push(v); });
+      var r = vp.getBoundingClientRect();
+      var d = Math.sqrt(Math.pow(a[0].x - a[1].x, 2) + Math.pow(a[0].y - a[1].y, 2));
+      var mx = (a[0].x + a[1].x) / 2 - r.left, my = (a[0].y + a[1].y) / 2 - r.top;
+      if (pinch && pinch.d > 0) {
+        zoomAt(d / pinch.d, mx, my);
+        tx += mx - pinch.mx; ty += my - pinch.my; apply();
+      }
+      pinch = { d: d, mx: mx, my: my }; moved = true;
+    }
+  });
+  function up(e) {
+    if (!pts.has(e.pointerId)) return;
+    pts.delete(e.pointerId);
+    if (pts.size < 2) pinch = null;
+    if (pts.size === 0) vp.classList.remove('grabbing');
+    if (!moved && e.pointerType !== 'mouse') {
+      var now = Date.now(), p = rel(e);
+      if (now - lastTap < 330) { toggleZoom(p.x, p.y); lastTap = 0; } else lastTap = now;
+    }
+  }
+  vp.addEventListener('pointerup', up);
+  vp.addEventListener('pointercancel', up);
+  vp.addEventListener('dblclick', function (e) { var p = rel(e); toggleZoom(p.x, p.y); });
+  vp.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    var p = rel(e);
+    zoomAt(Math.pow(0.99, e.deltaY), p.x, p.y);
+  }, { passive: false });
+
+  function toggleFs() {
+    var on = vp.classList.toggle('fs');
+    document.documentElement.classList.toggle('fs-on', on);
+    fsbtn.textContent = on ? 'Salir' : 'Ampliar';
+    fsbtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    requestAnimationFrame(function () { reset(on ? 'fit' : 'init'); if (on) vp.focus(); });
+  }
+  bar.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('button') : null;
+    if (!b) return;
+    var m = measure(), z = b.getAttribute('data-z');
+    if (z === 'in') anim(function () { zoomAt(1.6, m.w / 2, m.h / 2); });
+    else if (z === 'out') anim(function () { zoomAt(1 / 1.6, m.w / 2, m.h / 2); });
+    else if (z === 'fit') anim(function () { reset('fit'); });
+    else if (z === 'full') toggleFs();
+  });
+
+  vp.addEventListener('keydown', function (e) {
+    var m = measure(), step = 70, k = e.key;
+    if (k === '+' || k === '=') anim(function () { zoomAt(1.4, m.w / 2, m.h / 2); });
+    else if (k === '-' || k === '_') anim(function () { zoomAt(1 / 1.4, m.w / 2, m.h / 2); });
+    else if (k === '0') anim(function () { reset('init'); });
+    else if (k === 'ArrowLeft') { tx += step; apply(); }
+    else if (k === 'ArrowRight') { tx -= step; apply(); }
+    else if (k === 'ArrowUp') { ty += step; apply(); }
+    else if (k === 'ArrowDown') { ty -= step; apply(); }
+    else return;
+    e.preventDefault();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && vp.classList.contains('fs')) toggleFs();
+  });
+  addEventListener('resize', function () { apply(); });
+
+  reset('init');
+})();
+</script>
 
 </body>
 </html>
