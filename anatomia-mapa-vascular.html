@@ -215,6 +215,21 @@ footer{
   margin-top:44px; padding-top:20px; border-top:1px solid var(--rule);
   font-size:13px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:6px 18px;
 }
+@media print{
+  :root, :root[data-theme="dark"]{
+    --paper:#fff; --paper-2:#fff; --well:#fff; --dot:#D8CFB8;
+    --ink:#000; --ink-2:#4A443A; --rule:#C9BFA6;
+    --c-art:#9B3325; --c-ven:#26348A; --c-paper:#fff;
+  }
+  body{background:#fff;}
+  .mapbar{display:none !important;}
+  .viewport{height:auto !important; overflow:visible !important; border:0; cursor:auto;}
+  .stage{position:static !important; transform:none !important;
+    width:100% !important; height:auto !important; box-shadow:none;}
+  .stage svg{width:100% !important; height:auto !important;}
+  figure.map, .card, .legend li, .adds li{break-inside:avoid;}
+  h2{break-after:avoid;}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}
   .stage.anim{transition:none !important;}}
 </style>
