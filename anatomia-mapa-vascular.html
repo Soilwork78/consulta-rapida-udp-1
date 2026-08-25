@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Del ventrículo a los dedos — Mapa vascular UDP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Karla:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#F7F3E7; --paper-2:#FBF8EF; --dot:#D3C9AF;
+  --ink:#33302A; --ink-2:#6E6553;
+  --c-art:#A63A2C; --c-ven:#2E3E96; --c-ink:#6E6553; --c-sepia:#8B7448;
+  --c-paper:#FBF8EF; --rule:#DCD2B8;
+  --f-hand:'Patrick Hand', 'Segoe Print', cursive;
+  --f-disp:'Caveat', 'Segoe Script', cursive;
+  --f-body:'Karla', ui-sans-serif, system-ui, sans-serif;
+}
+:root:not([data-theme="light"]){ }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#15171C; --paper-2:#1B1E25; --dot:#2C313B;
+    --ink:#EAE5D7; --ink-2:#A79E8B;
+    --c-art:#EF8A79; --c-ven:#98A9F6; --c-ink:#A79E8B; --c-sepia:#C4AC80;
+    --c-paper:#1B1E25; --rule:#2E333D;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15171C; --paper-2:#1B1E25; --dot:#2C313B;
+  --ink:#EAE5D7; --ink-2:#A79E8B;
+  --c-art:#EF8A79; --c-ven:#98A9F6; --c-ink:#A79E8B; --c-sepia:#C4AC80;
+  --c-paper:#1B1E25; --rule:#2E333D;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:clamp(20px,4vw,56px) clamp(16px,3vw,32px) 72px;}
+figure.map + .wrap{padding-top:4px;}
+
+/* ── cabecera ── */
+.eyebrow{
+  font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--c-sepia); margin:0 0 10px;
+}
+h1{
+  font-family:var(--f-disp); font-weight:700;
+  font-size:clamp(2.6rem,7vw,4.6rem); line-height:.98; margin:0;
+  text-wrap:balance; color:var(--ink);
+}
+h1 .a{color:var(--c-art);} h1 .v{color:var(--c-ven);}
+.dek{
+  max-width:62ch; margin:18px 0 0; font-size:clamp(1rem,1.5vw,1.12rem);
+  color:var(--ink-2);
+}
+.rule{height:1px; background:var(--rule); border:0; margin:32px 0;}
+
+/* ── leyenda ── */
+.legend{
+  display:flex; flex-wrap:wrap; gap:10px 14px; align-items:stretch; margin:0 0 20px;
+  list-style:none; padding:0;
+}
+.legend li{
+  display:flex; align-items:center; gap:10px;
+  border:1px solid var(--rule); border-radius:2px;
+  background:var(--paper-2); padding:8px 14px 8px 12px;
+  font-size:14px; color:var(--ink-2);
+}
+.legend b{color:var(--ink); font-weight:700; font-size:14px;}
+.swatch{width:34px; height:0; flex:none; border-top:3px solid var(--ink);}
+.sw-art{border-color:var(--c-art);}
+.sw-ven{border-color:var(--c-ven);}
+.sw-dash{border-color:var(--c-art); border-top-style:dashed;}
+.sw-lvl{border-color:var(--c-sepia); border-top-style:dotted;}
+
+.howto{
+  display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  margin:0 0 26px; padding:0; list-style:none;
+}
+.howto li{font-size:14.5px; color:var(--ink-2); padding-left:16px; position:relative;}
+.howto li::before{
+  content:''; position:absolute; left:0; top:.62em; width:7px; height:7px;
+  border-radius:50%; background:var(--c-sepia);
+}
+.howto strong{color:var(--ink); font-weight:700;}
+
+/* ── mapa ── */
+figure.map{margin:0 0 8px;}
+.canvas{
+  border-block:1px solid var(--rule); border-inline:0;
+  background-color:var(--paper-2);
+  background-image:radial-gradient(var(--dot) 1.15px, transparent 1.15px);
+  background-size:24px 24px; background-position:12px 12px;
+  overflow-x:auto; overflow-y:hidden;
+  padding:20px clamp(14px,3vw,44px);
+  scrollbar-color:var(--rule) transparent;
+}
+.canvas:focus-visible{outline:2px solid var(--c-art); outline-offset:-2px;}
+.canvas svg{display:block; width:100%; min-width:1300px; height:auto;}
+figcaption{
+  max-width:1180px; margin:14px auto 0; padding:0 clamp(16px,3vw,32px);
+  font-size:13.5px; color:var(--ink-2);
+}
+figcaption b{color:var(--ink); font-weight:700;}
+
+/* ── clases dentro del SVG ── */
+#mapa text{font-family:var(--f-hand); paint-order:stroke fill;
+  stroke:var(--c-paper); stroke-width:5px; stroke-linejoin:round;}
+#mapa .lbl-art{fill:var(--c-art);}
+#mapa .lbl-ven{fill:var(--c-ven);}
+#mapa .lbl-ink{fill:var(--c-ink);}
+#mapa .lbl-lvl{fill:var(--c-sepia); font-family:var(--f-body); font-weight:700; stroke-width:4px;}
+#mapa .lbl-edge{fill:var(--c-sepia); font-family:var(--f-body); font-style:italic; stroke-width:4px;}
+#mapa .zone{fill:var(--c-sepia); font-family:var(--f-disp); font-weight:700; opacity:.72; stroke-width:0;}
+#mapa .big{stroke-width:5px;}
+#mapa .e-art,#mapa .e-ven,#mapa .e-ink{fill:none; stroke-linecap:round;}
+#mapa .e-art{stroke:var(--c-art); stroke-width:2.1;}
+#mapa .e-ven{stroke:var(--c-ven); stroke-width:2.1;}
+#mapa .e-ink{stroke:var(--c-ink); stroke-width:1.6;}
+#mapa .dash{stroke-dasharray:9 7;}
+#mapa .fill-art{fill:var(--c-art);} #mapa .fill-ven{fill:var(--c-ven);} #mapa .fill-ink{fill:var(--c-ink);}
+#mapa .organ{fill:none; stroke:var(--c-ink); stroke-width:2.2;}
+#mapa .hair{stroke:var(--c-ink); stroke-width:1.2; stroke-dasharray:5 6;}
+#mapa .inset{fill:none; stroke:var(--c-sepia); stroke-width:1.6; stroke-dasharray:8 7; opacity:.8;}
+#mapa .tether{fill:none; stroke:var(--c-sepia); stroke-width:1.4; stroke-dasharray:3 6; opacity:.75;}
+#mapa .ruler{stroke:var(--c-sepia); stroke-width:1.6;}
+#mapa .trunk-art{fill:none; stroke:var(--c-art); stroke-width:6; stroke-linecap:round; opacity:.92;}
+#mapa .trunk-ven{fill:none; stroke:var(--c-ven); stroke-width:6; stroke-linecap:round; opacity:.92;}
+
+/* ── fichas ── */
+h2{
+  font-family:var(--f-disp); font-weight:700; font-size:clamp(1.9rem,3.6vw,2.8rem);
+  margin:0 0 6px; color:var(--ink); text-wrap:balance;
+}
+.h2sub{margin:0 0 24px; color:var(--ink-2); font-size:15px; max-width:70ch;}
+.cards{
+  display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  padding:0; margin:0; list-style:none;
+}
+.card{
+  border:1px solid var(--rule); border-radius:3px; background:var(--paper-2);
+  padding:16px 18px 18px;
+}
+.card h3{
+  margin:0 0 10px; font-size:15px; font-weight:700; color:var(--ink);
+  display:flex; align-items:baseline; gap:8px;
+}
+.card h3 .n{
+  font-family:var(--f-body); font-size:11px; font-weight:700; letter-spacing:.1em;
+  color:var(--c-sepia); border:1px solid var(--rule); border-radius:2px;
+  padding:2px 6px; flex:none;
+}
+.ba{display:grid; gap:8px; margin:0; font-size:14px;}
+.ba div{display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:start;}
+.ba dt{
+  font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  padding-top:3px; white-space:nowrap;
+}
+.ba .antes dt{color:var(--ink-2);} .ba .antes dd{color:var(--ink-2); text-decoration:line-through; text-decoration-color:var(--c-art);}
+.ba .ahora dt{color:var(--c-art);} .ba .ahora dd{color:var(--ink); font-weight:500;}
+.ba dd{margin:0;}
+.card p.why{margin:10px 0 0; font-size:13px; color:var(--ink-2); line-height:1.5;}
+
+.adds{
+  display:grid; gap:10px 22px; grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  padding:0; margin:0; list-style:none;
+}
+.adds li{font-size:14.5px; padding-left:20px; position:relative; color:var(--ink-2);}
+.adds li::before{
+  content:'+'; position:absolute; left:0; top:0; color:var(--c-art);
+  font-weight:700; font-family:var(--f-body);
+}
+.adds b{color:var(--ink); font-weight:700;}
+
+footer{
+  margin-top:44px; padding-top:20px; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:6px 18px;
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Anatomía · Sistema circulatorio</p>
+  <h1>Del <span class="a">ventrículo</span><br>a los <span class="v">dedos</span></h1>
+  <p class="dek">Mapa de flujo de la circulación sistémica y pulmonar: quién nace de quién,
+  en el sentido en que corre la sangre. Reconstruido a partir de un apunte manuscrito, con
+  ocho correcciones anatómicas y seis territorios que faltaban.</p>
+</header>
+
+<hr class="rule">
+
+<ul class="legend">
+  <li><span class="swatch sw-art"></span><b>Arteria</b></li>
+  <li><span class="swatch sw-ven"></span><b>Vena</b></li>
+  <li><span class="swatch sw-dash"></span><span><b>Trazo discontinuo</b> — circuito pulmonar: la arteria lleva sangre desoxigenada y la vena, oxigenada</span></li>
+  <li><span class="swatch sw-lvl"></span><span><b>T12 – L4</b> — nivel vertebral de cada rama aórtica</span></li>
+</ul>
+
+<ul class="howto">
+  <li><strong>Cada flecha va en el sentido del flujo.</strong> Se lee siguiendo la punta, no de arriba abajo.</li>
+  <li><strong>Vista frontal:</strong> el lado derecho del cuerpo queda a tu izquierda.</li>
+  <li><strong>Brazo y pierna derechos</strong> desglosan el árbol arterial y el plano venoso profundo (palma).</li>
+  <li><strong>Brazo y pierna izquierdos</strong> desglosan el plano venoso superficial y el dorso. El patrón real es simétrico.</li>
+</ul>
+
+</div>
+
+<figure class="map">
+  <div class="canvas" tabindex="0" role="region" aria-label="Mapa vascular, desplazable en horizontal">
+<svg id="mapa" viewBox="0 0 2000 3012" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Mapa de flujo de la circulación sistémica y pulmonar: arterias en rojo desde el ventrículo izquierdo hasta manos y pies, y venas en azul de vuelta a las cavas.">
+<defs>
+<marker id="ah-art" viewBox="0 0 10 10" refX="8.4" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" class="fill-art"/></marker>
+<marker id="ah-ven" viewBox="0 0 10 10" refX="8.4" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" class="fill-ven"/></marker>
+<marker id="ah-ink" viewBox="0 0 10 10" refX="8.4" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" class="fill-ink"/></marker>
+<filter id="rough" x="-3%" y="-3%" width="106%" height="106%">
+<feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="9" result="t"/>
+<feDisplacementMap in="SourceGraphic" in2="t" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+</defs>
+<g filter="url(#rough)">
+<circle class="organ" cx="1000" cy="158" r="92"/>
+<circle class="fill-art" cx="968" cy="140" r="6"/>
+<circle class="fill-art" cx="1032" cy="140" r="6"/>
+<path class="e-art" d="M 966 182 Q 1000 208 1034 182"/>
+<path class="e-art" d="M 540 501 C 540 450, 540 430, 540 379" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 540 501 C 540 445, 540 477, 540 421" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1460 501 C 1460 450, 1460 430, 1460 379" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1460 501 C 1460 445, 1460 477, 1460 421" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 647 360 C 701 360, 708 300, 763 300" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1353 360 C 1203 360, 1097 300, 947 300" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 628 444 C 711 444, 680 300, 763 300" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1372 444 C 1222 444, 1097 300, 947 300" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 1053 300 C 926 300, 790 322, 790 449" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1160 319 C 1160 378, 1210 390, 1210 449" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 912 640 C 834 640, 809 600, 731 600" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1000 617 C 1000 467, 1460 689, 1460 539" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1088 640 C 1238 640, 1462 655, 1612 655" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 620 581 C 620 543, 540 577, 540 539" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 509 600 C 453 600, 443 655, 388 655" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 388 712 C 453 712, 478 722, 544 722" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1612 712 C 1547 712, 1522 722, 1456 722" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 790 487 C 790 593, 660 597, 660 703" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1210 487 C 1210 593, 1340 597, 1340 703" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 660 741 C 660 836, 785 792, 880 792" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1340 741 C 1340 836, 1215 792, 1120 792" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1211 780 C 1184 780, 1147 792, 1120 792" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 1235 813 C 1235 699, 1202 640, 1088 640" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 212 655 C 156 655, 170 726, 170 783" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 170 821 C 170 839, 170 823, 170 841" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 170 879 C 170 897, 170 881, 170 899" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 87 860 C 40 880, 40 976, 92 976" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 243 918 C 330 930, 330 1032, 272 1036" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 92 976 C 30 990, 30 1096, 54 1100" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 272 1036 C 330 1040, 330 1160, 281 1164" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 170 1119 C 170 1137, 170 1127, 170 1145" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 170 1183 C 170 1201, 170 1188, 170 1206" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 500 1091 C 500 1073, 500 1067, 500 1049" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 500 1011 C 500 989, 500 981, 500 959" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 500 921 C 500 903, 500 899, 500 881" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 500 843 C 500 825, 500 839, 500 821" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 500 783 C 500 680, 300 834, 300 731" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 1788 655 C 1844 655, 1830 726, 1830 783" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1830 821 C 1830 839, 1830 823, 1830 841" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1830 879 C 1830 897, 1830 881, 1830 899" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1913 860 C 1960 880, 1960 976, 1908 976" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1757 918 C 1670 930, 1670 1032, 1728 1036" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1830 1055 C 1830 1073, 1830 1059, 1830 1077" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1830 1115 C 1830 1133, 1830 1119, 1830 1137" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1830 1175 C 1830 1193, 1830 1182, 1830 1200" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 1500 1137 C 1500 1119, 1500 1115, 1500 1097" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1500 1059 C 1500 1041, 1500 1037, 1500 1019" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1500 981 C 1500 924, 1380 976, 1380 919" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1500 981 C 1500 924, 1620 976, 1620 919" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1439 900 C 1478 900, 1522 900, 1561 900" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1380 881 C 1380 825, 1500 877, 1500 821" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1620 881 C 1620 825, 1500 877, 1500 821" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1500 783 C 1500 680, 1700 834, 1700 731" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 426 1382 C 399 1382, 370 1386, 370 1413" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 554 1382 C 583 1382, 615 1384, 615 1413" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 615 1451 C 615 1469, 615 1443, 615 1461" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 370 1451 C 370 1498, 374 1530, 421 1530" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 615 1495 C 615 1528, 592 1530, 559 1530" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 490 1549 C 490 1567, 490 1541, 490 1559" marker-end="url(#ah-ven)"/>
+<path class="e-art dash" d="M 1540 1401 C 1540 1419, 1540 1391, 1540 1409" marker-end="url(#ah-art)"/>
+<path class="e-art dash" d="M 1540 1447 C 1540 1465, 1540 1440, 1540 1458" marker-end="url(#ah-art)"/>
+<path class="e-ven dash" d="M 1540 1494 C 1540 1512, 1540 1487, 1540 1505" marker-end="url(#ah-ven)"/>
+<path class="e-ven dash" d="M 1540 1543 C 1540 1561, 1540 1533, 1540 1551" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 1088 640 C 1150 660, 1300 1150, 1220 1226" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1473 1722 C 1562 1722, 1559 1690, 1647 1690" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1473 1722 C 1554 1722, 1585 1728, 1666 1728" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1473 1722 C 1561 1722, 1555 1766, 1642 1766" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1516 1812 C 1556 1812, 1571 1812, 1611 1812" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1459 1924 C 1543 1924, 1576 1924, 1660 1924" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1516 2038 C 1560 2038, 1576 2038, 1620 2038" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 274 1902 C 292 1902, 266 1902, 284 1902" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 213 1958 C 265 1958, 284 1958, 336 1958" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 225 2014 C 250 2014, 259 2014, 284 2014" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 516 1902 C 550 1902, 521 1846, 556 1846" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 464 1958 C 525 1958, 495 1846, 556 1846" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 400 1995 C 400 1977, 400 1995, 400 1977" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 620 1826 C 620 1808, 620 1820, 620 1802" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 620 1762 C 620 1744, 620 1759, 620 1741" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 1152 2172 C 900 2130, 400 2130, 300 2191" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1288 2172 C 1500 2130, 1670 2130, 1700 2191" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 300 2229 C 300 2285, 200 2261, 200 2317" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 402 2210 C 497 2210, 560 2222, 560 2317" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 560 2355 C 560 2373, 560 2363, 560 2381" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 482 2400 C 339 2400, 200 2302, 200 2445" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 200 2483 C 200 2501, 200 2491, 200 2509" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 560 2419 C 560 2457, 560 2471, 560 2509" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 560 2547 C 560 2616, 400 2510, 400 2579" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 643 2528 C 707 2528, 760 2515, 760 2579" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 400 2617 C 400 2669, 280 2593, 280 2645" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 400 2617 C 400 2673, 530 2589, 530 2645" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 760 2617 C 760 2649, 830 2613, 830 2645" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 280 2683 C 280 2705, 240 2693, 240 2715" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 280 2683 C 280 2776, 500 2622, 500 2715" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 830 2683 C 830 2701, 830 2697, 830 2715" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 240 2753 C 240 2809, 370 2727, 370 2783" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 500 2753 C 500 2809, 370 2727, 370 2783" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 830 2753 C 830 2771, 830 2765, 830 2783" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 370 2821 C 370 2839, 370 2833, 370 2851" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 370 2889 C 370 2907, 370 2904, 370 2922" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 830 2821 C 830 2839, 830 2833, 830 2851" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 830 2889 C 830 2907, 830 2904, 830 2922" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 1300 2850 C 1300 2813, 1300 2799, 1300 2761" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1780 2850 C 1780 2813, 1780 2799, 1780 2761" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1300 2723 C 1300 2705, 1300 2707, 1300 2689" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1780 2723 C 1780 2705, 1780 2707, 1780 2689" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1300 2651 C 1300 2607, 1200 2663, 1200 2619" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1300 2651 C 1300 2591, 1440 2679, 1440 2619" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1780 2651 C 1780 2615, 1700 2655, 1700 2619" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1200 2581 C 1200 2508, 1264 2530, 1337 2530" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1440 2581 C 1440 2563, 1420 2567, 1420 2549" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1700 2581 C 1700 2489, 1595 2530, 1503 2530" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1872 2670 C 1968 2660, 1968 2582, 1880 2549" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1872 2670 C 1994 2640, 1994 2452, 1880 2419" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1802 2530 C 1676 2530, 1628 2530, 1503 2530" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1802 2400 C 1674 2400, 1626 2400, 1498 2400" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1420 2511 C 1420 2472, 1420 2458, 1420 2419" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1296 2464 C 1328 2464, 1310 2400, 1342 2400" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1420 2381 C 1420 2363, 1420 2373, 1420 2355" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1420 2317 C 1420 2294, 1380 2304, 1380 2281" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1780 2317 C 1780 2167, 1632 2262, 1482 2262" marker-end="url(#ah-ven)"/>
+<rect class="organ" x="840" y="872" width="320" height="300" rx="28"/>
+<line class="hair" x1="1000.0" y1="882" x2="1000.0" y2="1162"/>
+<line class="hair" x1="852" y1="1010.0" x2="1148" y2="1010.0"/>
+<text class="lbl-ven big" x="920" y="932" text-anchor="middle" dominant-baseline="middle" font-size="34">AD</text>
+<text class="lbl-art big" x="1080" y="932" text-anchor="middle" dominant-baseline="middle" font-size="34">AI</text>
+<text class="lbl-ven big" x="920" y="1092" text-anchor="middle" dominant-baseline="middle" font-size="34">VD</text>
+<text class="lbl-art big" x="1080" y="1092" text-anchor="middle" dominant-baseline="middle" font-size="34">VI</text>
+<text class="lbl-ink" x="1000" y="1207" text-anchor="middle" dominant-baseline="middle" font-size="18">AD · AI aurículas   |   VD · VI ventrículos</text>
+<path class="e-ven" d="M 1000 810 C 1000 840, 962 845, 962 872" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 1108 872 C 1130 852, 1150 845, 1176 838" marker-end="url(#ah-art)"/>
+<text class="lbl-ink" x="1000" y="1030" text-anchor="middle" dominant-baseline="middle" font-size="19">CORAZÓN</text>
+<rect class="inset" x="255" y="1300" width="470" height="310" rx="18"/>
+<text class="zone" x="490.0" y="1334" text-anchor="middle" dominant-baseline="middle" font-size="30">Circulación coronaria</text>
+<path class="tether" d="M 872 1172 C 800 1240, 700 1250, 640 1300"/>
+<rect class="inset" x="1275" y="1300" width="530" height="310" rx="18"/>
+<text class="zone" x="1540.0" y="1334" text-anchor="middle" dominant-baseline="middle" font-size="30">Circuito pulmonar</text>
+<path class="tether" d="M 1128 1172 C 1200 1240, 1300 1250, 1360 1300"/>
+<path class="trunk-art" d="M 1220 1272 L 1220 2200"/>
+<path class="trunk-ven" d="M 780 2262 L 780 1012 C 780 968, 798 946, 836 942" marker-end="url(#ah-ven)"/>
+<line class="ruler" x1="1090" y1="1698" x2="1090" y2="2196"/>
+<line class="ruler" x1="1079" y1="1722" x2="1101" y2="1722"/>
+<text class="lbl-lvl" x="1071" y="1722" text-anchor="end" dominant-baseline="middle" font-size="19">T12</text>
+<line class="ruler" x1="1079" y1="1812" x2="1101" y2="1812"/>
+<text class="lbl-lvl" x="1071" y="1812" text-anchor="end" dominant-baseline="middle" font-size="19">L1</text>
+<line class="ruler" x1="1079" y1="1868" x2="1101" y2="1868"/>
+<text class="lbl-lvl" x="1071" y="1868" text-anchor="end" dominant-baseline="middle" font-size="19">L1</text>
+<line class="ruler" x1="1079" y1="1924" x2="1101" y2="1924"/>
+<text class="lbl-lvl" x="1071" y="1924" text-anchor="end" dominant-baseline="middle" font-size="19">L1-L2</text>
+<line class="ruler" x1="1079" y1="1980" x2="1101" y2="1980"/>
+<text class="lbl-lvl" x="1071" y="1980" text-anchor="end" dominant-baseline="middle" font-size="19">L2</text>
+<line class="ruler" x1="1079" y1="2038" x2="1101" y2="2038"/>
+<text class="lbl-lvl" x="1071" y="2038" text-anchor="end" dominant-baseline="middle" font-size="19">L3</text>
+<line class="ruler" x1="1079" y1="2172" x2="1101" y2="2172"/>
+<text class="lbl-lvl" x="1071" y="2172" text-anchor="end" dominant-baseline="middle" font-size="19">L4</text>
+<path class="e-art" d="M 1220 1722 L 1324 1722" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1220 1812 L 1281 1812" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1220 1868 L 1276 1868" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1220 1924 L 1338 1924" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1220 1980 L 1328 1980" marker-end="url(#ah-art)"/>
+<path class="e-art" d="M 1220 2038 L 1281 2038" marker-end="url(#ah-art)"/>
+<path class="e-ink" d="M 1220 2100 L 1300 2100" marker-end="url(#ah-ink)"/>
+<path class="e-ven" d="M 691.698 1722 L 780 1722" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 710.682 2078 L 780 2078" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 682.206 2128 L 780 2128" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 691.698 2178 L 780 2178" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 702 2262 L 766 2262" marker-end="url(#ah-ven)"/>
+<path class="e-ven" d="M 1278 2262 L 794 2262" marker-end="url(#ah-ven)"/>
+<path class="e-art" d="M 900 268 C 880 280, 866 282, 858 286" marker-end="url(#ah-art)"/>
+<path class="e-ven" d="M 1096 210 C 1130 250, 1150 268, 1156 284" marker-end="url(#ah-ven)"/>
+<text class="zone" x="56" y="128" dominant-baseline="middle" font-size="31">Cabeza y cuello</text>
+<text class="zone" x="56" y="606" dominant-baseline="middle" font-size="31">Tórax</text>
+<text class="zone" x="56" y="1660" dominant-baseline="middle" font-size="31">Abdomen</text>
+<text class="zone" x="56" y="2410" dominant-baseline="middle" font-size="31">Miembros inferiores</text>
+<text class="zone" x="56" y="750" dominant-baseline="middle" font-size="31">Miembro superior</text>
+</g>
+<text class="lbl-edge" x="695" y="388" text-anchor="middle" dominant-baseline="middle" font-size="17">vía tronco basilar</text>
+<text class="lbl-edge" x="75" y="689" text-anchor="middle" dominant-baseline="middle" font-size="17">1.ª costilla</text>
+<text class="lbl-edge" x="1925" y="689" text-anchor="middle" dominant-baseline="middle" font-size="17">1.ª costilla</text>
+<text class="lbl-edge" x="1500" y="887" text-anchor="middle" dominant-baseline="middle" font-size="17">V. mediana cubital</text>
+<text class="lbl-edge" x="670" y="2370" text-anchor="middle" dominant-baseline="middle" font-size="17">ligamento inguinal</text>
+<text class="lbl-edge" x="917" y="2633" text-anchor="middle" dominant-baseline="middle" font-size="17">continúa como pedia</text>
+<text class="lbl-edge" x="1652" y="2516" text-anchor="middle" dominant-baseline="middle" font-size="17">unión safenopoplítea</text>
+<text class="lbl-edge" x="1650" y="2386" text-anchor="middle" dominant-baseline="middle" font-size="17">unión safenofemoral</text>
+<text class="lbl-art" x="855" y="300" text-anchor="middle" dominant-baseline="middle" font-size="21">Polígono de Willis</text>
+<text class="lbl-ven" x="1160" y="300" text-anchor="middle" dominant-baseline="middle" font-size="21">Senos venosos durales</text>
+<text class="lbl-art" x="540" y="360" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida interna der.</text>
+<text class="lbl-art" x="540" y="402" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida externa der.</text>
+<text class="lbl-art" x="540" y="444" text-anchor="middle" dominant-baseline="middle" font-size="21">A. vertebral der.</text>
+<text class="lbl-art" x="1460" y="360" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida interna izq.</text>
+<text class="lbl-art" x="1460" y="402" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida externa izq.</text>
+<text class="lbl-art" x="1460" y="444" text-anchor="middle" dominant-baseline="middle" font-size="21">A. vertebral izq.</text>
+<text class="lbl-ven" x="790" y="468" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. yugulares der.</text>
+<text class="lbl-ven" x="1210" y="468" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. yugulares izq.</text>
+<text class="lbl-art" x="540" y="520" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida común der.</text>
+<text class="lbl-art" x="1460" y="520" text-anchor="middle" dominant-baseline="middle" font-size="21">Carótida común izq.</text>
+<text class="lbl-art" x="1000" y="640" text-anchor="middle" dominant-baseline="middle" font-size="27">ARCO AÓRTICO</text>
+<text class="lbl-art" x="620" y="600" text-anchor="middle" dominant-baseline="middle" font-size="21">Tronco braquiocefálico</text>
+<text class="lbl-art" x="300" y="655" text-anchor="middle" dominant-baseline="middle" font-size="21">A. subclavia der.</text>
+<text class="lbl-art" x="1700" y="655" text-anchor="middle" dominant-baseline="middle" font-size="21">A. subclavia izq.</text>
+<text class="lbl-ven" x="300" y="712" text-anchor="middle" dominant-baseline="middle" font-size="21">V. subclavia der.</text>
+<text class="lbl-ven" x="1700" y="712" text-anchor="middle" dominant-baseline="middle" font-size="21">V. subclavia izq.</text>
+<text class="lbl-ven" x="660" y="722" text-anchor="middle" dominant-baseline="middle" font-size="21">V. braquiocefálica der.</text>
+<text class="lbl-ven" x="1340" y="722" text-anchor="middle" dominant-baseline="middle" font-size="21">V. braquiocefálica izq.</text>
+<text class="lbl-ven" x="1000" y="792" text-anchor="middle" dominant-baseline="middle" font-size="25">VENA CAVA SUPERIOR</text>
+<text class="lbl-ven" x="1330" y="780" text-anchor="middle" dominant-baseline="middle" font-size="19">V. ácigos · pared torácica</text>
+<text class="lbl-art" x="1235" y="832" text-anchor="middle" dominant-baseline="middle" font-size="21">Aorta ascendente</text>
+<text class="lbl-art" x="170" y="802" text-anchor="middle" dominant-baseline="middle" font-size="21">A. axilar der.</text>
+<text class="lbl-art" x="170" y="860" text-anchor="middle" dominant-baseline="middle" font-size="21">A. braquial der.</text>
+<text class="lbl-art" x="170" y="918" text-anchor="middle" dominant-baseline="middle" font-size="21">A. radial der.</text>
+<text class="lbl-art" x="170" y="976" text-anchor="middle" dominant-baseline="middle" font-size="21">A. cubital der.</text>
+<text class="lbl-art" x="170" y="1036" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco palmar PROFUNDO</text>
+<text class="lbl-art" x="170" y="1100" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco palmar SUPERFICIAL</text>
+<text class="lbl-art" x="170" y="1164" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. digitales palmares</text>
+<text class="lbl-art" x="170" y="1228" text-anchor="middle" dominant-baseline="middle" font-size="25">PALMA DE LA MANO</text>
+<text class="lbl-ven" x="500" y="802" text-anchor="middle" dominant-baseline="middle" font-size="21">V. axilar der.</text>
+<text class="lbl-ven" x="500" y="862" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. braquiales</text>
+<text class="lbl-ven" x="500" y="940" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. radiales y cubitales</text>
+<text class="lbl-ven" x="500" y="1030" text-anchor="middle" dominant-baseline="middle" font-size="21">Arcos venosos palmares</text>
+<text class="lbl-ven" x="500" y="1110" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. digitales palmares</text>
+<text class="lbl-art" x="1830" y="802" text-anchor="middle" dominant-baseline="middle" font-size="21">A. axilar izq.</text>
+<text class="lbl-art" x="1830" y="860" text-anchor="middle" dominant-baseline="middle" font-size="21">A. braquial izq.</text>
+<text class="lbl-art" x="1830" y="918" text-anchor="middle" dominant-baseline="middle" font-size="21">A. radial izq.</text>
+<text class="lbl-art" x="1830" y="976" text-anchor="middle" dominant-baseline="middle" font-size="21">A. cubital izq.</text>
+<text class="lbl-art" x="1830" y="1036" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco carpiano DORSAL</text>
+<text class="lbl-art" x="1830" y="1096" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. metacarp. dorsales</text>
+<text class="lbl-art" x="1830" y="1156" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. digitales dorsales</text>
+<text class="lbl-art" x="1830" y="1222" text-anchor="middle" dominant-baseline="middle" font-size="25">DORSO DE LA MANO</text>
+<text class="lbl-ven" x="1500" y="802" text-anchor="middle" dominant-baseline="middle" font-size="21">V. axilar izq.</text>
+<text class="lbl-ven" x="1380" y="900" text-anchor="middle" dominant-baseline="middle" font-size="21">V. cefálica</text>
+<text class="lbl-ven" x="1620" y="900" text-anchor="middle" dominant-baseline="middle" font-size="21">V. basílica</text>
+<text class="lbl-ven" x="1500" y="1000" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. superficiales</text>
+<text class="lbl-ven" x="1500" y="1078" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco venoso dorsal</text>
+<text class="lbl-ven" x="1500" y="1156" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. digitales dorsales</text>
+<text class="lbl-art" x="490" y="1382" text-anchor="middle" dominant-baseline="middle" font-size="21">Raíz aórtica</text>
+<text class="lbl-art" x="370" y="1432" text-anchor="middle" dominant-baseline="middle" font-size="21">Coronaria der.</text>
+<text class="lbl-art" x="615" y="1432" text-anchor="middle" dominant-baseline="middle" font-size="21">Coronaria izq.</text>
+<text class="lbl-art" x="615" y="1478" text-anchor="middle" dominant-baseline="middle" font-size="18">Desc. ant. + circunfleja</text>
+<text class="lbl-ven" x="490" y="1530" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. cardíacas</text>
+<text class="lbl-ven" x="490" y="1578" text-anchor="middle" dominant-baseline="middle" font-size="21">Seno coronario → AD</text>
+<text class="lbl-art" x="1540" y="1382" text-anchor="middle" dominant-baseline="middle" font-size="21">VD → tronco pulmonar</text>
+<text class="lbl-art" x="1540" y="1428" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. pulmonares der. e izq.</text>
+<text class="lbl-ink" x="1540" y="1476" text-anchor="middle" dominant-baseline="middle" font-size="19">PULMONES · capilares alveolares</text>
+<text class="lbl-ven" x="1540" y="1524" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. pulmonares</text>
+<text class="lbl-ven" x="1540" y="1570" text-anchor="middle" dominant-baseline="middle" font-size="21">→ aurícula izquierda</text>
+<text class="lbl-art" x="1220" y="1245" text-anchor="middle" dominant-baseline="middle" font-size="21">Aorta torácica descendente</text>
+<text class="lbl-art" x="1220" y="1660" text-anchor="middle" dominant-baseline="middle" font-size="25">AORTA ABDOMINAL</text>
+<text class="lbl-ven" x="780" y="1660" text-anchor="middle" dominant-baseline="middle" font-size="25">VENA CAVA INFERIOR</text>
+<text class="lbl-art" x="1400" y="1722" text-anchor="middle" dominant-baseline="middle" font-size="21">Tronco celíaco</text>
+<text class="lbl-art" x="1730" y="1690" text-anchor="middle" dominant-baseline="middle" font-size="21">A. gástrica izq.</text>
+<text class="lbl-art" x="1730" y="1728" text-anchor="middle" dominant-baseline="middle" font-size="21">A. esplénica</text>
+<text class="lbl-art" x="1730" y="1766" text-anchor="middle" dominant-baseline="middle" font-size="21">A. hepática común</text>
+<text class="lbl-art" x="1400" y="1812" text-anchor="middle" dominant-baseline="middle" font-size="21">A. mesentérica superior</text>
+<text class="lbl-ink" x="1740" y="1812" text-anchor="middle" dominant-baseline="middle" font-size="18">intestino delgado · colon der.</text>
+<text class="lbl-art" x="1400" y="1868" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. suprarrenales medias</text>
+<text class="lbl-art" x="1400" y="1924" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. renales</text>
+<text class="lbl-ink" x="1700" y="1924" text-anchor="middle" dominant-baseline="middle" font-size="19">RIÑONES</text>
+<text class="lbl-art" x="1400" y="1980" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. gonadales</text>
+<text class="lbl-art" x="1400" y="2038" text-anchor="middle" dominant-baseline="middle" font-size="21">A. mesentérica inferior</text>
+<text class="lbl-ink" x="1700" y="2038" text-anchor="middle" dominant-baseline="middle" font-size="18">colon izq. · recto</text>
+<text class="lbl-ink" x="1520" y="2100" text-anchor="middle" dominant-baseline="middle" font-size="18">ramas parietales: intercostales, lumbares, sacra media</text>
+<text class="lbl-art" x="1220" y="2172" text-anchor="middle" dominant-baseline="middle" font-size="22">BIFURCACIÓN</text>
+<text class="lbl-ven" x="620" y="1722" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. hepáticas</text>
+<text class="lbl-ink" x="620" y="1782" text-anchor="middle" dominant-baseline="middle" font-size="23">HÍGADO</text>
+<text class="lbl-ven" x="620" y="1846" text-anchor="middle" dominant-baseline="middle" font-size="23">VENA PORTA</text>
+<text class="lbl-ven" x="400" y="1902" text-anchor="middle" dominant-baseline="middle" font-size="21">V. mesentérica superior</text>
+<text class="lbl-ven" x="400" y="1958" text-anchor="middle" dominant-baseline="middle" font-size="21">V. esplénica</text>
+<text class="lbl-ven" x="400" y="2014" text-anchor="middle" dominant-baseline="middle" font-size="21">V. mesentérica inferior</text>
+<text class="lbl-ink" x="145" y="1902" text-anchor="middle" dominant-baseline="middle" font-size="18">intestino delgado · colon der.</text>
+<text class="lbl-ink" x="145" y="1958" text-anchor="middle" dominant-baseline="middle" font-size="18">bazo · estómago</text>
+<text class="lbl-ink" x="145" y="2014" text-anchor="middle" dominant-baseline="middle" font-size="18">colon izq. · recto</text>
+<text class="lbl-ven" x="620" y="2078" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. suprarrenales</text>
+<text class="lbl-ven" x="620" y="2128" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. renales</text>
+<text class="lbl-ven" x="620" y="2178" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. gonadales</text>
+<text class="lbl-art" x="300" y="2210" text-anchor="middle" dominant-baseline="middle" font-size="21">A. ilíaca común der.</text>
+<text class="lbl-ven" x="600" y="2262" text-anchor="middle" dominant-baseline="middle" font-size="21">V. ilíaca común der.</text>
+<text class="lbl-ven" x="1380" y="2262" text-anchor="middle" dominant-baseline="middle" font-size="21">V. ilíaca común izq.</text>
+<text class="lbl-art" x="1700" y="2210" text-anchor="middle" dominant-baseline="middle" font-size="21">A. ilíaca común izq.</text>
+<text class="lbl-ink" x="1700" y="2246" text-anchor="middle" dominant-baseline="middle" font-size="18">mismo árbol arterial que la pierna derecha</text>
+<text class="lbl-ink" x="600" y="2306" text-anchor="middle" dominant-baseline="middle" font-size="18">mismo retorno venoso que la pierna izquierda</text>
+<text class="lbl-art" x="200" y="2336" text-anchor="middle" dominant-baseline="middle" font-size="21">A. ilíaca interna (pelvis)</text>
+<text class="lbl-art" x="560" y="2336" text-anchor="middle" dominant-baseline="middle" font-size="21">A. ilíaca externa der.</text>
+<text class="lbl-art" x="560" y="2400" text-anchor="middle" dominant-baseline="middle" font-size="21">A. femoral der.</text>
+<text class="lbl-art" x="200" y="2464" text-anchor="middle" dominant-baseline="middle" font-size="21">A. femoral profunda</text>
+<text class="lbl-art" x="200" y="2528" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. circunflejas</text>
+<text class="lbl-art" x="560" y="2528" text-anchor="middle" dominant-baseline="middle" font-size="21">A. poplítea der.</text>
+<text class="lbl-art" x="400" y="2598" text-anchor="middle" dominant-baseline="middle" font-size="21">Tronco tibioperoneo</text>
+<text class="lbl-art" x="760" y="2598" text-anchor="middle" dominant-baseline="middle" font-size="21">A. tibial anterior</text>
+<text class="lbl-art" x="280" y="2664" text-anchor="middle" dominant-baseline="middle" font-size="21">A. tibial posterior</text>
+<text class="lbl-art" x="530" y="2664" text-anchor="middle" dominant-baseline="middle" font-size="21">A. fibular (peronea)</text>
+<text class="lbl-art" x="830" y="2664" text-anchor="middle" dominant-baseline="middle" font-size="21">A. dorsal del pie (pedia)</text>
+<text class="lbl-art" x="240" y="2734" text-anchor="middle" dominant-baseline="middle" font-size="21">A. plantar medial</text>
+<text class="lbl-art" x="500" y="2734" text-anchor="middle" dominant-baseline="middle" font-size="21">A. plantar lateral</text>
+<text class="lbl-art" x="830" y="2734" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco arqueado</text>
+<text class="lbl-art" x="370" y="2802" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco plantar profundo</text>
+<text class="lbl-art" x="830" y="2802" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. metatars. dorsales</text>
+<text class="lbl-art" x="370" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. digitales plantares</text>
+<text class="lbl-art" x="830" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="21">Aa. digitales dorsales</text>
+<text class="lbl-art" x="370" y="2944" text-anchor="middle" dominant-baseline="middle" font-size="25">PLANTA DEL PIE</text>
+<text class="lbl-art" x="830" y="2944" text-anchor="middle" dominant-baseline="middle" font-size="25">DORSO DEL PIE</text>
+<text class="lbl-ven" x="1780" y="2336" text-anchor="middle" dominant-baseline="middle" font-size="21">V. ilíaca interna izq.</text>
+<text class="lbl-ven" x="1420" y="2336" text-anchor="middle" dominant-baseline="middle" font-size="21">V. ilíaca externa izq.</text>
+<text class="lbl-ven" x="1420" y="2400" text-anchor="middle" dominant-baseline="middle" font-size="21">V. femoral izq.</text>
+<text class="lbl-ven" x="1880" y="2400" text-anchor="middle" dominant-baseline="middle" font-size="21">V. safena MAYOR</text>
+<text class="lbl-ven" x="1180" y="2464" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. femorales profundas</text>
+<text class="lbl-ven" x="1420" y="2530" text-anchor="middle" dominant-baseline="middle" font-size="21">V. poplítea izq.</text>
+<text class="lbl-ven" x="1880" y="2530" text-anchor="middle" dominant-baseline="middle" font-size="21">V. safena menor</text>
+<text class="lbl-ven" x="1200" y="2600" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. tibiales post.</text>
+<text class="lbl-ven" x="1440" y="2600" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. fibulares</text>
+<text class="lbl-ven" x="1700" y="2600" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. tibiales ant.</text>
+<text class="lbl-ven" x="1300" y="2670" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco venoso plantar</text>
+<text class="lbl-ven" x="1780" y="2670" text-anchor="middle" dominant-baseline="middle" font-size="21">Arco venoso DORSAL</text>
+<text class="lbl-ven" x="1300" y="2742" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. digitales plantares</text>
+<text class="lbl-ven" x="1780" y="2742" text-anchor="middle" dominant-baseline="middle" font-size="21">Vv. digitales dorsales</text>
+<text class="lbl-ven" x="1300" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="22">PLANTA · plano profundo</text>
+<text class="lbl-ven" x="1780" y="2870" text-anchor="middle" dominant-baseline="middle" font-size="22">DORSO · plano superficial</text>
+</svg>
+  </div>
+  <figcaption>Circuito completo: ventrículo izquierdo → aorta → arcos palmares y arcos del pie →
+  retorno venoso profundo y superficial → cavas → aurícula derecha → circuito pulmonar → aurícula izquierda.
+  Los dos recuadros punteados aíslan los circuitos que se enredaban en el centro del apunte original:
+  la irrigación del propio corazón y el paso por el pulmón.
+  <b>En pantallas angostas el mapa se desliza en horizontal.</b></figcaption>
+</figure>
+
+<div class="wrap">
+<hr class="rule">
+
+<h2>Lo que se corrigió</h2>
+<p class="h2sub">Ocho puntos del apunte original que estaban invertidos, incompletos o mal encadenados.
+Cada ficha muestra qué decía y qué dice ahora.</p>
+
+<ul class="cards">
+  <li class="card">
+    <h3><span class="n">01</span> Arcos palmares</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Radial → arco superficial; cubital → arco profundo</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Radial → arco <b>profundo</b>; cubital → arco <b>superficial</b></dd></div>
+    </dl>
+    <p class="why">Es la inversión clásica. La radial se hunde entre los dos primeros metacarpianos y forma el arco profundo; la cubital cruza superficial al retináculo y forma el superficial.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">02</span> Dorso de la mano</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Colgaba de los arcos palmares</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Rama propia: radial → <b>arco carpiano dorsal</b> → metacarpianas dorsales</dd></div>
+    </dl>
+    <p class="why">El dorso no se irriga desde la palma. Sale de la radial antes de que ésta forme el arco profundo.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">03</span> Dorso del pie</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Conectado al lado plantar; la tibial anterior moría sin continuación</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Tibial anterior → <b>arteria dorsal del pie (pedia)</b> → arco arqueado → digitales dorsales</dd></div>
+    </dl>
+    <p class="why">La pedia faltaba por completo, y es el pulso distal que se palpa en toda evaluación vascular de la extremidad inferior.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">04</span> Orden de las ramas aórticas</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Las ramas estaban todas, pero dispersas sin secuencia</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Ordenadas de arriba abajo con su <b>nivel vertebral</b>: T12 · L1 · L1-L2 · L2 · L3 · L4</dd></div>
+    </dl>
+    <p class="why">La regla vertical convierte la lista en algo memorizable y da gratis el dato que se pregunta: la bifurcación en L4.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">05</span> Color del circuito pulmonar</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Arteria pulmonar en rojo y venas pulmonares en azul, sin aviso</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Se mantiene el código por <b>tipo de vaso</b>, pero en trazo discontinuo y declarado en la leyenda</dd></div>
+    </dl>
+    <p class="why">Es el punto donde más se confunde "rojo = oxigenada". Marcar la excepción en vez de esconderla.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">06</span> Mesentérica inferior</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Drenaba directo a la porta</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Drena a la <b>vena esplénica</b>, y ésta se une a la mesentérica superior para formar la porta</dd></div>
+    </dl>
+    <p class="why">El resto del sistema porta ya estaba correcto en el original: era la mejor parte del apunte.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">07</span> Vena mediana cubital</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Dibujada como un nodo más de la cadena</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Dibujada como el <b>puente</b> que realmente es, entre cefálica y basílica</dd></div>
+    </dl>
+    <p class="why">No es un peldaño del retorno: es la anastomosis en la fosa cubital, y por eso es el sitio de venopunción.</p>
+  </li>
+
+  <li class="card">
+    <h3><span class="n">08</span> El nudo central</h3>
+    <dl class="ba">
+      <div class="antes"><dt>Antes</dt><dd>Seis o siete trazos cruzándose sobre el corazón</dd></div>
+      <div class="ahora"><dt>Ahora</dt><dd>Corazón despejado; <b>coronarias</b> y <b>circuito pulmonar</b> salen a dos recuadros propios</dd></div>
+    </dl>
+    <p class="why">Era la zona con la información más crítica y la peor legibilidad. Sacar los dos subcircuitos deja el trayecto principal limpio.</p>
+  </li>
+</ul>
+
+<hr class="rule">
+
+<h2>Lo que se agregó</h2>
+<p class="h2sub">Territorios que el apunte no cubría y que cierran el circuito.</p>
+<ul class="adds">
+  <li><b>Arterias vertebrales</b> → tronco basilar → polígono de Willis: la segunda entrada al encéfalo.</li>
+  <li><b>Senos venosos durales</b> como origen real de la yugular interna.</li>
+  <li><b>Circulación coronaria</b> completa: raíz aórtica → coronarias → venas cardíacas → seno coronario → AD.</li>
+  <li><b>Sistema ácigos y hemiácigos</b>: el retorno de la pared torácica y la vía colateral cava-cava.</li>
+  <li><b>Ramas parietales</b> de la aorta: intercostales, lumbares y sacra media.</li>
+  <li><b>Safena mayor y menor</b> con sus uniones: safenofemoral y safenopoplítea.</li>
+</ul>
+
+<footer>
+  <span>Lámina de estudio · Consulta Rápida UDP</span>
+  <span>Rojo: arterias · Azul: venas</span>
+  <span>Vista anterior, patrón bilateral simétrico</span>
+</footer>
+</div>
+
+</body>
+</html>
