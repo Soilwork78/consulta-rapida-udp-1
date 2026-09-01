@@ -83,6 +83,28 @@ svg{display:block;width:100%;height:auto}
 .fig-frame{border:.6pt solid var(--line);border-radius:1.6mm;padding:2mm;background:#fff}
 .top{align-self:start}
 
+
+/* ---------- sistema gráfico de figuras ---------- */
+svg{fill:#2b4358}
+svg text{font-family:var(--font)}
+.s-t{font-size:9.2px;font-weight:700;fill:#12466e}
+.s-st{font-size:7.6px;fill:#7c8fa0}
+.s-l{font-size:8.2px;fill:#2b4358}
+.s-lb{font-size:8.2px;font-weight:700;fill:#0c3252}
+.s-n{font-size:7.4px;fill:#5d7385}
+.s-ax{font-size:7px;fill:#8496a6}
+.s-u{font-size:7.2px;fill:#7c8fa0}
+.s-red{fill:#b3261e}.s-grn{fill:#15803d}.s-amb{fill:#a75a00}.s-pur{fill:#5b3fa8}.s-tea{fill:#0e7490}.s-nav{fill:#12466e}
+.s-axis{stroke:#7c8fa0;stroke-width:.9;fill:none}
+.s-grid{stroke:#e6eef4;stroke-width:.7;fill:none}
+.s-tick{stroke:#a9bccb;stroke-width:.7}
+.s-lead{stroke:#a9bccb;stroke-width:.7;fill:none}
+.s-dash{stroke-dasharray:3.5 2.5}
+.s-card{fill:#fff;stroke:#dae4ec;stroke-width:.8}
+.s-card2{fill:#f5f9fc;stroke:#dae4ec;stroke-width:.8}
+.s-w{fill:none;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+.s-w2{fill:none;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+
 /* ---------- portada ---------- */
 .cover{background:linear-gradient(160deg,#0b2740 0%,#12466e 45%,#0e7490 100%);color:#fff;padding:0;
        display:flex;flex-direction:column;justify-content:space-between}
@@ -98,6 +120,37 @@ svg{display:block;width:100%;height:auto}
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <pattern id="ecgFine" width="5.5" height="5.5" patternUnits="userSpaceOnUse">
+    <path d="M5.5 0H0V5.5" fill="none" stroke="#f6d7d4" stroke-width=".45"/>
+  </pattern>
+  <pattern id="ecgPaper" width="27.5" height="27.5" patternUnits="userSpaceOnUse">
+    <rect width="27.5" height="27.5" fill="#fffafa"/>
+    <rect width="27.5" height="27.5" fill="url(#ecgFine)"/>
+    <path d="M27.5 0H0V27.5" fill="none" stroke="#eab3ad" stroke-width=".9"/>
+  </pattern>
+  <pattern id="monFine" width="7" height="7" patternUnits="userSpaceOnUse">
+    <path d="M7 0H0V7" fill="none" stroke="#e8eff5" stroke-width=".5"/>
+  </pattern>
+  <pattern id="monPaper" width="35" height="35" patternUnits="userSpaceOnUse">
+    <rect width="35" height="35" fill="#fcfeff"/>
+    <rect width="35" height="35" fill="url(#monFine)"/>
+    <path d="M35 0H0V35" fill="none" stroke="#d8e5ee" stroke-width=".8"/>
+  </pattern>
+  <marker id="aNav" markerWidth="8" markerHeight="8" refX="6.4" refY="2.8" orient="auto"><path d="M0 0L6.6 2.8L0 5.6z" fill="#12466e"/></marker>
+  <marker id="aRed" markerWidth="8" markerHeight="8" refX="6.4" refY="2.8" orient="auto"><path d="M0 0L6.6 2.8L0 5.6z" fill="#b3261e"/></marker>
+  <marker id="aTea" markerWidth="8" markerHeight="8" refX="6.4" refY="2.8" orient="auto"><path d="M0 0L6.6 2.8L0 5.6z" fill="#0e7490"/></marker>
+  <marker id="aPur" markerWidth="7" markerHeight="7" refX="5.6" refY="2.4" orient="auto"><path d="M0 0L5.8 2.4L0 4.8z" fill="#5b3fa8"/></marker>
+  <marker id="aPurS" markerWidth="7" markerHeight="7" refX="1" refY="2.4" orient="auto"><path d="M5.8 0L0 2.4L5.8 4.8z" fill="#5b3fa8"/></marker>
+  <linearGradient id="gSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe8dd"/><stop offset="1" stop-color="#f0d2c1"/></linearGradient>
+  <linearGradient id="gBed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef4f8"/><stop offset="1" stop-color="#dbe6ee"/></linearGradient>
+  <linearGradient id="gNav" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#12466e"/><stop offset="1" stop-color="#0e6c8a"/></linearGradient>
+  <linearGradient id="gTea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3ef"/><stop offset="1" stop-color="#e8f4f9"/></linearGradient>
+  <linearGradient id="gScreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1b28"/><stop offset="1" stop-color="#060e16"/></linearGradient>
+  <radialGradient id="gIris" cx="35%" cy="30%" r="78%"><stop offset="0" stop-color="#d9e7ef"/><stop offset="55%" stop-color="#a8c2d2"/><stop offset="100%" stop-color="#7b9db1"/></radialGradient>
+  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.7" stdDeviation="0.9" flood-color="#0c3252" flood-opacity=".18"/></filter>
+</defs></svg>
 
 <!-- =================== PÁGINA 1 · PORTADA =================== -->
 <section class="page cover">
@@ -123,48 +176,37 @@ svg{display:block;width:100%;height:auto}
 
       <div style="margin-top:9mm;background:rgba(255,255,255,.07);border:.8pt solid rgba(255,255,255,.22);
                   border-radius:2.4mm;padding:4mm">
-        <svg viewBox="0 0 640 168" role="img" aria-label="Monitor multiparamétrico con trazados de ECG, pletismografía, presión arterial y capnografía">
-          <defs>
-            <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#0a1622"/><stop offset="1" stop-color="#050c14"/>
-            </linearGradient>
-          </defs>
-          <rect x="0" y="0" width="640" height="168" rx="7" fill="#1a222b"/>
-          <rect x="6" y="6" width="628" height="156" rx="4" fill="url(#scr)"/>
-          <!-- rejilla -->
-          <g stroke="#16303f" stroke-width="0.5">
-            <path d="M6 40H520M6 74H520M6 108H520M6 142H520"/>
-            <path d="M80 6V162M160 6V162M240 6V162M320 6V162M400 6V162M480 6V162"/>
-          </g>
-          <!-- ECG -->
-          <path d="M8 40h26l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h60"
-                fill="none" stroke="#3ddc84" stroke-width="1.7" stroke-linejoin="round"/>
-          <text x="12" y="20" fill="#3ddc84" font-family="monospace" font-size="9">II</text>
-          <!-- Pletismografía -->
-          <path d="M8 74c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M82 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M156 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M230 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M304 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M378 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M452 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4"
-                fill="none" stroke="#38bdf8" stroke-width="1.7"/>
-          <text x="12" y="60" fill="#38bdf8" font-family="monospace" font-size="9">Pleth</text>
-          <!-- Presión arterial -->
-          <path d="M8 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M82 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M156 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M230 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M304 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M378 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M452 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4"
-                fill="none" stroke="#f87171" stroke-width="1.7"/>
-          <text x="12" y="98" fill="#f87171" font-family="monospace" font-size="9">ART</text>
-          <!-- Capnografía -->
-          <path d="M8 156h14l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h30"
-                fill="none" stroke="#fbbf24" stroke-width="1.6"/>
-          <text x="12" y="136" fill="#fbbf24" font-family="monospace" font-size="9">CO₂</text>
-          <!-- panel de números -->
-          <g font-family="monospace">
-            <rect x="524" y="10" width="106" height="36" rx="3" fill="#0d1b26"/>
-            <text x="530" y="22" fill="#3ddc84" font-size="8">FC lpm</text><text x="626" y="42" fill="#3ddc84" font-size="24" text-anchor="end">88</text>
-            <rect x="524" y="48" width="106" height="36" rx="3" fill="#0d1b26"/>
-            <text x="530" y="60" fill="#38bdf8" font-size="8">SpO₂ %</text><text x="626" y="80" fill="#38bdf8" font-size="24" text-anchor="end">97</text>
-            <rect x="524" y="86" width="106" height="36" rx="3" fill="#0d1b26"/>
-            <text x="530" y="98" fill="#f87171" font-size="8">PA mmHg</text><text x="626" y="118" fill="#f87171" font-size="19" text-anchor="end">118/64</text>
-            <text x="530" y="118" fill="#f87171" font-size="9">(78)</text>
-            <rect x="524" y="124" width="106" height="34" rx="3" fill="#0d1b26"/>
-            <text x="530" y="136" fill="#fbbf24" font-size="8">EtCO₂ · FR</text><text x="626" y="154" fill="#fbbf24" font-size="19" text-anchor="end">36 · 16</text>
-          </g>
-        </svg>
+        <svg viewBox="0 0 640 264" role="img" aria-label="Monitor multiparamétrico con trazados de ECG, pletismografía, presión arterial y capnografía">
+  <rect x="0" y="0" width="640" height="264" rx="9" fill="#1a2430"/>
+  <rect x="7" y="7" width="626" height="250" rx="5" fill="url(#gScreen)"/>
+  <g stroke="#123044" stroke-width=".5" opacity=".85">
+    <path d="M7 62H500M7 90H500M7 118H500M7 146H500M7 174H500M7 202H500M7 230H500"/>
+    <path d="M70 28V257M133 28V257M196 28V257M259 28V257M322 28V257M385 28V257M448 28V257"/>
+  </g>
+  <rect x="7" y="7" width="626" height="20" rx="5" fill="#0f2231"/>
+  <text x="16" y="21" font-family="monospace" font-size="9" fill="#7fb7cf">CAMA 12 · ADULTO</text>
+  <text x="320" y="21" font-family="monospace" font-size="9" fill="#5d8ba3">MONITORIZACIÓN CONTINUA</text>
+  <circle cx="620" cy="17" r="3.4" fill="#3ddc84"/>
+  <path d="M52 48q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0" fill="none" stroke="#3ddc84" stroke-width="1.7" stroke-linejoin="round"/>
+  <text x="16" y="51" font-family="monospace" font-size="9.5" fill="#3ddc84">II</text>
+  <path d="M52 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M122 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M192 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M262 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M332 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M402 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8" fill="none" stroke="#38bdf8" stroke-width="1.7"/>
+  <text x="16" y="107" font-family="monospace" font-size="9.5" fill="#38bdf8">PLETH</text>
+  <path d="M52 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M122 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M192 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M262 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M332 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M402 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9" fill="none" stroke="#f87171" stroke-width="1.7"/>
+  <text x="16" y="159" font-family="monospace" font-size="9.5" fill="#f87171">ART</text>
+  <path d="M52 210h8l4-30h32l4 30h14M122 210h8l4-30h32l4 30h14M192 210h8l4-30h32l4 30h14M262 210h8l4-30h32l4 30h14M332 210h8l4-30h32l4 30h14M402 210h8l4-30h32l4 30h14" fill="none" stroke="#fbbf24" stroke-width="1.6"/>
+  <text x="16" y="213" font-family="monospace" font-size="9.5" fill="#fbbf24">CO₂</text>
+  <g font-family="monospace">
+    <rect x="506" y="34" width="124" height="52" rx="4" fill="#0e1d29"/>
+    <text x="514" y="48" font-size="8.5" fill="#3ddc84">FC   lpm</text><text x="624" y="78" font-size="30" text-anchor="end" fill="#3ddc84">88</text>
+    <rect x="506" y="90" width="124" height="52" rx="4" fill="#0e1d29"/>
+    <text x="514" y="104" font-size="8.5" fill="#38bdf8">SpO₂   %</text><text x="624" y="134" font-size="30" text-anchor="end" fill="#38bdf8">97</text>
+    <rect x="506" y="146" width="124" height="52" rx="4" fill="#0e1d29"/>
+    <text x="514" y="160" font-size="8.5" fill="#f87171">PA   mmHg</text><text x="624" y="186" font-size="22" text-anchor="end" fill="#f87171">118/64</text>
+    <text x="514" y="186" font-size="11" fill="#f87171">(78)</text>
+    <rect x="506" y="202" width="124" height="52" rx="4" fill="#0e1d29"/>
+    <text x="514" y="216" font-size="8.5" fill="#fbbf24">EtCO₂ · FR</text><text x="624" y="244" font-size="22" text-anchor="end" fill="#fbbf24">36 · 16</text>
+  </g>
+</svg>
         <div style="font-size:7.4pt;color:#a9d6e6;margin-top:2mm">
           Figura de portada · Simulación de pantalla de monitor multiparamétrico: trazado electrocardiográfico (verde),
           onda pletismográfica (azul), curva de presión arterial invasiva (rojo) y capnograma (amarillo).
@@ -225,55 +267,56 @@ svg{display:block;width:100%;height:auto}
   <p><strong>Monitorizar no es mirar una pantalla: es vigilar una tendencia para tomar decisiones.</strong> Un valor aislado dice poco; lo que orienta es la <em>dirección</em> del cambio y su coherencia con el examen físico. Todo sistema de monitorización sigue la misma cadena, y en cada eslabón se pueden introducir errores.</p>
 
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 122" role="img" aria-label="Cadena de monitorización: paciente, sensor, procesamiento, pantalla, interpretación y decisión clínica">
-      <defs>
-        <marker id="ar1" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-          <path d="M0 0 L8 3.2 L0 6.4 z" fill="#12466e"/>
-        </marker>
-      </defs>
-      <g font-family="Liberation Sans, Arial" font-size="11">
-        <!-- 5 nodos -->
-        <g>
-          <rect x="4" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
-          <text x="63" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">1. Fenómeno</text>
-          <text x="63" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">biológico del paciente</text>
-        </g>
-        <path d="M124 49H140" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
-        <g>
-          <rect x="144" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
-          <text x="203" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">2. Sensor</text>
-          <text x="203" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">electrodo, transductor</text>
-        </g>
-        <path d="M264 49H280" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
-        <g>
-          <rect x="284" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
-          <text x="343" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">3. Procesamiento</text>
-          <text x="343" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">filtros, promediado</text>
-        </g>
-        <path d="M404 49H420" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
-        <g>
-          <rect x="424" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
-          <text x="483" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">4. Pantalla</text>
-          <text x="483" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">número + curva + alarma</text>
-        </g>
-        <path d="M544 49H560" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
-        <g>
-          <rect x="564" y="26" width="132" height="46" rx="6" fill="#12466e"/>
-          <text x="630" y="44" text-anchor="middle" font-weight="bold" fill="#fff">5. Interpretación</text>
-          <text x="630" y="58" text-anchor="middle" font-size="9.5" fill="#bfe3f0">y decisión de enfermería</text>
-        </g>
-        <!-- fallos -->
-        <text x="4" y="14" font-size="9" font-weight="bold" fill="#b3261e">Dónde falla la cadena ↓</text>
-        <g font-size="8.6" fill="#7b3b36">
-          <text x="63" y="92" text-anchor="middle">variabilidad</text><text x="63" y="103" text-anchor="middle">fisiológica real</text>
-          <text x="203" y="92" text-anchor="middle">mala posición,</text><text x="203" y="103" text-anchor="middle">piel, movimiento</text>
-          <text x="343" y="92" text-anchor="middle">retardo del</text><text x="343" y="103" text-anchor="middle">promediado</text>
-          <text x="483" y="92" text-anchor="middle">alarmas mal</text><text x="483" y="103" text-anchor="middle">configuradas</text>
-          <text x="630" y="92" text-anchor="middle">error humano:</text><text x="630" y="103" text-anchor="middle">no mirar al paciente</text>
-        </g>
-        <path d="M4 78H696" stroke="#e3b6b2" stroke-width="1" stroke-dasharray="4 3"/>
-      </g>
-    </svg>
+    <svg viewBox="0 0 700 128" role="img" aria-label="Cadena de monitorización: paciente, sensor, procesamiento, pantalla, interpretación y decisión clínica">
+  <text x="4" y="12" class="s-t">Cadena de la señal</text>
+  <text x="696" y="12" text-anchor="end" font-size="8" font-weight="700" fill="#b3261e">Dónde puede fallar ↓</text>
+  <g>
+    <rect x="4" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="19" cy="36" r="8.5" fill="#12466e"/><text x="19" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">1</text>
+    <text x="33" y="39" font-size="9.4" font-weight="700" fill="#12466e">Fenómeno</text>
+    <text x="15" y="58" font-size="7.8" fill="#5d7385">biológico del paciente</text>
+  </g>
+  <path d="M133 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <g>
+    <rect x="147" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="162" cy="36" r="8.5" fill="#12466e"/><text x="162" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">2</text>
+    <text x="176" y="39" font-size="9.4" font-weight="700" fill="#12466e">Sensor</text>
+    <text x="158" y="58" font-size="7.8" fill="#5d7385">electrodo · transductor</text>
+  </g>
+  <path d="M276 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <g>
+    <rect x="290" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="305" cy="36" r="8.5" fill="#12466e"/><text x="305" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">3</text>
+    <text x="319" y="39" font-size="9.4" font-weight="700" fill="#12466e">Procesamiento</text>
+    <text x="301" y="58" font-size="7.8" fill="#5d7385">filtros · promediado</text>
+  </g>
+  <path d="M419 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <g>
+    <rect x="433" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="448" cy="36" r="8.5" fill="#12466e"/><text x="448" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">4</text>
+    <text x="462" y="39" font-size="9.4" font-weight="700" fill="#12466e">Pantalla</text>
+    <text x="444" y="58" font-size="7.8" fill="#5d7385">número · curva · alarma</text>
+  </g>
+  <path d="M562 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <g>
+    <rect x="576" y="20" width="120" height="54" rx="6" fill="url(#gNav)"/>
+    <circle cx="591" cy="36" r="8.5" fill="#ffffff"/><text x="591" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#12466e">5</text>
+    <text x="605" y="39" font-size="9.4" font-weight="700" fill="#ffffff">Interpretación</text>
+    <text x="587" y="58" font-size="7.8" fill="#bfe3f0">y decisión de enfermería</text>
+  </g>
+  <g stroke="#d9b8b4" stroke-width=".8" stroke-dasharray="3 2">
+    <path d="M67 76v10M210 76v10M353 76v10M496 76v10M636 76v10"/>
+  </g>
+  <rect x="4" y="88" width="692" height="22" rx="4" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
+  <g font-size="7.6" fill="#8a4a44" text-anchor="middle">
+    <text x="67" y="102">variabilidad fisiológica</text>
+    <text x="210" y="102">posición, piel, movimiento</text>
+    <text x="353" y="102">retardo de la señal</text>
+    <text x="496" y="102">alarmas mal configuradas</text>
+    <text x="636" y="102">no mirar al paciente</text>
+  </g>
+  <text x="4" y="124" class="s-ax">Cada eslabón puede introducir error: el valor que aparece en pantalla no es el fenómeno, es su representación.</text>
+</svg>
     <figcaption><b>Figura 1.</b> Cadena de la monitorización. Elaboración propia. El monitor no mide al paciente: mide una señal que representa al paciente. Antes de actuar sobre un valor anómalo, verifique el eslabón que puede estar fallando.</figcaption>
   </figure>
 
@@ -318,44 +361,47 @@ svg{display:block;width:100%;height:auto}
 
   <div class="g21">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 420 208" role="img" aria-label="Esquema de colocación de electrodos de cinco latiguillos sobre el tórax">
-        <g font-family="Liberation Sans, Arial">
-          <!-- torso -->
-          <path d="M120 18c-26 0-40 12-46 26-6 14-30 18-38 30-6 9-4 20 2 24 8 5 16-2 20-10 3-6 8-10 12-12-4 30-6 60-4 92 1 16 4 26 6 32h116c2-6 5-16 6-32 2-32 0-62-4-92 4 2 9 6 12 12 4 8 12 15 20 10 6-4 8-15 2-24-8-12-32-16-38-30-6-14-20-26-46-26z"
-                fill="#f7e7dd" stroke="#c8a894" stroke-width="1.4"/>
-          <!-- clavículas / esternón guía -->
-          <path d="M78 44c14 8 32 10 46 10s32-2 46-10" fill="none" stroke="#e0c4b1" stroke-width="1.2"/>
-          <path d="M124 54v92" fill="none" stroke="#e0c4b1" stroke-width="1.2" stroke-dasharray="3 3"/>
-          <text x="124" y="14" text-anchor="middle" font-size="9" fill="#8a6a58">línea media clavicular</text>
-          <!-- electrodos -->
-          <g stroke="#333" stroke-width="1">
-            <circle cx="76" cy="56" r="9" fill="#ffffff"/><circle cx="76" cy="56" r="4.6" fill="#e11d48"/>
-            <circle cx="172" cy="56" r="9" fill="#ffffff"/><circle cx="172" cy="56" r="4.6" fill="#facc15"/>
-            <circle cx="76" cy="158" r="9" fill="#ffffff"/><circle cx="76" cy="158" r="4.6" fill="#111827"/>
-            <circle cx="172" cy="158" r="9" fill="#ffffff"/><circle cx="172" cy="158" r="4.6" fill="#16a34a"/>
-            <circle cx="150" cy="108" r="9" fill="#ffffff"/><circle cx="150" cy="108" r="4.6" fill="#ffffff"/>
-          </g>
-          <g font-size="10" font-weight="bold" fill="#12466e">
-            <text x="44" y="42">RA</text><text x="188" y="42">LA</text>
-            <text x="42" y="180">RL</text><text x="188" y="180">LL</text><text x="166" y="126">V</text>
-          </g>
-          <!-- leyenda derecha -->
-          <g font-size="9.6" fill="#0f1f2c">
-            <text x="222" y="30" font-weight="bold" fill="#12466e">Regla nemotécnica (AHA)</text>
-            <circle cx="230" cy="46" r="5" fill="#e11d48"/><text x="242" y="49">Blanco/rojo a la <tspan font-weight="bold">de</tspan>recha</text>
-            <circle cx="230" cy="66" r="5" fill="#facc15"/><text x="242" y="69">Negro/amarillo a la izquierda</text>
-            <circle cx="230" cy="86" r="5" fill="#16a34a"/><text x="242" y="89">"Humo sobre fuego":</text>
-            <text x="242" y="101">negro sobre rojo (LA sobre LL)</text>
-            <circle cx="230" cy="118" r="5" fill="#ffffff" stroke="#333"/><text x="242" y="121">V (marrón/blanco): 4.º EIC</text>
-            <text x="242" y="133">paraesternal o V5 axilar ant.</text>
-            <text x="222" y="156" font-weight="bold" fill="#b3261e">Errores frecuentes</text>
-            <text x="222" y="169" font-size="9">· Electrodo sobre hueso o vello → artefacto</text>
-            <text x="222" y="180" font-size="9">· Piel húmeda o con residuo de gel seco</text>
-            <text x="222" y="191" font-size="9">· Electrodos sobre zona de desfibrilación</text>
-            <text x="222" y="202" font-size="9">· No rotar sitio cada 24 h → lesión cutánea</text>
-          </g>
-        </g>
-      </svg>
+      <svg viewBox="0 0 420 214" role="img" aria-label="Esquema de colocación de electrodos de cinco latiguillos sobre el tórax">
+  <text x="4" y="12" class="s-t">Colocación de 5 latiguillos</text>
+  <!-- cuello y hombros -->
+  <path d="M112 26h32v14c0 6 10 8 22 11l30 8c10 3 16 10 17 20l3 22c1 8-9 10-11 2l-6-20-8-6 4 44c2 24 2 48-1 70l-2 12H83l-2-12c-3-22-3-46-1-70l4-44-8 6-6 20c-2 8-12 6-11-2l3-22c1-10 7-17 17-20l30-8c12-3 22-5 22-11z"
+        fill="url(#gSkin)" stroke="#d5ac96" stroke-width="1.1"/>
+  <!-- referencias anatómicas -->
+  <path d="M84 62q44 14 88 0" fill="none" stroke="#e6c3b0" stroke-width="1"/>
+  <path d="M128 66v92" stroke="#e6c3b0" stroke-width=".9" stroke-dasharray="3 3"/>
+  <path d="M92 92q36 12 72 0M94 112q34 11 68 0M97 132q31 10 62 0" fill="none" stroke="#eed3c4" stroke-width=".9"/>
+  <!-- electrodos -->
+  <g filter="url(#soft)">
+    <circle cx="86" cy="72" r="9.5" fill="#fff" stroke="#c3d1da" stroke-width=".9"/><circle cx="86" cy="72" r="5" fill="#e11d48"/>
+    <circle cx="170" cy="72" r="9.5" fill="#fff" stroke="#c3d1da" stroke-width=".9"/><circle cx="170" cy="72" r="5" fill="#eab308"/>
+    <circle cx="88" cy="170" r="9.5" fill="#fff" stroke="#c3d1da" stroke-width=".9"/><circle cx="88" cy="170" r="5" fill="#111827"/>
+    <circle cx="168" cy="170" r="9.5" fill="#fff" stroke="#c3d1da" stroke-width=".9"/><circle cx="168" cy="170" r="5" fill="#16a34a"/>
+    <circle cx="150" cy="116" r="9.5" fill="#fff" stroke="#c3d1da" stroke-width=".9"/><circle cx="150" cy="116" r="5" fill="#8b5cf6"/>
+  </g>
+  <g font-size="9" font-weight="700" fill="#0c3252">
+    <text x="66" y="56" text-anchor="middle">RA</text><text x="190" y="56" text-anchor="middle">LA</text>
+    <text x="66" y="190" text-anchor="middle">RL</text><text x="190" y="190" text-anchor="middle">LL</text>
+    <text x="150" y="102" text-anchor="middle">V</text>
+  </g>
+  <!-- leyenda -->
+  <text x="228" y="26" class="s-t">Regla nemotécnica (AHA)</text>
+  <g>
+    <circle cx="234" cy="42" r="4.6" fill="#e11d48"/><text x="245" y="45" class="s-l">Blanco/rojo a la <tspan font-weight="700">de</tspan>recha</text>
+    <circle cx="234" cy="60" r="4.6" fill="#eab308"/><text x="245" y="63" class="s-l">Negro/amarillo a la izquierda</text>
+    <circle cx="234" cy="78" r="4.6" fill="#111827"/><text x="245" y="81" class="s-l">"Humo sobre fuego": negro</text>
+    <text x="245" y="91" class="s-l">sobre rojo (LA sobre LL)</text>
+    <circle cx="234" cy="106" r="4.6" fill="#8b5cf6"/><text x="245" y="109" class="s-l">V: 4.º EIC paraesternal o</text>
+    <text x="245" y="119" class="s-l">V5 en línea axilar anterior</text>
+  </g>
+  <rect x="226" y="132" width="190" height="76" rx="5" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
+  <text x="236" y="148" font-size="8.4" font-weight="700" fill="#b3261e">Errores frecuentes</text>
+  <g font-size="7.6" fill="#8a4a44">
+    <text x="236" y="163">· Electrodo sobre hueso o vello → artefacto</text>
+    <text x="236" y="175">· Piel húmeda o con gel seco residual</text>
+    <text x="236" y="187">· Electrodo en zona de desfibrilación</text>
+    <text x="236" y="199">· No rotar el sitio cada 24 h → lesión cutánea</text>
+  </g>
+</svg>
       <figcaption><b>Figura 2.</b> Colocación de 5 latiguillos (esquema propio). RA/LA en infraclavicular, RL/LL en flanco bajo (no sobre prominencias óseas), V en precordio. Con 5 latiguillos se pueden mostrar 7 derivaciones, incluida una precordial.</figcaption>
     </figure>
 
@@ -385,31 +431,45 @@ svg{display:block;width:100%;height:auto}
 
   <h3 style="margin-top:1mm">Reconocer artefacto versus arritmia real</h3>
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 232" role="img" aria-label="Cuatro trazados electrocardiográficos: ritmo sinusal, artefacto, fibrilación auricular y taquicardia ventricular">
-      <g font-family="Liberation Sans, Arial">
-        <rect x="0" y="0" width="700" height="232" fill="#fbfdfe"/>
-        <g transform="translate(0,0)">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#0f766e">A · Ritmo sinusal (referencia): P–QRS–T regular y R–R constante</text>
-          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
-          <path d="M6 40l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linejoin="round"/>
-        </g>
-        <g transform="translate(0,58)">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#b3261e">B · Artefacto por movimiento o temblor: línea de base "sucia", pero el pulso es normal</text>
-          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
-          <path d="M6 40l3 -11l3 11l3 -8l3 8l3 -11l3 11l3 -11l3 11l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -8l3 8l3 -7l3 7l3 -7l3 7l3 -8l3 8l3 -11l3 11l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -8l3 8l3 -7l3 7l3 -5l3 5l3 -11l3 11l3 -9l3 9l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -7l3 7l3 -5l3 5l3 -8l3 8l3 -5l3 5l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -11l3 11l3 -11l3 11l3 -8l3 8l3 -7l3 7l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -5l3 5l3 -8l3 8l3 -5l3 5l3 -5l3 5l3 -5l3 5l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -7l3 7l3 -7l3 7l3 -8l3 8l3 -5l3 5l3 -11l3 11l3 -9l3 9" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-linejoin="round"/>
-        </g>
-        <g transform="translate(0,116)">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">C · Fibrilación auricular: sin ondas P y con intervalos R–R irregulares</text>
-          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
-          <path d="M6 40q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l34 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l44 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l14 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l14 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l44 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l34 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10" fill="none" stroke="#12466e" stroke-width="1.5" stroke-linejoin="round"/>
-        </g>
-        <g transform="translate(0,174)">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#b3261e">D · Taquicardia ventricular: QRS ancho, regular, sin ondas P → emergencia</text>
-          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
-          <path d="M6 40q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-linejoin="round"/>
-        </g>
-      </g>
-      </svg>
+    <svg viewBox="0 0 700 262" role="img" aria-label="Cuatro trazados electrocardiográficos: ritmo sinusal, artefacto, fibrilación auricular y taquicardia ventricular">
+  <g transform="translate(0,0)">
+  <circle cx="10" cy="6.5" r="6.5" fill="#0f766e"/><text x="10" y="9.6" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">A</text>
+  <text x="22" y="10" font-size="9" font-weight="700" fill="#0f766e">Ritmo sinusal (referencia)</text>
+  <text x="149" y="10" class="s-st">· P antes de cada QRS · R–R constante · QRS angosto</text>
+  <rect x="4" y="14" width="692" height="48" rx="3" fill="url(#ecgPaper)" stroke="#e3c3bf" stroke-width=".8"/>
+  <path d="M8 44v-22h7v22" fill="none" stroke="#94a3b8" stroke-width="1.1"/>
+  <path d="M8 44q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l24 0" fill="none" stroke="#0f766e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,65)">
+  <circle cx="10" cy="6.5" r="6.5" fill="#b3261e"/><text x="10" y="9.6" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">B</text>
+  <text x="22" y="10" font-size="9" font-weight="700" fill="#b3261e">Artefacto por movimiento o temblor</text>
+  <text x="189" y="10" class="s-st">· Línea de base irregular, pero el paciente tiene pulso y conciencia normales</text>
+  <rect x="4" y="14" width="692" height="48" rx="3" fill="url(#ecgPaper)" stroke="#e3c3bf" stroke-width=".8"/>
+  <path d="M8 44v-22h7v22" fill="none" stroke="#94a3b8" stroke-width="1.1"/>
+  <path d="M8 44l2.5 -6l2.5 6l2.5 -9l2.5 9l2.5 -8l2.5 8l2.5 -9l2.5 9l2.5 -8l2.5 8l2.5 -8l2.5 8q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -8l2.5 8l2.5 -6l2.5 6l2.5 -5l2.5 5l2.5 -11l2.5 11l2.5 -7l2.5 7l2.5 -8l2.5 8q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -5l2.5 5l2.5 -7l2.5 7l2.5 -5l2.5 5l2.5 -9l2.5 9l2.5 -11l2.5 11l2.5 -7l2.5 7q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -11l2.5 11l2.5 -6l2.5 6l2.5 -5l2.5 5l2.5 -6l2.5 6l2.5 -7l2.5 7l2.5 -5l2.5 5q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -8l2.5 8l2.5 -7l2.5 7l2.5 -11l2.5 11l2.5 -9l2.5 9l2.5 -7l2.5 7l2.5 -11l2.5 11q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -7l2.5 7l2.5 -5l2.5 5l2.5 -7l2.5 7l2.5 -6l2.5 6l2.5 -6l2.5 6l2.5 -11l2.5 11q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -7l2.5 7l2.5 -7l2.5 7l2.5 -5l2.5 5l2.5 -5l2.5 5l2.5 -7l2.5 7l2.5 -7l2.5 7q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -7l2.5 7l2.5 -7l2.5 7l2.5 -9l2.5 9l2.5 -9l2.5 9l2.5 -7l2.5 7l2.5 -6l2.5 6q4 -6 8 0 l6 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l10 0l2.5 -8l2.5 8l2.5 -8l2.5 8l2.5 -7l2.5 7l2.5 -7l2.5 7l2.5 -8l2.5 8l2.5 -7l2.5 7" fill="none" stroke="#b3261e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,130)">
+  <circle cx="10" cy="6.5" r="6.5" fill="#12466e"/><text x="10" y="9.6" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">C</text>
+  <text x="22" y="10" font-size="9" font-weight="700" fill="#12466e">Fibrilación auricular</text>
+  <text x="125" y="10" class="s-st">· Sin ondas P · intervalos R–R irregulares · línea de base fibrilatoria</text>
+  <rect x="4" y="14" width="692" height="48" rx="3" fill="url(#ecgPaper)" stroke="#e3c3bf" stroke-width=".8"/>
+  <path d="M8 44v-22h7v22" fill="none" stroke="#94a3b8" stroke-width="1.1"/>
+  <path d="M8 44q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l16 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l16 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l16 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l40 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l28 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l40 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l40 0q3 -3 6 0q3 3 6 0q3 -2 6 0l14 0 l2 4 l3 -28 l3 35 l2 -11 l5 0 q6 -10 12 0 l34 0" fill="none" stroke="#12466e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,195)">
+  <circle cx="10" cy="6.5" r="6.5" fill="#b3261e"/><text x="10" y="9.6" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">D</text>
+  <text x="22" y="10" font-size="9" font-weight="700" fill="#b3261e">Taquicardia ventricular</text>
+  <text x="135" y="10" class="s-st">· QRS ancho y regular, sin ondas P → evaluar pulso y avisar de inmediato</text>
+  <rect x="4" y="14" width="692" height="48" rx="3" fill="url(#ecgPaper)" stroke="#e3c3bf" stroke-width=".8"/>
+  <path d="M8 44v-22h7v22" fill="none" stroke="#94a3b8" stroke-width="1.1"/>
+  <path d="M8 44q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0q9 -24 18 0q9 24 18 0" fill="none" stroke="#b3261e" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+  <g font-size="7" font-weight="700" fill="#8a4a44">
+    <text x="26" y="28" text-anchor="middle">P</text><text x="45" y="22" text-anchor="middle">QRS</text><text x="66" y="28" text-anchor="middle">T</text>
+  </g>
+  <path d="M26 31v5M45 25v9M66 31v5" stroke="#c99b95" stroke-width=".7"/>
+  <text x="692" y="58" text-anchor="end" font-size="6.6" fill="#a8867f">25 mm/s · 10 mm/mV</text>
+  </svg>
     <figcaption><b>Figura 3.</b> Trazados esquemáticos de elaboración propia (no son registros de pacientes). La diferencia clave entre B y D es el <b>estado del paciente</b>: en el artefacto hay pulso, conciencia y SpO₂ normales; en la TV hay deterioro hemodinámico. Ante la duda, palpe el pulso central.</figcaption>
   </figure>
 
@@ -432,30 +492,70 @@ svg{display:block;width:100%;height:auto}
 
   <div class="g2">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 360 176" role="img" aria-label="Principio oscilométrico: presión del manguito y amplitud de oscilaciones">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">Principio oscilométrico</text>
-          <!-- ejes -->
-          <path d="M34 150H344M34 150V26" stroke="#334155" stroke-width="1.2"/>
-          <text x="188" y="168" font-size="9" text-anchor="middle" fill="#41566a">Presión del manguito al desinflarse (mmHg) →</text>
-          <text x="14" y="92" font-size="9" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 92)">Amplitud oscilación</text>
-          <!-- curva envolvente -->
-          <path d="M44 148c30-2 46-30 62-54 12-18 22-30 34-30s22 12 34 30c16 24 32 52 62 54"
-                fill="none" stroke="#0e7490" stroke-width="1.6" stroke-dasharray="4 3"/>
-          <!-- oscilaciones -->
-          <g stroke="#12466e" stroke-width="1.3" fill="none">
-            <path d="M52 150v-6M64 150v-12M76 150v-22M88 150v-36M100 150v-52M112 150v-66M124 150v-78M136 150v-88M148 150v-92M160 150v-94M172 150v-92M184 150v-86M196 150v-74M208 150v-60M220 150v-46M232 150v-34M244 150v-24M256 150v-16M268 150v-10M280 150v-6"/>
-          </g>
-          <!-- marcas -->
-          <path d="M112 26V150" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
-          <path d="M160 26V150" stroke="#15803d" stroke-width="1.2"/>
-          <path d="M232 26V150" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
-          <text x="112" y="22" font-size="8.6" text-anchor="middle" fill="#b3261e">PAS (estimada)</text>
-          <text x="160" y="36" font-size="9" text-anchor="middle" font-weight="bold" fill="#15803d">PAM</text>
-          <text x="160" y="46" font-size="8" text-anchor="middle" fill="#15803d">máxima oscilación</text>
-          <text x="238" y="22" font-size="8.6" text-anchor="start" fill="#b3261e">PAD (estimada)</text>
-        </g>
-      </svg>
+      <svg viewBox="0 0 360 190" role="img" aria-label="Principio oscilométrico: presión del manguito y amplitud de oscilaciones">
+  <text x="4" y="12" class="s-t">Principio oscilométrico</text>
+  <rect x="36" y="20" width="316" height="130" rx="4" fill="#fcfeff" stroke="#e0e9f0" stroke-width=".8"/>
+  <g class="s-grid"><path d="M36 62h316M36 92h316M36 122h316"/></g>
+  <rect x="146" y="20" width="34" height="130" fill="#eef8f2"/>
+  <rect x="49" y="144" width="6" height="6" rx="2.4" fill="#c8dcea"/>
+  <rect x="49" y="144" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="61" y="138" width="6" height="12" rx="2.4" fill="#c8dcea"/>
+  <rect x="61" y="138" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="73" y="128" width="6" height="22" rx="2.4" fill="#c8dcea"/>
+  <rect x="73" y="128" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="85" y="114" width="6" height="36" rx="2.4" fill="#c8dcea"/>
+  <rect x="85" y="114" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="97" y="98" width="6" height="52" rx="2.4" fill="#c8dcea"/>
+  <rect x="97" y="98" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="109" y="84" width="6" height="66" rx="2.4" fill="#c8dcea"/>
+  <rect x="109" y="84" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="121" y="72" width="6" height="78" rx="2.4" fill="#c8dcea"/>
+  <rect x="121" y="72" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="133" y="62" width="6" height="88" rx="2.4" fill="#c8dcea"/>
+  <rect x="133" y="62" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="145" y="58" width="6" height="92" rx="2.4" fill="#c8dcea"/>
+  <rect x="145" y="58" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="157" y="56" width="6" height="94" rx="2.4" fill="#c8dcea"/>
+  <rect x="157" y="56" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="169" y="58" width="6" height="92" rx="2.4" fill="#c8dcea"/>
+  <rect x="169" y="58" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="181" y="64" width="6" height="86" rx="2.4" fill="#c8dcea"/>
+  <rect x="181" y="64" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="193" y="76" width="6" height="74" rx="2.4" fill="#c8dcea"/>
+  <rect x="193" y="76" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="205" y="90" width="6" height="60" rx="2.4" fill="#c8dcea"/>
+  <rect x="205" y="90" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="217" y="104" width="6" height="46" rx="2.4" fill="#c8dcea"/>
+  <rect x="217" y="104" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="229" y="116" width="6" height="34" rx="2.4" fill="#c8dcea"/>
+  <rect x="229" y="116" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="241" y="126" width="6" height="24" rx="2.4" fill="#c8dcea"/>
+  <rect x="241" y="126" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="253" y="134" width="6" height="16" rx="2.4" fill="#c8dcea"/>
+  <rect x="253" y="134" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="265" y="140" width="6" height="10" rx="2.4" fill="#c8dcea"/>
+  <rect x="265" y="140" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <rect x="277" y="144" width="6" height="6" rx="2.4" fill="#c8dcea"/>
+  <rect x="277" y="144" width="6" height="2.6" rx="1.3" fill="#12466e" opacity=".55"/>
+  <path d="M50 148c26-4 42-34 60-62 12-19 22-32 34-32s22 13 34 32c18 28 34 58 60 62"
+        fill="none" stroke="#0e7490" stroke-width="1.4" stroke-dasharray="4.5 3"/>
+  <g stroke-width="1" stroke="#b3261e" stroke-dasharray="3.5 2.5"><path d="M112 44V150M232 44V150"/></g>
+  <path d="M163 32V150" stroke="#15803d" stroke-width="1.6"/>
+  <path d="M36 150h320" class="s-axis"/><path d="M36 150V18" class="s-axis"/>
+  <g class="s-tick"><path d="M52 150v3M112 150v3M163 150v3M232 150v3M292 150v3M340 150v3"/></g>
+  <g class="s-ax" text-anchor="middle"><text x="52" y="162">180</text><text x="112" y="162">140</text><text x="163" y="162">110</text><text x="232" y="162">80</text><text x="292" y="162">60</text><text x="340" y="162">40</text></g>
+  <text x="196" y="175" text-anchor="middle" class="s-u">Presión del manguito durante el desinflado (mmHg) →</text>
+  <text x="12" y="88" text-anchor="middle" class="s-u" transform="rotate(-90 12 88)">Amplitud de la oscilación</text>
+  <g>
+    <rect x="132" y="24" width="62" height="15" rx="7.5" fill="#15803d"/>
+    <text x="163" y="34.5" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">PAM medida</text>
+    <rect x="72" y="28" width="60" height="13" rx="6.5" fill="#fdeceb" stroke="#e9c2be" stroke-width=".7"/>
+    <text x="102" y="37" text-anchor="middle" font-size="7.4" font-weight="700" fill="#b3261e">PAS estimada</text>
+    <rect x="206" y="28" width="60" height="13" rx="6.5" fill="#fdeceb" stroke="#e9c2be" stroke-width=".7"/>
+    <text x="236" y="37" text-anchor="middle" font-size="7.4" font-weight="700" fill="#b3261e">PAD estimada</text>
+  </g>
+  <text x="180" y="187" text-anchor="middle" font-size="7.6" fill="#15803d">La PAM es el punto de máxima oscilación: el único valor medido directamente.</text>
+</svg>
       <figcaption><b>Figura 4.</b> Esquema propio. La PAM se mide; PAS y PAD se calculan. En arritmias, temblor, shock o vasoconstricción intensa, esa estimación pierde exactitud.</figcaption>
     </figure>
 
@@ -520,58 +620,70 @@ svg{display:block;width:100%;height:auto}
   <p>El sensor emite luz <strong>roja (660 nm) e infrarroja (940 nm)</strong> a través de un lecho vascular. La hemoglobina oxigenada y la desoxigenada absorben ambas longitudes de onda de manera distinta; el equipo analiza sólo el <strong>componente pulsátil</strong> de la señal (el que aporta la sangre arterial) y calcula la relación entre ambas absorciones. De ahí el requisito esencial: <strong>sin pulso detectable, no hay SpO₂ confiable</strong>.</p>
 
   <div class="g21">
-    <figure class="fig-frame">
+    <figure class="fig-frame top">
       <svg viewBox="0 0 340 216" role="img" aria-label="Curva de disociación de la hemoglobina con puntos clave">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">Curva de disociación de la hemoglobina</text>
-          <path d="M40 150H320M40 150V32" stroke="#334155" stroke-width="1.2"/>
-          <g font-size="8" fill="#64748b">
-            <text x="40" y="162" text-anchor="middle">0</text><text x="118" y="162" text-anchor="middle">30</text>
-            <text x="144" y="162" text-anchor="middle">40</text><text x="196" y="162" text-anchor="middle">60</text>
-            <text x="248" y="162" text-anchor="middle">80</text><text x="300" y="162" text-anchor="middle">100</text>
-            <text x="34" y="153" text-anchor="end">0</text><text x="34" y="95" text-anchor="end">50</text>
-            <text x="34" y="50" text-anchor="end">90</text><text x="34" y="40" text-anchor="end">100</text>
-          </g>
-          <text x="180" y="176" font-size="8.6" text-anchor="middle" fill="#41566a">PaO₂ (mmHg)</text>
-          <text x="12" y="92" font-size="8.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 12 92)">SaO₂ (%)</text>
-          <path d="M40 46.5H196M196 46.5V150" stroke="#15803d" stroke-width=".9" stroke-dasharray="3 2"/>
-          <path d="M40 64H144M144 64V150" stroke="#a75a00" stroke-width=".9" stroke-dasharray="3 2"/>
-          <path d="M40 92.5H110M110 92.5V150" stroke="#b3261e" stroke-width=".9" stroke-dasharray="3 2"/>
-          <path d="M40 150C60 146 80 124 92 110C102 99 106 96 110 92.5C120 80 132 70 144 64C158 56 182 48 196 46.5C216 44 240 41 300 38"
-                fill="none" stroke="#12466e" stroke-width="2.2"/>
-          <path d="M40 150C56 144 74 118 86 104C96 93 100 90 104 86C114 74 126 64 138 58C152 50 176 44 190 43C212 41 240 39 300 37"
-                fill="none" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/>
-          <path d="M40 150C66 148 88 132 100 118C110 107 114 103 118 99C128 87 140 77 152 70C166 62 190 52 202 50C222 47 244 43 300 39"
-                fill="none" stroke="#b3261e" stroke-width="1" stroke-dasharray="4 3"/>
-          <circle cx="196" cy="46.5" r="3.4" fill="#15803d"/><circle cx="144" cy="64" r="3.4" fill="#a75a00"/>
-          <circle cx="110" cy="92.5" r="3.4" fill="#b3261e"/>
-          <g font-size="8.2">
-            <circle cx="8" cy="185" r="3.4" fill="#15803d"/>
-            <text x="16" y="188" fill="#15803d" font-weight="bold">60 → 90 %</text>
-            <circle cx="92" cy="185" r="3.4" fill="#a75a00"/>
-            <text x="100" y="188" fill="#a75a00" font-weight="bold">40 → 75 %</text>
-            <circle cx="176" cy="185" r="3.4" fill="#b3261e"/>
-            <text x="184" y="188" fill="#b3261e" font-weight="bold">P₅₀ 27 → 50 %</text>
-            <text x="8" y="199" fill="#b3261e">– – desplazamiento a la derecha: fiebre, acidosis, ↑CO₂ (cede O₂)</text>
-            <text x="8" y="210" fill="#0e7490">– – desplazamiento a la izquierda: hipotermia, alcalosis (retiene O₂)</text>
-          </g>
-        </g>
-      </svg>
+  <text x="4" y="12" class="s-t">Curva de disociación de la hemoglobina</text>
+  <rect x="38" y="22" width="292" height="130" rx="4" fill="#fcfeff" stroke="#e0e9f0" stroke-width=".8"/>
+  <rect x="38" y="22" width="292" height="26" fill="#f1f9f4"/>
+  <rect x="38" y="48" width="292" height="104" fill="#fdf5f4"/>
+  <text x="44" y="33" font-size="6.8" fill="#4b8f66">zona de seguridad · SaO₂ ≥ 90 %</text>
+  <text x="326" y="148" text-anchor="end" font-size="6.8" fill="#c07b74">bajo 90 % la curva cae en picada</text>
+  <g class="s-grid"><path d="M38 48h292M38 77h292M38 106h292M96 22v130M154 22v130M212 22v130M270 22v130"/></g>
+  <path d="M38 152h294" class="s-axis"/><path d="M38 152V20" class="s-axis"/>
+  <g class="s-tick"><path d="M38 152v3M96 152v3M125 152v3M154 152v3M212 152v3M270 152v3M328 152v3M35 152h-3M35 106h-3M35 48h-3M35 29h-3"/></g>
+  <g class="s-ax"><text x="38" y="163" text-anchor="middle">0</text><text x="96" y="163" text-anchor="middle">20</text><text x="125" y="163" text-anchor="middle">30</text><text x="154" y="163" text-anchor="middle">40</text><text x="212" y="163" text-anchor="middle">60</text><text x="270" y="163" text-anchor="middle">80</text><text x="328" y="163" text-anchor="middle">100</text>
+    <text x="30" y="155" text-anchor="end">0</text><text x="30" y="109" text-anchor="end">50</text><text x="30" y="51" text-anchor="end">90</text><text x="30" y="32" text-anchor="end">100</text></g>
+  <text x="184" y="176" text-anchor="middle" class="s-u">Presión arterial de oxígeno · PaO₂ (mmHg)</text>
+  <text x="12" y="88" text-anchor="middle" class="s-u" transform="rotate(-90 12 88)">Saturación · SaO₂ (%)</text>
+  <path d="M38 152C60 148 82 124 96 108C108 94 114 88 125 79C136 70 146 64 154 59C170 50 196 44 212 42C240 39 280 34 328 31"
+        fill="none" stroke="#0e7490" stroke-width=".9" stroke-dasharray="4 3" opacity=".85"/>
+  <path d="M38 152C66 150 92 136 106 120C118 106 124 100 136 92C148 84 160 76 170 71C186 62 206 54 224 51C252 46 288 40 328 36"
+        fill="none" stroke="#b3261e" stroke-width=".9" stroke-dasharray="4 3" opacity=".85"/>
+  <path d="M38 152C58 148 78 128 92 112C102 100 110 92 118 86C130 77 142 68 154 62C172 53 196 46 212 44C244 40 284 36 328 33"
+        fill="none" stroke="#12466e" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M214 47l16 18h20" class="s-lead"/>
+  <path d="M156 65l10 14h16" class="s-lead"/>
+  <path d="M120 89l8 12h14" class="s-lead"/>
+  <g>
+    <circle cx="212" cy="44" r="3.6" fill="#15803d" stroke="#fff" stroke-width="1.2"/>
+    <circle cx="154" cy="62" r="3.6" fill="#a75a00" stroke="#fff" stroke-width="1.2"/>
+    <circle cx="118" cy="86" r="3.6" fill="#b3261e" stroke="#fff" stroke-width="1.2"/>
+  </g>
+  <text x="253" y="68" font-size="7.6" font-weight="700" fill="#15803d">SaO₂ 90 %</text>
+  <text x="185" y="82" font-size="7.6" font-weight="700" fill="#a75a00">75 %</text>
+  <text x="145" y="104" font-size="7.6" font-weight="700" fill="#b3261e">P₅₀ · 50 %</text>
+  <g font-size="7.4">
+    <circle cx="10" cy="188" r="3.4" fill="#15803d"/><text x="18" y="191" fill="#15803d"><tspan font-weight="700">PaO₂ 60 → 90 %</tspan> umbral crítico</text>
+    <circle cx="132" cy="188" r="3.4" fill="#a75a00"/><text x="140" y="191" fill="#a75a00"><tspan font-weight="700">40 → 75 %</tspan> sangre venosa</text>
+    <circle cx="240" cy="188" r="3.4" fill="#b3261e"/><text x="248" y="191" fill="#b3261e"><tspan font-weight="700">P₅₀ 27 mmHg</tspan></text>
+    <path d="M6 202h14" stroke="#b3261e" stroke-width="1" stroke-dasharray="4 3"/><text x="24" y="205" fill="#b3261e">derecha: fiebre, acidosis, ↑CO₂</text>
+    <path d="M166 202h14" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/><text x="184" y="205" fill="#0e7490">izquierda: hipotermia, alcalosis</text>
+  </g>
+</svg>
       <figcaption><b>Figura 5.</b> Esquema propio. Por debajo de <b>SpO₂ 90 %</b> la curva cae en picada: pequeños descensos de saturación equivalen a caídas grandes de PaO₂. Ése es el umbral que debe activar su respuesta.</figcaption>
     </figure>
 
     <div>
       <figure class="fig-frame" style="margin-bottom:2mm">
-        <svg viewBox="0 0 300 96" role="img" aria-label="Onda pletismográfica normal comparada con onda de mala perfusión">
-          <g font-family="Liberation Sans, Arial">
-            <text x="4" y="11" font-size="8.6" font-weight="bold" fill="#15803d">Pleth normal: pulsátil, con muesca dícrota</text>
-            <path d="M4 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M60 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M116 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M172 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M228 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3"
-                  fill="none" stroke="#15803d" stroke-width="1.6"/>
-            <text x="4" y="66" font-size="8.6" font-weight="bold" fill="#b3261e">Mala perfusión / vasoconstricción: onda plana y ruidosa</text>
-            <path d="M4 88c8 0 10-5 16-5s8 3 12 4 6-1 10 1 6 2 10 0 8-4 12-3 8 4 12 3 8-5 14-4 8 4 12 3 8-3 12-2 8 3 12 2 8-4 14-3 8 4 12 3 8-4 12-3 8 3 12 2 8-3 14-2 8 3 12 2 8-3 12-2 8 2 12 1"
-                  fill="none" stroke="#b3261e" stroke-width="1.5"/>
-          </g>
-        </svg>
+        <svg viewBox="0 0 300 116" role="img" aria-label="Onda pletismográfica normal comparada con onda de mala perfusión">
+  <g>
+    <circle cx="7" cy="9" r="4.4" fill="#15803d"/>
+    <text x="16" y="12" font-size="8.2" font-weight="700" fill="#15803d">Señal confiable</text>
+    <text x="86" y="12" font-size="7.4" fill="#5d7385">· pulsátil, con muesca dícrota</text>
+    <rect x="4" y="16" width="292" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+    <path d="M8 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7M53 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7M98 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7M143 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7M188 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7M233 44c5 0 7-20 12-20s7 9 10 13 4 1 6 4 3 6 5 3 3-7 5-7 4 2 7 7"
+          fill="none" stroke="#15803d" stroke-width="1.7" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(0,58)">
+    <circle cx="7" cy="9" r="4.4" fill="#b3261e"/>
+    <text x="16" y="12" font-size="8.2" font-weight="700" fill="#b3261e">Señal no confiable</text>
+    <text x="98" y="12" font-size="7.4" fill="#5d7385">· mala perfusión o vasoconstricción</text>
+    <rect x="4" y="16" width="292" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+    <path d="M8 40c7 0 9-4 15-4s8 3 12 4 6-1 10 1 6 2 10 0 8-3 12-2 8 3 12 2 8-4 14-3 8 3 12 2 8-2 12-1 8 2 12 1 8-3 14-2 8 3 12 2 8-3 12-2 8 2 12 1 8-2 12-1 8 2 12 1 8-3 14-2 8 3 12 2"
+          fill="none" stroke="#b3261e" stroke-width="1.6"/>
+    <text x="292" y="27" text-anchor="end" font-size="6.6" fill="#c07b74">amplitud casi nula: el número de SpO₂ no es válido</text>
+  </g>
+</svg>
         <figcaption><b>Figura 6.</b> Esquema propio. <b>Nunca interprete un número de SpO₂ sin mirar la onda.</b> Si la onda es plana o irregular, el valor no es confiable.</figcaption>
       </figure>
       <div class="alert" style="margin-bottom:0">
@@ -641,40 +753,58 @@ svg{display:block;width:100%;height:auto}
     </div>
 
     <figure class="fig-frame">
-      <svg viewBox="0 0 360 282" role="img" aria-label="Patrones respiratorios: eupnea, taquipnea, bradipnea, Kussmaul, Cheyne-Stokes y Biot">
-      <g font-family="Liberation Sans, Arial">
-        <g transform="translate(0,0)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Eupnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · 12–20/min · patrón normal</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
-        </g>
-        <g transform="translate(0,47)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Taquipnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · dolor, fiebre, sepsis, ansiedad</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
-        </g>
-        <g transform="translate(0,94)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Bradipnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · opioides, sedación, hipertensión intracraneal</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
-        </g>
-        <g transform="translate(0,141)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Kussmaul<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · profunda y rápida: acidosis metabólica</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
-        </g>
-        <g transform="translate(0,188)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Cheyne-Stokes<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · ciclos crescendo–decrescendo con apnea</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q7 -3 14 0q7 -7 14 0q7 -13 14 0q7 -19 14 0q7 -22 14 0q7 -18 14 0q7 -12 14 0q7 -6 14 0q7 -2 14 0l40 0q7 -3 14 0q7 -7 14 0q7 -13 14 0q7 -19 14 0q7 -22 14 0q7 -18 14 0q7 -12 14 0q7 -6 14 0q7 -2 14 0l30 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
-        </g>
-        <g transform="translate(0,235)">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Biot<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · salvas irregulares con apneas: lesión bulbar</tspan></text>
-          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
-          <path d="M4 40q8 -18 16 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l44 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l40 0q8 -18 16 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l30 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
-        </g>
-      </g>
-      </svg>
+      <svg viewBox="0 0 360 292" role="img" aria-label="Patrones respiratorios: eupnea, taquipnea, bradipnea, Kussmaul, Cheyne-Stokes y Biot">
+  <text x="4" y="10" class="s-t">Patrones respiratorios</text>
+  <g transform="translate(0,16)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#0f766e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#0f766e">Eupnea</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">12–20 /min · normal</text>
+  <path d="M102 30q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0q10.5 -10 21 0" fill="none" stroke="#0f766e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,60)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#0f766e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#0f766e">Taquipnea</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">fiebre, dolor, sepsis</text>
+  <path d="M102 30q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0q7.0 -7 14 0" fill="none" stroke="#0f766e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,104)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#0f766e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#0f766e">Bradipnea</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">opioides, sedación, ↑PIC</text>
+  <path d="M102 30q21.0 -13 42 0q21.0 -13 42 0q21.0 -13 42 0q21.0 -13 42 0q21.0 -13 42 0q21.0 -13 42 0" fill="none" stroke="#0f766e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,148)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#b3261e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#b3261e">Kussmaul</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">acidosis metabólica</text>
+  <path d="M102 30q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0q12.5 -20 25 0" fill="none" stroke="#b3261e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,192)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#b3261e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#b3261e">Cheyne-Stokes</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">insuf. cardíaca, daño cerebral</text>
+  <path d="M102 30q6 -3 12 0q6 -7 12 0q6 -12 12 0q6 -17 12 0q6 -20 12 0q6 -16 12 0q6 -11 12 0q6 -5 12 0q6 -2 12 0l30 0q6 -3 12 0q6 -7 12 0q6 -12 12 0q6 -17 12 0q6 -20 12 0q6 -16 12 0q6 -11 12 0q6 -5 12 0q6 -2 12 0" fill="none" stroke="#b3261e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(0,236)">
+  <rect x="96" y="4" width="260" height="34" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M100 30h254" stroke="#c9d8e4" stroke-width=".6" stroke-dasharray="3 2"/>
+  <rect x="0" y="4" width="4" height="34" rx="2" fill="#b3261e" opacity=".55"/>
+  <text x="10" y="20" font-size="8.6" font-weight="700" fill="#b3261e">Biot</text>
+  <text x="10" y="31" font-size="7" fill="#7c8fa0">lesión bulbar grave</text>
+  <path d="M102 30q7 -17 14 0q7 -17 14 0q7 -17 14 0q7 -17 14 0l34 0q7 -17 14 0q7 -17 14 0q7 -17 14 0l30 0q7 -17 14 0q7 -17 14 0q7 -17 14 0l20 0" fill="none" stroke="#b3261e" stroke-width="1.7" stroke-linecap="round"/>
+  </g>
+  <text x="4" y="288" class="s-ax">Los tres patrones inferiores (rojo) obligan a avisar: traducen acidosis grave o compromiso del centro respiratorio.</text>
+  </svg>
       <figcaption><b>Figura 7.</b> Patrones respiratorios (esquema propio). Los tres inferiores obligan a avisar: traducen acidosis metabólica grave o compromiso del centro respiratorio.</figcaption>
     </figure>
   </div>
@@ -720,80 +850,86 @@ svg{display:block;width:100%;height:auto}
   <p>La capnografía mide el <strong>CO₂ espirado</strong> y muestra su valor al final de la espiración (EtCO₂, normal <span class="mono">35–45 mmHg</span>) junto con una curva. Es el único parámetro de cabecera que informa <strong>simultáneamente sobre ventilación, perfusión y metabolismo</strong>: para que aparezca CO₂ en la boca, el organismo debe producirlo (metabolismo), la sangre debe transportarlo al pulmón (gasto cardíaco) y el paciente debe ventilar (vía aérea permeable). Por eso una caída brusca del EtCO₂ nunca es un dato menor.</p>
 
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 150" role="img" aria-label="Capnograma normal con sus cuatro fases">
-      <g font-family="Liberation Sans, Arial">
-        <path d="M40 124H340M40 124V22" stroke="#334155" stroke-width="1.2"/>
-        <g font-size="8" fill="#64748b">
-          <text x="34" y="127" text-anchor="end">0</text><text x="34" y="52" text-anchor="end">40</text><text x="34" y="30" text-anchor="end">50</text>
-        </g>
-        <text x="14" y="76" font-size="8.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 76)">CO₂ (mmHg)</text>
-        <text x="190" y="142" font-size="8.6" text-anchor="middle" fill="#41566a">Tiempo →</text>
-        <path d="M40 55H340" stroke="#cbd5e1" stroke-width=".8" stroke-dasharray="3 3"/>
-        <!-- capnograma normal -->
-        <path d="M44 124h30l6-2 8-52 10-14 12-4h60l3 2v2h20l16 54 6 12h40l6-2 8-52 10-14 12-4h44"
-              fill="none" stroke="#a75a00" stroke-width="2.2"/>
-        <g font-size="8.6" font-weight="bold" fill="#12466e">
-          <text x="52" y="118">I</text><text x="86" y="86">II</text><text x="150" y="42">III</text><text x="214" y="86">0</text>
-        </g>
-        <g font-size="8.4" fill="#41566a">
-          <text x="360" y="34" font-weight="bold" fill="#12466e">Fases del capnograma</text>
-          <text x="360" y="50"><tspan font-weight="bold">I</tspan> · espacio muerto anatómico: gas sin CO₂ (línea basal en 0)</text>
-          <text x="360" y="66"><tspan font-weight="bold">II</tspan> · ascenso rápido: mezcla de espacio muerto y gas alveolar</text>
-          <text x="360" y="82"><tspan font-weight="bold">III</tspan> · meseta alveolar, ligeramente ascendente</text>
-          <text x="360" y="98"><tspan font-weight="bold">EtCO₂</tspan> · valor máximo al final de la meseta (punto de lectura)</text>
-          <text x="360" y="114"><tspan font-weight="bold">0</tspan> · descenso inspiratorio: entra gas fresco sin CO₂</text>
-          <text x="360" y="134" fill="#b3261e">Una basal que no vuelve a 0 = reinhalación de CO₂ (revise el circuito y la cal sodada)</text>
-        </g>
-        <circle cx="212" cy="47" r="3" fill="#b3261e"/><text x="196" y="42" font-size="8" fill="#b3261e" font-weight="bold">EtCO₂</text>
-      </g>
-    </svg>
+    <svg viewBox="0 0 700 164" role="img" aria-label="Capnograma normal con sus cuatro fases">
+  <text x="4" y="12" class="s-t">Capnograma normal</text>
+  <text x="96" y="12" class="s-st">· la forma de la curva informa tanto como el número</text>
+  <rect x="36" y="20" width="330" height="112" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <rect x="40" y="20" width="34" height="112" fill="#eef2f6" opacity=".75"/>
+  <rect x="74" y="20" width="30" height="112" fill="#e6f1f8" opacity=".8"/>
+  <rect x="104" y="20" width="96" height="112" fill="#fbf2e4" opacity=".7"/>
+  <rect x="200" y="20" width="30" height="112" fill="#f0ecf9" opacity=".8"/>
+  <g font-size="8.4" font-weight="700" text-anchor="middle">
+    <text x="57" y="31" fill="#7c8fa0">I</text><text x="89" y="31" fill="#0e7490">II</text>
+    <text x="152" y="31" fill="#a75a00">III</text><text x="215" y="31" fill="#5b3fa8">0</text>
+  </g>
+  <path d="M36 132h334" class="s-axis"/><path d="M36 132V18" class="s-axis"/>
+  <g class="s-tick"><path d="M33 132h-3M33 96h-3M33 60h-3M33 42h-3"/></g>
+  <g class="s-ax" text-anchor="end"><text x="30" y="134">0</text><text x="30" y="99">20</text><text x="30" y="63">40</text><text x="30" y="45">50</text></g>
+  <text x="14" y="76" text-anchor="middle" class="s-u" transform="rotate(-90 14 76)">CO₂ espirado (mmHg)</text>
+  <text x="200" y="150" text-anchor="middle" class="s-u">Tiempo →</text>
+  <path d="M36 66h330" stroke="#c9a86a" stroke-width=".8" stroke-dasharray="4 3"/>
+  <path d="M40 130h30l6-2 8-42 8-14 12-4h84l4 2 2 4h6l14 44 6 12h34l6-2 8-42 8-14 12-4h74"
+        fill="none" stroke="#a75a00" stroke-width="2.1" stroke-linejoin="round"/>
+  <circle cx="196" cy="62" r="3.6" fill="#b3261e" stroke="#fff" stroke-width="1.2"/>
+  <path d="M199 61l22-14" class="s-lead"/>
+  <rect x="222" y="38" width="56" height="15" rx="7.5" fill="#b3261e"/>
+  <text x="250" y="48.5" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">EtCO₂ 38</text>
+  <g font-size="8.2">
+    <text x="392" y="34" class="s-t">Fases del capnograma</text>
+    <text x="392" y="52"><tspan font-weight="700" fill="#7c8fa0">I</tspan>  espacio muerto anatómico: gas sin CO₂, línea basal en 0</text>
+    <text x="392" y="70"><tspan font-weight="700" fill="#0e7490">II</tspan>  ascenso rápido: mezcla de espacio muerto y gas alveolar</text>
+    <text x="392" y="88"><tspan font-weight="700" fill="#a75a00">III</tspan>  meseta alveolar, ligeramente ascendente</text>
+    <text x="392" y="106"><tspan font-weight="700" fill="#b3261e">EtCO₂</tspan>  valor al final de la meseta: es el punto de lectura</text>
+    <text x="392" y="124"><tspan font-weight="700" fill="#5b3fa8">0</tspan>  descenso inspiratorio: entra gas fresco sin CO₂</text>
+  </g>
+  <rect x="386" y="134" width="310" height="22" rx="4" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
+  <text x="396" y="148" font-size="7.8" fill="#8a4a44">Una basal que no regresa a 0 indica <tspan font-weight="700">reinhalación de CO₂</tspan>: revise el circuito.</text>
+</svg>
     <figcaption><b>Figura 8.</b> Capnograma normal (esquema propio). La forma importa tanto como el número: el valor de EtCO₂ sin la curva puede inducir a error.</figcaption>
   </figure>
 
   <h3>Curvas anormales que debe reconocer</h3>
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 130" role="img" aria-label="Capnogramas anormales: obstructivo, desconexión, esfuerzo respiratorio y retorno de circulación espontánea">
-      <g font-family="Liberation Sans, Arial" font-size="8.4">
-        <!-- 1 obstructivo -->
-        <g>
-          <text x="4" y="12" font-weight="bold" fill="#b3261e">A · "Aleta de tiburón"</text>
-          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
-          <path d="M8 92h14c16 0 26-22 34-34 8-12 14-14 22-16h4v46h14c16 0 26-22 34-34 8-12 14-14 22-16h4v46h6"
-                fill="none" stroke="#a75a00" stroke-width="1.8"/>
-          <text x="4" y="108" fill="#41566a">Broncoespasmo, EPOC: fase II y III</text>
-          <text x="4" y="117" fill="#41566a">con pendiente prolongada</text>
-        </g>
-        <!-- 2 desconexión -->
-        <g transform="translate(178,0)">
-          <text x="4" y="12" font-weight="bold" fill="#b3261e">B · Caída brusca a cero</text>
-          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
-          <path d="M8 92h6l4-42h24l4 42h10l4-42h24l4 42h10l4-42h10l-2 42h60"
-                fill="none" stroke="#a75a00" stroke-width="1.8"/>
-          <path d="M116 30V96" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
-          <text x="4" y="108" fill="#b3261e">Extubación, desconexión, obstrucción</text>
-          <text x="4" y="117" fill="#b3261e">total del tubo o paro cardíaco</text>
-        </g>
-        <!-- 3 curare -->
-        <g transform="translate(352,0)">
-          <text x="4" y="12" font-weight="bold" fill="#a75a00">C · Muesca en la meseta</text>
-          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
-          <path d="M8 92h6l4-42h14l3 8 3-8h14l4 42h12l4-42h14l3 8 3-8h14l4 42h12l4-42h14l3 8 3-8h14l4 42h6"
-                fill="none" stroke="#a75a00" stroke-width="1.8"/>
-          <text x="4" y="108" fill="#41566a">Esfuerzo inspiratorio del paciente</text>
-          <text x="4" y="117" fill="#41566a">(asincronía / relajación que cede)</text>
-        </g>
-        <!-- 4 ROSC -->
-        <g transform="translate(526,0)">
-          <text x="4" y="12" font-weight="bold" fill="#15803d">D · Ascenso súbito en RCP</text>
-          <path d="M4 92H170" stroke="#cbd5e1" stroke-width=".8"/>
-          <path d="M8 92h4l3-12h12l3 12h8l3-12h12l3 12h8l3-12h12l3 12h8l3-46h14l3 46h10l3-46h14l3 46h10l3-46h14l3 46h6"
-                fill="none" stroke="#15803d" stroke-width="1.8"/>
-          <path d="M96 24V96" stroke="#15803d" stroke-width="1" stroke-dasharray="3 2"/>
-          <text x="4" y="108" fill="#15803d">EtCO₂ que sube bruscamente durante</text>
-          <text x="4" y="117" fill="#15803d">la RCP sugiere retorno de circulación</text>
-        </g>
-      </g>
-    </svg>
+    <svg viewBox="0 0 700 118" role="img" aria-label="Capnogramas anormales: obstructivo, desconexión, esfuerzo respiratorio y retorno de circulación espontánea">
+  <g transform="translate(4,0)">
+  <rect x="0" y="0" width="168" height="114" rx="5" fill="#fff" stroke="#dae4ec" stroke-width=".8"/>
+  <circle cx="14" cy="14" r="6.4" fill="#a75a00"/><text x="14" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">A</text>
+  <text x="25" y="17" font-size="8.4" font-weight="700" fill="#a75a00">"Aleta de tiburón"</text>
+  <rect x="8" y="24" width="152" height="46" rx="3" fill="url(#monPaper)" stroke="#e3ebf1" stroke-width=".7"/>
+  <g transform="translate(8,8)"><path d="M6 62h10c14 0 22-18 30-28 7-9 12-12 18-13h4v41h10c14 0 22-18 30-28 7-9 12-12 18-13h4v41h6" fill="none" stroke="#a75a00" stroke-width="1.7" stroke-linejoin="round"/></g>
+  <text x="8" y="86" font-size="7.4" fill="#5d7385">Broncoespasmo, EPOC:</text>
+  <text x="8" y="97" font-size="7.4" fill="#5d7385">fases II y III con pendiente prolongada</text>
+  </g>
+  <g transform="translate(178,0)">
+  <rect x="0" y="0" width="168" height="114" rx="5" fill="#fff" stroke="#dae4ec" stroke-width=".8"/>
+  <circle cx="14" cy="14" r="6.4" fill="#b3261e"/><text x="14" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">B</text>
+  <text x="25" y="17" font-size="8.4" font-weight="700" fill="#b3261e">Caída brusca a cero</text>
+  <rect x="8" y="24" width="152" height="46" rx="3" fill="url(#monPaper)" stroke="#e3ebf1" stroke-width=".7"/>
+  <g transform="translate(8,8)"><path d="M6 62h6l3-34h20l3 34h10l3-34h20l3 34h10l3-34h8l-2 34h56" fill="none" stroke="#a75a00" stroke-width="1.7" stroke-linejoin="round"/></g>
+  <path d="M108 26v42" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="8" y="86" font-size="7.4" fill="#5d7385">Extubación, desconexión, obstrucción</text>
+  <text x="8" y="97" font-size="7.4" fill="#5d7385">total del tubo o paro cardíaco</text>
+  </g>
+  <g transform="translate(352,0)">
+  <rect x="0" y="0" width="168" height="114" rx="5" fill="#fff" stroke="#dae4ec" stroke-width=".8"/>
+  <circle cx="14" cy="14" r="6.4" fill="#a75a00"/><text x="14" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">C</text>
+  <text x="25" y="17" font-size="8.4" font-weight="700" fill="#a75a00">Muesca en la meseta</text>
+  <rect x="8" y="24" width="152" height="46" rx="3" fill="url(#monPaper)" stroke="#e3ebf1" stroke-width=".7"/>
+  <g transform="translate(8,8)"><path d="M6 62h6l3-34h12l2 7 2-7h12l3 34h10l3-34h12l2 7 2-7h12l3 34h10l3-34h12l2 7 2-7h12l3 34h6" fill="none" stroke="#a75a00" stroke-width="1.7" stroke-linejoin="round"/></g>
+  <text x="8" y="86" font-size="7.4" fill="#5d7385">Esfuerzo inspiratorio del paciente:</text>
+  <text x="8" y="97" font-size="7.4" fill="#5d7385">asincronía o relajación que cede</text>
+  </g>
+  <g transform="translate(526,0)">
+  <rect x="0" y="0" width="168" height="114" rx="5" fill="#fff" stroke="#dae4ec" stroke-width=".8"/>
+  <circle cx="14" cy="14" r="6.4" fill="#15803d"/><text x="14" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">D</text>
+  <text x="25" y="17" font-size="8.4" font-weight="700" fill="#15803d">Ascenso súbito en RCP</text>
+  <rect x="8" y="24" width="152" height="46" rx="3" fill="url(#monPaper)" stroke="#e3ebf1" stroke-width=".7"/>
+  <g transform="translate(8,8)"><path d="M6 62h4l2-9h10l2 9h8l2-9h10l2 9h8l2-9h10l2 9h6l3-38h12l3 38h8l3-38h12l3 38h8l3-38h12l3 38h6" fill="none" stroke="#15803d" stroke-width="1.7" stroke-linejoin="round"/></g>
+  <path d="M78 26v42" stroke="#15803d" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="8" y="86" font-size="7.4" fill="#5d7385">EtCO₂ que sube bruscamente durante</text>
+  <text x="8" y="97" font-size="7.4" fill="#5d7385">la RCP sugiere retorno de circulación</text>
+  </g>
+  </svg>
     <figcaption><b>Figura 9.</b> Morfologías anormales (esquemas propios). Ante cualquiera de ellas: evalúe al paciente antes de tocar el equipo.</figcaption>
   </figure>
 
@@ -839,34 +975,41 @@ svg{display:block;width:100%;height:auto}
 
   <div class="g21">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 420 252" role="img" aria-label="Curvas de presión-tiempo y flujo-tiempo del ventilador con pausa inspiratoria">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Presión / tiempo (con pausa inspiratoria)</text>
-          <path d="M40 112H414M40 112V20" stroke="#334155" stroke-width="1.1"/>
-          <text x="14" y="66" font-size="8" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 66)">cmH₂O</text>
-          <path d="M40 96H414" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/>
-          <text x="44" y="108" font-size="8.4" font-weight="bold" fill="#0e7490">PEEP</text>
-          <path d="M44 96l6-2 36-62 6 14h34l4 8 10 22 12 12 14 6 10 2h12l6-2 36-62 6 14h34l4 8 10 22 12 12 14 6 10 2h14"
-                fill="none" stroke="#12466e" stroke-width="2"/>
-          <circle cx="86" cy="32" r="3.2" fill="#b3261e"/><text x="58" y="28" font-size="8.4" font-weight="bold" fill="#b3261e">P pico</text>
-          <circle cx="112" cy="46" r="3.2" fill="#a75a00"/><text x="118" y="42" font-size="8.4" font-weight="bold" fill="#a75a00">P meseta (pausa)</text>
-          <path d="M338 46V96" stroke="#5b3fa8" stroke-width="1.4"/>
-          <path d="M334 52l4-6 4 6zM334 90l4 6 4-6z" fill="#5b3fa8"/>
-          <path d="M296 46h44M296 96h44" stroke="#5b3fa8" stroke-width=".7" stroke-dasharray="3 2"/>
-          <text x="346" y="66" font-size="8.4" font-weight="bold" fill="#5b3fa8">Driving</text>
-          <text x="346" y="76" font-size="8.4" font-weight="bold" fill="#5b3fa8">pressure</text>
-          <text x="346" y="86" font-size="7.6" fill="#5b3fa8">P meseta − PEEP</text>
+      <svg viewBox="0 0 420 258" role="img" aria-label="Curvas de presión-tiempo y flujo-tiempo del ventilador con pausa inspiratoria">
+  <text x="4" y="12" class="s-t">Presión / tiempo</text>
+  <text x="86" y="12" class="s-st">· con pausa inspiratoria</text>
+  <rect x="34" y="18" width="382" height="104" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M34 122h384" class="s-axis"/><path d="M34 122V16" class="s-axis"/>
+  <g class="s-tick"><path d="M31 122h-3M31 96h-3M31 70h-3M31 44h-3"/></g>
+  <g class="s-ax" text-anchor="end"><text x="28" y="124">0</text><text x="28" y="99">10</text><text x="28" y="73">20</text><text x="28" y="47">30</text></g>
+  <text x="12" y="70" text-anchor="middle" class="s-u" transform="rotate(-90 12 70)">Presión (cmH₂O)</text>
+  <path d="M34 96h382" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="38" y="108" font-size="8" font-weight="700" fill="#0e7490">PEEP 5</text>
+  <path d="M38 96l6-2 34-58 6 14h38l4 8 10 20 12 12 14 6 10 2h14l6-2 34-58 6 14h38l4 8 10 20 12 12 14 6 10 2h16"
+        fill="none" stroke="#12466e" stroke-width="2.1" stroke-linejoin="round"/>
+  <circle cx="78" cy="36" r="3.4" fill="#b3261e" stroke="#fff" stroke-width="1.1"/>
+  <text x="50" y="30" font-size="8.2" font-weight="700" fill="#b3261e">P pico</text>
+  <circle cx="110" cy="50" r="3.4" fill="#a75a00" stroke="#fff" stroke-width="1.1"/>
+  <text x="116" y="44" font-size="8.2" font-weight="700" fill="#a75a00">P meseta</text>
+  <g stroke="#5b3fa8" stroke-width=".8" stroke-dasharray="3 2"><path d="M250 50h104M250 96h104"/></g>
+  <path d="M350 52v42" stroke="#5b3fa8" stroke-width="1.3" marker-start="url(#aPurS)" marker-end="url(#aPur)"/>
+  <text x="358" y="70" font-size="8.2" font-weight="700" fill="#5b3fa8">Driving</text>
+  <text x="358" y="80" font-size="8.2" font-weight="700" fill="#5b3fa8">pressure</text>
+  <text x="358" y="90" font-size="7" fill="#5b3fa8">meseta − PEEP</text>
 
-          <text x="4" y="146" font-size="9" font-weight="bold" fill="#12466e">Flujo / tiempo</text>
-          <path d="M40 196H414M40 232V160" stroke="#334155" stroke-width="1.1"/>
-          <text x="14" y="196" font-size="8" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 196)">L/min</text>
-          <path d="M44 196h4l4-26h60l4 26h4l6 30 16-12 18-8 16-4h14M204 196h4l4-26h60l4 26h4l6 30 16-12 18-8 16-4h16"
-                fill="none" stroke="#15803d" stroke-width="1.8"/>
-          <text x="66" y="166" font-size="8" fill="#15803d">inspiración</text>
-          <text x="150" y="216" font-size="8" fill="#15803d">espiración</text>
-          <text x="4" y="246" font-size="8" fill="#b3261e">Si el flujo espiratorio no alcanza la línea de cero antes de la siguiente inspiración → auto-PEEP (atrapamiento aéreo).</text>
-        </g>
-      </svg>
+  <text x="4" y="146" class="s-t">Flujo / tiempo</text>
+  <rect x="34" y="152" width="382" height="76" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M34 190h384" class="s-axis"/><path d="M34 232V150" class="s-axis"/>
+  <text x="12" y="190" text-anchor="middle" class="s-u" transform="rotate(-90 12 190)">Flujo (L/min)</text>
+  <text x="24" y="193" class="s-ax" text-anchor="end">0</text>
+  <path d="M38 190h4l4-24h58l4 24h4l6 28 16-12 18-8 16-4h14M198 190h4l4-24h58l4 24h4l6 28 16-12 18-8 16-4h16"
+        fill="none" stroke="#15803d" stroke-width="1.9" stroke-linejoin="round"/>
+  <text x="62" y="162" font-size="7.6" fill="#15803d">inspiración</text>
+  <text x="150" y="212" font-size="7.6" fill="#15803d">espiración</text>
+  <path d="M182 190v-8" stroke="#b3261e" stroke-width="1" stroke-dasharray="2 2"/>
+  <circle cx="182" cy="190" r="2.6" fill="#b3261e"/>
+  <text x="416" y="246" text-anchor="end" font-size="7.6" fill="#b3261e">Si el flujo espiratorio no vuelve a cero antes de la siguiente inspiración → auto-PEEP</text>
+</svg>
       <figcaption><b>Figura 10.</b> Curvas básicas del ventilador (esquema propio). La <b>presión pico</b> depende de la vía aérea (secreciones, broncoespasmo, mordida del tubo); la <b>presión meseta</b> refleja la distensibilidad del pulmón.</figcaption>
     </figure>
 
@@ -946,44 +1089,43 @@ svg{display:block;width:100%;height:auto}
 
     <div>
       <figure class="fig-frame" style="margin-bottom:2mm">
-        <svg viewBox="0 0 340 196" role="img" aria-label="Escala de tamaño pupilar en milímetros y patrones pupilares patológicos">
-          <g font-family="Liberation Sans, Arial">
-            <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Escala de tamaño pupilar (mm)</text>
-            <g>
-              <circle cx="26" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="34" r="2" fill="#111"/>
-              <circle cx="70" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="70" cy="34" r="3" fill="#111"/>
-              <circle cx="114" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="114" cy="34" r="4" fill="#111"/>
-              <circle cx="158" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="158" cy="34" r="5" fill="#111"/>
-              <circle cx="202" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="202" cy="34" r="6" fill="#111"/>
-              <circle cx="246" cy="34" r="9.5" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="246" cy="34" r="7" fill="#111"/>
-              <circle cx="292" cy="34" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="292" cy="34" r="8.4" fill="#111"/>
-            </g>
-            <g font-size="8" fill="#41566a" text-anchor="middle">
-              <text x="26" y="52">2</text><text x="70" y="52">3</text><text x="114" y="52">4</text><text x="158" y="52">5</text>
-              <text x="202" y="52">6</text><text x="246" y="52">7</text><text x="292" y="52">8</text>
-            </g>
-            <text x="4" y="74" font-size="9" font-weight="bold" fill="#b3261e">Patrones que obligan a avisar</text>
-            <g>
-              <circle cx="26" cy="100" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="100" r="3" fill="#111"/>
-              <circle cx="52" cy="100" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="100" r="8" fill="#111"/>
-              <text x="72" y="94" font-size="8.6" font-weight="bold" fill="#b3261e">Anisocoria con midriasis</text>
-              <text x="72" y="105" font-size="8.2" fill="#41566a">unilateral arreactiva → compresión del III par:</text>
-              <text x="72" y="115" font-size="8.2" fill="#41566a">herniación en curso</text>
-            </g>
-            <g>
-              <circle cx="26" cy="142" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="142" r="1.6" fill="#111"/>
-              <circle cx="52" cy="142" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="142" r="1.6" fill="#111"/>
-              <text x="72" y="138" font-size="8.6" font-weight="bold" fill="#a75a00">Mióticas puntiformes</text>
-              <text x="72" y="149" font-size="8.2" fill="#41566a">opioides, lesión pontina</text>
-            </g>
-            <g>
-              <circle cx="26" cy="178" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="178" r="8.4" fill="#111"/>
-              <circle cx="52" cy="178" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="178" r="8.4" fill="#111"/>
-              <text x="72" y="174" font-size="8.6" font-weight="bold" fill="#b3261e">Midriasis bilateral arreactiva</text>
-              <text x="72" y="185" font-size="8.2" fill="#41566a">hipoxia grave, fármacos, lesión mesencefálica</text>
-            </g>
-          </g>
-        </svg>
+        <svg viewBox="0 0 340 208" role="img" aria-label="Escala de tamaño pupilar en milímetros y patrones pupilares patológicos">
+  <text x="4" y="12" class="s-t">Escala de tamaño pupilar</text>
+  <text x="112" y="12" class="s-st">· documente siempre en milímetros</text>
+  <rect x="4" y="18" width="332" height="44" rx="4" fill="#f7fbfd" stroke="#e0e9f0" stroke-width=".8"/>
+  <circle cx="30" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="30" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="30" cy="36" r="1.8" fill="#0b1116"/><circle cx="26.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="30" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">2 mm</text>
+  <circle cx="76" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="76" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="76" cy="36" r="2.6" fill="#0b1116"/><circle cx="72.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="76" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">3 mm</text>
+  <circle cx="122" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="122" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="122" cy="36" r="3.4" fill="#0b1116"/><circle cx="118.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="122" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">4 mm</text>
+  <circle cx="168" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="168" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="168" cy="36" r="4.2" fill="#0b1116"/><circle cx="164.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="168" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">5 mm</text>
+  <circle cx="214" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="214" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="214" cy="36" r="5" fill="#0b1116"/><circle cx="210.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="214" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">6 mm</text>
+  <circle cx="260" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="260" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="260" cy="36" r="5.8" fill="#0b1116"/><circle cx="256.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="260" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">7 mm</text>
+  <circle cx="306" cy="36" r="10" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="306" cy="36" r="8.6" fill="url(#gIris)"/><circle cx="306" cy="36" r="6.8" fill="#0b1116"/><circle cx="302.8" cy="32.6" r="1.6" fill="#fff" opacity=".75"/>
+  <text x="306" y="57" text-anchor="middle" font-size="7.6" font-weight="700" fill="#5d7385">8 mm</text>
+  <text x="4" y="80" class="s-t s-red" fill="#b3261e">Patrones que obligan a avisar</text>
+  <rect x="4" y="86" width="332" height="34" rx="4" fill="#fff" stroke="#e6edf2" stroke-width=".7"/>
+  <circle cx="22" cy="100" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="22" cy="100" r="7.6" fill="url(#gIris)"/><circle cx="22" cy="100" r="3" fill="#0b1116"/><circle cx="19.1" cy="96.9" r="1.4" fill="#fff" opacity=".75"/>
+  <circle cx="46" cy="100" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="46" cy="100" r="7.6" fill="url(#gIris)"/><circle cx="46" cy="100" r="7.6" fill="#0b1116"/><circle cx="43.1" cy="96.9" r="1.4" fill="#fff" opacity=".75"/>
+  <text x="64" y="98" font-size="8.4" font-weight="700" fill="#b3261e">Anisocoria con midriasis unilateral</text>
+  <text x="64" y="109" font-size="7.6" fill="#5d7385">arreactiva → compresión del III par:</text>
+  <text x="64" y="119" font-size="7.6" fill="#5d7385">herniación cerebral en curso</text>
+  <rect x="4" y="126" width="332" height="28" rx="4" fill="#fff" stroke="#e6edf2" stroke-width=".7"/>
+  <circle cx="22" cy="140" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="22" cy="140" r="7.6" fill="url(#gIris)"/><circle cx="22" cy="140" r="1.6" fill="#0b1116"/><circle cx="19.1" cy="136.9" r="1.4" fill="#fff" opacity=".75"/>
+  <circle cx="46" cy="140" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="46" cy="140" r="7.6" fill="url(#gIris)"/><circle cx="46" cy="140" r="1.6" fill="#0b1116"/><circle cx="43.1" cy="136.9" r="1.4" fill="#fff" opacity=".75"/>
+  <text x="64" y="138" font-size="8.4" font-weight="700" fill="#a75a00">Pupilas mióticas puntiformes</text>
+  <text x="64" y="149" font-size="7.6" fill="#5d7385">opioides, lesión pontina</text>
+  <rect x="4" y="162" width="332" height="28" rx="4" fill="#fff" stroke="#e6edf2" stroke-width=".7"/>
+  <circle cx="22" cy="176" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="22" cy="176" r="7.6" fill="url(#gIris)"/><circle cx="22" cy="176" r="7.6" fill="#0b1116"/><circle cx="19.1" cy="172.9" r="1.4" fill="#fff" opacity=".75"/>
+  <circle cx="46" cy="176" r="9" fill="#fdfdfd" stroke="#c8d3db" stroke-width=".8"/><circle cx="46" cy="176" r="7.6" fill="url(#gIris)"/><circle cx="46" cy="176" r="7.6" fill="#0b1116"/><circle cx="43.1" cy="172.9" r="1.4" fill="#fff" opacity=".75"/>
+  <text x="64" y="174" font-size="8.4" font-weight="700" fill="#b3261e">Midriasis bilateral arreactiva</text>
+  <text x="64" y="185" font-size="7.6" fill="#5d7385">hipoxia grave, fármacos, lesión mesencefálica</text>
+  <text x="4" y="204" class="s-ax">Evalúe tamaño, simetría y reactividad con luz directa y consensual, en penumbra.</text>
+  </svg>
         <figcaption><b>Figura 11.</b> Esquema propio. Evalúe <b>tamaño, simetría y reactividad</b> con luz directa y consensual, en penumbra, y documente en milímetros, no como "normales".</figcaption>
       </figure>
       <div class="note" style="margin-bottom:0">
@@ -1052,30 +1194,40 @@ svg{display:block;width:100%;height:auto}
       </div>
     </div>
 
-    <figure class="fig-frame">
-      <svg viewBox="0 0 340 162" role="img" aria-label="Curva presión-volumen intracraneal y morfología de la onda de PIC">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#12466e">Curva presión–volumen intracraneal</text>
-          <path d="M32 106H150M32 106V22" stroke="#334155" stroke-width="1.1"/>
-          <path d="M36 102C66 100 96 96 116 84C130 74 138 50 144 24" fill="none" stroke="#12466e" stroke-width="2"/>
-          <text x="42" y="94" font-size="7.6" fill="#15803d">compensación</text>
-          <text x="148" y="52" font-size="7.6" fill="#b3261e" text-anchor="end">descompensación</text>
-          <text x="92" y="120" font-size="7.6" text-anchor="middle" fill="#41566a">Volumen añadido →</text>
-          <text x="14" y="64" font-size="7.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 64)">PIC</text>
-          <text x="176" y="12" font-size="8.8" font-weight="bold" fill="#12466e">Onda de PIC</text>
-          <path d="M176 66h158" stroke="#e2e8f0" stroke-width="1"/>
-          <path d="M178 64l6-38 6 10 8 5 8 8 8 3 6 6 8 6h8l6-38 6 10 8 5 8 8 8 3 6 6 8 6h8l6-38 6 10 8 5 8 8 8 3 6 6 8 6"
-                fill="none" stroke="#0e7490" stroke-width="1.6"/>
-          <g font-size="7.8" font-weight="bold" fill="#0e7490">
-            <text x="180" y="24">P1</text><text x="193" y="36">P2</text><text x="208" y="47">P3</text>
-          </g>
-          <text x="188" y="84" font-size="7.8" fill="#41566a">Normal: P1 &gt; P2 &gt; P3 (escalón descendente)</text>
-          <path d="M176 140h158" stroke="#e2e8f0" stroke-width="1"/>
-          <path d="M178 138l6-24 4 4 6-18 8 8 8 5 6 6 8 5h8l6-24 4 4 6-18 8 8 8 5 6 6 8 5h8l6-24 4 4 6-18 8 8 8 5 6 6 8 5"
-                fill="none" stroke="#b3261e" stroke-width="1.6"/>
-          <text x="176" y="158" font-size="7.8" fill="#b3261e">P2 &gt; P1 = distensibilidad cerebral agotada</text>
-        </g>
-      </svg>
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 340 170" role="img" aria-label="Curva presión-volumen intracraneal y morfología de la onda de PIC">
+  <text x="4" y="11" class="s-t">Curva presión–volumen</text>
+  <rect x="26" y="18" width="128" height="86" rx="4" fill="#fcfeff" stroke="#e0e9f0" stroke-width=".8"/>
+  <path d="M30 100C60 98 88 94 108 84" fill="none" stroke="#15803d" stroke-width="8" opacity=".16" stroke-linecap="round"/>
+  <path d="M112 82C126 72 136 52 142 24" fill="none" stroke="#b3261e" stroke-width="8" opacity=".14" stroke-linecap="round"/>
+  <path d="M30 100C62 98 90 94 110 83C126 73 136 50 143 22" fill="none" stroke="#12466e" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M26 104h130" class="s-axis"/><path d="M26 104V16" class="s-axis"/>
+  <text x="14" y="60" text-anchor="middle" class="s-u" transform="rotate(-90 14 60)">PIC</text>
+  <text x="90" y="118" text-anchor="middle" class="s-u">Volumen añadido →</text>
+  <text x="36" y="92" font-size="7" fill="#15803d">compensación</text>
+  <text x="150" y="40" text-anchor="end" font-size="7" fill="#b3261e">descompensación</text>
+  <text x="4" y="136" class="s-ax">Agotada la compensación, pequeños aumentos</text>
+  <text x="4" y="146" class="s-ax">de volumen elevan mucho la PIC.</text>
+  <text x="4" y="163" font-size="7.6" font-weight="700" fill="#12466e">Normal 5–15 mmHg · HTIC &gt; 20–22 mmHg</text>
+
+  <text x="172" y="11" class="s-t">Onda de PIC</text>
+  <rect x="172" y="16" width="164" height="46" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M176 56l6-32 6 9 8 4 8 7 8 3 6 5 8 4h8l6-32 6 9 8 4 8 7 8 3 6 5 8 4h8l6-32 6 9 8 4 8 7 8 3 6 5 8 4h6"
+        fill="none" stroke="#0e7490" stroke-width="1.7" stroke-linejoin="round"/>
+  <g font-size="7" font-weight="700" fill="#0e7490">
+    <text x="178" y="22">P1</text><text x="190" y="32">P2</text><text x="203" y="41">P3</text>
+  </g>
+  <text x="172" y="73" font-size="7.4" fill="#15803d"><tspan font-weight="700">Normal:</tspan> P1 &gt; P2 &gt; P3 · escalón descendente</text>
+  <rect x="172" y="80" width="164" height="46" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M176 120l6-22 4 4 6-18 8 7 8 4 6 5 8 4h8l6-22 4 4 6-18 8 7 8 4 6 5 8 4h8l6-22 4 4 6-18 8 7 8 4 6 5 8 4h6"
+        fill="none" stroke="#b3261e" stroke-width="1.7" stroke-linejoin="round"/>
+  <g font-size="7" font-weight="700" fill="#b3261e">
+    <text x="178" y="96">P1</text><text x="191" y="84">P2</text>
+  </g>
+  <text x="172" y="137" font-size="7.4" fill="#b3261e"><tspan font-weight="700">Alterada:</tspan> P2 &gt; P1 · distensibilidad agotada</text>
+  <text x="172" y="152" class="s-ax">La forma de la onda cambia antes que el</text>
+  <text x="172" y="162" class="s-ax">valor numérico.</text>
+</svg>
       <figcaption><b>Figura 12.</b> Esquemas propios. La morfología de la onda de PIC informa sobre la reserva del cerebro antes de que el valor numérico se eleve.</figcaption>
       <div class="tip" style="margin:2mm 0 0">
         <h4>Cuidados de enfermería en riesgo de HTIC</h4>
@@ -1128,84 +1280,96 @@ svg{display:block;width:100%;height:auto}
   <p>Un catéter en una arteria periférica —habitualmente <strong>radial</strong>, alternativamente femoral o braquial— se conecta a un sistema con suero presurizado, un <strong>transductor</strong> que convierte la presión mecánica en señal eléctrica y un cable al monitor. Entrega PA continua, morfología de onda y acceso para gasometrías arteriales sin nuevas punciones.</p>
 
   <div class="g2">
-    <figure class="fig-frame">
-      <svg viewBox="0 0 340 172" role="img" aria-label="Componentes de la onda de presión arterial invasiva">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Onda de presión arterial normal</text>
-          <path d="M34 124H336M34 124V26" stroke="#334155" stroke-width="1.1"/>
-          <g font-size="8" fill="#64748b">
-            <text x="30" y="38" text-anchor="end">120</text><text x="30" y="80" text-anchor="end">80</text><text x="30" y="120" text-anchor="end">40</text>
-          </g>
-          <path d="M38 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M112 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M186 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M260 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10"
-                fill="none" stroke="#b3261e" stroke-width="1.9"/>
-          <circle cx="62" cy="42" r="3" fill="#12466e"/>
-          <path d="M64 40L96 30" stroke="#12466e" stroke-width=".8"/>
-          <text x="98" y="32" font-size="8.2" font-weight="bold" fill="#12466e">Pico sistólico</text>
-          <circle cx="98" cy="102" r="3.4" fill="#5b3fa8"/>
-          <circle cx="172" cy="102" r="3.4" fill="#5b3fa8"/>
-          <circle cx="246" cy="102" r="3.4" fill="#5b3fa8"/>
-          <circle cx="8" cy="140" r="3.4" fill="#5b3fa8"/>
-          <text x="16" y="143" font-size="8" fill="#5b3fa8" font-weight="bold">Muesca dícrota</text>
-          <text x="98" y="143" font-size="8" fill="#5b3fa8">(cierre de la válvula aórtica)</text>
-          <text x="4" y="156" font-size="8" fill="#41566a">El área bajo la curva y la pendiente de ascenso se relacionan</text>
-          <text x="4" y="166" font-size="8" fill="#41566a">con el volumen sistólico y la contractilidad.</text>
-        </g>
-      </svg>
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 340 178" role="img" aria-label="Componentes de la onda de presión arterial invasiva">
+  <text x="4" y="12" class="s-t">Onda de presión arterial invasiva</text>
+  <rect x="30" y="20" width="306" height="106" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M30 126h306" class="s-axis"/><path d="M30 126V18" class="s-axis"/>
+  <g class="s-tick"><path d="M27 126h-3M27 96h-3M27 66h-3M27 36h-3"/></g>
+  <g class="s-ax" text-anchor="end"><text x="24" y="128">40</text><text x="24" y="99">80</text><text x="24" y="69">120</text><text x="24" y="39">160</text></g>
+  <text x="10" y="72" text-anchor="middle" class="s-u" transform="rotate(-90 10 72)">mmHg</text>
+  <path d="M30 104h180" stroke="#0e7490" stroke-width=".9" stroke-dasharray="4 3"/>
+  <path d="M34 104c6 0 8-2 12-4 4-2 6-62 12-62s10 52 14 60c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-12 8-12s6 8 10 10M108 104c6 0 8-2 12-4 4-2 6-62 12-62s10 52 14 60c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-12 8-12s6 8 10 10"
+        fill="none" stroke="#b3261e" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="58" cy="38" r="3.4" fill="#12466e" stroke="#fff" stroke-width="1.1"/>
+  <path d="M61 37l30-10h124" class="s-lead"/>
+  <text x="218" y="30" font-size="8" font-weight="700" fill="#12466e">Pico sistólico</text>
+  <circle cx="94" cy="98" r="3.4" fill="#5b3fa8" stroke="#fff" stroke-width="1.1"/>
+  <path d="M96 96l24-24h94" class="s-lead"/>
+  <text x="218" y="70" font-size="8" font-weight="700" fill="#5b3fa8">Muesca dícrota</text>
+  <text x="218" y="79" font-size="7" fill="#5b3fa8">cierre de la válvula aórtica</text>
+  <circle cx="192" cy="104" r="3.4" fill="#0e7490" stroke="#fff" stroke-width="1.1"/>
+  <path d="M195 104h18" class="s-lead"/>
+  <text x="218" y="107" font-size="8" font-weight="700" fill="#0e7490">Fin de diástole</text>
+  <text x="4" y="146" font-size="7.8" fill="#5d7385">El área bajo la curva se relaciona con el <tspan font-weight="700">volumen sistólico</tspan>; la pendiente de</text>
+  <text x="4" y="157" font-size="7.8" fill="#5d7385">ascenso, con la <tspan font-weight="700">contractilidad</tspan>; y la caída diastólica, con el tono vascular.</text>
+  <text x="4" y="172" class="s-ax">Antes de leer el número, compruebe que la curva tenga esta morfología.</text>
+</svg>
       <figcaption><b>Figura 13.</b> Esquema propio.</figcaption>
     </figure>
 
     <figure class="fig-frame">
-      <svg viewBox="0 0 340 176" role="img" aria-label="Prueba de onda cuadrada: respuesta normal, subamortiguada y sobreamortiguada">
-        <g font-family="Liberation Sans, Arial" font-size="8.2">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Prueba de la onda cuadrada (test de cuadratura)</text>
-          <text x="4" y="26" font-size="7.8" fill="#41566a">Tire del dispositivo de lavado rápido 1 segundo y suelte; observe la respuesta.</text>
-          <g transform="translate(0,32)">
-            <text x="4" y="10" font-weight="bold" fill="#15803d">Normal: 1–2 oscilaciones y vuelta a la curva</text>
-            <path d="M6 40h20V16h40v24l6 10-5-8 4 6-2-4h4c6 0 8-14 12-14s8 12 12 14M110 40c4 0 6-14 10-14s8 12 12 14"
-                  fill="none" stroke="#15803d" stroke-width="1.5"/>
-            <text x="150" y="26" fill="#41566a">Señal fiable: puede titular</text>
-            <text x="150" y="36" fill="#41566a">vasoactivos según ese valor.</text>
-          </g>
-          <g transform="translate(0,80)">
-            <text x="4" y="10" font-weight="bold" fill="#a75a00">Subamortiguada: muchas oscilaciones</text>
-            <path d="M6 40h20V16h40v24l6 16-6-14 6 12-5-11 5 9-4-7 4 6-3-5h4c6 0 8-14 12-14s8 12 12 14M110 40c4 0 6-14 10-14s8 12 12 14"
-                  fill="none" stroke="#a75a00" stroke-width="1.5"/>
-            <text x="150" y="26" fill="#41566a">Sobrestima la sistólica. Tubuladura</text>
-            <text x="150" y="36" fill="#41566a">muy larga o rígida, taquicardia.</text>
-          </g>
-          <g transform="translate(0,128)">
-            <text x="4" y="10" font-weight="bold" fill="#b3261e">Sobreamortiguada: sin oscilación</text>
-            <path d="M6 40h20V16h40c4 0 8 18 12 20 6 3 8-6 12-6s8 8 12 10M110 40c4 0 6-12 10-12s8 10 12 12"
-                  fill="none" stroke="#b3261e" stroke-width="1.5"/>
-            <text x="150" y="26" fill="#41566a">Subestima la sistólica. Burbujas,</text>
-            <text x="150" y="36" fill="#41566a">coágulo, acodamiento, bolsa sin presión.</text>
-          </g>
-        </g>
-      </svg>
+      <svg viewBox="0 0 340 190" role="img" aria-label="Prueba de onda cuadrada: respuesta normal, subamortiguada y sobreamortiguada">
+  <text x="4" y="12" class="s-t">Prueba de la onda cuadrada</text>
+  <text x="4" y="24" class="s-st">Tire del dispositivo de lavado rápido 1 segundo y suelte; observe la respuesta</text>
+  <g transform="translate(0,32)">
+  <rect x="0" y="0" width="336" height="48" rx="4" fill="#fff" stroke="#e2eaf0" stroke-width=".8"/>
+  <rect x="0" y="0" width="3.5" height="48" rx="1.8" fill="#15803d"/>
+  <rect x="10" y="6" width="140" height="36" rx="3" fill="url(#monPaper)" stroke="#e6edf2" stroke-width=".7"/>
+  <g transform="translate(10,-2)"><path d="M6 44h18V16h40v28l5 11-4-9 4 7-2-4h4c6 0 8-13 12-13s8 11 12 13M105 44c4 0 6-13 10-13s8 11 12 13" fill="none" stroke="#15803d" stroke-width="1.6" stroke-linejoin="round"/></g>
+  <text x="160" y="19" font-size="8.4" font-weight="700" fill="#15803d">Normal</text>
+  <text x="160" y="30" font-size="7.4" fill="#7c8fa0">1–2 oscilaciones y vuelta a la curva</text>
+  <text x="160" y="41" font-size="7.4" fill="#5d7385">Señal fiable: el valor sirve para titular.</text>
+  </g>
+  <g transform="translate(0,85)">
+  <rect x="0" y="0" width="336" height="48" rx="4" fill="#fff" stroke="#e2eaf0" stroke-width=".8"/>
+  <rect x="0" y="0" width="3.5" height="48" rx="1.8" fill="#a75a00"/>
+  <rect x="10" y="6" width="140" height="36" rx="3" fill="url(#monPaper)" stroke="#e6edf2" stroke-width=".7"/>
+  <g transform="translate(10,-2)"><path d="M6 44h18V16h40v28l5 15-5-13 5 11-4-10 4 8-3-6 3 5-2-4h4c6 0 8-13 12-13s8 11 12 13M105 44c4 0 6-13 10-13s8 11 12 13" fill="none" stroke="#a75a00" stroke-width="1.6" stroke-linejoin="round"/></g>
+  <text x="160" y="19" font-size="8.4" font-weight="700" fill="#a75a00">Subamortiguada</text>
+  <text x="160" y="30" font-size="7.4" fill="#7c8fa0">muchas oscilaciones</text>
+  <text x="160" y="41" font-size="7.4" fill="#5d7385">Sobrestima la sistólica; tubuladura larga.</text>
+  </g>
+  <g transform="translate(0,138)">
+  <rect x="0" y="0" width="336" height="48" rx="4" fill="#fff" stroke="#e2eaf0" stroke-width=".8"/>
+  <rect x="0" y="0" width="3.5" height="48" rx="1.8" fill="#b3261e"/>
+  <rect x="10" y="6" width="140" height="36" rx="3" fill="url(#monPaper)" stroke="#e6edf2" stroke-width=".7"/>
+  <g transform="translate(10,-2)"><path d="M6 44h18V16h40c4 0 8 17 12 19 6 3 8-5 12-5s8 7 12 9M105 44c4 0 6-11 10-11s8 9 12 11" fill="none" stroke="#b3261e" stroke-width="1.6" stroke-linejoin="round"/></g>
+  <text x="160" y="19" font-size="8.4" font-weight="700" fill="#b3261e">Sobreamortiguada</text>
+  <text x="160" y="30" font-size="7.4" fill="#7c8fa0">sin oscilación</text>
+  <text x="160" y="41" font-size="7.4" fill="#5d7385">Subestima la sistólica; burbujas o coágulo.</text>
+  </g>
+  </svg>
       <figcaption><b>Figura 14.</b> Esquema propio. Compruebe la calidad de la señal antes de titular vasoactivos según ese número.</figcaption>
     </figure>
   </div>
 
   <div class="g12">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 320 132" role="img" aria-label="Nivelación del transductor en el eje flebostático">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Nivelado en el eje flebostático</text>
-          <path d="M20 116h230v8H20z" fill="#dbe6ee" stroke="#9fb4c4"/>
-          <path d="M40 74c30-16 90-22 150-14l24 4v52H40z" fill="#eef4f8" stroke="#9fb4c4"/>
-          <path d="M70 110c0-18 14-30 36-30h60c22 0 34 12 34 30z" fill="#f7e7dd" stroke="#c8a894"/>
-          <circle cx="62" cy="94" r="12" fill="#f7e7dd" stroke="#c8a894"/>
-          <circle cx="150" cy="96" r="3.4" fill="#b3261e"/>
-          <path d="M150 96H268" stroke="#b3261e" stroke-width="1.3" stroke-dasharray="4 3"/>
-          <path d="M150 96V54" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
-          <text x="156" y="44" font-size="8.4" font-weight="bold" fill="#b3261e">4.º espacio intercostal ×</text>
-          <text x="156" y="54" font-size="8.4" font-weight="bold" fill="#b3261e">línea axilar media</text>
-          <rect x="268" y="88" width="26" height="16" rx="2" fill="#12466e"/>
-          <text x="281" y="100" font-size="8" fill="#fff" text-anchor="middle">T</text>
-          <text x="248" y="82" font-size="8" fill="#12466e">Transductor</text>
-          
-        </g>
-      </svg>
+      <svg viewBox="0 0 320 156" role="img" aria-label="Nivelación del transductor en el eje flebostático">
+  <text x="4" y="12" class="s-t">Nivelado en el eje flebostático</text>
+  <rect x="10" y="110" width="186" height="7" rx="2" fill="#c7d5df"/>
+  <rect x="14" y="117" width="6" height="16" fill="#c7d5df"/><rect x="184" y="117" width="6" height="16" fill="#c7d5df"/>
+  <path d="M10 106h186v6H10z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+  <path d="M92 106V68c0-4 3-7 7-7h90c4 0 7 3 7 7v38z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+  <path d="M36 106c0-13 9-22 22-22h56l36-21c4-2 8-1 10 3s1 8-3 10l-38 23c-3 2-6 3-9 3H58c-2 0-4 1-4 4z" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+  <circle cx="30" cy="94" r="11" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+  <circle cx="100" cy="92" r="3.6" fill="#b3261e" stroke="#fff" stroke-width="1.1"/>
+  <path d="M100 92h122" stroke="#b3261e" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <path d="M100 92V50" stroke="#b3261e" stroke-width=".9" stroke-dasharray="3 2"/>
+  <text x="106" y="42" font-size="8" font-weight="700" fill="#b3261e">4.º espacio intercostal ×</text>
+  <text x="106" y="51" font-size="8" font-weight="700" fill="#b3261e">línea axilar media</text>
+  <rect x="222" y="84" width="46" height="17" rx="3" fill="#12466e"/>
+  <text x="245" y="96" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">TRANS</text>
+  <rect x="288" y="40" width="4" height="98" rx="2" fill="#b7c8d4"/>
+  <path d="M268 92h20" stroke="#b7c8d4" stroke-width="2"/>
+  <path d="M245 80V64" stroke="#a75a00" stroke-width="1.1" marker-end="url(#aTea)"/>
+  <text x="212" y="58" font-size="7.2" fill="#a75a00">más alto → subestima</text>
+  <path d="M245 105v16" stroke="#a75a00" stroke-width="1.1" marker-end="url(#aTea)"/>
+  <text x="212" y="132" font-size="7.2" fill="#a75a00">más bajo → sobrestima</text>
+  <text x="212" y="142" font-size="7.2" font-weight="700" fill="#15803d">"cero" al aire cada turno</text>
+  <text x="4" y="152" class="s-ax">≈ 7,5 mmHg de error por cada 10 cm de desnivel.</text>
+</svg>
       <figcaption><b>Figura 15.</b> Esquema propio. Transductor <b>alto</b> → subestima la presión; transductor <b>bajo</b> → la sobrestima (≈ 7,5 mmHg por cada 10 cm de desnivel). Renivele cada vez que cambie la posición de la cama o del paciente, y ponga "cero" al aire ambiente al menos una vez por turno y ante todo valor dudoso.</figcaption>
     </figure>
 
@@ -1246,59 +1410,66 @@ svg{display:block;width:100%;height:auto}
 
   <div class="g2">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 340 176" role="img" aria-label="Sitios de inserción del catéter venoso central y posición de la punta">
-        <g font-family="Liberation Sans, Arial">
-          <path d="M104 10c-18 0-27 9-31 20-4 11-22 14-27 23-4 7-3 15 2 18 5 3 12-2 14-7 2-5 5-7 8-9-3 23-4 46-3 69 1 12 3 19 4 24h84c1-5 3-12 4-24 2-23 1-46-3-69 3 2 6 4 8 9 2 5 9 10 14 7 5-3 6-11 2-18-5-9-23-12-27-23-4-11-13-20-31-20z"
-                fill="#f7e7dd" stroke="#c8a894" stroke-width="1.2"/>
-          <path d="M86 32c2 18 9 30 20 40M126 32c-2 18-9 30-20 40" stroke="#2563eb" stroke-width="3.2" fill="none" opacity=".5"/>
-          <path d="M106 72v40" stroke="#2563eb" stroke-width="4.6" fill="none" opacity=".5"/>
-          <ellipse cx="112" cy="120" rx="15" ry="11" fill="#e11d48" opacity=".3"/>
-          <path d="M126 32c-2 16-7 27-18 36l-4 6v34" stroke="#111" stroke-width="1.5" fill="none"/>
-          <circle cx="104" cy="108" r="3" fill="#111"/>
-          <text x="110" y="112" font-size="7.6" fill="#111">punta del catéter</text>
-          <g>
-            <circle cx="86" cy="32" r="7" fill="#12466e"/><text x="86" y="35" font-size="8" fill="#fff" text-anchor="middle">1</text>
-            <circle cx="68" cy="50" r="7" fill="#12466e"/><text x="68" y="53" font-size="8" fill="#fff" text-anchor="middle">2</text>
-            <circle cx="96" cy="150" r="7" fill="#12466e"/><text x="96" y="153" font-size="8" fill="#fff" text-anchor="middle">3</text>
-          </g>
-          <g font-size="8.2" fill="#41566a">
-            <text x="188" y="22" font-weight="bold" fill="#12466e">Elección del sitio</text>
-            <text x="188" y="36"><tspan font-weight="bold">1. Yugular interna:</tspan> segura</text>
-            <text x="188" y="46">con guía ecográfica</text>
-            <text x="188" y="60"><tspan font-weight="bold">2. Subclavia:</tspan> menor riesgo de</text>
-            <text x="188" y="70">infección, mayor de neumotórax</text>
-            <text x="188" y="84"><tspan font-weight="bold">3. Femoral:</tspan> reservar; mayor riesgo</text>
-            <text x="188" y="94">infeccioso y trombótico</text>
-            <text x="188" y="112" font-weight="bold" fill="#b3261e">Confirmar posición</text>
-            <text x="188" y="126">Radiografía de tórax o ecografía</text>
-            <text x="188" y="136">antes de infundir vasoactivos</text>
-            <text x="188" y="154" font-weight="bold" fill="#12466e">Vía distal</text>
-            <text x="188" y="168">Se usa para medir la PVC y tomar</text>
-            <text x="188" y="176">la muestra de SvcO₂</text>
-          </g>
-        </g>
-      </svg>
+      <svg viewBox="0 0 340 186" role="img" aria-label="Sitios de inserción del catéter venoso central y posición de la punta">
+  <text x="4" y="12" class="s-t">Accesos venosos centrales</text>
+  <g transform="translate(-24,0)">
+    <path d="M96 20h34v13c0 6 10 8 22 11l26 7c9 3 15 10 16 19l3 19c1 7-9 9-11 2l-5-17-7-5 4 38c2 21 2 42-1 61l-2 10H73l-2-10c-3-19-3-40-1-61l4-38-7 5-5 17c-2 7-12 5-11-2l3-19c1-9 7-16 16-19l26-7c12-3 22-5 22-11z"
+          fill="url(#gSkin)" stroke="#d5ac96" stroke-width="1"/>
+    <path d="M92 40c3 16 9 26 20 34" stroke="#3b82f6" stroke-width="4.5" fill="none" opacity=".45" stroke-linecap="round"/>
+    <path d="M136 40c-3 16-9 26-20 34" stroke="#3b82f6" stroke-width="4.5" fill="none" opacity=".45" stroke-linecap="round"/>
+    <path d="M72 56c14 4 26 10 38 18" stroke="#3b82f6" stroke-width="4" fill="none" opacity=".45" stroke-linecap="round"/>
+    <path d="M113 74v34" stroke="#3b82f6" stroke-width="7" fill="none" opacity=".45" stroke-linecap="round"/>
+    <text x="113" y="92" text-anchor="middle" font-size="6.4" font-weight="700" fill="#1d4ed8">VCS</text>
+    <ellipse cx="118" cy="120" rx="17" ry="13" fill="#e11d48" opacity=".26"/>
+    <text x="118" y="123" text-anchor="middle" font-size="6.4" font-weight="700" fill="#b3261e">AD</text>
+    <path d="M136 40c-3 14-8 24-18 32l-5 6v30" stroke="#243746" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <circle cx="113" cy="108" r="3" fill="#243746"/>
+    <g>
+      <circle cx="92" cy="40" r="7.4" fill="#12466e"/><text x="92" y="43" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">1</text>
+      <circle cx="72" cy="56" r="7.4" fill="#12466e"/><text x="72" y="59" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">2</text>
+      <circle cx="84" cy="158" r="7.4" fill="#12466e"/><text x="84" y="161" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">3</text>
+    </g>
+  </g>
+  <path d="M92 108l30-16h14" class="s-lead"/>
+  <text x="138" y="94" font-size="6.8" font-weight="700" fill="#243746">punta: unión cavo-atrial</text>
+  <g>
+    <circle cx="200" cy="24" r="6" fill="#12466e"/><text x="200" y="27" text-anchor="middle" font-size="7.4" font-weight="700" fill="#fff">1</text>
+    <text x="212" y="23" font-size="8.2" font-weight="700" fill="#12466e">Yugular interna</text>
+    <text x="212" y="33" font-size="7.4" fill="#5d7385">segura con guía ecográfica</text>
+    <circle cx="200" cy="52" r="6" fill="#12466e"/><text x="200" y="55" text-anchor="middle" font-size="7.4" font-weight="700" fill="#fff">2</text>
+    <text x="212" y="51" font-size="8.2" font-weight="700" fill="#12466e">Subclavia</text>
+    <text x="212" y="61" font-size="7.4" fill="#5d7385">menos infección, más neumotórax</text>
+    <circle cx="200" cy="80" r="6" fill="#12466e"/><text x="200" y="83" text-anchor="middle" font-size="7.4" font-weight="700" fill="#fff">3</text>
+    <text x="212" y="79" font-size="8.2" font-weight="700" fill="#12466e">Femoral</text>
+    <text x="212" y="89" font-size="7.4" fill="#5d7385">reservar: más infección y trombosis</text>
+  </g>
+  <rect x="192" y="100" width="144" height="34" rx="4" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
+  <text x="200" y="114" font-size="7.8" font-weight="700" fill="#b3261e">Confirmar posición</text>
+  <text x="200" y="126" font-size="7.4" fill="#8a4a44">Rx de tórax o ecografía antes de infundir</text>
+  <rect x="192" y="140" width="144" height="34" rx="4" fill="#f2f8fb" stroke="#cfe3ee" stroke-width=".8"/>
+  <text x="200" y="154" font-size="7.8" font-weight="700" fill="#0e7490">Vía distal</text>
+  <text x="200" y="166" font-size="7.4" fill="#41697d">mide la PVC y toma la muestra de SvcO₂</text>
+</svg>
       <figcaption><b>Figura 16.</b> Esquema propio.</figcaption>
     </figure>
 
     <div>
       <figure class="fig-frame" style="margin-bottom:2mm">
-        <svg viewBox="0 0 340 118" role="img" aria-label="Onda de presión venosa central con ondas a, c y v">
-          <g font-family="Liberation Sans, Arial">
-            <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Onda de PVC correlacionada con el ECG</text>
-            <!-- ECG -->
-            <path d="M6 40h20l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h44l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h44l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h60"
-                  fill="none" stroke="#0f766e" stroke-width="1.3"/>
-            <text x="6" y="24" font-size="7.6" fill="#0f766e">ECG</text>
-            <!-- PVC -->
-            <path d="M6 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8M96 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8M186 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8"
-                  fill="none" stroke="#5b3fa8" stroke-width="1.7"/>
-            <g font-size="8.4" font-weight="bold" fill="#5b3fa8">
-              <text x="16" y="78">a</text><text x="40" y="82">c</text><text x="62" y="78">v</text>
-            </g>
-            <text x="6" y="112" font-size="7.8" fill="#41566a"><tspan font-weight="bold">a</tspan> contracción auricular · <tspan font-weight="bold">c</tspan> cierre tricuspídeo · <tspan font-weight="bold">v</tspan> llenado auricular</text>
-          </g>
-        </svg>
+        <svg viewBox="0 0 340 126" role="img" aria-label="Onda de presión venosa central con ondas a, c y v">
+  <text x="4" y="11" class="s-t">Onda de PVC correlacionada con el ECG</text>
+  <rect x="4" y="16" width="332" height="86" rx="3" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <text x="10" y="28" font-size="7" font-weight="700" fill="#0f766e">ECG</text>
+  <path d="M12 40h18l3-3 3 6 3-13 3 20 3-10h6l4-3 3 3h44l3-3 3 6 3-13 3 20 3-10h6l4-3 3 3h44l3-3 3 6 3-13 3 20 3-10h6l4-3 3 3h44l3-3 3 6 3-13 3 20 3-10h6l4-3 3 3h30"
+        fill="none" stroke="#0f766e" stroke-width="1.3"/>
+  <text x="10" y="60" font-size="7" font-weight="700" fill="#5b3fa8">PVC</text>
+  <path d="M12 92c6 0 8-13 14-13s8 11 12 11 6-7 10-7 6 9 10 9 8-11 14-11 8 9 12 9 8-7 12-7M98 92c6 0 8-13 14-13s8 11 12 11 6-7 10-7 6 9 10 9 8-11 14-11 8 9 12 9 8-7 12-7M184 92c6 0 8-13 14-13s8 11 12 11 6-7 10-7 6 9 10 9 8-11 14-11 8 9 12 9 8-7 12-7M270 92c6 0 8-13 14-13s8 11 12 11 6-7 10-7 6 9 10 9"
+        fill="none" stroke="#5b3fa8" stroke-width="1.7"/>
+  <g font-size="7.4" font-weight="700" fill="#5b3fa8">
+    <text x="24" y="74">a</text><text x="46" y="78">c</text><text x="68" y="74">v</text>
+  </g>
+  <text x="4" y="114" font-size="7.4" fill="#5d7385"><tspan font-weight="700">a</tspan> contracción auricular · <tspan font-weight="700">c</tspan> cierre tricuspídeo · <tspan font-weight="700">v</tspan> llenado auricular</text>
+  <text x="4" y="124" class="s-ax">Se mide al final de la espiración, con el transductor nivelado y en cero.</text>
+</svg>
         <figcaption><b>Figura 17.</b> Esquema propio. Se mide al final de la espiración. Normal: <b>2–8 mmHg</b> (hasta 12 en ventilación mecánica).</figcaption>
       </figure>
       <div class="alert" style="margin-bottom:0">
@@ -1355,31 +1526,45 @@ svg{display:block;width:100%;height:auto}
         </ul>
       </div>
     </div>
-    <figure class="fig-frame">
-      <svg viewBox="0 0 340 186" role="img" aria-label="Curvas de presión durante el avance del catéter de arteria pulmonar">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Curvas durante el avance del catéter</text>
-          <path d="M30 142H336M30 142V22" stroke="#334155" stroke-width="1.1"/>
-          <g font-size="7.6" fill="#64748b">
-            <text x="26" y="32" text-anchor="end">40</text><text x="26" y="74" text-anchor="end">25</text><text x="26" y="142" text-anchor="end">0</text>
-          </g>
-          <path d="M34 132c5 0 7-10 12-10s7 8 10 8 5-6 10-6 7 8 12 8" fill="none" stroke="#12466e" stroke-width="1.7"/>
-          <text x="58" y="158" font-size="8" font-weight="bold" fill="#12466e" text-anchor="middle">AD 2–8</text>
-          <path d="M92 132c2 0 4-2 6-2s5-64 9-64 8 58 11 62 4 4 6 4M126 132c2 0 4-2 6-2s5-64 9-64 8 58 11 62 4 4 6 4"
-                fill="none" stroke="#b3261e" stroke-width="1.7"/>
-          <text x="130" y="158" font-size="8" font-weight="bold" fill="#b3261e" text-anchor="middle">VD 25/0–5</text>
-          <path d="M174 100c2 0 4-2 6-2s5-32 9-32 8 26 11 30 3 4 5 6 3 2 5-2 3-6 5-6 4 4 6 6M218 100c2 0 4-2 6-2s5-32 9-32 8 26 11 30 3 4 5 6 3 2 5-2 3-6 5-6 4 4 6 6"
-                fill="none" stroke="#a75a00" stroke-width="1.7"/>
-          <text x="216" y="158" font-size="8" font-weight="bold" fill="#a75a00" text-anchor="middle">AP 25/10</text>
-          <path d="M272 120c5 0 7-8 10-8s6 6 9 6 5-5 9-5 6 7 10 7 6-8 10-8 6 6 8 6"
-                fill="none" stroke="#5b3fa8" stroke-width="1.7"/>
-          <text x="300" y="158" font-size="8" font-weight="bold" fill="#5b3fa8" text-anchor="middle">PCP 6–12</text>
-          <path d="M266 22v120M166 22v120M86 22v120" stroke="#cbd5e1" stroke-width=".8" stroke-dasharray="3 2"/>
-          <text x="272" y="34" font-size="7.6" fill="#5b3fa8">balón inflado</text>
-          <text x="4" y="176" font-size="7.6" fill="#41566a">Valores en mmHg. La aparición de una presión diastólica que "sube" marca el</text>
-          <text x="4" y="185" font-size="7.6" fill="#41566a">paso del ventrículo derecho al lecho arterial pulmonar.</text>
-        </g>
-      </svg>
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 340 196" role="img" aria-label="Curvas de presión durante el avance del catéter de arteria pulmonar">
+  <text x="4" y="12" class="s-t">Presiones durante el avance del catéter</text>
+  <rect x="30" y="18" width="306" height="130" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <g stroke="#c6d6e2" stroke-width=".8" stroke-dasharray="3 2"><path d="M104 18v130M178 18v130M252 18v130"/></g>
+  <path d="M30 148h306" class="s-axis"/><path d="M30 148V16" class="s-axis"/>
+  <g class="s-tick"><path d="M27 148h-3M27 121h-3M27 93h-3M27 66h-3M27 38h-3"/></g>
+  <g class="s-ax" text-anchor="end"><text x="24" y="150">0</text><text x="24" y="124">10</text><text x="24" y="96">20</text><text x="24" y="69">30</text><text x="24" y="41">40</text></g>
+  <text x="10" y="80" text-anchor="middle" class="s-u" transform="rotate(-90 10 80)">mmHg</text>
+  <path d="M34 130c5 0 7-7 12-7s7 6 10 6 5-4 8-4 6 5 10 5 8-7 12-7 8 6 12 6"
+        fill="none" stroke="#12466e" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M108 134c2 0 4-1 6-1s5-60 9-60 8 54 11 58 4 3 6 3M142 134c2 0 4-1 6-1s5-60 9-60 8 54 11 58 4 3 6 3"
+        fill="none" stroke="#b3261e" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M182 115c2 0 4-1 6-1s5-40 9-40 8 34 11 38 3 3 5 5 3 1 5-2 3-5 5-5 4 4 6 5M218 115c2 0 4-1 6-1s5-40 9-40 8 34 11 38 3 3 5 5 3 1 5-2 3-5 5-5 4 4 6 5"
+        fill="none" stroke="#a75a00" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M256 122c5 0 7-8 11-8s6 6 9 6 5-5 9-5 6 7 10 7 6-8 10-8 6 6 8 6 5-5 9-5"
+        fill="none" stroke="#5b3fa8" stroke-width="1.8" stroke-linejoin="round"/>
+  <g>
+    <rect x="34" y="22" width="66" height="14" rx="7" fill="#12466e"/><text x="67" y="32" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">AD 2–8</text>
+    <rect x="108" y="22" width="66" height="14" rx="7" fill="#b3261e"/><text x="141" y="32" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">VD 25/0–5</text>
+    <rect x="182" y="22" width="66" height="14" rx="7" fill="#a75a00"/><text x="215" y="32" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">AP 25/10</text>
+    <rect x="256" y="22" width="76" height="14" rx="7" fill="#5b3fa8"/><text x="294" y="32" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">PCP 6–12</text>
+  </g>
+  <path d="M252 44h6" stroke="#5b3fa8" stroke-width="1.2" marker-end="url(#aPur)"/>
+  <text x="262" y="47" font-size="7" fill="#5b3fa8">balón inflado</text>
+  <g>
+    <circle cx="34" cy="166" r="6.4" fill="#12466e"/><text x="34" y="169" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">1</text>
+    <path d="M42 166h20" stroke="#94a8b8" stroke-width="1" marker-end="url(#aNav)"/>
+    <circle cx="72" cy="166" r="6.4" fill="#b3261e"/><text x="72" y="169" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">2</text>
+    <path d="M80 166h20" stroke="#94a8b8" stroke-width="1" marker-end="url(#aNav)"/>
+    <circle cx="110" cy="166" r="6.4" fill="#a75a00"/><text x="110" y="169" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">3</text>
+    <path d="M118 166h20" stroke="#94a8b8" stroke-width="1" marker-end="url(#aNav)"/>
+    <circle cx="148" cy="166" r="6.4" fill="#5b3fa8"/><text x="148" y="169" text-anchor="middle" font-size="7.6" font-weight="700" fill="#fff">4</text>
+    <text x="162" y="163" font-size="7.4" fill="#5d7385">Aurícula y ventrículo derechos → arteria</text>
+    <text x="162" y="173" font-size="7.4" fill="#5d7385">pulmonar → enclavamiento (estima presión</text>
+    <text x="162" y="183" font-size="7.4" fill="#5d7385">de llenado del ventrículo izquierdo)</text>
+  </g>
+  <text x="4" y="193" class="s-ax">La aparición de una diastólica que "sube" marca el paso del ventrículo derecho al lecho arterial pulmonar.</text>
+</svg>
       <figcaption><b>Figura 18.</b> Esquema propio.</figcaption>
     </figure>
   </div>
@@ -1387,35 +1572,50 @@ svg{display:block;width:100%;height:auto}
   <h2 style="margin-top:2mm">8.4 · PiCCO y monitorización por termodilución transpulmonar</h2>
   <div class="g12">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 340 196" role="img" aria-label="Curva de termodilución transpulmonar y variables derivadas">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Curva de termodilución transpulmonar</text>
-          <path d="M30 92H180M30 92V22" stroke="#334155" stroke-width="1.1"/>
-          <path d="M34 90c14 0 20-2 26-16 6-14 10-38 18-38s14 24 20 38c8 18 22 16 40 16h42"
-                fill="#e8f2f8" stroke="#0e7490" stroke-width="1.8"/>
-          <text x="92" y="36" font-size="8" fill="#0e7490" font-weight="bold">Área bajo la curva</text>
-          <text x="92" y="46" font-size="8" fill="#0e7490">→ gasto cardíaco</text>
-          <text x="4" y="112" font-size="7.6" fill="#41566a">Se inyecta suero frío por el CVC y un</text>
-          <text x="4" y="122" font-size="7.6" fill="#41566a">sensor en la arteria femoral registra el</text>
-          <text x="4" y="132" font-size="7.6" fill="#41566a">cambio de temperatura. Entre</text>
-          <text x="4" y="142" font-size="7.6" fill="#41566a">calibraciones, el equipo estima el gasto</text>
-          <text x="4" y="152" font-size="7.6" fill="#41566a">latido a latido analizando el</text>
-          <text x="4" y="162" font-size="7.6" font-weight="bold" fill="#41566a">contorno de la onda de pulso.</text>
-          <text x="200" y="26" font-size="8.4" font-weight="bold" fill="#12466e">Variables clave</text>
-          <g font-size="7.8" fill="#41566a">
-            <text x="200" y="42"><tspan font-weight="bold">IC</tspan> índice cardíaco (L/min/m²)</text>
-            <text x="200" y="58"><tspan font-weight="bold">GEDI</tspan> volumen telediastólico global:</text>
-            <text x="200" y="68">precarga volumétrica, no presión</text>
-            <text x="200" y="84"><tspan font-weight="bold">ELWI</tspan> agua pulmonar extravascular</text>
-            <text x="200" y="94">= edema pulmonar cuantificado</text>
-            <text x="200" y="110"><tspan font-weight="bold">IPVP</tspan> permeabilidad vascular pulmonar</text>
-            <text x="200" y="126"><tspan font-weight="bold">VVS / VPP</tspan> respuesta a volumen</text>
-            <text x="200" y="142"><tspan font-weight="bold">IRVS</tspan> resistencia vascular sistémica:</text>
-            <text x="200" y="152">tono vascular</text>
-          </g>
-          
-        </g>
-      </svg>
+      <svg viewBox="0 0 340 200" role="img" aria-label="Curva de termodilución transpulmonar y variables derivadas">
+  <text x="4" y="12" class="s-t">Termodilución transpulmonar</text>
+  <rect x="24" y="18" width="148" height="82" rx="4" fill="url(#monPaper)" stroke="#dae4ec" stroke-width=".8"/>
+  <path d="M28 94c14 0 20-2 26-15 6-13 10-35 18-35s14 22 20 35c8 17 22 15 40 15h36z" fill="#dceaf3" opacity=".85"/>
+  <path d="M28 94c14 0 20-2 26-15 6-13 10-35 18-35s14 22 20 35c8 17 22 15 40 15h36" fill="none" stroke="#0e7490" stroke-width="1.9"/>
+  <path d="M24 100h150" class="s-axis"/><path d="M24 100V16" class="s-axis"/>
+  <text x="12" y="60" text-anchor="middle" class="s-u" transform="rotate(-90 12 60)">Δ temperatura</text>
+  <text x="100" y="112" text-anchor="middle" class="s-u">Tiempo tras la inyección →</text>
+  <text x="88" y="40" font-size="7.4" font-weight="700" fill="#0e7490">área bajo la curva</text>
+  <text x="88" y="50" font-size="7.4" fill="#0e7490">→ gasto cardíaco</text>
+  <path d="M32 92V34" stroke="#94a8b8" stroke-width=".8" stroke-dasharray="3 2"/>
+  <text x="28" y="30" font-size="6.6" fill="#7c8fa0">suero frío por el CVC</text>
+  <rect x="4" y="122" width="172" height="34" rx="4" fill="#f2f8fb" stroke="#cfe3ee" stroke-width=".8"/>
+  <text x="12" y="135" font-size="7.2" fill="#41697d">Entre calibraciones, el gasto se estima</text>
+  <text x="12" y="145" font-size="7.2" fill="#41697d">latido a latido con el <tspan font-weight="700" fill="#0e7490">contorno de pulso</tspan>.</text>
+  <rect x="4" y="162" width="172" height="34" rx="4" fill="#fdf7ee" stroke="#eddcc2" stroke-width=".8"/>
+  <text x="12" y="175" font-size="7.2" fill="#7a5a2a">Responde: ¿necesita más volumen o</text>
+  <text x="12" y="185" font-size="7.2" font-weight="700" fill="#a75a00">ya está encharcando el pulmón?</text>
+  <text x="186" y="12" class="s-t">Variables clave</text>
+  <rect x="186" y="18" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="18" width="3.2" height="26" rx="1.6" fill="#12466e"/>
+  <text x="195" y="29" font-size="7.8" font-weight="700" fill="#12466e">IC</text>
+  <text x="195" y="39" font-size="6.8" fill="#5d7385">índice cardíaco (L/min/m²)</text>
+  <rect x="186" y="48" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="48" width="3.2" height="26" rx="1.6" fill="#0e7490"/>
+  <text x="195" y="59" font-size="7.8" font-weight="700" fill="#0e7490">GEDI</text>
+  <text x="195" y="69" font-size="6.8" fill="#5d7385">precarga volumétrica, no presión</text>
+  <rect x="186" y="78" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="78" width="3.2" height="26" rx="1.6" fill="#b3261e"/>
+  <text x="195" y="89" font-size="7.8" font-weight="700" fill="#b3261e">ELWI</text>
+  <text x="195" y="99" font-size="6.8" fill="#5d7385">agua pulmonar extravascular</text>
+  <rect x="186" y="108" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="108" width="3.2" height="26" rx="1.6" fill="#a75a00"/>
+  <text x="195" y="119" font-size="7.8" font-weight="700" fill="#a75a00">IPVP</text>
+  <text x="195" y="129" font-size="6.8" fill="#5d7385">permeabilidad vascular pulmonar</text>
+  <rect x="186" y="138" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="138" width="3.2" height="26" rx="1.6" fill="#5b3fa8"/>
+  <text x="195" y="149" font-size="7.8" font-weight="700" fill="#5b3fa8">VVS / VPP</text>
+  <text x="195" y="159" font-size="6.8" fill="#5d7385">respuesta a volumen</text>
+  <rect x="186" y="168" width="150" height="26" rx="4" fill="#f7fbfd" stroke="#dce7ee" stroke-width=".7"/>
+  <rect x="186" y="168" width="3.2" height="26" rx="1.6" fill="#15803d"/>
+  <text x="195" y="179" font-size="7.8" font-weight="700" fill="#15803d">IRVS</text>
+  <text x="195" y="189" font-size="6.8" fill="#5d7385">resistencia vascular · tono</text>
+  </svg>
       <figcaption><b>Figura 19.</b> Esquema propio.</figcaption>
     </figure>
     <div>
@@ -1450,33 +1650,34 @@ svg{display:block;width:100%;height:auto}
 
   <div class="g21">
     <figure class="fig-frame top">
-      <svg viewBox="0 0 400 152" role="img" aria-label="Maniobra de elevación pasiva de piernas en dos posiciones">
-        <g font-family="Liberation Sans, Arial">
-          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Elevación pasiva de piernas (EPP)</text>
-          <!-- posición 1 -->
-          <g transform="translate(0,4)">
-            <text x="10" y="26" font-size="8.4" font-weight="bold" fill="#41566a">1. Semisentado 45°</text>
-            <path d="M14 96h150v8H14z" fill="#dbe6ee" stroke="#9fb4c4"/>
-            <path d="M60 96V54l40-16v58z" fill="#eef4f8" stroke="#9fb4c4"/>
-            <path d="M66 92c8-20 20-30 34-36l14-6 46 2v40z" fill="#f7e7dd" stroke="#c8a894"/>
-            <circle cx="98" cy="46" r="9" fill="#f7e7dd" stroke="#c8a894"/>
-          </g>
-          <path d="M176 78h24" stroke="#12466e" stroke-width="2"/>
-          <path d="M196 72l10 6-10 6z" fill="#12466e"/>
-          <!-- posición 2 -->
-          <g transform="translate(210,4)">
-            <text x="10" y="26" font-size="8.4" font-weight="bold" fill="#15803d">2. Tronco horizontal + piernas 45°</text>
-            <path d="M14 96h160v8H14z" fill="#dbe6ee" stroke="#9fb4c4"/>
-            <path d="M120 96l46-34 6 8-38 26z" fill="#eef4f8" stroke="#9fb4c4"/>
-            <path d="M24 92c0-14 10-20 24-20h60l40-26 6 10-36 36z" fill="#f7e7dd" stroke="#c8a894"/>
-            <circle cx="30" cy="80" r="9" fill="#f7e7dd" stroke="#c8a894"/>
-            <path d="M100 60c14 6 24 2 34-6" stroke="#b3261e" stroke-width="1.4" fill="none"/>
-            <text x="60" y="44" font-size="8" fill="#b3261e" font-weight="bold">≈ 300 ml de "autotransfusión"</text>
-          </g>
-          <text x="4" y="134" font-size="8" fill="#41566a">Se mueve la cama, no al paciente. El efecto es máximo durante el primer minuto</text>
-          <text x="4" y="145" font-size="8" fill="#41566a">y es <tspan font-weight="bold">reversible</tspan>: si el paciente no responde, no queda con sobrecarga de volumen.</text>
-        </g>
-      </svg>
+      <svg viewBox="0 0 400 162" role="img" aria-label="Maniobra de elevación pasiva de piernas en dos posiciones">
+  <text x="4" y="12" class="s-t">Elevación pasiva de piernas (EPP)</text>
+  <g>
+    <text x="14" y="30" font-size="8.2" font-weight="700" fill="#5d7385">1. Semisentado a 45°</text>
+    <rect x="14" y="100" width="150" height="6" rx="2" fill="#c7d5df"/>
+    <rect x="18" y="106" width="5" height="14" fill="#c7d5df"/><rect x="152" y="106" width="5" height="14" fill="#c7d5df"/>
+    <path d="M62 100V64c0-3 2-5 5-5h92c3 0 5 2 5 5v36z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+    <path d="M14 96h150v4H14z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+    <path d="M68 96c2-16 12-26 28-31l24-8h40v39z" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+    <circle cx="98" cy="52" r="10" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+  </g>
+  <path d="M176 74h22" stroke="#12466e" stroke-width="1.6" marker-end="url(#aNav)"/>
+  <text x="187" y="66" text-anchor="middle" font-size="7" fill="#12466e">1 min</text>
+  <g transform="translate(210,0)">
+    <text x="14" y="30" font-size="8.2" font-weight="700" fill="#15803d">2. Tronco horizontal + piernas a 45°</text>
+    <rect x="14" y="100" width="170" height="6" rx="2" fill="#c7d5df"/>
+    <rect x="18" y="106" width="5" height="14" fill="#c7d5df"/><rect x="172" y="106" width="5" height="14" fill="#c7d5df"/>
+    <path d="M120 100l52-38 5 7-42 31z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+    <path d="M14 96h170v4H14z" fill="url(#gBed)" stroke="#b7c8d4" stroke-width=".7"/>
+    <path d="M26 96c0-13 9-21 22-21h68l40-28 6 9-38 32c-3 3-7 4-11 4H30z" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+    <circle cx="30" cy="84" r="10" fill="url(#gSkin)" stroke="#d5ac96" stroke-width=".9"/>
+    <path d="M96 66c16 8 28 4 40-6" fill="none" stroke="#b3261e" stroke-width="1.4" marker-end="url(#aRed)"/>
+    <text x="86" y="58" font-size="7.6" font-weight="700" fill="#b3261e">≈ 300 ml de "autotransfusión"</text>
+  </g>
+  <rect x="4" y="128" width="392" height="30" rx="4" fill="#f2f8fb" stroke="#cfe3ee" stroke-width=".8"/>
+  <text x="12" y="141" font-size="7.6" fill="#41697d">Se mueve la cama, no al paciente. El efecto es máximo durante el primer minuto y es <tspan font-weight="700">reversible</tspan>:</text>
+  <text x="12" y="152" font-size="7.6" fill="#41697d">si no responde, no queda con sobrecarga. Mida el efecto sobre el <tspan font-weight="700">gasto cardíaco</tspan>, no sobre la presión arterial.</text>
+</svg>
       <figcaption><b>Figura 20.</b> Esquema propio. La EPP es la prueba de referencia porque es válida en respiración espontánea y en arritmias, situaciones donde la VPP falla. Su efecto debe medirse sobre el <b>gasto cardíaco o un sustituto</b>, no sobre la presión arterial aislada.</figcaption>
     </figure>
 
@@ -1499,50 +1700,41 @@ svg{display:block;width:100%;height:auto}
 
   <h3>Mapa integrador: de lo básico a lo invasivo</h3>
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 178" role="img" aria-label="Escalera de monitorización desde parámetros básicos hasta monitorización invasiva">
-      <g font-family="Liberation Sans, Arial">
-        <!-- escalones -->
-        <g>
-          <rect x="8" y="118" width="164" height="52" rx="4" fill="#eaf1f6" stroke="#12466e"/>
-          <rect x="180" y="88" width="164" height="82" rx="4" fill="#dbe9f2" stroke="#12466e"/>
-          <rect x="352" y="58" width="164" height="112" rx="4" fill="#c9dfec" stroke="#12466e"/>
-          <rect x="524" y="28" width="168" height="142" rx="4" fill="#12466e"/>
-        </g>
-        <g font-size="9.6" font-weight="bold" fill="#12466e">
-          <text x="90" y="136" text-anchor="middle">NIVEL 1 · Todo paciente</text>
-          <text x="262" y="106" text-anchor="middle">NIVEL 2 · Paciente agudo</text>
-          <text x="434" y="76" text-anchor="middle">NIVEL 3 · Paciente crítico</text>
-        </g>
-        <text x="608" y="46" text-anchor="middle" font-size="9.6" font-weight="bold" fill="#fff">NIVEL 4 · Shock complejo</text>
-        <g font-size="8.4" fill="#2b4358">
-          <text x="90" y="150" text-anchor="middle">FC · PA · FR · SpO₂ · Tº</text>
-          <text x="90" y="162" text-anchor="middle">conciencia · diuresis · dolor</text>
-          <text x="262" y="122" text-anchor="middle">ECG continuo · capnografía</text>
-          <text x="262" y="134" text-anchor="middle">GCS y pupilas seriados · RASS</text>
-          <text x="262" y="146" text-anchor="middle">lactato · llene capilar</text>
-          <text x="262" y="158" text-anchor="middle">NEWS2 · ecografía a la cabecera</text>
-          <text x="434" y="94" text-anchor="middle">Línea arterial · VPP</text>
-          <text x="434" y="106" text-anchor="middle">CVC · PVC · SvcO₂ · ΔPCO₂</text>
-          <text x="434" y="118" text-anchor="middle">curvas del ventilador</text>
-          <text x="434" y="130" text-anchor="middle">PIC · PPC · pupilometría</text>
-          <text x="434" y="142" text-anchor="middle">ecocardiografía</text>
-          <text x="434" y="158" text-anchor="middle">pruebas dinámicas de volumen</text>
-        </g>
-        <g font-size="8.4" fill="#cfe8f2">
-          <text x="608" y="64" text-anchor="middle">Termodilución transpulmonar</text>
-          <text x="608" y="76" text-anchor="middle">(PiCCO): IC · GEDI · ELWI</text>
-          <text x="608" y="92" text-anchor="middle">Catéter de arteria pulmonar:</text>
-          <text x="608" y="104" text-anchor="middle">PCP · SvO₂ · resistencias</text>
-          <text x="608" y="120" text-anchor="middle">EEG continuo · NIRS · DTC</text>
-          <text x="608" y="136" text-anchor="middle">Indicación restringida,</text>
-          <text x="608" y="148" text-anchor="middle">decisión del equipo,</text>
-          <text x="608" y="160" text-anchor="middle">nunca de rutina</text>
-        </g>
-        <path d="M8 18H692" stroke="#0e7490" stroke-width="1.4"/>
-        <path d="M686 12l10 6-10 6z" fill="#0e7490"/>
-        <text x="8" y="12" font-size="8.6" fill="#0e7490">Mayor complejidad, mayor riesgo, mayor costo — y siempre sobre la base del nivel anterior, nunca en su reemplazo →</text>
-      </g>
-    </svg>
+    <svg viewBox="0 0 700 192" role="img" aria-label="Escalera de monitorización desde parámetros básicos hasta monitorización invasiva">
+  <defs><linearGradient id="gArrow" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a9c6d8"/><stop offset="1" stop-color="#0e7490"/></linearGradient></defs>
+  <text x="8" y="12" font-size="8" fill="#0e7490">Mayor complejidad, mayor riesgo y mayor costo — cada nivel se apoya en el anterior, nunca lo reemplaza</text>
+  <path d="M8 20h672" stroke="url(#gArrow)" stroke-width="1.6" marker-end="url(#aTea)"/>
+  <rect x="8" y="120" width="164" height="71" rx="6" fill="#eaf2f8" stroke="#b9d1e0" stroke-width=".9"/>
+  <text x="20" y="138" font-size="7.8" font-weight="700" fill="#12466e" opacity=".72">NIVEL 1</text>
+  <text x="20" y="152" font-size="9.6" font-weight="700" fill="#12466e">Todo paciente</text>
+  <path d="M20 158h56" stroke="#12466e" stroke-width="1" opacity=".35"/>
+  <text x="20" y="170" font-size="7.2" fill="#5d7385">FC · PA · FR · SpO₂ · Tº</text>
+  <text x="20" y="181" font-size="7.2" fill="#5d7385">conciencia · diuresis · dolor</text>
+  <rect x="180" y="104" width="164" height="82" rx="6" fill="#dae9f2" stroke="#b9d1e0" stroke-width=".9"/>
+  <text x="192" y="122" font-size="7.8" font-weight="700" fill="#12466e" opacity=".72">NIVEL 2</text>
+  <text x="192" y="136" font-size="9.6" font-weight="700" fill="#12466e">Paciente agudo</text>
+  <path d="M192 142h56" stroke="#12466e" stroke-width="1" opacity=".35"/>
+  <text x="192" y="154" font-size="7.2" fill="#5d7385">ECG continuo · capnografía</text>
+  <text x="192" y="165" font-size="7.2" fill="#5d7385">GCS y pupilas seriados · RASS</text>
+  <text x="192" y="176" font-size="7.2" fill="#5d7385">lactato · llene capilar · NEWS2</text>
+  <rect x="352" y="88" width="164" height="93" rx="6" fill="#c6dceb" stroke="#b9d1e0" stroke-width=".9"/>
+  <text x="364" y="106" font-size="7.8" font-weight="700" fill="#0c3252" opacity=".72">NIVEL 3</text>
+  <text x="364" y="120" font-size="9.6" font-weight="700" fill="#0c3252">Paciente crítico</text>
+  <path d="M364 126h56" stroke="#0c3252" stroke-width="1" opacity=".35"/>
+  <text x="364" y="138" font-size="7.2" fill="#5d7385">Línea arterial · VPP</text>
+  <text x="364" y="149" font-size="7.2" fill="#5d7385">CVC · PVC · SvcO₂ · ΔPCO₂</text>
+  <text x="364" y="160" font-size="7.2" fill="#5d7385">curvas del ventilador · PIC · PPC</text>
+  <text x="364" y="171" font-size="7.2" fill="#5d7385">ecocardiografía · pruebas de volumen</text>
+  <rect x="524" y="72" width="164" height="104" rx="6" fill="url(#gNav)" stroke="none" stroke-width=".9"/>
+  <text x="536" y="90" font-size="7.8" font-weight="700" fill="#ffffff" opacity=".72">NIVEL 4</text>
+  <text x="536" y="104" font-size="9.6" font-weight="700" fill="#ffffff">Shock complejo</text>
+  <path d="M536 110h56" stroke="#ffffff" stroke-width="1" opacity=".35"/>
+  <text x="536" y="122" font-size="7.2" fill="#bfe3f0">Termodilución transpulmonar (PiCCO)</text>
+  <text x="536" y="133" font-size="7.2" fill="#bfe3f0">Catéter de arteria pulmonar</text>
+  <text x="536" y="144" font-size="7.2" fill="#bfe3f0">EEG continuo · NIRS · DTC</text>
+  <text x="536" y="155" font-size="7.2" fill="#bfe3f0">pupilometría cuantitativa</text>
+  <text x="536" y="166" font-size="7.2" fill="#bfe3f0">indicación restringida, nunca de rutina</text>
+  </svg>
     <figcaption><b>Figura 21.</b> Elaboración propia. Ningún nivel superior sustituye al examen clínico del nivel 1: lo complementa. El error más caro en cuidados críticos es confiar en un número invasivo mientras se deja de mirar al paciente.</figcaption>
   </figure>
 
