@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Manual de Monitorización del Paciente — Enfermería UDP</title>
+<style>
+@page { size: A4; margin: 0; }
+:root{
+  --ink:#0f1f2c; --navy:#12466e; --navy2:#0c3252; --teal:#0e7490; --red:#b3261e;
+  --amber:#a75a00; --green:#15803d; --purple:#5b3fa8;
+  --line:#d5dfe8; --soft:#f3f7fa; --soft2:#eaf1f6; --muted:#5d7385;
+  --mono:"DejaVu Sans Mono","Liberation Mono",monospace;
+  --font:"Liberation Sans",Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--ink);background:#8f9aa4;font-size:9.6pt;line-height:1.42;
+     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;background:#fff;margin:0 auto 6mm;padding:13mm 14mm 11mm;
+      position:relative;overflow:hidden;page-break-after:always;display:flex;flex-direction:column}
+.page:last-child{page-break-after:auto}
+@media print{ body{background:#fff} .page{margin:0;box-shadow:none} }
+
+/* ---------- encabezados ---------- */
+.runhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--navy);
+         padding-bottom:2.5mm;margin-bottom:4mm;flex:0 0 auto}
+.runhead .sec{font-size:8pt;font-weight:700;color:var(--navy);letter-spacing:.06em;text-transform:uppercase}
+.runhead .doc{font-size:7.2pt;color:var(--muted);letter-spacing:.04em}
+.foot{position:absolute;left:14mm;right:14mm;bottom:6mm;display:flex;justify-content:space-between;
+      align-items:center;font-size:7pt;color:var(--muted);border-top:.6pt solid var(--line);padding-top:2mm}
+.foot b{color:var(--navy)}
+.body{flex:1 1 auto;min-height:0}
+
+h1{font-size:20pt;line-height:1.1;letter-spacing:-.02em}
+h2{font-size:13pt;color:var(--navy);margin:0 0 2mm;line-height:1.15;letter-spacing:-.01em}
+h3{font-size:10.2pt;color:var(--navy2);margin:3mm 0 1.4mm}
+h4{font-size:9pt;color:var(--teal);margin:2.5mm 0 1mm;text-transform:uppercase;letter-spacing:.05em}
+p{margin:0 0 2mm;text-align:justify}
+ul,ol{margin:0 0 2mm 4.2mm}
+li{margin-bottom:.9mm}
+strong{color:var(--navy2)}
+em{color:var(--ink)}
+.small{font-size:8.4pt}
+.tiny{font-size:7.4pt;color:var(--muted)}
+.mono{font-family:var(--mono)}
+.kicker{display:inline-block;background:var(--navy);color:#fff;font-size:7.4pt;font-weight:700;
+        letter-spacing:.08em;text-transform:uppercase;padding:1mm 2.4mm;border-radius:1mm;margin-bottom:2mm}
+.num{display:inline-flex;align-items:center;justify-content:center;width:6.5mm;height:6.5mm;border-radius:50%;
+     background:var(--navy);color:#fff;font-size:9pt;font-weight:700;margin-right:2mm;vertical-align:-1.4mm}
+
+/* ---------- retículas ---------- */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm}
+.g21{display:grid;grid-template-columns:1.35fr 1fr;gap:4mm}
+.g12{display:grid;grid-template-columns:1fr 1.35fr;gap:4mm}
+
+/* ---------- cajas ---------- */
+.box{background:var(--soft);border:.6pt solid var(--line);border-radius:1.6mm;padding:2.6mm 3mm;margin-bottom:2.5mm}
+.box h4{margin-top:0}
+.alert{border-left:3.5pt solid var(--red);background:#fdf2f1;border-radius:0 1.6mm 1.6mm 0;padding:2.4mm 3mm;margin-bottom:2.5mm}
+.alert h4{color:var(--red);margin-top:0}
+.tip{border-left:3.5pt solid var(--green);background:#f1f8f3;border-radius:0 1.6mm 1.6mm 0;padding:2.4mm 3mm;margin-bottom:2.5mm}
+.tip h4{color:var(--green);margin-top:0}
+.pearl{border-left:3.5pt solid var(--amber);background:#fdf7ee;border-radius:0 1.6mm 1.6mm 0;padding:2.4mm 3mm;margin-bottom:2.5mm}
+.pearl h4{color:var(--amber);margin-top:0}
+.note{border:.8pt dashed var(--teal);background:#f0fafb;border-radius:1.6mm;padding:2.4mm 3mm;margin-bottom:2.5mm}
+.note h4{margin-top:0}
+
+/* ---------- tablas ---------- */
+table{width:100%;border-collapse:collapse;font-size:8.2pt;margin-bottom:2.5mm}
+th{background:var(--navy);color:#fff;text-align:left;padding:1.4mm 1.8mm;font-size:7.8pt;
+   letter-spacing:.03em;text-transform:uppercase;font-weight:700}
+td{padding:1.3mm 1.8mm;border-bottom:.5pt solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#f7fafc}
+table.compact td,table.compact th{padding:1mm 1.4mm;font-size:7.6pt}
+.tc{text-align:center}
+
+/* ---------- figuras ---------- */
+figure{margin:0 0 2.5mm}
+figcaption{font-size:7.4pt;color:var(--muted);margin-top:1mm;line-height:1.3}
+figcaption b{color:var(--navy);font-size:7.4pt}
+svg{display:block;width:100%;height:auto}
+.fig-frame{border:.6pt solid var(--line);border-radius:1.6mm;padding:2mm;background:#fff}
+.top{align-self:start}
+
+/* ---------- portada ---------- */
+.cover{background:linear-gradient(160deg,#0b2740 0%,#12466e 45%,#0e7490 100%);color:#fff;padding:0;
+       display:flex;flex-direction:column;justify-content:space-between}
+.cover-in{padding:20mm 16mm 14mm;display:flex;flex-direction:column;height:100%}
+.cover h1{font-size:30pt;font-weight:700;letter-spacing:-.03em;margin-bottom:3mm}
+.cover .sub{font-size:12.5pt;color:#bfe3f0;font-weight:400;line-height:1.35;max-width:135mm}
+.cover .rule{width:38mm;height:1.4mm;background:#7fd3e8;margin:6mm 0}
+.cover .chips{display:flex;flex-wrap:wrap;gap:2mm;margin-top:5mm}
+.chip{border:.8pt solid rgba(255,255,255,.45);border-radius:20mm;padding:1.2mm 3.2mm;font-size:8pt;color:#e6f6fb}
+.cover-meta{border-top:.8pt solid rgba(255,255,255,.3);padding-top:4mm;font-size:8.6pt;color:#cfe8f2;
+            display:flex;justify-content:space-between;align-items:flex-end;gap:6mm}
+.cover-badge{font-size:7.6pt;letter-spacing:.14em;text-transform:uppercase;color:#8fd6ea;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- =================== PÁGINA 1 · PORTADA =================== -->
+<section class="page cover">
+  <div class="cover-in">
+    <div class="cover-badge">Universidad Diego Portales · Escuela de Enfermería</div>
+    <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center">
+      <h1>Manual de Monitorización<br>del Paciente</h1>
+      <div class="rule"></div>
+      <div class="sub">De los signos vitales básicos a la monitorización invasiva.<br>
+      Monitorización hemodinámica, ventilatoria y neurológica para el cuidado de enfermería.</div>
+      <div class="chips">
+        <span class="chip">FC · ECG continuo</span>
+        <span class="chip">PANI</span>
+        <span class="chip">SpO₂</span>
+        <span class="chip">FR · EtCO₂</span>
+        <span class="chip">Ventilación mecánica</span>
+        <span class="chip">GCS · pupilas · RASS</span>
+        <span class="chip">Línea arterial</span>
+        <span class="chip">CVC · PVC</span>
+        <span class="chip">CAP</span>
+        <span class="chip">PiCCO</span>
+      </div>
+
+      <div style="margin-top:9mm;background:rgba(255,255,255,.07);border:.8pt solid rgba(255,255,255,.22);
+                  border-radius:2.4mm;padding:4mm">
+        <svg viewBox="0 0 640 168" role="img" aria-label="Monitor multiparamétrico con trazados de ECG, pletismografía, presión arterial y capnografía">
+          <defs>
+            <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0a1622"/><stop offset="1" stop-color="#050c14"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="640" height="168" rx="7" fill="#1a222b"/>
+          <rect x="6" y="6" width="628" height="156" rx="4" fill="url(#scr)"/>
+          <!-- rejilla -->
+          <g stroke="#16303f" stroke-width="0.5">
+            <path d="M6 40H520M6 74H520M6 108H520M6 142H520"/>
+            <path d="M80 6V162M160 6V162M240 6V162M320 6V162M400 6V162M480 6V162"/>
+          </g>
+          <!-- ECG -->
+          <path d="M8 40h26l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h30l4-6 4 12 5-30 5 44 5-20h7l5-4 4 4h60"
+                fill="none" stroke="#3ddc84" stroke-width="1.7" stroke-linejoin="round"/>
+          <text x="12" y="20" fill="#3ddc84" font-family="monospace" font-size="9">II</text>
+          <!-- Pletismografía -->
+          <path d="M8 74c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M82 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M156 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M230 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M304 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M378 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4M452 80c10 0 12-16 20-16s10 9 14 12 8 2 12 6 6 8 12 8 10-4 16-4"
+                fill="none" stroke="#38bdf8" stroke-width="1.7"/>
+          <text x="12" y="60" fill="#38bdf8" font-family="monospace" font-size="9">Pleth</text>
+          <!-- Presión arterial -->
+          <path d="M8 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M82 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M156 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M230 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M304 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M378 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4M452 118c6 0 8-2 12-2s6-26 10-26 8 22 12 26 8 2 10 6 4 6 8 2 4-10 8-10 6 4 10 4"
+                fill="none" stroke="#f87171" stroke-width="1.7"/>
+          <text x="12" y="98" fill="#f87171" font-family="monospace" font-size="9">ART</text>
+          <!-- Capnografía -->
+          <path d="M8 156h14l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h20l2-16h30l2 16h30"
+                fill="none" stroke="#fbbf24" stroke-width="1.6"/>
+          <text x="12" y="136" fill="#fbbf24" font-family="monospace" font-size="9">CO₂</text>
+          <!-- panel de números -->
+          <g font-family="monospace">
+            <rect x="524" y="10" width="106" height="36" rx="3" fill="#0d1b26"/>
+            <text x="530" y="22" fill="#3ddc84" font-size="8">FC lpm</text><text x="626" y="42" fill="#3ddc84" font-size="24" text-anchor="end">88</text>
+            <rect x="524" y="48" width="106" height="36" rx="3" fill="#0d1b26"/>
+            <text x="530" y="60" fill="#38bdf8" font-size="8">SpO₂ %</text><text x="626" y="80" fill="#38bdf8" font-size="24" text-anchor="end">97</text>
+            <rect x="524" y="86" width="106" height="36" rx="3" fill="#0d1b26"/>
+            <text x="530" y="98" fill="#f87171" font-size="8">PA mmHg</text><text x="626" y="118" fill="#f87171" font-size="19" text-anchor="end">118/64</text>
+            <text x="530" y="118" fill="#f87171" font-size="9">(78)</text>
+            <rect x="524" y="124" width="106" height="34" rx="3" fill="#0d1b26"/>
+            <text x="530" y="136" fill="#fbbf24" font-size="8">EtCO₂ · FR</text><text x="626" y="154" fill="#fbbf24" font-size="19" text-anchor="end">36 · 16</text>
+          </g>
+        </svg>
+        <div style="font-size:7.4pt;color:#a9d6e6;margin-top:2mm">
+          Figura de portada · Simulación de pantalla de monitor multiparamétrico: trazado electrocardiográfico (verde),
+          onda pletismográfica (azul), curva de presión arterial invasiva (rojo) y capnograma (amarillo).
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <div style="font-size:10pt;color:#fff;font-weight:700;margin-bottom:1.2mm">Material docente · 4.º año de Enfermería</div>
+        <div>Asignatura de Cuidados del Paciente Crítico / Enfermería del Adulto</div>
+        <div style="margin-top:1.6mm">Documento de estudio · 15 páginas · Evidencia 2020–2025</div>
+      </div>
+      <div style="text-align:right">
+        <div class="cover-badge" style="color:#cfe8f2">Versión 1.0</div>
+        <div style="margin-top:1.4mm">Uso educativo interno</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PÁGINA 2 · CÓMO USAR + FUNDAMENTOS =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Presentación · Sección 1: Fundamentos</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <div class="g21" style="margin-bottom:3mm">
+    <div>
+      <h2>Cómo usar este manual</h2>
+      <p>Este manual recorre la monitorización clínica <strong>desde lo más simple hasta lo más invasivo</strong>. Las secciones 1 a 6 son contenido que usted debe <strong>manejar y ejecutar</strong> en la práctica clínica. La sección 7 (línea arterial, CVC, CAP, PiCCO) se presenta a modo de <strong>pinceladas</strong>: el objetivo es que reconozca que estas tecnologías existen, entienda qué miden y sepa cuál es su rol de enfermería, no que las domine en cuarto año.</p>
+      <p>Cada apartado responde a tres preguntas: <em>¿qué mide?</em>, <em>¿cómo se interpreta?</em> y <em>¿qué hago yo como enfermero/a?</em> Las cajas de color destacan errores frecuentes (rojo), buenas prácticas (verde) y perlas clínicas (ámbar).</p>
+    </div>
+    <div class="box" style="background:var(--soft2)">
+      <h4>Objetivos de aprendizaje</h4>
+      <p class="small" style="margin-bottom:1.5mm">Al terminar este manual usted debería ser capaz de:</p>
+      <ol class="small" style="margin-bottom:0">
+        <li>Explicar el principio físico de las técnicas básicas de monitorización.</li>
+        <li>Reconocer artefactos y diferenciarlos de un deterioro real.</li>
+        <li>Interpretar SpO₂, EtCO₂, FR, PA y trazado ECG en contexto.</li>
+        <li>Aplicar GCS, pupilas y RASS, y detectar signos de hipertensión intracraneal.</li>
+        <li>Identificar los dispositivos invasivos, sus valores y sus cuidados de enfermería.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div style="background:var(--navy);color:#fff;border-radius:1.6mm;padding:2.6mm 3mm;margin-bottom:3mm">
+    <div style="font-size:7.6pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:1.5mm;color:#a9d6e6">Contenido</div>
+    <div class="small" style="display:grid;grid-template-columns:1fr 1fr;gap:.6mm 5mm;line-height:1.35">
+      <div><b>1.</b> Fundamentos: qué es monitorizar · p. 2–3</div><div><b>6.</b> Neuromonitorización básica · p. 9–10</div>
+      <div><b>2.</b> Monitorización cardíaca básica: ECG y FC · p. 3–4</div><div><b>7.</b> Hemodinamia básica: perfusión · p. 10</div>
+      <div><b>3.</b> Presión arterial no invasiva · p. 4</div><div><b>8.</b> Monitorización invasiva (pinceladas) · p. 11–13</div>
+      <div><b>4.</b> Oximetría de pulso · p. 5</div><div><b>9.</b> ¿Responde a volumen? · p. 14</div>
+      <div><b>5.</b> Función ventilatoria y respiratoria · p. 6–8</div><div><b>10.</b> Rol de enfermería, autoevaluación y bibliografía · p. 15</div>
+    </div>
+  </div>
+
+  <h2><span class="num">1</span>Fundamentos: qué significa monitorizar</h2>
+  <p><strong>Monitorizar no es mirar una pantalla: es vigilar una tendencia para tomar decisiones.</strong> Un valor aislado dice poco; lo que orienta es la <em>dirección</em> del cambio y su coherencia con el examen físico. Todo sistema de monitorización sigue la misma cadena, y en cada eslabón se pueden introducir errores.</p>
+
+  <figure class="fig-frame">
+    <svg viewBox="0 0 700 122" role="img" aria-label="Cadena de monitorización: paciente, sensor, procesamiento, pantalla, interpretación y decisión clínica">
+      <defs>
+        <marker id="ar1" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+          <path d="M0 0 L8 3.2 L0 6.4 z" fill="#12466e"/>
+        </marker>
+      </defs>
+      <g font-family="Liberation Sans, Arial" font-size="11">
+        <!-- 5 nodos -->
+        <g>
+          <rect x="4" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
+          <text x="63" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">1. Fenómeno</text>
+          <text x="63" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">biológico del paciente</text>
+        </g>
+        <path d="M124 49H140" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
+        <g>
+          <rect x="144" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
+          <text x="203" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">2. Sensor</text>
+          <text x="203" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">electrodo, transductor</text>
+        </g>
+        <path d="M264 49H280" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
+        <g>
+          <rect x="284" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
+          <text x="343" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">3. Procesamiento</text>
+          <text x="343" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">filtros, promediado</text>
+        </g>
+        <path d="M404 49H420" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
+        <g>
+          <rect x="424" y="26" width="118" height="46" rx="6" fill="#eaf1f6" stroke="#12466e" stroke-width="1.2"/>
+          <text x="483" y="44" text-anchor="middle" font-weight="bold" fill="#12466e">4. Pantalla</text>
+          <text x="483" y="58" text-anchor="middle" font-size="9.5" fill="#41566a">número + curva + alarma</text>
+        </g>
+        <path d="M544 49H560" stroke="#12466e" stroke-width="1.6" marker-end="url(#ar1)"/>
+        <g>
+          <rect x="564" y="26" width="132" height="46" rx="6" fill="#12466e"/>
+          <text x="630" y="44" text-anchor="middle" font-weight="bold" fill="#fff">5. Interpretación</text>
+          <text x="630" y="58" text-anchor="middle" font-size="9.5" fill="#bfe3f0">y decisión de enfermería</text>
+        </g>
+        <!-- fallos -->
+        <text x="4" y="14" font-size="9" font-weight="bold" fill="#b3261e">Dónde falla la cadena ↓</text>
+        <g font-size="8.6" fill="#7b3b36">
+          <text x="63" y="92" text-anchor="middle">variabilidad</text><text x="63" y="103" text-anchor="middle">fisiológica real</text>
+          <text x="203" y="92" text-anchor="middle">mala posición,</text><text x="203" y="103" text-anchor="middle">piel, movimiento</text>
+          <text x="343" y="92" text-anchor="middle">retardo del</text><text x="343" y="103" text-anchor="middle">promediado</text>
+          <text x="483" y="92" text-anchor="middle">alarmas mal</text><text x="483" y="103" text-anchor="middle">configuradas</text>
+          <text x="630" y="92" text-anchor="middle">error humano:</text><text x="630" y="103" text-anchor="middle">no mirar al paciente</text>
+        </g>
+        <path d="M4 78H696" stroke="#e3b6b2" stroke-width="1" stroke-dasharray="4 3"/>
+      </g>
+    </svg>
+    <figcaption><b>Figura 1.</b> Cadena de la monitorización. Elaboración propia. El monitor no mide al paciente: mide una señal que representa al paciente. Antes de actuar sobre un valor anómalo, verifique el eslabón que puede estar fallando.</figcaption>
+  </figure>
+
+  <div class="g2">
+    <div>
+      <h3>Monitorización invasiva y no invasiva</h3>
+      <table class="compact">
+        <tr><th>Tipo</th><th>Ejemplos</th><th>Costo/riesgo</th></tr>
+        <tr><td><b>No invasiva</b></td><td>FC, PANI, SpO₂, FR, EtCO₂, temperatura, GCS</td><td>Mínimo</td></tr>
+        <tr><td><b>Mínimamente invasiva</b></td><td>Línea arterial, PiCCO, contorno de pulso</td><td>Bajo–moderado</td></tr>
+        <tr><td><b>Invasiva</b></td><td>CVC/PVC, catéter de arteria pulmonar, PIC</td><td>Moderado–alto</td></tr>
+      </table>
+      <p class="tiny" style="margin-bottom:0">Regla práctica: se escala de no invasivo a invasivo <em>sólo</em> cuando la información adicional va a cambiar una decisión terapéutica. Más monitorización no equivale a mejor cuidado.</p>
+    </div>
+    <div>
+      <div class="alert" style="margin-bottom:2mm">
+        <h4>Fatiga de alarmas</h4>
+        <p class="small" style="margin-bottom:0">Hasta 8 de cada 10 alarmas en una unidad crítica no requieren intervención. La consecuencia es que el equipo deja de responder. <b>Su responsabilidad:</b> ajustar los límites al paciente concreto al inicio de cada turno, no silenciar sin evaluar, y nunca apagar una alarma de manera permanente.</p>
+      </div>
+      <div class="tip" style="margin-bottom:0">
+        <h4>Regla de los 3 pasos ante un valor alarmante</h4>
+        <ol class="small" style="margin-bottom:0">
+          <li><b>Mire al paciente</b> (conciencia, color, respiración, pulso).</li>
+          <li><b>Verifique el sensor</b> (posición, cable, perfusión, artefacto).</li>
+          <li><b>Confirme con otro método</b> (pulso manual, PANI, gasometría) y comunique.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>2</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 3 · ECG CONTINUO Y FC =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 2 · Monitorización cardíaca básica</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">2</span>Frecuencia cardíaca y electrocardiografía continua</h2>
+  <p>El monitor no mide "el corazón": registra la <strong>diferencia de potencial eléctrico</strong> entre electrodos de superficie. De ahí obtiene el trazado y, contando complejos QRS, la frecuencia cardíaca. Por eso un electrodo despegado puede simular una asistolia, y un temblor muscular puede simular una fibrilación ventricular. <strong>Siempre correlacione el trazado con el pulso del paciente.</strong></p>
+
+  <div class="g21">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 420 208" role="img" aria-label="Esquema de colocación de electrodos de cinco latiguillos sobre el tórax">
+        <g font-family="Liberation Sans, Arial">
+          <!-- torso -->
+          <path d="M120 18c-26 0-40 12-46 26-6 14-30 18-38 30-6 9-4 20 2 24 8 5 16-2 20-10 3-6 8-10 12-12-4 30-6 60-4 92 1 16 4 26 6 32h116c2-6 5-16 6-32 2-32 0-62-4-92 4 2 9 6 12 12 4 8 12 15 20 10 6-4 8-15 2-24-8-12-32-16-38-30-6-14-20-26-46-26z"
+                fill="#f7e7dd" stroke="#c8a894" stroke-width="1.4"/>
+          <!-- clavículas / esternón guía -->
+          <path d="M78 44c14 8 32 10 46 10s32-2 46-10" fill="none" stroke="#e0c4b1" stroke-width="1.2"/>
+          <path d="M124 54v92" fill="none" stroke="#e0c4b1" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <text x="124" y="14" text-anchor="middle" font-size="9" fill="#8a6a58">línea media clavicular</text>
+          <!-- electrodos -->
+          <g stroke="#333" stroke-width="1">
+            <circle cx="76" cy="56" r="9" fill="#ffffff"/><circle cx="76" cy="56" r="4.6" fill="#e11d48"/>
+            <circle cx="172" cy="56" r="9" fill="#ffffff"/><circle cx="172" cy="56" r="4.6" fill="#facc15"/>
+            <circle cx="76" cy="158" r="9" fill="#ffffff"/><circle cx="76" cy="158" r="4.6" fill="#111827"/>
+            <circle cx="172" cy="158" r="9" fill="#ffffff"/><circle cx="172" cy="158" r="4.6" fill="#16a34a"/>
+            <circle cx="150" cy="108" r="9" fill="#ffffff"/><circle cx="150" cy="108" r="4.6" fill="#ffffff"/>
+          </g>
+          <g font-size="10" font-weight="bold" fill="#12466e">
+            <text x="44" y="42">RA</text><text x="188" y="42">LA</text>
+            <text x="42" y="180">RL</text><text x="188" y="180">LL</text><text x="166" y="126">V</text>
+          </g>
+          <!-- leyenda derecha -->
+          <g font-size="9.6" fill="#0f1f2c">
+            <text x="222" y="30" font-weight="bold" fill="#12466e">Regla nemotécnica (AHA)</text>
+            <circle cx="230" cy="46" r="5" fill="#e11d48"/><text x="242" y="49">Blanco/rojo a la <tspan font-weight="bold">de</tspan>recha</text>
+            <circle cx="230" cy="66" r="5" fill="#facc15"/><text x="242" y="69">Negro/amarillo a la izquierda</text>
+            <circle cx="230" cy="86" r="5" fill="#16a34a"/><text x="242" y="89">"Humo sobre fuego":</text>
+            <text x="242" y="101">negro sobre rojo (LA sobre LL)</text>
+            <circle cx="230" cy="118" r="5" fill="#ffffff" stroke="#333"/><text x="242" y="121">V (marrón/blanco): 4.º EIC</text>
+            <text x="242" y="133">paraesternal o V5 axilar ant.</text>
+            <text x="222" y="156" font-weight="bold" fill="#b3261e">Errores frecuentes</text>
+            <text x="222" y="169" font-size="9">· Electrodo sobre hueso o vello → artefacto</text>
+            <text x="222" y="180" font-size="9">· Piel húmeda o con residuo de gel seco</text>
+            <text x="222" y="191" font-size="9">· Electrodos sobre zona de desfibrilación</text>
+            <text x="222" y="202" font-size="9">· No rotar sitio cada 24 h → lesión cutánea</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figura 2.</b> Colocación de 5 latiguillos (esquema propio). RA/LA en infraclavicular, RL/LL en flanco bajo (no sobre prominencias óseas), V en precordio. Con 5 latiguillos se pueden mostrar 7 derivaciones, incluida una precordial.</figcaption>
+    </figure>
+
+    <div>
+      <h3>Qué mirar en el trazado, en este orden</h3>
+      <table class="compact">
+        <tr><th>Paso</th><th>Pregunta</th></tr>
+        <tr><td><b>1. Frecuencia</b></td><td>¿&lt;50 o &gt;120 lpm? ¿Coincide con el pulso palpable?</td></tr>
+        <tr><td><b>2. Ritmo</b></td><td>¿Los R–R son regulares o irregulares?</td></tr>
+        <tr><td><b>3. Onda P</b></td><td>¿Hay P antes de cada QRS y con la misma forma?</td></tr>
+        <tr><td><b>4. QRS</b></td><td>¿Angosto (&lt;0,12 s) o ancho? Ancho = pensar ventricular.</td></tr>
+        <tr><td><b>5. Segmento ST</b></td><td>¿Elevado o descendido respecto de la línea de base?</td></tr>
+        <tr><td><b>6. Paciente</b></td><td>¿Está sintomático? Conciencia, PA, perfusión.</td></tr>
+      </table>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Avise de inmediato si aparece</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li>Taquicardia de complejo ancho, sostenida.</li>
+          <li>Bradicardia &lt;40 lpm o pausas &gt;3 s.</li>
+          <li>Bloqueo AV de 2.º grado Mobitz II o completo.</li>
+          <li>Cambios nuevos del ST o inversión de T.</li>
+          <li>Cualquier arritmia con <b>compromiso hemodinámico</b>: hipotensión, dolor torácico, disnea, alteración de conciencia.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1mm">Reconocer artefacto versus arritmia real</h3>
+  <figure class="fig-frame">
+    <svg viewBox="0 0 700 232" role="img" aria-label="Cuatro trazados electrocardiográficos: ritmo sinusal, artefacto, fibrilación auricular y taquicardia ventricular">
+      <g font-family="Liberation Sans, Arial">
+        <rect x="0" y="0" width="700" height="232" fill="#fbfdfe"/>
+        <g transform="translate(0,0)">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#0f766e">A · Ritmo sinusal (referencia): P–QRS–T regular y R–R constante</text>
+          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
+          <path d="M6 40l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0l6 0 q4 -5 8 0 l4 0 l3 4 l3 -26 l3 32 l3 -10 l4 0 q5 -7 10 0 l26 0" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(0,58)">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#b3261e">B · Artefacto por movimiento o temblor: línea de base "sucia", pero el pulso es normal</text>
+          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
+          <path d="M6 40l3 -11l3 11l3 -8l3 8l3 -11l3 11l3 -11l3 11l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -8l3 8l3 -7l3 7l3 -7l3 7l3 -8l3 8l3 -11l3 11l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -8l3 8l3 -7l3 7l3 -5l3 5l3 -11l3 11l3 -9l3 9l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -7l3 7l3 -5l3 5l3 -8l3 8l3 -5l3 5l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -11l3 11l3 -11l3 11l3 -8l3 8l3 -7l3 7l3 -8l3 8l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -5l3 5l3 -8l3 8l3 -5l3 5l3 -5l3 5l3 -5l3 5l6 0 q4 -5 8 0 l4 0 l3 4 l3 -24 l3 30 l3 -10 l4 0 q5 -7 10 0 l6 0l3 -7l3 7l3 -7l3 7l3 -8l3 8l3 -5l3 5l3 -11l3 11l3 -9l3 9" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(0,116)">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">C · Fibrilación auricular: sin ondas P y con intervalos R–R irregulares</text>
+          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
+          <path d="M6 40q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l34 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l44 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l14 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l14 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l44 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l34 0 l3 4 l3 -26 l3 32 l3 -10q6 -4 12 0 q6 3 12 0 l24 0 l3 4 l3 -26 l3 32 l3 -10" fill="none" stroke="#12466e" stroke-width="1.5" stroke-linejoin="round"/>
+        </g>
+        <g transform="translate(0,174)">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#b3261e">D · Taquicardia ventricular: QRS ancho, regular, sin ondas P → emergencia</text>
+          <path d="M4 40H696" stroke="#eaf2f7" stroke-width="1"/>
+          <path d="M6 40q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0q10 -22 20 0 q10 22 20 0" fill="none" stroke="#b3261e" stroke-width="1.5" stroke-linejoin="round"/>
+        </g>
+      </g>
+      </svg>
+    <figcaption><b>Figura 3.</b> Trazados esquemáticos de elaboración propia (no son registros de pacientes). La diferencia clave entre B y D es el <b>estado del paciente</b>: en el artefacto hay pulso, conciencia y SpO₂ normales; en la TV hay deterioro hemodinámico. Ante la duda, palpe el pulso central.</figcaption>
+  </figure>
+
+  <div class="pearl" style="margin-bottom:0">
+    <h4>Perla clínica</h4>
+    <p class="small" style="margin-bottom:0">La FC del monitor se calcula desde el QRS; la del oxímetro, desde el pulso periférico. Si <b>no coinciden</b>, sospeche actividad eléctrica sin pulso efectivo, extrasístoles que no generan eyección, o un artefacto. Esa discordancia es un hallazgo clínico, no un defecto del equipo.</p>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>3</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 4 · PANI Y TEMPERATURA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 3 · Presión arterial no invasiva y temperatura</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">3</span>Presión arterial no invasiva (PANI)</h2>
+  <p>Los monitores actuales usan <strong>oscilometría</strong>: el manguito se infla por sobre la presión sistólica, se desinfla progresivamente y un sensor registra las oscilaciones que la pared arterial transmite al aire del brazalete. La <strong>presión arterial media (PAM) es el único valor que el equipo mide de forma directa</strong> —corresponde al punto de máxima oscilación—; la sistólica y la diastólica se <em>estiman</em> mediante algoritmos. Esto explica por qué, en pacientes graves, se toman decisiones sobre la PAM y no sobre la sistólica.</p>
+
+  <div class="g2">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 360 176" role="img" aria-label="Principio oscilométrico: presión del manguito y amplitud de oscilaciones">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">Principio oscilométrico</text>
+          <!-- ejes -->
+          <path d="M34 150H344M34 150V26" stroke="#334155" stroke-width="1.2"/>
+          <text x="188" y="168" font-size="9" text-anchor="middle" fill="#41566a">Presión del manguito al desinflarse (mmHg) →</text>
+          <text x="14" y="92" font-size="9" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 92)">Amplitud oscilación</text>
+          <!-- curva envolvente -->
+          <path d="M44 148c30-2 46-30 62-54 12-18 22-30 34-30s22 12 34 30c16 24 32 52 62 54"
+                fill="none" stroke="#0e7490" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <!-- oscilaciones -->
+          <g stroke="#12466e" stroke-width="1.3" fill="none">
+            <path d="M52 150v-6M64 150v-12M76 150v-22M88 150v-36M100 150v-52M112 150v-66M124 150v-78M136 150v-88M148 150v-92M160 150v-94M172 150v-92M184 150v-86M196 150v-74M208 150v-60M220 150v-46M232 150v-34M244 150v-24M256 150v-16M268 150v-10M280 150v-6"/>
+          </g>
+          <!-- marcas -->
+          <path d="M112 26V150" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
+          <path d="M160 26V150" stroke="#15803d" stroke-width="1.2"/>
+          <path d="M232 26V150" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="112" y="22" font-size="8.6" text-anchor="middle" fill="#b3261e">PAS (estimada)</text>
+          <text x="160" y="36" font-size="9" text-anchor="middle" font-weight="bold" fill="#15803d">PAM</text>
+          <text x="160" y="46" font-size="8" text-anchor="middle" fill="#15803d">máxima oscilación</text>
+          <text x="238" y="22" font-size="8.6" text-anchor="start" fill="#b3261e">PAD (estimada)</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 4.</b> Esquema propio. La PAM se mide; PAS y PAD se calculan. En arritmias, temblor, shock o vasoconstricción intensa, esa estimación pierde exactitud.</figcaption>
+    </figure>
+
+    <div>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Fórmula de la PAM</h4>
+        <p class="mono" style="text-align:center;font-size:11pt;margin:1.5mm 0 1.5mm;color:var(--navy)">PAM ≈ PAD + ⅓ (PAS – PAD)</p>
+        <p class="small" style="margin-bottom:0">Ejemplo: 120/60 → PAM ≈ 60 + ⅓(60) = <b>80 mmHg</b>. Se pondera más la diastólica porque, a frecuencias normales, la diástole ocupa alrededor de dos tercios del ciclo cardíaco. En taquicardia marcada la aproximación pierde validez.</p>
+      </div>
+      <div class="tip" style="margin-bottom:2mm">
+        <h4>Objetivo de PAM</h4>
+        <p class="small" style="margin-bottom:0">En shock, la meta inicial habitual es <b>PAM ≥ 65 mmHg</b> (Surviving Sepsis Campaign 2021), individualizada según antecedentes: un hipertenso crónico o un paciente neurocrítico pueden requerir cifras mayores. La PAM es la presión que impulsa la perfusión de los órganos.</p>
+      </div>
+      <div class="alert" style="margin-bottom:0">
+        <h4>El error más frecuente: el tamaño del manguito</h4>
+        <p class="small" style="margin-bottom:1mm">La cámara inflable debe cubrir <b>~80 % del perímetro</b> del brazo y su ancho equivaler a <b>~40 %</b> de ese perímetro.</p>
+        <ul class="small" style="margin-bottom:0">
+          <li><b>Manguito pequeño</b> → sobreestima la PA (falsa hipertensión).</li>
+          <li><b>Manguito grande</b> → subestima la PA (hipotensión falsa).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Técnica correcta y fuentes de error</h3>
+  <table>
+    <tr><th style="width:26%">Elemento</th><th style="width:37%">Correcto</th><th>Consecuencia del error</th></tr>
+    <tr><td>Posición del brazo</td><td>Apoyado, a la altura del corazón (eje flebostático)</td><td>Cada 10 cm de desnivel modifica la lectura ~7–8 mmHg</td></tr>
+    <tr><td>Ubicación del manguito</td><td>Sobre piel, 2–3 cm sobre la flexura; nunca sobre ropa gruesa</td><td>Lecturas erráticas</td></tr>
+    <tr><td>Extremidad</td><td>Evitar el brazo con fístula, vaciamiento axilar, línea arterial o vía periférica en infusión</td><td>Daño, trombosis, interrupción de fármacos</td></tr>
+    <tr><td>Frecuencia de ciclado</td><td>La menor que sea clínicamente útil; rotar de extremidad</td><td>Petequias, edema, lesión por presión, neuropatía</td></tr>
+    <tr><td>Contexto</td><td>Registrar dolor, agitación, fármacos vasoactivos y hora</td><td>Interpretación errónea de la tendencia</td></tr>
+  </table>
+
+  <div class="g21">
+    <div>
+      <h3>Temperatura: el signo vital que se subestima</h3>
+      <p class="small" style="margin-bottom:0">La temperatura central (esofágica, vesical, intravascular) es más fiable que la periférica en el paciente crítico. El <strong>gradiente entre temperatura central y periférica</strong> es un signo indirecto de vasoconstricción: amplio, con piel fría y moteada, sugiere shock aun con PA "normal". Hipotermia e hipertermia además desplazan la curva de disociación de la hemoglobina.</p>
+    </div>
+    <div class="note" style="margin-bottom:0">
+      <h4>Cuándo la PANI ya no basta</h4>
+      <ul class="small" style="margin-bottom:0">
+        <li>Necesidad de <b>vasoactivos en titulación</b>.</li>
+        <li>Inestabilidad que exige lectura latido a latido.</li>
+        <li>Necesidad de <b>gasometrías arteriales frecuentes</b>.</li>
+        <li>Obesidad extrema, quemaduras o arritmia.</li>
+      </ul>
+      <p class="small" style="margin:1.5mm 0 0">→ Se instala una <b>línea arterial</b> (página 11).</p>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>4</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 5 · OXIMETRÍA DE PULSO =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 4 · Oximetría de pulso</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">4</span>Saturación de oxígeno por pulsioximetría (SpO₂)</h2>
+  <p>El sensor emite luz <strong>roja (660 nm) e infrarroja (940 nm)</strong> a través de un lecho vascular. La hemoglobina oxigenada y la desoxigenada absorben ambas longitudes de onda de manera distinta; el equipo analiza sólo el <strong>componente pulsátil</strong> de la señal (el que aporta la sangre arterial) y calcula la relación entre ambas absorciones. De ahí el requisito esencial: <strong>sin pulso detectable, no hay SpO₂ confiable</strong>.</p>
+
+  <div class="g21">
+    <figure class="fig-frame">
+      <svg viewBox="0 0 340 216" role="img" aria-label="Curva de disociación de la hemoglobina con puntos clave">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9.5" font-weight="bold" fill="#12466e">Curva de disociación de la hemoglobina</text>
+          <path d="M40 150H320M40 150V32" stroke="#334155" stroke-width="1.2"/>
+          <g font-size="8" fill="#64748b">
+            <text x="40" y="162" text-anchor="middle">0</text><text x="118" y="162" text-anchor="middle">30</text>
+            <text x="144" y="162" text-anchor="middle">40</text><text x="196" y="162" text-anchor="middle">60</text>
+            <text x="248" y="162" text-anchor="middle">80</text><text x="300" y="162" text-anchor="middle">100</text>
+            <text x="34" y="153" text-anchor="end">0</text><text x="34" y="95" text-anchor="end">50</text>
+            <text x="34" y="50" text-anchor="end">90</text><text x="34" y="40" text-anchor="end">100</text>
+          </g>
+          <text x="180" y="176" font-size="8.6" text-anchor="middle" fill="#41566a">PaO₂ (mmHg)</text>
+          <text x="12" y="92" font-size="8.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 12 92)">SaO₂ (%)</text>
+          <path d="M40 46.5H196M196 46.5V150" stroke="#15803d" stroke-width=".9" stroke-dasharray="3 2"/>
+          <path d="M40 64H144M144 64V150" stroke="#a75a00" stroke-width=".9" stroke-dasharray="3 2"/>
+          <path d="M40 92.5H110M110 92.5V150" stroke="#b3261e" stroke-width=".9" stroke-dasharray="3 2"/>
+          <path d="M40 150C60 146 80 124 92 110C102 99 106 96 110 92.5C120 80 132 70 144 64C158 56 182 48 196 46.5C216 44 240 41 300 38"
+                fill="none" stroke="#12466e" stroke-width="2.2"/>
+          <path d="M40 150C56 144 74 118 86 104C96 93 100 90 104 86C114 74 126 64 138 58C152 50 176 44 190 43C212 41 240 39 300 37"
+                fill="none" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/>
+          <path d="M40 150C66 148 88 132 100 118C110 107 114 103 118 99C128 87 140 77 152 70C166 62 190 52 202 50C222 47 244 43 300 39"
+                fill="none" stroke="#b3261e" stroke-width="1" stroke-dasharray="4 3"/>
+          <circle cx="196" cy="46.5" r="3.4" fill="#15803d"/><circle cx="144" cy="64" r="3.4" fill="#a75a00"/>
+          <circle cx="110" cy="92.5" r="3.4" fill="#b3261e"/>
+          <g font-size="8.2">
+            <circle cx="8" cy="185" r="3.4" fill="#15803d"/>
+            <text x="16" y="188" fill="#15803d" font-weight="bold">60 → 90 %</text>
+            <circle cx="92" cy="185" r="3.4" fill="#a75a00"/>
+            <text x="100" y="188" fill="#a75a00" font-weight="bold">40 → 75 %</text>
+            <circle cx="176" cy="185" r="3.4" fill="#b3261e"/>
+            <text x="184" y="188" fill="#b3261e" font-weight="bold">P₅₀ 27 → 50 %</text>
+            <text x="8" y="199" fill="#b3261e">– – desplazamiento a la derecha: fiebre, acidosis, ↑CO₂ (cede O₂)</text>
+            <text x="8" y="210" fill="#0e7490">– – desplazamiento a la izquierda: hipotermia, alcalosis (retiene O₂)</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figura 5.</b> Esquema propio. Por debajo de <b>SpO₂ 90 %</b> la curva cae en picada: pequeños descensos de saturación equivalen a caídas grandes de PaO₂. Ése es el umbral que debe activar su respuesta.</figcaption>
+    </figure>
+
+    <div>
+      <figure class="fig-frame" style="margin-bottom:2mm">
+        <svg viewBox="0 0 300 96" role="img" aria-label="Onda pletismográfica normal comparada con onda de mala perfusión">
+          <g font-family="Liberation Sans, Arial">
+            <text x="4" y="11" font-size="8.6" font-weight="bold" fill="#15803d">Pleth normal: pulsátil, con muesca dícrota</text>
+            <path d="M4 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M60 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M116 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M172 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3M228 44c6 0 8-22 14-22s8 10 11 14 5 1 7 5 3 7 6 3 3-9 6-9 5 3 8 3"
+                  fill="none" stroke="#15803d" stroke-width="1.6"/>
+            <text x="4" y="66" font-size="8.6" font-weight="bold" fill="#b3261e">Mala perfusión / vasoconstricción: onda plana y ruidosa</text>
+            <path d="M4 88c8 0 10-5 16-5s8 3 12 4 6-1 10 1 6 2 10 0 8-4 12-3 8 4 12 3 8-5 14-4 8 4 12 3 8-3 12-2 8 3 12 2 8-4 14-3 8 4 12 3 8-4 12-3 8 3 12 2 8-3 14-2 8 3 12 2 8-3 12-2 8 2 12 1"
+                  fill="none" stroke="#b3261e" stroke-width="1.5"/>
+          </g>
+        </svg>
+        <figcaption><b>Figura 6.</b> Esquema propio. <b>Nunca interprete un número de SpO₂ sin mirar la onda.</b> Si la onda es plana o irregular, el valor no es confiable.</figcaption>
+      </figure>
+      <div class="alert" style="margin-bottom:0">
+        <h4>SpO₂ no es</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li><b>No es ventilación:</b> un paciente con oxígeno suplementario puede retener CO₂ y mantener SpO₂ 98 %. Para ventilación se usa la <b>FR y el EtCO₂</b>.</li>
+          <li><b>No es contenido de oxígeno:</b> en anemia grave la SpO₂ puede ser 100 % con muy poco O₂ transportado.</li>
+          <li><b>No es perfusión tisular:</b> puede haber SpO₂ normal con shock establecido.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Limitaciones que sí debe conocer (actualización 2020–2025)</h3>
+  <table class="compact">
+    <tr><th style="width:24%">Situación</th><th style="width:38%">Qué ocurre</th><th>Conducta de enfermería</th></tr>
+    <tr><td><b>Pigmentación cutánea oscura</b></td><td>Sobreestimación de la saturación real e <b>hipoxemia oculta</b> (SaO₂ &lt;88 % con SpO₂ 92–96 %), descrita por Sjoding et al. (NEJM 2020). La FDA publicó en enero de 2025 una guía en consulta que exige validar los equipos en poblaciones con diversidad de tonos de piel</td><td>Mayor umbral de sospecha; confirmar con gasometría arterial cuando la clínica no calza con la SpO₂</td></tr>
+    <tr><td>Hipoperfusión, hipotermia, vasoconstricción, vasopresores</td><td>Señal pulsátil insuficiente</td><td>Cambiar de sitio (lóbulo de oreja, frente), calentar la extremidad</td></tr>
+    <tr><td>Movimiento, temblor, convulsión</td><td>Artefacto y falsas alarmas</td><td>Estabilizar el sensor; correlacionar con la onda</td></tr>
+    <tr><td>Carboxihemoglobina (incendios, humo)</td><td><b>SpO₂ falsamente normal o alta</b>: el equipo no la distingue de la oxihemoglobina</td><td>Sospechar siempre en víctimas de incendio; cooximetría</td></tr>
+    <tr><td>Metahemoglobinemia</td><td>SpO₂ tiende a fijarse cerca de 85 % sin importar la PaO₂ real</td><td>Cooximetría; avisar</td></tr>
+    <tr><td>Esmalte de uñas oscuro, uña artificial, henna, azul de metileno</td><td>Absorción anómala de luz</td><td>Retirar el esmalte o rotar el sitio del sensor</td></tr>
+  </table>
+
+  <div class="g2">
+    <div class="tip" style="margin-bottom:0">
+      <h4>Metas de oxigenación</h4>
+      <p class="small" style="margin-bottom:0">Ni poco ni demasiado. En el adulto crítico general se busca <b>SpO₂ 92–96 %</b>; en el paciente con riesgo de retención de CO₂ (EPOC), <b>88–92 %</b>. La hiperoxia mantenida no es inocua. Titule el oxígeno igual que titula un fármaco: con una meta escrita.</p>
+    </div>
+    <div class="note" style="margin-bottom:0">
+      <h4>Del SpO₂ al diagnóstico: relación SpO₂/FiO₂</h4>
+      <p class="small" style="margin-bottom:0">La nueva definición global de SDRA (2024) permite usar <b>SpO₂/FiO₂ ≤ 315</b> (siempre que la SpO₂ sea ≤ 97 %) como criterio de hipoxemia cuando no se dispone de gasometría. Un cálculo que usted puede hacer con datos de cabecera.</p>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>5</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 6 · FR Y PATRÓN RESPIRATORIO =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 5 · Función ventilatoria y respiratoria (1 de 3)</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">5</span>Frecuencia respiratoria y patrón ventilatorio</h2>
+  <p>La frecuencia respiratoria es el <strong>signo vital más predictivo de deterioro y el peor registrado</strong>: se anota "de memoria", se copia del turno anterior o simplemente se omite. Es también el primer parámetro que se altera antes de un paro cardiorrespiratorio y el que más peso tiene en los puntajes de alerta temprana. Cuéntela durante <strong>un minuto completo</strong>, observando el tórax, sin avisar al paciente que lo está haciendo.</p>
+
+  <div class="g21">
+    <div>
+      <table class="compact">
+        <tr><th>Rango en adulto</th><th>Interpretación</th></tr>
+        <tr><td class="mono">12–20 /min</td><td>Normal (eupnea)</td></tr>
+        <tr><td class="mono">21–24 /min</td><td>Taquipnea leve: vigilancia estrecha</td></tr>
+        <tr><td class="mono">≥ 25 /min</td><td><b>Signo de alarma</b>: aumento sostenido del trabajo respiratorio</td></tr>
+        <tr><td class="mono">&lt; 8–10 /min</td><td>Depresión respiratoria (opioides, sedación, neurológica)</td></tr>
+      </table>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Signos de trabajo respiratorio aumentado</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li>Uso de músculos accesorios (esternocleidomastoideo, escalenos).</li>
+          <li>Tiraje intercostal, supraclavicular o supraesternal.</li>
+          <li>Aleteo nasal; imposibilidad de hablar frases completas.</li>
+          <li><b>Respiración paradójica</b> (el abdomen se hunde en inspiración): fatiga diafragmática inminente.</li>
+          <li>Diaforesis, agitación o somnolencia progresiva.</li>
+        </ul>
+      </div>
+    </div>
+
+    <figure class="fig-frame">
+      <svg viewBox="0 0 360 282" role="img" aria-label="Patrones respiratorios: eupnea, taquipnea, bradipnea, Kussmaul, Cheyne-Stokes y Biot">
+      <g font-family="Liberation Sans, Arial">
+        <g transform="translate(0,0)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Eupnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · 12–20/min · patrón normal</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0q13 -12 26 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
+        </g>
+        <g transform="translate(0,47)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Taquipnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · dolor, fiebre, sepsis, ansiedad</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0q8 -9 17 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
+        </g>
+        <g transform="translate(0,94)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#0f766e">Bradipnea<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · opioides, sedación, hipertensión intracraneal</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0q28 -14 56 0" fill="none" stroke="#0f766e" stroke-width="1.6"/>
+        </g>
+        <g transform="translate(0,141)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Kussmaul<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · profunda y rápida: acidosis metabólica</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0q16 -22 31 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
+        </g>
+        <g transform="translate(0,188)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Cheyne-Stokes<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · ciclos crescendo–decrescendo con apnea</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q7 -3 14 0q7 -7 14 0q7 -13 14 0q7 -19 14 0q7 -22 14 0q7 -18 14 0q7 -12 14 0q7 -6 14 0q7 -2 14 0l40 0q7 -3 14 0q7 -7 14 0q7 -13 14 0q7 -19 14 0q7 -22 14 0q7 -18 14 0q7 -12 14 0q7 -6 14 0q7 -2 14 0l30 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
+        </g>
+        <g transform="translate(0,235)">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#b3261e">Biot<tspan font-weight="normal" font-size="7.4" fill="#64748b"> · salvas irregulares con apneas: lesión bulbar</tspan></text>
+          <path d="M4 40H356" stroke="#eef3f7" stroke-width="1"/>
+          <path d="M4 40q8 -18 16 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l44 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l40 0q8 -18 16 0q8 -18 16 0q8 -18 16 0q8 -18 16 0l30 0" fill="none" stroke="#b3261e" stroke-width="1.6"/>
+        </g>
+      </g>
+      </svg>
+      <figcaption><b>Figura 7.</b> Patrones respiratorios (esquema propio). Los tres inferiores obligan a avisar: traducen acidosis metabólica grave o compromiso del centro respiratorio.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Herramientas de vigilancia respiratoria a la cabecera</h3>
+  <div class="g3">
+    <div class="box">
+      <h4>Índice ROX</h4>
+      <p class="small mono" style="text-align:center;color:var(--navy);margin:1mm 0">ROX = (SpO₂/FiO₂) ÷ FR</p>
+      <p class="small" style="margin-bottom:0">Se usa en pacientes con <b>cánula nasal de alto flujo</b>. Valores bajos o que no mejoran a las 2–6–12 h anticipan fracaso y necesidad de intubación. Un <b>ROX ≥ 4,88</b> a las 12 h se asocia a menor riesgo de fracaso.</p>
+    </div>
+    <div class="box">
+      <h4>Puntajes de alerta temprana (NEWS2 / MEWS)</h4>
+      <p class="small" style="margin-bottom:0">Integran FR, SpO₂, PA, FC, temperatura y conciencia en un puntaje único. Sirven en sala general para <b>activar al equipo de respuesta rápida</b> antes del colapso. La FR es la variable de mayor peso.</p>
+    </div>
+    <div class="box">
+      <h4>Auscultación y ecografía pulmonar</h4>
+      <p class="small" style="margin-bottom:0">La auscultación sigue siendo monitorización: crépitos nuevos, sibilancias o abolición unilateral cambian la conducta. La <b>ecografía pulmonar</b> a la cabecera (líneas B, derrame, consolidación) hoy es parte del estándar y fue incorporada como criterio de imagen en la definición global de SDRA de 2024.</p>
+    </div>
+  </div>
+
+  <div class="g12">
+    <div class="pearl" style="margin-bottom:0">
+      <h4>Perla clínica</h4>
+      <p class="small" style="margin-bottom:0">Un paciente que <b>deja de estar taquipneico sin haber mejorado</b> no está mejor: puede estar agotándose. La caída de la FR en un paciente que venía luchando, junto con somnolencia, es un signo preterminal. Avise, no espere el siguiente control.</p>
+    </div>
+    <div class="note" style="margin-bottom:0">
+      <h4>Registro correcto</h4>
+      <p class="small" style="margin-bottom:0">Anote FR real contada, SpO₂ <b>con la FiO₂ o el dispositivo de oxígeno usado</b> ("SpO₂ 94 % con mascarilla al 40 %"), patrón respiratorio y trabajo respiratorio. Una SpO₂ sin FiO₂ es un dato incompleto.</p>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>6</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 7 · CAPNOGRAFÍA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 5 · Función ventilatoria y respiratoria (2 de 3)</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2>5.2 · Capnografía: el monitor de la ventilación</h2>
+  <p>La capnografía mide el <strong>CO₂ espirado</strong> y muestra su valor al final de la espiración (EtCO₂, normal <span class="mono">35–45 mmHg</span>) junto con una curva. Es el único parámetro de cabecera que informa <strong>simultáneamente sobre ventilación, perfusión y metabolismo</strong>: para que aparezca CO₂ en la boca, el organismo debe producirlo (metabolismo), la sangre debe transportarlo al pulmón (gasto cardíaco) y el paciente debe ventilar (vía aérea permeable). Por eso una caída brusca del EtCO₂ nunca es un dato menor.</p>
+
+  <figure class="fig-frame">
+    <svg viewBox="0 0 700 150" role="img" aria-label="Capnograma normal con sus cuatro fases">
+      <g font-family="Liberation Sans, Arial">
+        <path d="M40 124H340M40 124V22" stroke="#334155" stroke-width="1.2"/>
+        <g font-size="8" fill="#64748b">
+          <text x="34" y="127" text-anchor="end">0</text><text x="34" y="52" text-anchor="end">40</text><text x="34" y="30" text-anchor="end">50</text>
+        </g>
+        <text x="14" y="76" font-size="8.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 76)">CO₂ (mmHg)</text>
+        <text x="190" y="142" font-size="8.6" text-anchor="middle" fill="#41566a">Tiempo →</text>
+        <path d="M40 55H340" stroke="#cbd5e1" stroke-width=".8" stroke-dasharray="3 3"/>
+        <!-- capnograma normal -->
+        <path d="M44 124h30l6-2 8-52 10-14 12-4h60l3 2v2h20l16 54 6 12h40l6-2 8-52 10-14 12-4h44"
+              fill="none" stroke="#a75a00" stroke-width="2.2"/>
+        <g font-size="8.6" font-weight="bold" fill="#12466e">
+          <text x="52" y="118">I</text><text x="86" y="86">II</text><text x="150" y="42">III</text><text x="214" y="86">0</text>
+        </g>
+        <g font-size="8.4" fill="#41566a">
+          <text x="360" y="34" font-weight="bold" fill="#12466e">Fases del capnograma</text>
+          <text x="360" y="50"><tspan font-weight="bold">I</tspan> · espacio muerto anatómico: gas sin CO₂ (línea basal en 0)</text>
+          <text x="360" y="66"><tspan font-weight="bold">II</tspan> · ascenso rápido: mezcla de espacio muerto y gas alveolar</text>
+          <text x="360" y="82"><tspan font-weight="bold">III</tspan> · meseta alveolar, ligeramente ascendente</text>
+          <text x="360" y="98"><tspan font-weight="bold">EtCO₂</tspan> · valor máximo al final de la meseta (punto de lectura)</text>
+          <text x="360" y="114"><tspan font-weight="bold">0</tspan> · descenso inspiratorio: entra gas fresco sin CO₂</text>
+          <text x="360" y="134" fill="#b3261e">Una basal que no vuelve a 0 = reinhalación de CO₂ (revise el circuito y la cal sodada)</text>
+        </g>
+        <circle cx="212" cy="47" r="3" fill="#b3261e"/><text x="196" y="42" font-size="8" fill="#b3261e" font-weight="bold">EtCO₂</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 8.</b> Capnograma normal (esquema propio). La forma importa tanto como el número: el valor de EtCO₂ sin la curva puede inducir a error.</figcaption>
+  </figure>
+
+  <h3>Curvas anormales que debe reconocer</h3>
+  <figure class="fig-frame">
+    <svg viewBox="0 0 700 130" role="img" aria-label="Capnogramas anormales: obstructivo, desconexión, esfuerzo respiratorio y retorno de circulación espontánea">
+      <g font-family="Liberation Sans, Arial" font-size="8.4">
+        <!-- 1 obstructivo -->
+        <g>
+          <text x="4" y="12" font-weight="bold" fill="#b3261e">A · "Aleta de tiburón"</text>
+          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
+          <path d="M8 92h14c16 0 26-22 34-34 8-12 14-14 22-16h4v46h14c16 0 26-22 34-34 8-12 14-14 22-16h4v46h6"
+                fill="none" stroke="#a75a00" stroke-width="1.8"/>
+          <text x="4" y="108" fill="#41566a">Broncoespasmo, EPOC: fase II y III</text>
+          <text x="4" y="117" fill="#41566a">con pendiente prolongada</text>
+        </g>
+        <!-- 2 desconexión -->
+        <g transform="translate(178,0)">
+          <text x="4" y="12" font-weight="bold" fill="#b3261e">B · Caída brusca a cero</text>
+          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
+          <path d="M8 92h6l4-42h24l4 42h10l4-42h24l4 42h10l4-42h10l-2 42h60"
+                fill="none" stroke="#a75a00" stroke-width="1.8"/>
+          <path d="M116 30V96" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="4" y="108" fill="#b3261e">Extubación, desconexión, obstrucción</text>
+          <text x="4" y="117" fill="#b3261e">total del tubo o paro cardíaco</text>
+        </g>
+        <!-- 3 curare -->
+        <g transform="translate(352,0)">
+          <text x="4" y="12" font-weight="bold" fill="#a75a00">C · Muesca en la meseta</text>
+          <path d="M4 92H166" stroke="#cbd5e1" stroke-width=".8"/>
+          <path d="M8 92h6l4-42h14l3 8 3-8h14l4 42h12l4-42h14l3 8 3-8h14l4 42h12l4-42h14l3 8 3-8h14l4 42h6"
+                fill="none" stroke="#a75a00" stroke-width="1.8"/>
+          <text x="4" y="108" fill="#41566a">Esfuerzo inspiratorio del paciente</text>
+          <text x="4" y="117" fill="#41566a">(asincronía / relajación que cede)</text>
+        </g>
+        <!-- 4 ROSC -->
+        <g transform="translate(526,0)">
+          <text x="4" y="12" font-weight="bold" fill="#15803d">D · Ascenso súbito en RCP</text>
+          <path d="M4 92H170" stroke="#cbd5e1" stroke-width=".8"/>
+          <path d="M8 92h4l3-12h12l3 12h8l3-12h12l3 12h8l3-12h12l3 12h8l3-46h14l3 46h10l3-46h14l3 46h10l3-46h14l3 46h6"
+                fill="none" stroke="#15803d" stroke-width="1.8"/>
+          <path d="M96 24V96" stroke="#15803d" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="4" y="108" fill="#15803d">EtCO₂ que sube bruscamente durante</text>
+          <text x="4" y="117" fill="#15803d">la RCP sugiere retorno de circulación</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>Figura 9.</b> Morfologías anormales (esquemas propios). Ante cualquiera de ellas: evalúe al paciente antes de tocar el equipo.</figcaption>
+  </figure>
+
+  <div class="g21">
+    <div>
+      <h3>Usos clínicos de la capnografía</h3>
+      <table class="compact">
+        <tr><th style="width:34%">Escenario</th><th>Qué aporta</th></tr>
+        <tr><td><b>Confirmación de intubación</b></td><td>Estándar de oro a la cabecera: la presencia de curva sostenida en 6 ventilaciones confirma la posición traqueal. La auscultación por sí sola no basta</td></tr>
+        <tr><td><b>Reanimación cardiopulmonar</b></td><td>Recomendada en las guías del ERC 2021: EtCO₂ persistentemente &lt; 10 mmHg indica compresiones ineficaces o mal pronóstico; un ascenso brusco sugiere retorno de circulación espontánea</td></tr>
+        <tr><td><b>Sedación y analgesia</b></td><td>Detecta apnea e hipoventilación <b>antes</b> de que caiga la SpO₂, sobre todo si el paciente recibe oxígeno</td></tr>
+        <tr><td><b>Ventilación mecánica</b></td><td>Vigila desconexiones, extubación accidental y cambios del espacio muerto</td></tr>
+        <tr><td><b>Transporte intrahospitalario</b></td><td>Vigilancia continua de la vía aérea cuando la auscultación es imposible</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Gradiente PaCO₂ – EtCO₂</h4>
+        <p class="small" style="margin-bottom:0">Normalmente el EtCO₂ es <b>2–5 mmHg menor</b> que la PaCO₂. Un gradiente que se amplía traduce <b>aumento del espacio muerto</b>: embolia pulmonar, hipovolemia, bajo gasto cardíaco o SDRA. No ajuste el ventilador sólo por EtCO₂ sin correlacionar con gasometría.</p>
+      </div>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Interpretación rápida del EtCO₂ bajo</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li><b>Súbito a 0:</b> desconexión, extubación, obstrucción, paro.</li>
+          <li><b>Descenso gradual:</b> hiperventilación, hipotermia, caída del gasto cardíaco.</li>
+          <li><b>Descenso con hipotensión:</b> piense en shock o embolia.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>7</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 8 · VENTILACIÓN MECÁNICA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 5 · Función ventilatoria y respiratoria (3 de 3)</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2>5.3 · Monitorización del paciente en ventilación mecánica</h2>
+  <p>Cuando el paciente está conectado a un ventilador, el equipo pasa a ser también un <strong>monitor</strong>: entrega presiones, volúmenes, flujos y curvas en tiempo real. Usted no programa el ventilador, pero sí debe <strong>leer sus números, reconocer una alarma peligrosa y describir lo que ve</strong>.</p>
+
+  <div class="g21">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 420 252" role="img" aria-label="Curvas de presión-tiempo y flujo-tiempo del ventilador con pausa inspiratoria">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Presión / tiempo (con pausa inspiratoria)</text>
+          <path d="M40 112H414M40 112V20" stroke="#334155" stroke-width="1.1"/>
+          <text x="14" y="66" font-size="8" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 66)">cmH₂O</text>
+          <path d="M40 96H414" stroke="#0e7490" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="44" y="108" font-size="8.4" font-weight="bold" fill="#0e7490">PEEP</text>
+          <path d="M44 96l6-2 36-62 6 14h34l4 8 10 22 12 12 14 6 10 2h12l6-2 36-62 6 14h34l4 8 10 22 12 12 14 6 10 2h14"
+                fill="none" stroke="#12466e" stroke-width="2"/>
+          <circle cx="86" cy="32" r="3.2" fill="#b3261e"/><text x="58" y="28" font-size="8.4" font-weight="bold" fill="#b3261e">P pico</text>
+          <circle cx="112" cy="46" r="3.2" fill="#a75a00"/><text x="118" y="42" font-size="8.4" font-weight="bold" fill="#a75a00">P meseta (pausa)</text>
+          <path d="M338 46V96" stroke="#5b3fa8" stroke-width="1.4"/>
+          <path d="M334 52l4-6 4 6zM334 90l4 6 4-6z" fill="#5b3fa8"/>
+          <path d="M296 46h44M296 96h44" stroke="#5b3fa8" stroke-width=".7" stroke-dasharray="3 2"/>
+          <text x="346" y="66" font-size="8.4" font-weight="bold" fill="#5b3fa8">Driving</text>
+          <text x="346" y="76" font-size="8.4" font-weight="bold" fill="#5b3fa8">pressure</text>
+          <text x="346" y="86" font-size="7.6" fill="#5b3fa8">P meseta − PEEP</text>
+
+          <text x="4" y="146" font-size="9" font-weight="bold" fill="#12466e">Flujo / tiempo</text>
+          <path d="M40 196H414M40 232V160" stroke="#334155" stroke-width="1.1"/>
+          <text x="14" y="196" font-size="8" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 196)">L/min</text>
+          <path d="M44 196h4l4-26h60l4 26h4l6 30 16-12 18-8 16-4h14M204 196h4l4-26h60l4 26h4l6 30 16-12 18-8 16-4h16"
+                fill="none" stroke="#15803d" stroke-width="1.8"/>
+          <text x="66" y="166" font-size="8" fill="#15803d">inspiración</text>
+          <text x="150" y="216" font-size="8" fill="#15803d">espiración</text>
+          <text x="4" y="246" font-size="8" fill="#b3261e">Si el flujo espiratorio no alcanza la línea de cero antes de la siguiente inspiración → auto-PEEP (atrapamiento aéreo).</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 10.</b> Curvas básicas del ventilador (esquema propio). La <b>presión pico</b> depende de la vía aérea (secreciones, broncoespasmo, mordida del tubo); la <b>presión meseta</b> refleja la distensibilidad del pulmón.</figcaption>
+    </figure>
+
+    <div>
+      <h3>Los números que debe leer en cada turno</h3>
+      <table class="compact">
+        <tr><th style="width:42%">Parámetro</th><th>Referencia de seguridad</th></tr>
+        <tr><td>Volumen corriente (Vt)</td><td><b>6 ml/kg</b> de peso <b>predicho</b> (no el real) en pulmón agudo</td></tr>
+        <tr><td>Presión meseta</td><td><b>&lt; 30 cmH₂O</b></td></tr>
+        <tr><td>Driving pressure</td><td><b>≤ 15 cmH₂O</b> (menor presión, menor mortalidad en SDRA)</td></tr>
+        <tr><td>PEEP</td><td>Según protocolo/oxigenación; nunca desconectar sin motivo</td></tr>
+        <tr><td>FiO₂</td><td>La mínima para la meta de SpO₂</td></tr>
+        <tr><td>Volumen minuto</td><td>Comparar con el basal del paciente</td></tr>
+        <tr><td>Presión del cuff</td><td><b>20–30 cmH₂O</b>, medida con manómetro cada turno</td></tr>
+      </table>
+      <div class="tip" style="margin-bottom:0">
+        <h4>Cabecera 30–45° y evaluación diaria del destete</h4>
+        <p class="small" style="margin-bottom:0">Ambas son medidas de enfermería que se apoyan en la monitorización. El <b>índice de respiración rápida y superficial</b> (Tobin: FR ÷ Vt en litros) &lt; 105 durante una prueba de ventilación espontánea predice éxito de extubación.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="alert" style="margin-bottom:0">
+      <h4>Alarma de presión alta: piense DOPES</h4>
+      <table class="compact" style="margin-bottom:0">
+        <tr><td><b>D</b></td><td>Desplazamiento del tubo (endobronquial o extubación)</td></tr>
+        <tr><td><b>O</b></td><td>Obstrucción: secreciones, mordida, acodamiento</td></tr>
+        <tr><td><b>P</b></td><td>Pneumotórax (neumotórax a tensión)</td></tr>
+        <tr><td><b>E</b></td><td>Equipo: falla del ventilador o del circuito</td></tr>
+        <tr><td><b>S</b></td><td>"Stacking": atrapamiento aéreo / auto-PEEP</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Asincronías paciente–ventilador</h4>
+        <p class="small" style="margin-bottom:0">Ocurren cuando el esfuerzo del paciente y el ciclo del ventilador no coinciden. Las más frecuentes son el <b>doble disparo</b> (dos ciclos seguidos sin espiración completa) y los <b>esfuerzos inefectivos</b> (el paciente intenta inspirar y el ventilador no responde). Se reconocen mirando las curvas y al paciente. Se asocian a mayor tiempo de ventilación: informarlas es parte del cuidado, no un detalle técnico.</p>
+      </div>
+      <div class="pearl" style="margin-bottom:0">
+        <h4>Perla clínica</h4>
+        <p class="small" style="margin-bottom:0">Ante un paciente ventilado que se deteriora bruscamente: <b>desconecte y ventile con bolsa autoinflable</b>. Si mejora, el problema es del ventilador o del circuito; si no mejora, el problema es del paciente (DOPES). Es la maniobra diagnóstica más rápida que existe.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>8</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 9 · NEUROMONITORIZACIÓN BÁSICA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 6 · Neuromonitorización básica (1 de 2)</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">6</span>Neuromonitorización clínica: conciencia, pupilas y sedación</h2>
+  <p>El mejor monitor neurológico sigue siendo <strong>un examen clínico repetido por la misma metodología</strong>. Su valor está en la <em>comparación seriada</em>: un GCS de 12 no dice nada por sí solo; un GCS que baja de 14 a 12 en dos horas es una emergencia.</p>
+
+  <div class="g2">
+    <div>
+      <h3>Escala de Coma de Glasgow (GCS)</h3>
+      <table class="compact">
+        <tr><th style="width:12%">Pts</th><th style="width:29%">Ocular (O)</th><th style="width:31%">Verbal (V)</th><th>Motora (M)</th></tr>
+        <tr><td class="tc"><b>6</b></td><td>—</td><td>—</td><td>Obedece órdenes</td></tr>
+        <tr><td class="tc"><b>5</b></td><td>—</td><td>Orientado</td><td>Localiza el dolor</td></tr>
+        <tr><td class="tc"><b>4</b></td><td>Espontánea</td><td>Confuso</td><td>Retira al dolor</td></tr>
+        <tr><td class="tc"><b>3</b></td><td>Al llamado</td><td>Palabras inapropiadas</td><td>Flexión anormal (decorticación)</td></tr>
+        <tr><td class="tc"><b>2</b></td><td>Al dolor</td><td>Sonidos incomprensibles</td><td>Extensión anormal (descerebración)</td></tr>
+        <tr><td class="tc"><b>1</b></td><td>Ausente</td><td>Ausente</td><td>Ausente</td></tr>
+      </table>
+      <p class="small"><b>Registre siempre desglosado</b> (p. ej. O3 V4 M6 = 13). Si el paciente está intubado, la verbal se consigna como <span class="mono">V1t</span> o "no evaluable". Gravedad: <b>leve 14–15 · moderado 9–13 · grave ≤ 8</b> (umbral clásico de protección de vía aérea).</p>
+      <div class="box" style="margin-bottom:0">
+        <h4>GCS-P: la versión que incorpora las pupilas</h4>
+        <p class="small mono" style="text-align:center;color:var(--navy);margin:1mm 0">GCS-P = GCS − PRS</p>
+        <p class="small" style="margin-bottom:0">PRS (puntaje de reactividad pupilar) resta <b>0</b> si ambas pupilas reaccionan, <b>1</b> si sólo una, y <b>2</b> si ninguna. Permite discriminar mejor a los pacientes más graves, que antes se agrupaban todos en "GCS 3".</p>
+      </div>
+    </div>
+
+    <div>
+      <figure class="fig-frame" style="margin-bottom:2mm">
+        <svg viewBox="0 0 340 196" role="img" aria-label="Escala de tamaño pupilar en milímetros y patrones pupilares patológicos">
+          <g font-family="Liberation Sans, Arial">
+            <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Escala de tamaño pupilar (mm)</text>
+            <g>
+              <circle cx="26" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="34" r="2" fill="#111"/>
+              <circle cx="70" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="70" cy="34" r="3" fill="#111"/>
+              <circle cx="114" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="114" cy="34" r="4" fill="#111"/>
+              <circle cx="158" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="158" cy="34" r="5" fill="#111"/>
+              <circle cx="202" cy="34" r="9" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="202" cy="34" r="6" fill="#111"/>
+              <circle cx="246" cy="34" r="9.5" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="246" cy="34" r="7" fill="#111"/>
+              <circle cx="292" cy="34" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="292" cy="34" r="8.4" fill="#111"/>
+            </g>
+            <g font-size="8" fill="#41566a" text-anchor="middle">
+              <text x="26" y="52">2</text><text x="70" y="52">3</text><text x="114" y="52">4</text><text x="158" y="52">5</text>
+              <text x="202" y="52">6</text><text x="246" y="52">7</text><text x="292" y="52">8</text>
+            </g>
+            <text x="4" y="74" font-size="9" font-weight="bold" fill="#b3261e">Patrones que obligan a avisar</text>
+            <g>
+              <circle cx="26" cy="100" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="100" r="3" fill="#111"/>
+              <circle cx="52" cy="100" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="100" r="8" fill="#111"/>
+              <text x="72" y="94" font-size="8.6" font-weight="bold" fill="#b3261e">Anisocoria con midriasis</text>
+              <text x="72" y="105" font-size="8.2" fill="#41566a">unilateral arreactiva → compresión del III par:</text>
+              <text x="72" y="115" font-size="8.2" fill="#41566a">herniación en curso</text>
+            </g>
+            <g>
+              <circle cx="26" cy="142" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="142" r="1.6" fill="#111"/>
+              <circle cx="52" cy="142" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="142" r="1.6" fill="#111"/>
+              <text x="72" y="138" font-size="8.6" font-weight="bold" fill="#a75a00">Mióticas puntiformes</text>
+              <text x="72" y="149" font-size="8.2" fill="#41566a">opioides, lesión pontina</text>
+            </g>
+            <g>
+              <circle cx="26" cy="178" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="26" cy="178" r="8.4" fill="#111"/>
+              <circle cx="52" cy="178" r="10" fill="#f7e7dd" stroke="#8a6a58"/><circle cx="52" cy="178" r="8.4" fill="#111"/>
+              <text x="72" y="174" font-size="8.6" font-weight="bold" fill="#b3261e">Midriasis bilateral arreactiva</text>
+              <text x="72" y="185" font-size="8.2" fill="#41566a">hipoxia grave, fármacos, lesión mesencefálica</text>
+            </g>
+          </g>
+        </svg>
+        <figcaption><b>Figura 11.</b> Esquema propio. Evalúe <b>tamaño, simetría y reactividad</b> con luz directa y consensual, en penumbra, y documente en milímetros, no como "normales".</figcaption>
+      </figure>
+      <div class="note" style="margin-bottom:0">
+        <h4>Pupilometría cuantitativa (NPi)</h4>
+        <p class="small" style="margin-bottom:0">El pupilómetro automatizado mide tamaño, velocidad y latencia de la respuesta a la luz, y entrega el <b>índice pupilar neurológico (NPi)</b>: <b>≥ 3 normal</b>, <b>&lt; 3 anormal</b>, <b>0 sin respuesta</b>. Elimina la variabilidad entre observadores y detecta deterioro antes que el ojo humano; la evidencia reciente lo asocia a la detección precoz de herniación cerebral. Aún no está en todas las unidades, pero su uso crece.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div>
+      <h3>Sedación: escala RASS</h3>
+      <table class="compact">
+        <tr><th style="width:14%">Punt.</th><th style="width:32%">Término</th><th>Descripción</th></tr>
+        <tr><td class="tc"><b>+4</b></td><td>Combativo</td><td>Violento, peligro inmediato</td></tr>
+        <tr><td class="tc"><b>+3</b></td><td>Muy agitado</td><td>Se retira dispositivos, agresivo</td></tr>
+        <tr><td class="tc"><b>+2</b></td><td>Agitado</td><td>Movimientos frecuentes, lucha con el ventilador</td></tr>
+        <tr><td class="tc"><b>+1</b></td><td>Inquieto</td><td>Ansioso, sin movimientos agresivos</td></tr>
+        <tr style="background:#eef7f1"><td class="tc"><b>0</b></td><td><b>Alerta y tranquilo</b></td><td>Meta habitual</td></tr>
+        <tr style="background:#eef7f1"><td class="tc"><b>−1</b></td><td>Somnoliento</td><td>Despierta &gt; 10 s al llamado, mantiene la mirada</td></tr>
+        <tr style="background:#eef7f1"><td class="tc"><b>−2</b></td><td>Sedación leve</td><td>Despierta &lt; 10 s con contacto visual</td></tr>
+        <tr><td class="tc"><b>−3</b></td><td>Sedación moderada</td><td>Movimiento al llamado, sin contacto visual</td></tr>
+        <tr><td class="tc"><b>−4</b></td><td>Sedación profunda</td><td>Sólo responde al estímulo físico</td></tr>
+        <tr><td class="tc"><b>−5</b></td><td>No despertable</td><td>Sin respuesta a voz ni estímulo físico</td></tr>
+      </table>
+      <p class="small" style="margin-bottom:0">La meta en la mayoría de los pacientes ventilados es <b>RASS 0 a −2</b> (sedación superficial). La sedación profunda innecesaria prolonga la ventilación y aumenta el delirium.</p>
+    </div>
+    <div>
+      <h3>Dolor y delirium: también se monitorizan</h3>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Dolor</h4>
+        <p class="small" style="margin-bottom:0">Si el paciente comunica: <b>escala numérica (EVA/END)</b>. Si no puede comunicarse: <b>ESCID o CPOT</b>, basadas en expresión facial, tono muscular, movimientos y adaptación al ventilador. Las constantes vitales por sí solas <b>no</b> son un indicador válido de dolor.</p>
+      </div>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Delirium</h4>
+        <p class="small" style="margin-bottom:0"><b>CAM-ICU</b> o <b>ICDSC</b>, al menos una vez por turno. El delirium hipoactivo —el más frecuente— pasa desapercibido si no se busca activamente. La actualización 2025 de las guías de la SCCM sobre dolor, ansiedad, sedación, delirium, inmovilidad y sueño refuerza la movilización precoz y el manejo no farmacológico.</p>
+      </div>
+      <div class="pearl" style="margin-bottom:0">
+        <h4>Perla clínica</h4>
+        <p class="small" style="margin-bottom:0">Antes de atribuir agitación a "delirium", descarte causas tratables: dolor, globo vesical, hipoxemia, hipoglicemia, abstinencia, hipercapnia y mala posición del tubo. Es el error más frecuente y el más fácil de evitar.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>9</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 10 · PIC + HEMODINAMIA BÁSICA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 6–7 · Presión intracraneal y perfusión</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2>6.2 · Hipertensión intracraneal: de lo clínico a lo invasivo</h2>
+  <div class="g21">
+    <div>
+      <p class="small">El cráneo es una caja rígida que contiene <strong>parénquima, sangre y líquido cefalorraquídeo</strong> (doctrina de Monro-Kellie). Si uno de esos volúmenes aumenta, los otros deben disminuir; cuando esa compensación se agota, la presión intracraneal (PIC) se dispara. Valor normal: <span class="mono">5–15 mmHg</span>; se considera <strong>hipertensión intracraneal sobre 20–22 mmHg</strong> sostenidos.</p>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>La fórmula que debe saber de memoria</h4>
+        <p class="mono" style="text-align:center;font-size:11pt;margin:1mm 0;color:var(--navy)">PPC = PAM − PIC</p>
+        <p class="small" style="margin-bottom:0">La <b>presión de perfusión cerebral (PPC)</b> se mantiene habitualmente entre <b>60 y 70 mmHg</b>. Consecuencia práctica: <b>la hipotensión arterial mata neuronas tan rápido como la PIC elevada</b>. Cuidar la PAM es cuidar el cerebro.</p>
+      </div>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Tríada de Cushing (signo tardío)</h4>
+        <p class="small" style="margin-bottom:0"><b>Hipertensión arterial + bradicardia + respiración irregular</b>, junto con deterioro de conciencia y anisocoria. Cuando aparece, la herniación ya está en curso: es una emergencia inmediata, no un hallazgo para el próximo control.</p>
+      </div>
+    </div>
+
+    <figure class="fig-frame">
+      <svg viewBox="0 0 340 162" role="img" aria-label="Curva presión-volumen intracraneal y morfología de la onda de PIC">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="8.8" font-weight="bold" fill="#12466e">Curva presión–volumen intracraneal</text>
+          <path d="M32 106H150M32 106V22" stroke="#334155" stroke-width="1.1"/>
+          <path d="M36 102C66 100 96 96 116 84C130 74 138 50 144 24" fill="none" stroke="#12466e" stroke-width="2"/>
+          <text x="42" y="94" font-size="7.6" fill="#15803d">compensación</text>
+          <text x="148" y="52" font-size="7.6" fill="#b3261e" text-anchor="end">descompensación</text>
+          <text x="92" y="120" font-size="7.6" text-anchor="middle" fill="#41566a">Volumen añadido →</text>
+          <text x="14" y="64" font-size="7.6" text-anchor="middle" fill="#41566a" transform="rotate(-90 14 64)">PIC</text>
+          <text x="176" y="12" font-size="8.8" font-weight="bold" fill="#12466e">Onda de PIC</text>
+          <path d="M176 66h158" stroke="#e2e8f0" stroke-width="1"/>
+          <path d="M178 64l6-38 6 10 8 5 8 8 8 3 6 6 8 6h8l6-38 6 10 8 5 8 8 8 3 6 6 8 6h8l6-38 6 10 8 5 8 8 8 3 6 6 8 6"
+                fill="none" stroke="#0e7490" stroke-width="1.6"/>
+          <g font-size="7.8" font-weight="bold" fill="#0e7490">
+            <text x="180" y="24">P1</text><text x="193" y="36">P2</text><text x="208" y="47">P3</text>
+          </g>
+          <text x="188" y="84" font-size="7.8" fill="#41566a">Normal: P1 &gt; P2 &gt; P3 (escalón descendente)</text>
+          <path d="M176 140h158" stroke="#e2e8f0" stroke-width="1"/>
+          <path d="M178 138l6-24 4 4 6-18 8 8 8 5 6 6 8 5h8l6-24 4 4 6-18 8 8 8 5 6 6 8 5h8l6-24 4 4 6-18 8 8 8 5 6 6 8 5"
+                fill="none" stroke="#b3261e" stroke-width="1.6"/>
+          <text x="176" y="158" font-size="7.8" fill="#b3261e">P2 &gt; P1 = distensibilidad cerebral agotada</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 12.</b> Esquemas propios. La morfología de la onda de PIC informa sobre la reserva del cerebro antes de que el valor numérico se eleve.</figcaption>
+      <div class="tip" style="margin:2mm 0 0">
+        <h4>Cuidados de enfermería en riesgo de HTIC</h4>
+        <p class="small" style="margin-bottom:0">Cabecera a 30°, cabeza en línea media, evitar collares o fijaciones que compriman el retorno venoso yugular, agrupar cuidados, evitar aspiración prolongada, mantener normotermia, normoglicemia y normocapnia.</p>
+      </div>
+    </figure>
+  </div>
+
+  <div class="note" style="margin-bottom:2.5mm">
+    <h4>Neuromonitorización avanzada · sólo para reconocerla</h4>
+    <div class="small" style="display:grid;grid-template-columns:1fr 1fr;gap:.5mm 5mm">
+      <div><b>PIC invasiva:</b> catéter intraventricular (permite además drenar LCR; es el estándar) o sensor intraparenquimatoso.</div>
+      <div><b>EEG continuo:</b> detecta convulsiones no convulsivas, causa frecuente de coma inexplicado.</div>
+      <div><b>BIS / índice biespectral:</b> profundidad de sedación, útil con bloqueo neuromuscular.</div>
+      <div><b>NIRS:</b> oximetría cerebral regional no invasiva por espectroscopía de luz cercana al infrarrojo.</div>
+      <div><b>Doppler transcraneal:</b> velocidad de flujo cerebral, vasoespasmo en la hemorragia subaracnoidea.</div>
+      <div><b>SjvO₂ / PtiO₂:</b> oxigenación cerebral global o tisular, en unidades neurocríticas.</div>
+    </div>
+  </div>
+
+  <h2><span class="num">7</span>Monitorización hemodinámica básica: mirar la perfusión, no sólo la presión</h2>
+  <p>Un paciente puede tener PA "normal" y estar en shock. Lo que define el shock no es la cifra de presión, sino la <strong>incapacidad de entregar oxígeno a los tejidos</strong>. Por eso la monitorización hemodinámica básica se apoya en signos de perfusión, todos accesibles sin tecnología compleja.</p>
+
+  <table class="compact">
+    <tr><th style="width:19%">Parámetro</th><th style="width:22%">Cómo se obtiene</th><th style="width:20%">Valor esperado</th><th>Qué significa si está alterado</th></tr>
+    <tr><td><b>Llene capilar</b></td><td>Presión firme 10 s sobre la falange distal del índice; cronometrar</td><td>≤ 3 segundos</td><td>Prolongado = vasoconstricción/hipoperfusión. Estandarizado en el estudio ANDROMEDA-SHOCK como meta de reanimación; se normaliza rápido cuando la reanimación funciona</td></tr>
+    <tr><td><b>Moteado cutáneo (livedo)</b></td><td>Inspección de rodillas y muslos</td><td>Ausente</td><td>Extensión creciente = peor pronóstico en shock séptico</td></tr>
+    <tr><td><b>Diuresis horaria</b></td><td>Medición horaria en el paciente crítico</td><td>≥ 0,5 ml/kg/h</td><td>Oliguria = hipoperfusión renal, hipovolemia o daño renal agudo</td></tr>
+    <tr><td><b>Lactato arterial</b></td><td>Gasometría seriada</td><td>&lt; 2 mmol/L</td><td>Elevado o que no desciende = hipoperfusión persistente. Su <b>aclaramiento</b> es una meta de reanimación en sepsis</td></tr>
+    <tr><td><b>SvcO₂</b></td><td>Muestra desde la vía distal de un CVC</td><td>70–75 %</td><td>Baja = extracción aumentada (bajo gasto, anemia, hipoxemia). Alta con lactato alto = falla de utilización mitocondrial o shunt</td></tr>
+    <tr><td><b>Diferencia venoarterial de CO₂ (ΔPCO₂)</b></td><td>PCO₂ venosa central − arterial</td><td>≤ 6 mmHg</td><td>Aumentada = flujo sanguíneo insuficiente para lavar el CO₂ producido</td></tr>
+  </table>
+
+  <div class="tip" style="margin-bottom:0">
+    <h4>Cómo integrar</h4>
+    <p class="small" style="margin-bottom:0">Piense en tres ventanas de perfusión: <b>piel</b> (llene capilar, moteado, temperatura), <b>riñón</b> (diuresis) y <b>cerebro</b> (estado de conciencia). Si las tres están indemnes, es improbable que exista hipoperfusión grave, cualquiera sea el número de la pantalla.</p>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>10</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 11 · LÍNEA ARTERIAL =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 8 · Monitorización invasiva (1 de 3): línea arterial</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <div class="kicker">Pinceladas · reconocer, no dominar</div>
+  <h2><span class="num">8</span>Línea arterial (LA): presión latido a latido</h2>
+  <p>Un catéter en una arteria periférica —habitualmente <strong>radial</strong>, alternativamente femoral o braquial— se conecta a un sistema con suero presurizado, un <strong>transductor</strong> que convierte la presión mecánica en señal eléctrica y un cable al monitor. Entrega PA continua, morfología de onda y acceso para gasometrías arteriales sin nuevas punciones.</p>
+
+  <div class="g2">
+    <figure class="fig-frame">
+      <svg viewBox="0 0 340 172" role="img" aria-label="Componentes de la onda de presión arterial invasiva">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Onda de presión arterial normal</text>
+          <path d="M34 124H336M34 124V26" stroke="#334155" stroke-width="1.1"/>
+          <g font-size="8" fill="#64748b">
+            <text x="30" y="38" text-anchor="end">120</text><text x="30" y="80" text-anchor="end">80</text><text x="30" y="120" text-anchor="end">40</text>
+          </g>
+          <path d="M38 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M112 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M186 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10M260 108c6 0 8-2 12-4 4-2 6-66 12-66s10 56 14 64c4 8 8 4 10 10 3 8 6 4 8-6 2-8 4-14 8-14s6 8 10 10"
+                fill="none" stroke="#b3261e" stroke-width="1.9"/>
+          <circle cx="62" cy="42" r="3" fill="#12466e"/>
+          <path d="M64 40L96 30" stroke="#12466e" stroke-width=".8"/>
+          <text x="98" y="32" font-size="8.2" font-weight="bold" fill="#12466e">Pico sistólico</text>
+          <circle cx="98" cy="102" r="3.4" fill="#5b3fa8"/>
+          <circle cx="172" cy="102" r="3.4" fill="#5b3fa8"/>
+          <circle cx="246" cy="102" r="3.4" fill="#5b3fa8"/>
+          <circle cx="8" cy="140" r="3.4" fill="#5b3fa8"/>
+          <text x="16" y="143" font-size="8" fill="#5b3fa8" font-weight="bold">Muesca dícrota</text>
+          <text x="98" y="143" font-size="8" fill="#5b3fa8">(cierre de la válvula aórtica)</text>
+          <text x="4" y="156" font-size="8" fill="#41566a">El área bajo la curva y la pendiente de ascenso se relacionan</text>
+          <text x="4" y="166" font-size="8" fill="#41566a">con el volumen sistólico y la contractilidad.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 13.</b> Esquema propio.</figcaption>
+    </figure>
+
+    <figure class="fig-frame">
+      <svg viewBox="0 0 340 176" role="img" aria-label="Prueba de onda cuadrada: respuesta normal, subamortiguada y sobreamortiguada">
+        <g font-family="Liberation Sans, Arial" font-size="8.2">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Prueba de la onda cuadrada (test de cuadratura)</text>
+          <text x="4" y="26" font-size="7.8" fill="#41566a">Tire del dispositivo de lavado rápido 1 segundo y suelte; observe la respuesta.</text>
+          <g transform="translate(0,32)">
+            <text x="4" y="10" font-weight="bold" fill="#15803d">Normal: 1–2 oscilaciones y vuelta a la curva</text>
+            <path d="M6 40h20V16h40v24l6 10-5-8 4 6-2-4h4c6 0 8-14 12-14s8 12 12 14M110 40c4 0 6-14 10-14s8 12 12 14"
+                  fill="none" stroke="#15803d" stroke-width="1.5"/>
+            <text x="150" y="26" fill="#41566a">Señal fiable: puede titular</text>
+            <text x="150" y="36" fill="#41566a">vasoactivos según ese valor.</text>
+          </g>
+          <g transform="translate(0,80)">
+            <text x="4" y="10" font-weight="bold" fill="#a75a00">Subamortiguada: muchas oscilaciones</text>
+            <path d="M6 40h20V16h40v24l6 16-6-14 6 12-5-11 5 9-4-7 4 6-3-5h4c6 0 8-14 12-14s8 12 12 14M110 40c4 0 6-14 10-14s8 12 12 14"
+                  fill="none" stroke="#a75a00" stroke-width="1.5"/>
+            <text x="150" y="26" fill="#41566a">Sobrestima la sistólica. Tubuladura</text>
+            <text x="150" y="36" fill="#41566a">muy larga o rígida, taquicardia.</text>
+          </g>
+          <g transform="translate(0,128)">
+            <text x="4" y="10" font-weight="bold" fill="#b3261e">Sobreamortiguada: sin oscilación</text>
+            <path d="M6 40h20V16h40c4 0 8 18 12 20 6 3 8-6 12-6s8 8 12 10M110 40c4 0 6-12 10-12s8 10 12 12"
+                  fill="none" stroke="#b3261e" stroke-width="1.5"/>
+            <text x="150" y="26" fill="#41566a">Subestima la sistólica. Burbujas,</text>
+            <text x="150" y="36" fill="#41566a">coágulo, acodamiento, bolsa sin presión.</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figura 14.</b> Esquema propio. Compruebe la calidad de la señal antes de titular vasoactivos según ese número.</figcaption>
+    </figure>
+  </div>
+
+  <div class="g12">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 320 132" role="img" aria-label="Nivelación del transductor en el eje flebostático">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Nivelado en el eje flebostático</text>
+          <path d="M20 116h230v8H20z" fill="#dbe6ee" stroke="#9fb4c4"/>
+          <path d="M40 74c30-16 90-22 150-14l24 4v52H40z" fill="#eef4f8" stroke="#9fb4c4"/>
+          <path d="M70 110c0-18 14-30 36-30h60c22 0 34 12 34 30z" fill="#f7e7dd" stroke="#c8a894"/>
+          <circle cx="62" cy="94" r="12" fill="#f7e7dd" stroke="#c8a894"/>
+          <circle cx="150" cy="96" r="3.4" fill="#b3261e"/>
+          <path d="M150 96H268" stroke="#b3261e" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <path d="M150 96V54" stroke="#b3261e" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="156" y="44" font-size="8.4" font-weight="bold" fill="#b3261e">4.º espacio intercostal ×</text>
+          <text x="156" y="54" font-size="8.4" font-weight="bold" fill="#b3261e">línea axilar media</text>
+          <rect x="268" y="88" width="26" height="16" rx="2" fill="#12466e"/>
+          <text x="281" y="100" font-size="8" fill="#fff" text-anchor="middle">T</text>
+          <text x="248" y="82" font-size="8" fill="#12466e">Transductor</text>
+          
+        </g>
+      </svg>
+      <figcaption><b>Figura 15.</b> Esquema propio. Transductor <b>alto</b> → subestima la presión; transductor <b>bajo</b> → la sobrestima (≈ 7,5 mmHg por cada 10 cm de desnivel). Renivele cada vez que cambie la posición de la cama o del paciente, y ponga "cero" al aire ambiente al menos una vez por turno y ante todo valor dudoso.</figcaption>
+    </figure>
+
+    <div>
+      <h3>Rol de enfermería con una línea arterial</h3>
+      <ul class="small">
+        <li><b>Nunca</b> administrar medicamentos por la línea arterial. Rotúlela de forma inequívoca y diferenciada de las vías venosas.</li>
+        <li>Mantener el suero presurizado a <b>300 mmHg</b> para asegurar el lavado continuo y evitar reflujo.</li>
+        <li>Alarma de desconexión <b>siempre activa</b>: una desconexión inadvertida provoca hemorragia masiva en minutos.</li>
+        <li>Vigilar la <b>perfusión distal</b> (color, temperatura, llene capilar, sensibilidad) cada turno; retirar ante isquemia.</li>
+        <li>Curación y vigilancia del sitio; retirar apenas deje de ser necesaria.</li>
+        <li>Cero, nivelado y prueba de cuadratura documentados.</li>
+      </ul>
+      <div class="box" style="margin-bottom:0">
+        <h4>Variación de presión de pulso (VPP) y del volumen sistólico (VVS)</h4>
+        <p class="small" style="margin-bottom:1mm">Con cada ciclo del ventilador, la presión intratorácica modifica el retorno venoso. Si el corazón está en la parte ascendente de la curva de Frank-Starling, esa oscilación se amplifica: <b>VPP &gt; 13 %</b> sugiere que el paciente <b>responderá a volumen</b>.</p>
+        <p class="small" style="margin-bottom:0"><b>Sólo es válida si</b> hay ritmo regular, ventilación mecánica controlada sin esfuerzos del paciente, volumen corriente ≥ 8 ml/kg y tórax cerrado. Fuera de esas condiciones —es decir, en gran parte de los pacientes reales— pierde validez y hay que usar otras pruebas (página 14).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert" style="margin-bottom:0">
+    <h4>Complicaciones de la línea arterial</h4>
+    <p class="small" style="margin-bottom:0">Isquemia distal, trombosis, hematoma, pseudoaneurisma, infección del torrente sanguíneo asociada a catéter, hemorragia por desconexión y <b>administración accidental de fármacos por vía arterial</b> (puede provocar necrosis y pérdida de la extremidad). La mayoría son prevenibles con cuidados de enfermería.</p>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>11</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 12 · CVC Y PVC =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 8 · Monitorización invasiva (2 de 3): catéter venoso central</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2>8.2 · Catéter venoso central (CVC) y presión venosa central (PVC)</h2>
+  <p>El CVC es un catéter cuya punta queda en la <strong>vena cava superior, cerca de la unión con la aurícula derecha</strong>. Se instala por vía yugular interna, subclavia o femoral, hoy <strong>guiado por ecografía</strong>, que ha reducido de forma significativa las complicaciones mecánicas. Permite administrar drogas vasoactivas y soluciones irritantes, tomar muestras de SvcO₂ y medir la PVC.</p>
+
+  <div class="g2">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 340 176" role="img" aria-label="Sitios de inserción del catéter venoso central y posición de la punta">
+        <g font-family="Liberation Sans, Arial">
+          <path d="M104 10c-18 0-27 9-31 20-4 11-22 14-27 23-4 7-3 15 2 18 5 3 12-2 14-7 2-5 5-7 8-9-3 23-4 46-3 69 1 12 3 19 4 24h84c1-5 3-12 4-24 2-23 1-46-3-69 3 2 6 4 8 9 2 5 9 10 14 7 5-3 6-11 2-18-5-9-23-12-27-23-4-11-13-20-31-20z"
+                fill="#f7e7dd" stroke="#c8a894" stroke-width="1.2"/>
+          <path d="M86 32c2 18 9 30 20 40M126 32c-2 18-9 30-20 40" stroke="#2563eb" stroke-width="3.2" fill="none" opacity=".5"/>
+          <path d="M106 72v40" stroke="#2563eb" stroke-width="4.6" fill="none" opacity=".5"/>
+          <ellipse cx="112" cy="120" rx="15" ry="11" fill="#e11d48" opacity=".3"/>
+          <path d="M126 32c-2 16-7 27-18 36l-4 6v34" stroke="#111" stroke-width="1.5" fill="none"/>
+          <circle cx="104" cy="108" r="3" fill="#111"/>
+          <text x="110" y="112" font-size="7.6" fill="#111">punta del catéter</text>
+          <g>
+            <circle cx="86" cy="32" r="7" fill="#12466e"/><text x="86" y="35" font-size="8" fill="#fff" text-anchor="middle">1</text>
+            <circle cx="68" cy="50" r="7" fill="#12466e"/><text x="68" y="53" font-size="8" fill="#fff" text-anchor="middle">2</text>
+            <circle cx="96" cy="150" r="7" fill="#12466e"/><text x="96" y="153" font-size="8" fill="#fff" text-anchor="middle">3</text>
+          </g>
+          <g font-size="8.2" fill="#41566a">
+            <text x="188" y="22" font-weight="bold" fill="#12466e">Elección del sitio</text>
+            <text x="188" y="36"><tspan font-weight="bold">1. Yugular interna:</tspan> segura</text>
+            <text x="188" y="46">con guía ecográfica</text>
+            <text x="188" y="60"><tspan font-weight="bold">2. Subclavia:</tspan> menor riesgo de</text>
+            <text x="188" y="70">infección, mayor de neumotórax</text>
+            <text x="188" y="84"><tspan font-weight="bold">3. Femoral:</tspan> reservar; mayor riesgo</text>
+            <text x="188" y="94">infeccioso y trombótico</text>
+            <text x="188" y="112" font-weight="bold" fill="#b3261e">Confirmar posición</text>
+            <text x="188" y="126">Radiografía de tórax o ecografía</text>
+            <text x="188" y="136">antes de infundir vasoactivos</text>
+            <text x="188" y="154" font-weight="bold" fill="#12466e">Vía distal</text>
+            <text x="188" y="168">Se usa para medir la PVC y tomar</text>
+            <text x="188" y="176">la muestra de SvcO₂</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figura 16.</b> Esquema propio.</figcaption>
+    </figure>
+
+    <div>
+      <figure class="fig-frame" style="margin-bottom:2mm">
+        <svg viewBox="0 0 340 118" role="img" aria-label="Onda de presión venosa central con ondas a, c y v">
+          <g font-family="Liberation Sans, Arial">
+            <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Onda de PVC correlacionada con el ECG</text>
+            <!-- ECG -->
+            <path d="M6 40h20l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h44l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h44l3-3 3 6 3-14 3 22 3-11h6l4-3 3 3h60"
+                  fill="none" stroke="#0f766e" stroke-width="1.3"/>
+            <text x="6" y="24" font-size="7.6" fill="#0f766e">ECG</text>
+            <!-- PVC -->
+            <path d="M6 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8M96 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8M186 96c6 0 8-14 14-14s8 12 12 12 6-8 10-8 6 10 10 10 8-12 14-12 8 10 12 10 8-8 12-8"
+                  fill="none" stroke="#5b3fa8" stroke-width="1.7"/>
+            <g font-size="8.4" font-weight="bold" fill="#5b3fa8">
+              <text x="16" y="78">a</text><text x="40" y="82">c</text><text x="62" y="78">v</text>
+            </g>
+            <text x="6" y="112" font-size="7.8" fill="#41566a"><tspan font-weight="bold">a</tspan> contracción auricular · <tspan font-weight="bold">c</tspan> cierre tricuspídeo · <tspan font-weight="bold">v</tspan> llenado auricular</text>
+          </g>
+        </svg>
+        <figcaption><b>Figura 17.</b> Esquema propio. Se mide al final de la espiración. Normal: <b>2–8 mmHg</b> (hasta 12 en ventilación mecánica).</figcaption>
+      </figure>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Lo más importante que debe saber sobre la PVC</h4>
+        <p class="small" style="margin-bottom:0"><b>La PVC no sirve para predecir si un paciente responderá a volumen.</b> Es un concepto que cambió y que aún se enseña mal: numerosos estudios han mostrado que un valor aislado de PVC no discrimina entre respondedores y no respondedores. Las guías de sepsis dejaron de recomendarla como meta única de reanimación. Sí es útil como <b>tendencia</b> y para detectar situaciones concretas: PVC muy elevada en falla ventricular derecha, taponamiento, neumotórax a tensión o sobrecarga de volumen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div>
+      <h3>Bundle de prevención de infección asociada a CVC</h3>
+      <table class="compact">
+        <tr><th style="width:34%">Momento</th><th>Medida</th></tr>
+        <tr><td><b>Inserción</b></td><td>Higiene de manos · barrera máxima estéril · antisepsia con clorhexidina alcohólica al 2 % · elección del sitio adecuado · lista de verificación con poder de detener el procedimiento</td></tr>
+        <tr><td><b>Mantención diaria</b></td><td>Curación con apósito transparente estéril e íntegro · desinfección enérgica de conectores ("scrub the hub") 10–15 s antes de cada acceso · sistema cerrado</td></tr>
+        <tr><td><b>Todos los días</b></td><td><b>Preguntar si el catéter sigue siendo necesario y retirarlo apenas no lo sea.</b> Es la medida más eficaz y la de menor costo</td></tr>
+      </table>
+      <p class="tiny" style="margin-bottom:0">Vigile además: fiebre sin foco, eritema o secreción en el sitio, disfunción del catéter. Registre siempre día de instalación y días de permanencia.</p>
+    </div>
+    <div>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>PICC</h4>
+        <p class="small" style="margin-bottom:0">Catéter central de inserción periférica: se instala en una vena del brazo y la punta queda igualmente en cava superior. Menor riesgo mecánico en la inserción, útil para tratamientos prolongados; requiere los mismos cuidados de asepsia y conlleva riesgo de trombosis venosa del miembro superior.</p>
+      </div>
+      <div class="pearl" style="margin-bottom:0">
+        <h4>Perla clínica</h4>
+        <p class="small" style="margin-bottom:0">Una PVC que sube bruscamente en un paciente ventilado que se deteriora obliga a pensar en <b>neumotórax a tensión</b> o <b>taponamiento cardíaco</b>: ambos son diagnósticos de cabecera, urgentes y reversibles.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>12</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 13 · CAP Y PiCCO =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 8 · Monitorización invasiva (3 de 3): CAP y PiCCO</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2>8.3 · Catéter de arteria pulmonar (CAP o Swan-Ganz)</h2>
+  <div class="g21">
+    <div>
+      <p class="small">Es un catéter con balón en la punta que, introducido desde una vena central, "navega" con el flujo sanguíneo hasta la arteria pulmonar. Al inflar el balón se enclava y registra la <strong>presión de oclusión de la arteria pulmonar (PCP o PAOP)</strong>, que estima la presión de llenado del ventrículo izquierdo. Mide además presiones de aurícula y ventrículo derecho, arteria pulmonar, <strong>gasto cardíaco por termodilución</strong> y <strong>saturación venosa mixta (SvO₂)</strong>, y permite calcular resistencias vasculares.</p>
+      <p class="small" style="margin-bottom:2mm"><b>Su uso se redujo de forma drástica</b> tras los estudios que no mostraron beneficio en mortalidad en poblaciones no seleccionadas. Hoy se reserva para escenarios concretos: <b>shock cardiogénico complejo, hipertensión pulmonar, falla ventricular derecha, evaluación pretrasplante y asistencia circulatoria mecánica</b>.</p>
+      <div class="alert" style="margin-bottom:0">
+        <h4>Seguridad: lo esencial del rol de enfermería</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li>El balón <b>nunca</b> se infla más allá del volumen indicado (habitualmente 1,5 ml) ni se deja inflado: riesgo de <b>rotura de arteria pulmonar</b>, complicación de altísima letalidad.</li>
+          <li>Vigilar la curva de forma continua: si aparece un trazado de enclavamiento <b>espontáneo</b> (migración distal), avisar de inmediato.</li>
+          <li>Riesgo de arritmias durante la inserción y la migración: monitor ECG siempre activo y desfibrilador accesible.</li>
+          <li>Riesgo de infección, trombosis, nudo del catéter e infarto pulmonar.</li>
+        </ul>
+      </div>
+    </div>
+    <figure class="fig-frame">
+      <svg viewBox="0 0 340 186" role="img" aria-label="Curvas de presión durante el avance del catéter de arteria pulmonar">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Curvas durante el avance del catéter</text>
+          <path d="M30 142H336M30 142V22" stroke="#334155" stroke-width="1.1"/>
+          <g font-size="7.6" fill="#64748b">
+            <text x="26" y="32" text-anchor="end">40</text><text x="26" y="74" text-anchor="end">25</text><text x="26" y="142" text-anchor="end">0</text>
+          </g>
+          <path d="M34 132c5 0 7-10 12-10s7 8 10 8 5-6 10-6 7 8 12 8" fill="none" stroke="#12466e" stroke-width="1.7"/>
+          <text x="58" y="158" font-size="8" font-weight="bold" fill="#12466e" text-anchor="middle">AD 2–8</text>
+          <path d="M92 132c2 0 4-2 6-2s5-64 9-64 8 58 11 62 4 4 6 4M126 132c2 0 4-2 6-2s5-64 9-64 8 58 11 62 4 4 6 4"
+                fill="none" stroke="#b3261e" stroke-width="1.7"/>
+          <text x="130" y="158" font-size="8" font-weight="bold" fill="#b3261e" text-anchor="middle">VD 25/0–5</text>
+          <path d="M174 100c2 0 4-2 6-2s5-32 9-32 8 26 11 30 3 4 5 6 3 2 5-2 3-6 5-6 4 4 6 6M218 100c2 0 4-2 6-2s5-32 9-32 8 26 11 30 3 4 5 6 3 2 5-2 3-6 5-6 4 4 6 6"
+                fill="none" stroke="#a75a00" stroke-width="1.7"/>
+          <text x="216" y="158" font-size="8" font-weight="bold" fill="#a75a00" text-anchor="middle">AP 25/10</text>
+          <path d="M272 120c5 0 7-8 10-8s6 6 9 6 5-5 9-5 6 7 10 7 6-8 10-8 6 6 8 6"
+                fill="none" stroke="#5b3fa8" stroke-width="1.7"/>
+          <text x="300" y="158" font-size="8" font-weight="bold" fill="#5b3fa8" text-anchor="middle">PCP 6–12</text>
+          <path d="M266 22v120M166 22v120M86 22v120" stroke="#cbd5e1" stroke-width=".8" stroke-dasharray="3 2"/>
+          <text x="272" y="34" font-size="7.6" fill="#5b3fa8">balón inflado</text>
+          <text x="4" y="176" font-size="7.6" fill="#41566a">Valores en mmHg. La aparición de una presión diastólica que "sube" marca el</text>
+          <text x="4" y="185" font-size="7.6" fill="#41566a">paso del ventrículo derecho al lecho arterial pulmonar.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 18.</b> Esquema propio.</figcaption>
+    </figure>
+  </div>
+
+  <h2 style="margin-top:2mm">8.4 · PiCCO y monitorización por termodilución transpulmonar</h2>
+  <div class="g12">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 340 196" role="img" aria-label="Curva de termodilución transpulmonar y variables derivadas">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Curva de termodilución transpulmonar</text>
+          <path d="M30 92H180M30 92V22" stroke="#334155" stroke-width="1.1"/>
+          <path d="M34 90c14 0 20-2 26-16 6-14 10-38 18-38s14 24 20 38c8 18 22 16 40 16h42"
+                fill="#e8f2f8" stroke="#0e7490" stroke-width="1.8"/>
+          <text x="92" y="36" font-size="8" fill="#0e7490" font-weight="bold">Área bajo la curva</text>
+          <text x="92" y="46" font-size="8" fill="#0e7490">→ gasto cardíaco</text>
+          <text x="4" y="112" font-size="7.6" fill="#41566a">Se inyecta suero frío por el CVC y un</text>
+          <text x="4" y="122" font-size="7.6" fill="#41566a">sensor en la arteria femoral registra el</text>
+          <text x="4" y="132" font-size="7.6" fill="#41566a">cambio de temperatura. Entre</text>
+          <text x="4" y="142" font-size="7.6" fill="#41566a">calibraciones, el equipo estima el gasto</text>
+          <text x="4" y="152" font-size="7.6" fill="#41566a">latido a latido analizando el</text>
+          <text x="4" y="162" font-size="7.6" font-weight="bold" fill="#41566a">contorno de la onda de pulso.</text>
+          <text x="200" y="26" font-size="8.4" font-weight="bold" fill="#12466e">Variables clave</text>
+          <g font-size="7.8" fill="#41566a">
+            <text x="200" y="42"><tspan font-weight="bold">IC</tspan> índice cardíaco (L/min/m²)</text>
+            <text x="200" y="58"><tspan font-weight="bold">GEDI</tspan> volumen telediastólico global:</text>
+            <text x="200" y="68">precarga volumétrica, no presión</text>
+            <text x="200" y="84"><tspan font-weight="bold">ELWI</tspan> agua pulmonar extravascular</text>
+            <text x="200" y="94">= edema pulmonar cuantificado</text>
+            <text x="200" y="110"><tspan font-weight="bold">IPVP</tspan> permeabilidad vascular pulmonar</text>
+            <text x="200" y="126"><tspan font-weight="bold">VVS / VPP</tspan> respuesta a volumen</text>
+            <text x="200" y="142"><tspan font-weight="bold">IRVS</tspan> resistencia vascular sistémica:</text>
+            <text x="200" y="152">tono vascular</text>
+          </g>
+          
+        </g>
+      </svg>
+      <figcaption><b>Figura 19.</b> Esquema propio.</figcaption>
+    </figure>
+    <div>
+      <p class="small">Requiere un <strong>CVC más un catéter arterial especial con termistor</strong> (habitualmente femoral). Su gran aporte respecto del CAP es que entrega precarga como <strong>volumen</strong> y cuantifica el <strong>agua pulmonar extravascular</strong>, lo que permite responder a la pregunta clínica más difícil: <em>¿este paciente necesita más volumen o ya está encharcando el pulmón?</em></p>
+      <div class="box" style="margin-bottom:2mm">
+        <h4>Rol de enfermería</h4>
+        <ul class="small" style="margin-bottom:0">
+          <li><b>Recalibrar</b> con las inyecciones de suero frío según protocolo y tras cambios clínicos importantes; el contorno de pulso se desvía con el tiempo.</li>
+          <li>Inyección rápida (&lt; 7 s), volumen y temperatura correctos: la técnica determina la exactitud del resultado.</li>
+          <li>Los datos del contorno de pulso <b>no son confiables</b> en arritmias, balón de contrapulsación o señal arterial amortiguada.</li>
+          <li>Mismos cuidados de asepsia y de perfusión distal que cualquier catéter arterial.</li>
+        </ul>
+      </div>
+      <div class="note" style="margin-bottom:0">
+        <h4>Otras opciones que verá nombrar</h4>
+        <p class="small" style="margin-bottom:0"><b>Ecocardiografía y POCUS:</b> hoy es la herramienta de primera línea para clasificar el tipo de shock a la cabecera. <b>Doppler esofágico</b>, <b>biorreactancia</b> y sistemas de contorno de pulso no calibrados: menos invasivos, con exactitud variable en shock.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>13</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 14 · RESPUESTA A VOLUMEN + INTEGRACIÓN =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 9 · ¿Responde a volumen? · Integración</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">9</span>La pregunta que ordena toda la monitorización hemodinámica</h2>
+  <p>Ante un paciente hipotenso, la decisión más frecuente es <strong>si administrar volumen o no</strong>. Sólo alrededor de la mitad de los pacientes críticos hipotensos aumentan su gasto cardíaco tras un bolo de fluidos; en el resto, el líquido sólo produce edema, empeora el intercambio gaseoso y aumenta la mortalidad. Por eso hoy se usan <strong>pruebas dinámicas</strong> —que simulan un aporte de volumen y observan la respuesta— en lugar de valores estáticos como la PVC.</p>
+
+  <div class="g21">
+    <figure class="fig-frame top">
+      <svg viewBox="0 0 400 152" role="img" aria-label="Maniobra de elevación pasiva de piernas en dos posiciones">
+        <g font-family="Liberation Sans, Arial">
+          <text x="4" y="12" font-size="9" font-weight="bold" fill="#12466e">Elevación pasiva de piernas (EPP)</text>
+          <!-- posición 1 -->
+          <g transform="translate(0,4)">
+            <text x="10" y="26" font-size="8.4" font-weight="bold" fill="#41566a">1. Semisentado 45°</text>
+            <path d="M14 96h150v8H14z" fill="#dbe6ee" stroke="#9fb4c4"/>
+            <path d="M60 96V54l40-16v58z" fill="#eef4f8" stroke="#9fb4c4"/>
+            <path d="M66 92c8-20 20-30 34-36l14-6 46 2v40z" fill="#f7e7dd" stroke="#c8a894"/>
+            <circle cx="98" cy="46" r="9" fill="#f7e7dd" stroke="#c8a894"/>
+          </g>
+          <path d="M176 78h24" stroke="#12466e" stroke-width="2"/>
+          <path d="M196 72l10 6-10 6z" fill="#12466e"/>
+          <!-- posición 2 -->
+          <g transform="translate(210,4)">
+            <text x="10" y="26" font-size="8.4" font-weight="bold" fill="#15803d">2. Tronco horizontal + piernas 45°</text>
+            <path d="M14 96h160v8H14z" fill="#dbe6ee" stroke="#9fb4c4"/>
+            <path d="M120 96l46-34 6 8-38 26z" fill="#eef4f8" stroke="#9fb4c4"/>
+            <path d="M24 92c0-14 10-20 24-20h60l40-26 6 10-36 36z" fill="#f7e7dd" stroke="#c8a894"/>
+            <circle cx="30" cy="80" r="9" fill="#f7e7dd" stroke="#c8a894"/>
+            <path d="M100 60c14 6 24 2 34-6" stroke="#b3261e" stroke-width="1.4" fill="none"/>
+            <text x="60" y="44" font-size="8" fill="#b3261e" font-weight="bold">≈ 300 ml de "autotransfusión"</text>
+          </g>
+          <text x="4" y="134" font-size="8" fill="#41566a">Se mueve la cama, no al paciente. El efecto es máximo durante el primer minuto</text>
+          <text x="4" y="145" font-size="8" fill="#41566a">y es <tspan font-weight="bold">reversible</tspan>: si el paciente no responde, no queda con sobrecarga de volumen.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figura 20.</b> Esquema propio. La EPP es la prueba de referencia porque es válida en respiración espontánea y en arritmias, situaciones donde la VPP falla. Su efecto debe medirse sobre el <b>gasto cardíaco o un sustituto</b>, no sobre la presión arterial aislada.</figcaption>
+    </figure>
+
+    <div>
+      <h3>Pruebas dinámicas de uso habitual</h3>
+      <table class="compact">
+        <tr><th style="width:38%">Prueba</th><th>Cuándo es válida</th></tr>
+        <tr><td><b>Elevación pasiva de piernas</b></td><td>Casi siempre: respiración espontánea, arritmias, ventilación con Vt bajo. Limitada en hipertensión intraabdominal</td></tr>
+        <tr><td><b>VPP / VVS</b></td><td>Ventilación controlada, sin esfuerzos, ritmo regular, Vt ≥ 8 ml/kg, tórax cerrado</td></tr>
+        <tr><td><b>Oclusión al final de la espiración</b></td><td>Ventilación mecánica, paciente que tolera 15 s de pausa</td></tr>
+        <tr><td><b>Mini-bolo de fluido</b> (100 ml en 1 min)</td><td>Requiere medir gasto cardíaco con buena precisión</td></tr>
+        <tr><td><b>Prueba del volumen corriente</b></td><td>Aumento transitorio del Vt de 6 a 8 ml/kg y observación del cambio de la VPP</td></tr>
+      </table>
+      <div class="tip" style="margin-bottom:0">
+        <h4>Su rol en estas pruebas</h4>
+        <p class="small" style="margin-bottom:0">Usted ejecuta la maniobra y garantiza sus condiciones: posición correcta de la cama, no estimular al paciente durante la medición (el dolor y la tos invalidan el resultado), señal arterial bien amortiguada y registro del momento exacto de la medición basal y post-maniobra.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Mapa integrador: de lo básico a lo invasivo</h3>
+  <figure class="fig-frame">
+    <svg viewBox="0 0 700 178" role="img" aria-label="Escalera de monitorización desde parámetros básicos hasta monitorización invasiva">
+      <g font-family="Liberation Sans, Arial">
+        <!-- escalones -->
+        <g>
+          <rect x="8" y="118" width="164" height="52" rx="4" fill="#eaf1f6" stroke="#12466e"/>
+          <rect x="180" y="88" width="164" height="82" rx="4" fill="#dbe9f2" stroke="#12466e"/>
+          <rect x="352" y="58" width="164" height="112" rx="4" fill="#c9dfec" stroke="#12466e"/>
+          <rect x="524" y="28" width="168" height="142" rx="4" fill="#12466e"/>
+        </g>
+        <g font-size="9.6" font-weight="bold" fill="#12466e">
+          <text x="90" y="136" text-anchor="middle">NIVEL 1 · Todo paciente</text>
+          <text x="262" y="106" text-anchor="middle">NIVEL 2 · Paciente agudo</text>
+          <text x="434" y="76" text-anchor="middle">NIVEL 3 · Paciente crítico</text>
+        </g>
+        <text x="608" y="46" text-anchor="middle" font-size="9.6" font-weight="bold" fill="#fff">NIVEL 4 · Shock complejo</text>
+        <g font-size="8.4" fill="#2b4358">
+          <text x="90" y="150" text-anchor="middle">FC · PA · FR · SpO₂ · Tº</text>
+          <text x="90" y="162" text-anchor="middle">conciencia · diuresis · dolor</text>
+          <text x="262" y="122" text-anchor="middle">ECG continuo · capnografía</text>
+          <text x="262" y="134" text-anchor="middle">GCS y pupilas seriados · RASS</text>
+          <text x="262" y="146" text-anchor="middle">lactato · llene capilar</text>
+          <text x="262" y="158" text-anchor="middle">NEWS2 · ecografía a la cabecera</text>
+          <text x="434" y="94" text-anchor="middle">Línea arterial · VPP</text>
+          <text x="434" y="106" text-anchor="middle">CVC · PVC · SvcO₂ · ΔPCO₂</text>
+          <text x="434" y="118" text-anchor="middle">curvas del ventilador</text>
+          <text x="434" y="130" text-anchor="middle">PIC · PPC · pupilometría</text>
+          <text x="434" y="142" text-anchor="middle">ecocardiografía</text>
+          <text x="434" y="158" text-anchor="middle">pruebas dinámicas de volumen</text>
+        </g>
+        <g font-size="8.4" fill="#cfe8f2">
+          <text x="608" y="64" text-anchor="middle">Termodilución transpulmonar</text>
+          <text x="608" y="76" text-anchor="middle">(PiCCO): IC · GEDI · ELWI</text>
+          <text x="608" y="92" text-anchor="middle">Catéter de arteria pulmonar:</text>
+          <text x="608" y="104" text-anchor="middle">PCP · SvO₂ · resistencias</text>
+          <text x="608" y="120" text-anchor="middle">EEG continuo · NIRS · DTC</text>
+          <text x="608" y="136" text-anchor="middle">Indicación restringida,</text>
+          <text x="608" y="148" text-anchor="middle">decisión del equipo,</text>
+          <text x="608" y="160" text-anchor="middle">nunca de rutina</text>
+        </g>
+        <path d="M8 18H692" stroke="#0e7490" stroke-width="1.4"/>
+        <path d="M686 12l10 6-10 6z" fill="#0e7490"/>
+        <text x="8" y="12" font-size="8.6" fill="#0e7490">Mayor complejidad, mayor riesgo, mayor costo — y siempre sobre la base del nivel anterior, nunca en su reemplazo →</text>
+      </g>
+    </svg>
+    <figcaption><b>Figura 21.</b> Elaboración propia. Ningún nivel superior sustituye al examen clínico del nivel 1: lo complementa. El error más caro en cuidados críticos es confiar en un número invasivo mientras se deja de mirar al paciente.</figcaption>
+  </figure>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP</span><span>Página <b>14</b></span></div>
+</section>
+
+<!-- =================== PÁGINA 15 · CHECKLIST, AUTOEVALUACIÓN Y BIBLIOGRAFÍA =================== -->
+<section class="page">
+  <div class="runhead"><span class="sec">Sección 10 · Rol de enfermería, autoevaluación y bibliografía</span><span class="doc">Manual de Monitorización · Enfermería UDP</span></div>
+  <div class="body">
+
+  <h2><span class="num">10</span>Checklist de monitorización al inicio de turno</h2>
+  <div class="g2" style="margin-bottom:2mm">
+    <div class="box" style="margin-bottom:0">
+      <h4>Equipo y señal</h4>
+      <ul class="small" style="margin-bottom:0">
+        <li>Electrodos con buen contacto, rotados y sin lesión cutánea.</li>
+        <li>Sensor de SpO₂ con onda pletismográfica de buena calidad; sitio rotado.</li>
+        <li>Manguito de PANI del tamaño correcto y en la extremidad adecuada.</li>
+        <li>Transductores <b>nivelados en el eje flebostático y puestos en cero</b>; prueba de cuadratura realizada.</li>
+        <li>Suero presurizado y conexiones seguras y rotuladas.</li>
+        <li><b>Límites de alarma ajustados a este paciente</b> y volumen audible.</li>
+      </ul>
+    </div>
+    <div class="box" style="margin-bottom:0">
+      <h4>Paciente y registro</h4>
+      <ul class="small" style="margin-bottom:0">
+        <li>FR contada durante un minuto, no estimada.</li>
+        <li>GCS desglosado, pupilas en milímetros, RASS y evaluación de dolor y delirium.</li>
+        <li>Signos de perfusión: llene capilar, moteado, temperatura distal, diuresis horaria.</li>
+        <li>SpO₂ registrada <b>junto con la FiO₂ o el dispositivo</b> de oxígeno.</li>
+        <li>Tendencias documentadas y cambios comunicados, con registro de a quién.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Autoevaluación</h3>
+  <div class="g2">
+    <div>
+      <ol class="small" style="margin-bottom:0">
+        <li style="margin-bottom:1.4mm">Un paciente con SpO₂ 98 % y FR 32/min con uso de músculos accesorios. ¿Está bien oxigenado y bien ventilado? Fundamente.</li>
+        <li style="margin-bottom:1.4mm">La PANI muestra 150/95 en un paciente delgado. ¿Qué revisa antes de informar hipertensión?</li>
+        <li style="margin-bottom:1.4mm">Durante una RCP el EtCO₂ sube bruscamente de 12 a 38 mmHg. ¿Qué significa y qué hace?</li>
+        <li style="margin-bottom:1.4mm">Un paciente con PVC de 12 mmHg está hipotenso. ¿Puede concluir que no necesita volumen? Justifique.</li>
+        <li style="margin-bottom:1.4mm">Explique por qué en un paciente con piel oscura una SpO₂ de 93 % merece mayor cautela.</li>
+        <li style="margin-bottom:0">Enumere los tres pasos que ejecuta ante cualquier alarma antes de intervenir el equipo.</li>
+      </ol>
+    </div>
+    <div class="box" style="background:#f0f6f2;border-color:#bcd9c6;margin-bottom:0">
+      <h4 style="color:var(--green)">Respuestas comentadas</h4>
+      <ol class="small" style="margin-bottom:0">
+        <li style="margin-bottom:1.2mm"><b>Oxigenado sí, ventilado no necesariamente.</b> La SpO₂ no mide ventilación y la taquipnea con trabajo respiratorio anuncia fatiga: corresponde capnografía o gasometría, y avisar.</li>
+        <li style="margin-bottom:1.2mm"><b>El tamaño del manguito.</b> Uno demasiado pequeño sobreestima la presión. Verifique además posición del brazo, reposo y técnica antes de informar.</li>
+        <li style="margin-bottom:1.2mm"><b>Sugiere retorno de circulación espontánea.</b> Complete el ciclo y compruebe ritmo y pulso según protocolo.</li>
+        <li style="margin-bottom:1.2mm"><b>No.</b> Un valor aislado de PVC no predice respuesta a volumen. Se requiere una prueba dinámica, por ejemplo elevación pasiva de piernas.</li>
+        <li style="margin-bottom:1.2mm"><b>Por el riesgo de hipoxemia oculta:</b> la pulsioximetría puede sobreestimar la saturación real en pieles más pigmentadas; confirme con gasometría.</li>
+        <li style="margin-bottom:0"><b>Mirar al paciente · verificar el sensor · confirmar con otro método</b> y comunicar.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5mm">Bibliografía (2020–2025)</h3>
+  <ol style="margin-bottom:2mm;line-height:1.24;font-size:7pt;color:var(--muted)">
+    <li>Sjoding MW, Dickson RP, Iwashyna TJ, Gay SE, Valley TS. Racial bias in pulse oximetry measurement. <i>N Engl J Med</i>. 2020;383(25):2477-2478. doi:10.1056/NEJMc2029240</li>
+    <li>U.S. Food and Drug Administration. <i>Pulse Oximeters for Medical Purposes — Non-Clinical and Clinical Performance Testing, Labeling, and Premarket Submission Recommendations</i>. Guía en borrador, enero 2025.</li>
+    <li>Evans L, Rhodes A, Alhazzani W, et al. Surviving Sepsis Campaign: international guidelines for management of sepsis and septic shock 2021. <i>Intensive Care Med</i>. 2021;47(11):1181-1247. doi:10.1007/s00134-021-06506-y</li>
+    <li>Monnet X, Shi R, Teboul JL. Prediction of fluid responsiveness. What's new? <i>Ann Intensive Care</i>. 2022;12(1):46. doi:10.1186/s13613-022-01022-8</li>
+    <li>Messina A, Chew MS, Poole D, et al. Consistency of data reporting in fluid responsiveness studies in the critically ill setting: the CODEFIRE consensus from the Cardiovascular Dynamic section of the European Society of Intensive Care Medicine. <i>Intensive Care Med</i>. 2024;50(4):548-560. doi:10.1007/s00134-024-07344-4</li>
+    <li>Kattan E, Ibarra-Estrada M, Ospina-Tascón G, Hernández G. Perspectives on peripheral perfusion assessment. <i>Curr Opin Crit Care</i>. 2023;29(3):208-214. doi:10.1097/MCC.0000000000001038</li>
+    <li>Matthay MA, Arabi Y, Arroliga AC, et al. A new global definition of acute respiratory distress syndrome. <i>Am J Respir Crit Care Med</i>. 2024;209(1):37-47. doi:10.1164/rccm.202303-0558WS</li>
+    <li>Soar J, Böttiger BW, Carli P, et al. European Resuscitation Council Guidelines 2021: Adult advanced life support. <i>Resuscitation</i>. 2021;161:115-151.</li>
+    <li>Lewis K, Balas MC, Stollings JL, et al. A focused update to the clinical practice guidelines for the prevention and management of pain, anxiety, agitation/sedation, delirium, immobility, and sleep disruption in adult patients in the ICU. <i>Crit Care Med</i>. 2025;53(3):e711-e727. doi:10.1097/CCM.0000000000006574</li>
+    <li>Park C, Park SY, Kim M, Park B, Hong JM. Automated quantitative pupillometry as a predictor for transtentorial brain herniation in patients with malignant acute ischemic stroke. <i>PLoS One</i>. 2025;20(1):e0316358. doi:10.1371/journal.pone.0316358</li>
+  </ol>
+
+  <p class="tiny" style="margin-bottom:0;border-top:.6pt solid var(--line);padding-top:1.4mm">
+    <b>Nota.</b> Las 21 figuras son esquemas vectoriales originales elaborados para este manual: <b>no son registros ni fotografías de pacientes</b>. Para usar fotografías clínicas, recurra a bancos con licencia educativa o a registros institucionales con consentimiento, citando la fuente. Referencias verificadas en PubMed. Uso educativo interno; no reemplaza los protocolos de cada institución.</p>
+
+  </div>
+  <div class="foot"><span><b>Manual de Monitorización del Paciente</b> · Escuela de Enfermería UDP · v1.0</span><span>Página <b>15</b></span></div>
+</section>
+
+</body>
+</html>
