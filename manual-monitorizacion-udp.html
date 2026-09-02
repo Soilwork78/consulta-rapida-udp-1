@@ -109,7 +109,7 @@ svg text{font-family:var(--font)}
 .cover{background:linear-gradient(160deg,#0b2740 0%,#12466e 45%,#0e7490 100%);color:#fff;padding:0;
        display:flex;flex-direction:column;justify-content:space-between}
 .cover-in{padding:20mm 16mm 14mm;display:flex;flex-direction:column;height:100%}
-.cover h1{font-size:30pt;font-weight:700;letter-spacing:-.03em;margin-bottom:3mm}
+.cover h1{font-size:34pt;font-weight:700;letter-spacing:-.03em;margin-bottom:3mm}
 .cover .sub{font-size:12.5pt;color:#bfe3f0;font-weight:400;line-height:1.35;max-width:135mm}
 .cover .rule{width:38mm;height:1.4mm;background:#7fd3e8;margin:6mm 0}
 .cover .chips{display:flex;flex-wrap:wrap;gap:2mm;margin-top:5mm}
@@ -117,6 +117,9 @@ svg text{font-family:var(--font)}
 .cover-meta{border-top:.8pt solid rgba(255,255,255,.3);padding-top:4mm;font-size:8.6pt;color:#cfe8f2;
             display:flex;justify-content:space-between;align-items:flex-end;gap:6mm}
 .cover-badge{font-size:7.6pt;letter-spacing:.14em;text-transform:uppercase;color:#8fd6ea;font-weight:700}
+.authors{margin-top:12mm}
+.authors .name{font-size:14pt;color:#fff;font-weight:600;line-height:1.5;letter-spacing:-.01em}
+.authors .role{font-size:9.5pt;color:#a9d6e6;letter-spacing:.14em;text-transform:uppercase;margin-top:4mm}
 </style>
 </head>
 <body>
@@ -154,197 +157,116 @@ svg text{font-family:var(--font)}
 
 <!-- =================== PÁGINA 1 · PORTADA =================== -->
 <section class="page cover">
-  <div class="cover-in">
-    <div class="cover-badge">Universidad Diego Portales · Escuela de Enfermería</div>
-    <div style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:center">
-      <h1>Manual de<br>Monitorización Básica</h1>
-      <div class="rule"></div>
-      <div class="sub">De los signos vitales básicos a la monitorización invasiva.<br>
-      Monitorización hemodinámica, ventilatoria y neurológica para el cuidado de enfermería.</div>
-      <div class="chips">
-        <span class="chip">FC · ECG continuo</span>
-        <span class="chip">PANI</span>
-        <span class="chip">SpO₂</span>
-        <span class="chip">FR · EtCO₂</span>
-        <span class="chip">Ventilación mecánica</span>
-        <span class="chip">GCS · pupilas · RASS</span>
-        <span class="chip">Línea arterial</span>
-        <span class="chip">CVC · PVC</span>
-        <span class="chip">CAP</span>
-        <span class="chip">PiCCO</span>
-      </div>
-
-      <div style="margin-top:9mm;background:rgba(255,255,255,.07);border:.8pt solid rgba(255,255,255,.22);
-                  border-radius:2.4mm;padding:4mm">
-        <svg viewBox="0 0 640 264" role="img" aria-label="Monitor multiparamétrico con trazados de ECG, pletismografía, presión arterial y capnografía">
-  <rect x="0" y="0" width="640" height="264" rx="9" fill="#1a2430"/>
-  <rect x="7" y="7" width="626" height="250" rx="5" fill="url(#gScreen)"/>
-  <g stroke="#123044" stroke-width=".5" opacity=".85">
-    <path d="M7 62H500M7 90H500M7 118H500M7 146H500M7 174H500M7 202H500M7 230H500"/>
-    <path d="M70 28V257M133 28V257M196 28V257M259 28V257M322 28V257M385 28V257M448 28V257"/>
-  </g>
-  <rect x="7" y="7" width="626" height="20" rx="5" fill="#0f2231"/>
-  <text x="16" y="21" font-family="monospace" font-size="9" fill="#7fb7cf">CAMA 12 · ADULTO</text>
-  <text x="320" y="21" font-family="monospace" font-size="9" fill="#5d8ba3">MONITORIZACIÓN CONTINUA</text>
-  <circle cx="620" cy="17" r="3.4" fill="#3ddc84"/>
-  <path d="M52 48q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0q4 -5 8 0 l6 0 l2 3 l3 -26 l3 32 l2 -9 l4 0 q6 -9 12 0 l26 0" fill="none" stroke="#3ddc84" stroke-width="1.7" stroke-linejoin="round"/>
-  <text x="16" y="51" font-family="monospace" font-size="9.5" fill="#3ddc84">II</text>
-  <path d="M52 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M122 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M192 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M262 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M332 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8M402 104c8 0 10-26 18-26s10 11 14 16 6 2 9 6 5 8 8 4 5-10 8-10 6 4 10 8" fill="none" stroke="#38bdf8" stroke-width="1.7"/>
-  <text x="16" y="107" font-family="monospace" font-size="9.5" fill="#38bdf8">PLETH</text>
-  <path d="M52 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M122 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M192 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M262 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M332 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9M402 156c6 0 8-2 12-4 4-2 6-40 11-40s9 34 13 40c4 6 7 3 9 8 3 6 5 3 7-4 2-6 4-9 7-9s6 6 10 9" fill="none" stroke="#f87171" stroke-width="1.7"/>
-  <text x="16" y="159" font-family="monospace" font-size="9.5" fill="#f87171">ART</text>
-  <path d="M52 210h8l4-30h32l4 30h14M122 210h8l4-30h32l4 30h14M192 210h8l4-30h32l4 30h14M262 210h8l4-30h32l4 30h14M332 210h8l4-30h32l4 30h14M402 210h8l4-30h32l4 30h14" fill="none" stroke="#fbbf24" stroke-width="1.6"/>
-  <text x="16" y="213" font-family="monospace" font-size="9.5" fill="#fbbf24">CO₂</text>
-  <g font-family="monospace">
-    <rect x="506" y="34" width="124" height="52" rx="4" fill="#0e1d29"/>
-    <text x="514" y="48" font-size="8.5" fill="#3ddc84">FC   lpm</text><text x="624" y="78" font-size="30" text-anchor="end" fill="#3ddc84">88</text>
-    <rect x="506" y="90" width="124" height="52" rx="4" fill="#0e1d29"/>
-    <text x="514" y="104" font-size="8.5" fill="#38bdf8">SpO₂   %</text><text x="624" y="134" font-size="30" text-anchor="end" fill="#38bdf8">97</text>
-    <rect x="506" y="146" width="124" height="52" rx="4" fill="#0e1d29"/>
-    <text x="514" y="160" font-size="8.5" fill="#f87171">PA   mmHg</text><text x="624" y="186" font-size="22" text-anchor="end" fill="#f87171">118/64</text>
-    <text x="514" y="186" font-size="11" fill="#f87171">(78)</text>
-    <rect x="506" y="202" width="124" height="52" rx="4" fill="#0e1d29"/>
-    <text x="514" y="216" font-size="8.5" fill="#fbbf24">EtCO₂ · FR</text><text x="624" y="244" font-size="22" text-anchor="end" fill="#fbbf24">36 · 16</text>
-  </g>
-</svg>
-        <div style="font-size:7.4pt;color:#a9d6e6;margin-top:2mm">
-          Figura de portada · Simulación de pantalla de monitor multiparamétrico: trazado electrocardiográfico (verde),
-          onda pletismográfica (azul), curva de presión arterial invasiva (rojo) y capnograma (amarillo).
-        </div>
-      </div>
-    </div>
-
-    <div class="cover-meta">
-      <div>
-        <div style="font-size:10pt;color:#fff;font-weight:700;margin-bottom:1.2mm">Material docente · 4.º año de Enfermería</div>
-        <div>Asignatura de Cuidados del Paciente Crítico / Enfermería del Adulto</div>
-        <div style="margin-top:1.6mm">Documento de estudio · 15 páginas · Evidencia 2020–2025</div>
-      </div>
-      <div style="text-align:right">
-        <div class="cover-badge" style="color:#cfe8f2">Versión 1.0</div>
-        <div style="margin-top:1.4mm">Uso educativo interno</div>
-      </div>
+  <div class="cover-in" style="justify-content:center;align-items:flex-start">
+    <h1>Manual de<br>Monitorización Básica</h1>
+    <div class="rule"></div>
+    <div class="authors">
+      <div class="name">Rodrigo Pincheira</div>
+      <div class="name">Valeria Jabes</div>
+      <div class="role">Docentes UDP</div>
     </div>
   </div>
 </section>
 
 <!-- =================== PÁGINA 2 · CÓMO USAR + FUNDAMENTOS =================== -->
 <section class="page">
-  <div class="runhead"><span class="sec">Presentación · Sección 1: Fundamentos</span><span class="doc">Monitorización Básica · Enfermería UDP</span></div>
+  <div class="runhead"><span class="sec">Sección 1 · Fundamentos de la monitorización</span><span class="doc">Monitorización Básica · Enfermería UDP</span></div>
   <div class="body">
 
-  <div class="g21" style="margin-bottom:3mm">
-    <div>
-      <h2>Cómo usar este manual</h2>
-      <p>Este manual recorre la monitorización clínica <strong>desde lo más simple hasta lo más invasivo</strong>. Las secciones 1 a 6 son contenido que usted debe <strong>manejar y ejecutar</strong> en la práctica clínica. La sección 7 (línea arterial, CVC, CAP, PiCCO) se presenta a modo de <strong>pinceladas</strong>: el objetivo es que reconozca que estas tecnologías existen, entienda qué miden y sepa cuál es su rol de enfermería, no que las domine en cuarto año.</p>
-      <p>Cada apartado responde a tres preguntas: <em>¿qué mide?</em>, <em>¿cómo se interpreta?</em> y <em>¿qué hago yo como enfermero/a?</em> Las cajas de color destacan errores frecuentes (rojo), buenas prácticas (verde) y perlas clínicas (ámbar).</p>
-    </div>
-    <div class="box" style="background:var(--soft2)">
-      <h4>Objetivos de aprendizaje</h4>
-      <p class="small" style="margin-bottom:1.5mm">Al terminar este manual usted debería ser capaz de:</p>
-      <ol class="small" style="margin-bottom:0">
-        <li>Explicar el principio físico de las técnicas básicas de monitorización.</li>
-        <li>Reconocer artefactos y diferenciarlos de un deterioro real.</li>
-        <li>Interpretar SpO₂, EtCO₂, FR, PA y trazado ECG en contexto.</li>
-        <li>Aplicar GCS, pupilas y RASS, y detectar signos de hipertensión intracraneal.</li>
-        <li>Identificar los dispositivos invasivos, sus valores y sus cuidados de enfermería.</li>
-      </ol>
-    </div>
-  </div>
-
-  <div style="background:var(--navy);color:#fff;border-radius:1.6mm;padding:2.6mm 3mm;margin-bottom:3mm">
-    <div style="font-size:7.6pt;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin-bottom:1.5mm;color:#a9d6e6">Contenido</div>
-    <div class="small" style="display:grid;grid-template-columns:1fr 1fr;gap:.6mm 5mm;line-height:1.35">
-      <div><b>1.</b> Fundamentos: qué es monitorizar · p. 2–3</div><div><b>6.</b> Neuromonitorización básica · p. 9–10</div>
-      <div><b>2.</b> Monitorización cardíaca básica: ECG y FC · p. 3–4</div><div><b>7.</b> Hemodinamia básica: perfusión · p. 10</div>
-      <div><b>3.</b> Presión arterial no invasiva · p. 4</div><div><b>8.</b> Monitorización invasiva (pinceladas) · p. 11–13</div>
-      <div><b>4.</b> Oximetría de pulso · p. 5</div><div><b>9.</b> ¿Responde a volumen? · p. 14</div>
-      <div><b>5.</b> Función ventilatoria y respiratoria · p. 6–8</div><div><b>10.</b> Rol de enfermería, autoevaluación y bibliografía · p. 15</div>
-    </div>
-  </div>
-
   <h2><span class="num">1</span>Fundamentos: qué significa monitorizar</h2>
-  <p><strong>Monitorizar no es mirar una pantalla: es vigilar una tendencia para tomar decisiones.</strong> Un valor aislado dice poco; lo que orienta es la <em>dirección</em> del cambio y su coherencia con el examen físico. Todo sistema de monitorización sigue la misma cadena, y en cada eslabón se pueden introducir errores.</p>
+  <p style="font-size:10.4pt;line-height:1.5"><strong>Monitorizar no es mirar una pantalla: es vigilar una tendencia para tomar decisiones.</strong> Un valor aislado dice poco; lo que orienta es la <em>dirección</em> del cambio y su coherencia con el examen físico. Todo sistema de monitorización sigue la misma cadena, y en cada eslabón se pueden introducir errores.</p>
 
   <figure class="fig-frame">
-    <svg viewBox="0 0 700 128" role="img" aria-label="Cadena de monitorización: paciente, sensor, procesamiento, pantalla, interpretación y decisión clínica">
+    <svg viewBox="0 0 700 152" role="img" aria-label="Cadena de monitorización: paciente, sensor, procesamiento, pantalla, interpretación y decisión clínica">
   <text x="4" y="12" class="s-t">Cadena de la señal</text>
   <text x="696" y="12" text-anchor="end" font-size="8" font-weight="700" fill="#b3261e">Dónde puede fallar ↓</text>
   <g>
-    <rect x="4" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
-    <circle cx="19" cy="36" r="8.5" fill="#12466e"/><text x="19" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">1</text>
-    <text x="33" y="39" font-size="9.4" font-weight="700" fill="#12466e">Fenómeno</text>
-    <text x="15" y="58" font-size="7.8" fill="#5d7385">biológico del paciente</text>
+    <rect x="4" y="22" width="126" height="68" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="19" cy="42" r="9.5" fill="#12466e"/><text x="19" y="45.5" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">1</text>
+    <text x="33" y="45" font-size="9.8" font-weight="700" fill="#12466e">Fenómeno</text>
+    <text x="15" y="66" font-size="8.2" fill="#5d7385">biológico del paciente</text>
   </g>
-  <path d="M133 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <path d="M133 56h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
   <g>
-    <rect x="147" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
-    <circle cx="162" cy="36" r="8.5" fill="#12466e"/><text x="162" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">2</text>
-    <text x="176" y="39" font-size="9.4" font-weight="700" fill="#12466e">Sensor</text>
-    <text x="158" y="58" font-size="7.8" fill="#5d7385">electrodo · transductor</text>
+    <rect x="147" y="22" width="126" height="68" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="162" cy="42" r="9.5" fill="#12466e"/><text x="162" y="45.5" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">2</text>
+    <text x="176" y="45" font-size="9.8" font-weight="700" fill="#12466e">Sensor</text>
+    <text x="158" y="66" font-size="8.2" fill="#5d7385">electrodo · transductor</text>
   </g>
-  <path d="M276 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <path d="M276 56h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
   <g>
-    <rect x="290" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
-    <circle cx="305" cy="36" r="8.5" fill="#12466e"/><text x="305" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">3</text>
-    <text x="319" y="39" font-size="9.4" font-weight="700" fill="#12466e">Procesamiento</text>
-    <text x="301" y="58" font-size="7.8" fill="#5d7385">filtros · promediado</text>
+    <rect x="290" y="22" width="126" height="68" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="305" cy="42" r="9.5" fill="#12466e"/><text x="305" y="45.5" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">3</text>
+    <text x="319" y="45" font-size="9.8" font-weight="700" fill="#12466e">Procesamiento</text>
+    <text x="301" y="66" font-size="8.2" fill="#5d7385">filtros · promediado</text>
   </g>
-  <path d="M419 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <path d="M419 56h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
   <g>
-    <rect x="433" y="20" width="126" height="54" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
-    <circle cx="448" cy="36" r="8.5" fill="#12466e"/><text x="448" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">4</text>
-    <text x="462" y="39" font-size="9.4" font-weight="700" fill="#12466e">Pantalla</text>
-    <text x="444" y="58" font-size="7.8" fill="#5d7385">número · curva · alarma</text>
+    <rect x="433" y="22" width="126" height="68" rx="6" fill="#eef4f8" stroke="#c3d6e3" stroke-width=".9"/>
+    <circle cx="448" cy="42" r="9.5" fill="#12466e"/><text x="448" y="45.5" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">4</text>
+    <text x="462" y="45" font-size="9.8" font-weight="700" fill="#12466e">Pantalla</text>
+    <text x="444" y="66" font-size="8.2" fill="#5d7385">número · curva · alarma</text>
   </g>
-  <path d="M562 47h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
+  <path d="M562 56h11" stroke="#12466e" stroke-width="1.4" marker-end="url(#aNav)"/>
   <g>
-    <rect x="576" y="20" width="120" height="54" rx="6" fill="url(#gNav)"/>
-    <circle cx="591" cy="36" r="8.5" fill="#ffffff"/><text x="591" y="39.2" text-anchor="middle" font-size="9.4" font-weight="700" fill="#12466e">5</text>
-    <text x="605" y="39" font-size="9.4" font-weight="700" fill="#ffffff">Interpretación</text>
-    <text x="587" y="58" font-size="7.8" fill="#bfe3f0">y decisión de enfermería</text>
+    <rect x="576" y="22" width="120" height="68" rx="6" fill="url(#gNav)"/>
+    <circle cx="591" cy="42" r="9.5" fill="#ffffff"/><text x="591" y="45.5" text-anchor="middle" font-size="9.4" font-weight="700" fill="#12466e">5</text>
+    <text x="605" y="45" font-size="9.8" font-weight="700" fill="#ffffff">Interpretación</text>
+    <text x="587" y="66" font-size="8.2" fill="#bfe3f0">y decisión de enfermería</text>
   </g>
   <g stroke="#d9b8b4" stroke-width=".8" stroke-dasharray="3 2">
-    <path d="M67 76v10M210 76v10M353 76v10M496 76v10M636 76v10"/>
+    <path d="M67 92v12M210 92v12M353 92v12M496 92v12M636 92v12"/>
   </g>
-  <rect x="4" y="88" width="692" height="22" rx="4" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
+  <rect x="4" y="106" width="692" height="24" rx="4" fill="#fdf3f2" stroke="#f0d2ce" stroke-width=".8"/>
   <g font-size="7.6" fill="#8a4a44" text-anchor="middle">
-    <text x="67" y="102">variabilidad fisiológica</text>
-    <text x="210" y="102">posición, piel, movimiento</text>
-    <text x="353" y="102">retardo de la señal</text>
-    <text x="496" y="102">alarmas mal configuradas</text>
-    <text x="636" y="102">no mirar al paciente</text>
+    <text x="67" y="121">variabilidad fisiológica</text>
+    <text x="210" y="121">posición, piel, movimiento</text>
+    <text x="353" y="121">retardo de la señal</text>
+    <text x="496" y="121">alarmas mal configuradas</text>
+    <text x="636" y="121">no mirar al paciente</text>
   </g>
-  <text x="4" y="124" class="s-ax">Cada eslabón puede introducir error: el valor que aparece en pantalla no es el fenómeno, es su representación.</text>
+  <text x="4" y="148" class="s-ax">Cada eslabón puede introducir error: el valor que aparece en pantalla no es el fenómeno, es su representación.</text>
 </svg>
     <figcaption><b>Figura 1.</b> Cadena de la monitorización. Elaboración propia. El monitor no mide al paciente: mide una señal que representa al paciente. Antes de actuar sobre un valor anómalo, verifique el eslabón que puede estar fallando.</figcaption>
   </figure>
 
-  <div class="g2">
+  <div class="g21" style="margin-top:3mm">
     <div>
-      <h3>Monitorización invasiva y no invasiva</h3>
+      <h3 style="margin-top:0">Monitorización invasiva y no invasiva</h3>
       <table class="compact">
         <tr><th>Tipo</th><th>Ejemplos</th><th>Costo/riesgo</th></tr>
         <tr><td><b>No invasiva</b></td><td>FC, PANI, SpO₂, FR, EtCO₂, temperatura, GCS</td><td>Mínimo</td></tr>
         <tr><td><b>Mínimamente invasiva</b></td><td>Línea arterial, PiCCO, contorno de pulso</td><td>Bajo–moderado</td></tr>
         <tr><td><b>Invasiva</b></td><td>CVC/PVC, catéter de arteria pulmonar, PIC</td><td>Moderado–alto</td></tr>
       </table>
-      <p class="tiny" style="margin-bottom:0">Regla práctica: se escala de no invasivo a invasivo <em>sólo</em> cuando la información adicional va a cambiar una decisión terapéutica. Más monitorización no equivale a mejor cuidado.</p>
+      <p class="small" style="margin-bottom:0">Regla práctica: se escala de no invasivo a invasivo <em>sólo</em> cuando la información adicional va a cambiar una decisión terapéutica. <strong>Más monitorización no equivale a mejor cuidado</strong>: cada dispositivo añade riesgo de infección, de lesión y de error de interpretación.</p>
     </div>
-    <div>
-      <div class="alert" style="margin-bottom:2mm">
-        <h4>Fatiga de alarmas</h4>
-        <p class="small" style="margin-bottom:0">Hasta 8 de cada 10 alarmas en una unidad crítica no requieren intervención. La consecuencia es que el equipo deja de responder. <b>Su responsabilidad:</b> ajustar los límites al paciente concreto al inicio de cada turno, no silenciar sin evaluar, y nunca apagar una alarma de manera permanente.</p>
-      </div>
-      <div class="tip" style="margin-bottom:0">
-        <h4>Regla de los 3 pasos ante un valor alarmante</h4>
-        <ol class="small" style="margin-bottom:0">
-          <li><b>Mire al paciente</b> (conciencia, color, respiración, pulso).</li>
-          <li><b>Verifique el sensor</b> (posición, cable, perfusión, artefacto).</li>
-          <li><b>Confirme con otro método</b> (pulso manual, PANI, gasometría) y comunique.</li>
-        </ol>
-      </div>
+    <div class="alert" style="margin-bottom:0">
+      <h4>Fatiga de alarmas</h4>
+      <p class="small">Hasta 8 de cada 10 alarmas en una unidad crítica no requieren intervención. La consecuencia es que el equipo deja de responder, y la alarma que sí importa se pierde entre las demás.</p>
+      <p class="small" style="margin-bottom:0"><b>Su responsabilidad:</b> ajustar los límites al paciente concreto al inicio de cada turno, no silenciar sin evaluar y nunca apagar una alarma de manera permanente.</p>
     </div>
+  </div>
+
+  <h3 style="margin-top:5mm">Ante un valor alarmante, siempre en este orden</h3>
+  <div class="g3">
+    <div class="tip" style="margin-bottom:0;border-left-color:var(--green)">
+      <h4>1 · Mire al paciente</h4>
+      <p class="small" style="margin-bottom:0">Conciencia, color, patrón respiratorio y pulso. Un paciente que conversa y está bien perfundido rara vez está en la situación que anuncia el número.</p>
+    </div>
+    <div class="tip" style="margin-bottom:0">
+      <h4>2 · Verifique el sensor</h4>
+      <p class="small" style="margin-bottom:0">Posición, cable, contacto con la piel, perfusión de la extremidad y presencia de artefacto en la curva. La mayoría de las alarmas falsas nacen aquí.</p>
+    </div>
+    <div class="tip" style="margin-bottom:0">
+      <h4>3 · Confirme y comunique</h4>
+      <p class="small" style="margin-bottom:0">Contraste con otro método (pulso manual, PANI, gasometría), registre el hallazgo y avise. Documente también lo que descartó.</p>
+    </div>
+  </div>
+
+  <div class="pearl" style="margin:5mm 0 0">
+    <h4>Perla clínica</h4>
+    <p class="small" style="margin-bottom:0">El monitor no mide al paciente: mide una señal que lo representa. Cuando el número y el paciente no coinciden, <b>el que casi siempre tiene razón es el paciente</b>. Su trabajo es resolver esa discordancia, no elegir el dato que resulte más cómodo.</p>
   </div>
 
   </div>
