@@ -1,0 +1,1404 @@
+<title>Replay BTC Perp 4h</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#f2f4f6; --panel:#ffffff; --panel-2:#eef1f4;
+  --ink:#111820; --ink-2:#3d4753; --muted:#5b6672; --hair:#dde3e9;
+  --azul:#2a78d6; --naranja:#eb6834; --ok:#0a7a3d; --mal:#c93a39; --ambar:#a86b00;
+  --grid:#e6eaee;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-texto:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#151a1f; --panel:#1c232a; --panel-2:#222b33;
+    --ink:#e9eef2; --ink-2:#c3ccd4; --muted:#93a0ac; --hair:#2c363f;
+    --azul:#3987e5; --naranja:#e0714a; --ok:#43b56b; --mal:#e66767; --ambar:#d7a12f;
+    --grid:#26303a;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#151a1f; --panel:#1c232a; --panel-2:#222b33;
+  --ink:#e9eef2; --ink-2:#c3ccd4; --muted:#93a0ac; --hair:#2c363f;
+  --azul:#3987e5; --naranja:#e0714a; --ok:#43b56b; --mal:#e66767; --ambar:#d7a12f;
+  --grid:#26303a;
+}
+
+body{background:var(--ground); color:var(--ink); font-family:var(--f-texto); line-height:1.55;}
+.envoltura{max-width:1120px; margin:0 auto; padding:40px 24px 72px; display:flex; flex-direction:column; gap:40px;}
+
+.encabezado{display:flex; flex-direction:column; gap:14px;}
+.cinta{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:baseline;
+  font-family:var(--f-num); font-size:12px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase;}
+h1{font-family:var(--f-display); font-weight:700; font-size:clamp(30px,4.4vw,46px);
+  line-height:1.05; letter-spacing:-.02em; margin:0; text-wrap:balance;}
+.bajada{font-size:17px; color:var(--ink-2); max-width:64ch; margin:0;}
+
+.veredicto{background:var(--panel); border-left:4px solid var(--ambar);
+  padding:20px 24px; display:flex; flex-direction:column; gap:8px;}
+.veredicto strong{font-family:var(--f-display); font-size:20px; letter-spacing:-.01em;}
+.veredicto p{margin:0; color:var(--ink-2); max-width:72ch;}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1px; background:var(--hair);}
+.tile{background:var(--panel); padding:18px 20px; display:flex; flex-direction:column; gap:6px;}
+.tile .etq{font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);}
+.tile .val{font-family:var(--f-num); font-size:27px; font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums;}
+.tile .pie{font-size:12.5px; color:var(--muted);}
+
+section{display:flex; flex-direction:column; gap:14px;}
+h2{font-family:var(--f-display); font-weight:600; font-size:13px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--muted); margin:0; padding-bottom:8px; border-bottom:1px solid var(--hair);}
+h3{font-family:var(--f-display); font-weight:600; font-size:21px; letter-spacing:-.01em; margin:0;}
+p{margin:0; max-width:74ch;}
+.nota{font-size:13.5px; color:var(--muted); max-width:78ch;}
+
+.lienzo{background:var(--panel); padding:18px 8px 8px; position:relative;}
+.lienzo svg{display:block; width:100%; height:auto; overflow:visible;}
+.leyenda{display:flex; gap:18px; flex-wrap:wrap; padding:0 14px 10px; font-size:12.5px; color:var(--ink-2);}
+.leyenda span{display:inline-flex; align-items:center; gap:7px;}
+.swatch{width:14px; height:3px; border-radius:2px; display:inline-block;}
+.dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+
+.globo{position:absolute; pointer-events:none; opacity:0; transition:opacity .09s;
+  background:var(--panel); border:1px solid var(--hair); box-shadow:0 6px 20px rgba(0,0,0,.14);
+  padding:9px 12px; font-family:var(--f-num); font-size:12px; line-height:1.6; white-space:nowrap; z-index:5;}
+.globo b{font-weight:600;}
+
+.tabla-envoltura{overflow-x:auto; background:var(--panel);}
+table{border-collapse:collapse; width:100%; font-size:13.5px;}
+th,td{padding:10px 14px; text-align:right; border-bottom:1px solid var(--hair); white-space:nowrap;}
+th:first-child,td:first-child{text-align:left;}
+th{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+td{font-family:var(--f-num); font-variant-numeric:tabular-nums;}
+tbody tr:last-child td{border-bottom:none;}
+.pos{color:var(--ok); font-weight:600;} .neg{color:var(--mal); font-weight:600;}
+.chip{display:inline-block; font-family:var(--f-texto); font-size:11px; letter-spacing:.05em;
+  text-transform:uppercase; padding:2px 8px; border:1px solid var(--hair); color:var(--ink-2);}
+
+.dos{display:flex; flex-direction:column; gap:18px;}
+ul{margin:0; padding-left:20px; color:var(--ink-2); display:flex; flex-direction:column; gap:8px; max-width:74ch;}
+code{font-family:var(--f-num); font-size:.92em; background:var(--panel-2); padding:1px 5px;}
+footer{border-top:1px solid var(--hair); padding-top:18px; font-size:12.5px; color:var(--muted); max-width:80ch;}
+@media (prefers-reduced-motion: reduce){*{transition:none !important;}}
+</style>
+
+<div class="envoltura">
+
+  <header class="encabezado">
+    <div class="cinta">
+      <span>BTCUSDPERP · Crypto.com</span><span>velas de 4 h</span>
+      <span>captura 2026-09-04 14:14 UTC</span>
+    </div>
+    <h1>Dónde habría entrado el sistema</h1>
+    <p class="bajada">Semana del 28 de agosto al 4 de septiembre de 2026, reconstruida vela a vela sobre el
+      único futuro de BTC con liquidez real del venue. Las entradas se confirman al cierre y se ejecutan
+      en la apertura siguiente: nada mira hacia adelante.</p>
+  </header>
+
+  <div class="veredicto">
+    <strong>Con el filtro tal como lo pediste, la semana no dio ni una entrada.</strong>
+    <p>RSI(14) &lt; 30 <em>y</em> volumen ≥ +200% en la misma vela: cero coincidencias, y no por poco.
+      El RSI nunca bajó de 32,3 y las velas con volumen explosivo llegaron con el RSI ya recuperándose.
+      Todo lo que sigue muestra qué habría pasado al aflojar el filtro — y por qué aflojarlo no es gratis.</p>
+  </div>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>Precio y ejecución</h2>
+    <h3>El sistema relajado entra dos veces, ambas cerca del piso</h3>
+    <p class="nota">Umbral usado en el gráfico: RSI &lt; 40 y volumen ≥ x2,5 sobre la mediana de las 20 velas previas.
+      Stop en el mínimo de la vela de señal menos 0,5 ATR; objetivo a 2R; cierre por tiempo a las 12 velas.</p>
+    <div class="lienzo"><svg id="g-precio" viewBox="0 0 960 380" role="img"
+      aria-label="Precio de cierre de BTCUSDPERP en velas de 4 horas con las entradas y salidas marcadas"></svg>
+      <div class="globo" id="t-precio"></div></div>
+    <div class="leyenda">
+      <span><i class="swatch" style="background:var(--ink)"></i>cierre 4 h</span>
+      <span><i class="dot" style="background:var(--azul)"></i>entrada</span>
+      <span><i class="dot" style="background:var(--ok)"></i>salida en objetivo</span>
+      <span><i class="dot" style="background:var(--mal)"></i>salida en stop</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Bitácora</h2>
+    <div class="tabla-envoltura"><table id="tabla-ops">
+      <thead><tr><th>Señal (cierre)</th><th>RSI</th><th>Vol.</th><th>Entrada</th><th>Stop</th>
+        <th>Objetivo</th><th>Salida</th><th>Motivo</th><th>R</th><th>%</th></tr></thead>
+      <tbody></tbody></table></div>
+    <p class="nota" id="pie-tabla"></p>
+  </section>
+
+  <section>
+    <h2>Por qué el filtro estricto no disparó</h2>
+    <div class="dos">
+      <div class="lienzo"><svg id="g-rsi" viewBox="0 0 960 250" role="img"
+        aria-label="RSI de 14 periodos frente al umbral 30"></svg>
+        <div class="globo" id="t-rsi"></div></div>
+      <div class="lienzo"><svg id="g-vol" viewBox="0 0 960 250" role="img"
+        aria-label="Volumen de cada vela como multiplo de la mediana de las 20 previas"></svg>
+        <div class="globo" id="t-vol"></div></div>
+    </div>
+    <p class="nota">Las dos condiciones existieron por separado — hubo velas con volumen x4,7 y velas con RSI en 32 —
+      pero nunca en la misma vela. Es el problema clásico de exigir simultaneidad a dos indicadores desfasados:
+      el volumen explota cuando el precio ya giró, y para entonces el RSI ya salió de la zona.</p>
+  </section>
+
+  <section>
+    <h2>Oscilador Momentum-Ballenas</h2>
+    <h3>Flujo grande contra tendencia: la divergencia es el dato</h3>
+    <p class="nota">Dos series independientes en la misma escala −100 a +100. Cuando van juntas confirman;
+      cuando se separan, una de las dos miente. En este gráfico el <em>flujo</em> es un proxy calculado
+      sobre velas (volumen firmado por posición del cierre en el rango, solo en velas de volumen concentrado),
+      no la cinta real de trades: sirve para leer el mecanismo, no para operar.</p>
+    <div class="lienzo"><svg id="g-omb" viewBox="0 0 960 340" role="img"
+      aria-label="Oscilador: flujo de dinero grande frente a tendencia del precio"></svg>
+      <div class="globo" id="t-omb"></div></div>
+    <div class="leyenda">
+      <span><i class="swatch" style="background:var(--azul)"></i>flujo (dinero grande)</span>
+      <span><i class="swatch" style="background:var(--naranja)"></i>tendencia (precio / ATR)</span>
+      <span><i class="dot" style="background:var(--ambar)"></i>acumulación oculta</span>
+    </div>
+    <p class="nota" id="pie-omb"></p>
+  </section>
+
+  <section>
+    <h2>Antes de usar esto con dinero</h2>
+    <ul>
+      <li><strong>n = 2.</strong> Dos operaciones ganadoras en una semana no son evidencia de nada. Con el umbral
+        a RSI &lt; 45 y volumen x2 la misma semana da 6 entradas y suma exactamente <code>0,00R</code>.</li>
+      <li><strong>El umbral se eligió después de ver los datos.</strong> Bajar RSI &lt; 30 a &lt; 40 hasta que
+        aparezcan señales es sobreajuste, y el resultado de arriba lo refleja: está inflado por construcción.</li>
+      <li><strong>Sin costos.</strong> No hay comisiones, funding ni slippage en estos números. En perpetuos el
+        funding sobre 48 h de posición larga no es despreciable.</li>
+      <li><strong>Cuando el stop y el objetivo caen en la misma vela</strong> el replay asume el stop. Sin datos
+        intra-vela no se puede saber el orden real; el supuesto contrario le regalaría rentabilidad al sistema.</li>
+      <li><strong>Un solo venue.</strong> Todo esto es Crypto.com. Binance, Bybit y CME tienen otra microestructura
+        y otro perfil de volumen; la señal no tiene por qué replicarse.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Datos: endpoint público <code>get-candlestick</code> de Crypto.com Exchange, 50 velas de 4 h
+    (2026-08-27 08:00 a 2026-09-04 12:00 UTC). La última vela estaba en curso al momento de la captura.
+    Código, snapshots y pruebas en <code>cripto/</code>. Esto es análisis técnico reproducible,
+    no una recomendación de inversión.
+  </footer>
+</div>
+
+<script>
+var D = {
+ "instrumento": "BTCUSDPERP",
+ "tf": "4h",
+ "capturado": "2026-09-04T14:14:00Z",
+ "ventana": {
+  "desde": "2026-08-28T00:00:00Z",
+  "hasta": "2026-09-04T14:00:00Z"
+ },
+ "filas": [
+  {
+   "ts": "2026-08-27T08:00:00Z",
+   "o": 79065.5,
+   "h": 80525.1,
+   "l": 79027.7,
+   "c": 79464.7,
+   "v": 802.4952,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-27T12:00:00Z",
+   "o": 79470,
+   "h": 80813.4,
+   "l": 78897.6,
+   "c": 80317.3,
+   "v": 2607.4855,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-27T16:00:00Z",
+   "o": 80311.1,
+   "h": 80865.8,
+   "l": 79744.7,
+   "c": 79912.8,
+   "v": 1951.2224,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-27T20:00:00Z",
+   "o": 79914.1,
+   "h": 80445.6,
+   "l": 79877.2,
+   "c": 80263.2,
+   "v": 594.5558,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T00:00:00Z",
+   "o": 80265.1,
+   "h": 81514.5,
+   "l": 79721.8,
+   "c": 79820.3,
+   "v": 1088.0541,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T04:00:00Z",
+   "o": 79820.3,
+   "h": 80006.6,
+   "l": 79561,
+   "c": 79674,
+   "v": 243.1156,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T08:00:00Z",
+   "o": 79680,
+   "h": 79853,
+   "l": 79000,
+   "c": 79603.8,
+   "v": 432.4587,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T12:00:00Z",
+   "o": 79605.7,
+   "h": 79860.1,
+   "l": 78307.1,
+   "c": 78328.8,
+   "v": 1680.1828,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T16:00:00Z",
+   "o": 78328.8,
+   "h": 78406.6,
+   "l": 76865.7,
+   "c": 77563.9,
+   "v": 1704.1875,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-28T20:00:00Z",
+   "o": 77568.8,
+   "h": 77842.8,
+   "l": 77242.8,
+   "c": 77839.9,
+   "v": 541.585,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T00:00:00Z",
+   "o": 77838.2,
+   "h": 77948,
+   "l": 77492.4,
+   "c": 77506,
+   "v": 383.0521,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T04:00:00Z",
+   "o": 77506.8,
+   "h": 77715.9,
+   "l": 77376.9,
+   "c": 77620.3,
+   "v": 314.9497,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T08:00:00Z",
+   "o": 77618.6,
+   "h": 77766,
+   "l": 77474.1,
+   "c": 77590.5,
+   "v": 222.526,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T12:00:00Z",
+   "o": 77592,
+   "h": 78163.1,
+   "l": 77504.1,
+   "c": 77852.4,
+   "v": 433.3848,
+   "rsi": null,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T16:00:00Z",
+   "o": 77859.4,
+   "h": 78337,
+   "l": 77848.1,
+   "c": 78184.9,
+   "v": 545.4723,
+   "rsi": 38.684750318291094,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-29T20:00:00Z",
+   "o": 78188.4,
+   "h": 78298.3,
+   "l": 78040.8,
+   "c": 78238.7,
+   "v": 257.5646,
+   "rsi": 39.30656462566716,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T00:00:00Z",
+   "o": 78235.3,
+   "h": 78330,
+   "l": 77977.2,
+   "c": 78135.6,
+   "v": 274.2899,
+   "rsi": 38.50077303272309,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T04:00:00Z",
+   "o": 78135.1,
+   "h": 78312.8,
+   "l": 77977.4,
+   "c": 78115,
+   "v": 212.9908,
+   "rsi": 38.33168658101091,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T08:00:00Z",
+   "o": 78114.1,
+   "h": 78244.2,
+   "l": 77951.6,
+   "c": 78164.7,
+   "v": 171.5396,
+   "rsi": 39.02742779305838,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T12:00:00Z",
+   "o": 78166.8,
+   "h": 78967.1,
+   "l": 78166.8,
+   "c": 78827.8,
+   "v": 699.383,
+   "rsi": 47.53259011009476,
+   "surge": null,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T16:00:00Z",
+   "o": 78823.6,
+   "h": 79404.9,
+   "l": 78708.9,
+   "c": 78858,
+   "v": 493.9633,
+   "rsi": 47.88911441497267,
+   "surge": 1.0132894372728263,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-30T20:00:00Z",
+   "o": 78858,
+   "h": 78927,
+   "l": 76962.3,
+   "c": 77673.5,
+   "v": 1002.5082,
+   "rsi": 37.20929778455638,
+   "surge": 2.1620968436771477,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T00:00:00Z",
+   "o": 77668.8,
+   "h": 78178.7,
+   "l": 77368.2,
+   "c": 77743.6,
+   "v": 1112.6109,
+   "rsi": 38.08925320140351,
+   "surge": 2.3995539539036095,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T04:00:00Z",
+   "o": 77744.8,
+   "h": 78312,
+   "l": 77447.1,
+   "c": 78186.1,
+   "v": 452.1154,
+   "rsi": 43.47431966341995,
+   "surge": 0.9750716047188753,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T08:00:00Z",
+   "o": 78191,
+   "h": 78797.9,
+   "l": 77970.1,
+   "c": 78288,
+   "v": 478.8615,
+   "rsi": 44.66788954823475,
+   "surge": 1.0815615851921885,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T12:00:00Z",
+   "o": 78284.3,
+   "h": 78758.1,
+   "l": 77660.2,
+   "c": 78556.9,
+   "v": 2070.9972,
+   "rsi": 47.80025031915888,
+   "surge": 4.677575905685848,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T16:00:00Z",
+   "o": 78560.8,
+   "h": 79245.7,
+   "l": 78470.4,
+   "c": 78879.3,
+   "v": 1586.9791,
+   "rsi": 51.355859276308706,
+   "surge": 3.4092770722882597,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-08-31T20:00:00Z",
+   "o": 78884,
+   "h": 79169.8,
+   "l": 78369.7,
+   "c": 78565.1,
+   "v": 431.3845,
+   "rsi": 47.929416052548454,
+   "surge": 0.886869865982035,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-09-01T00:00:00Z",
+   "o": 78560.3,
+   "h": 78879.2,
+   "l": 78153.5,
+   "c": 78654.1,
+   "v": 897.6679,
+   "rsi": 48.968053983264426,
+   "surge": 1.9284429076596852,
+   "flujo": null,
+   "tend": null,
+   "omb": null,
+   "div": null
+  },
+  {
+   "ts": "2026-09-01T04:00:00Z",
+   "o": 78656.4,
+   "h": 79206.1,
+   "l": 78479.1,
+   "c": 78608.6,
+   "v": 388.6222,
+   "rsi": 48.43613282504639,
+   "surge": 0.8348696944038032,
+   "flujo": -3.63812676296749,
+   "tend": 7.7856579698733555,
+   "omb": 2.073765603452933,
+   "div": -11.423784732840845
+  },
+  {
+   "ts": "2026-09-01T08:00:00Z",
+   "o": 78616.8,
+   "h": 78643.2,
+   "l": 77722.2,
+   "c": 78064,
+   "v": 495.0968,
+   "rsi": 42.48714724937212,
+   "surge": 1.1182308033357868,
+   "flujo": -5.29041582577329,
+   "tend": -22.104108527117095,
+   "omb": -13.697262176445193,
+   "div": 16.813692701343804
+  },
+  {
+   "ts": "2026-09-01T12:00:00Z",
+   "o": 78062.3,
+   "h": 78405.5,
+   "l": 77453.2,
+   "c": 77881.2,
+   "v": 1626.6537,
+   "rsi": 40.68101928029091,
+   "surge": 3.494509262259891,
+   "flujo": -80.48507695884982,
+   "tend": -29.0681481334353,
+   "omb": -54.77661254614256,
+   "div": -51.416928825414516
+  },
+  {
+   "ts": "2026-09-01T16:00:00Z",
+   "o": 77886.4,
+   "h": 77951.1,
+   "l": 76381.5,
+   "c": 77295.3,
+   "v": 1575.3327,
+   "rsi": 35.475631678182864,
+   "surge": 3.238677097870038,
+   "flujo": 82.6869295881087,
+   "tend": -50.125851039051824,
+   "omb": 16.280539274528437,
+   "div": 132.81278062716052
+  },
+  {
+   "ts": "2026-09-01T20:00:00Z",
+   "o": 77290.4,
+   "h": 77613.4,
+   "l": 76876.5,
+   "c": 77397.6,
+   "v": 671.5935,
+   "rsi": 36.99162178786371,
+   "surge": 1.3580438640685233,
+   "flujo": 56.03389114247798,
+   "tend": -42.40280494139065,
+   "omb": 6.815543100543664,
+   "div": 98.43669608386863
+  },
+  {
+   "ts": "2026-09-02T00:00:00Z",
+   "o": 77398.7,
+   "h": 77758.9,
+   "l": 76669.7,
+   "c": 77521.4,
+   "v": 1145.0346,
+   "rsi": 38.863605741707126,
+   "surge": 2.2007853202636904,
+   "flujo": 32.318270009409936,
+   "tend": -32.796532835938585,
+   "omb": -0.23913141326432452,
+   "div": 65.11480284534852
+  },
+  {
+   "ts": "2026-09-02T04:00:00Z",
+   "o": 77520.2,
+   "h": 77732.4,
+   "l": 77244.8,
+   "c": 77441,
+   "v": 423.8729,
+   "rsi": 38.07249863193013,
+   "surge": 0.7266245378057914,
+   "flujo": 7.29681231774287,
+   "tend": -34.551785395223185,
+   "omb": -13.627486538740158,
+   "div": 41.848597712966054
+  },
+  {
+   "ts": "2026-09-02T08:00:00Z",
+   "o": 77442.2,
+   "h": 77518.7,
+   "l": 76210.5,
+   "c": 76788,
+   "v": 648.2793,
+   "rsi": 32.31832620117825,
+   "surge": 1.1113134308222157,
+   "flujo": 0,
+   "tend": -56.661792784380424,
+   "omb": -28.330896392190212,
+   "div": 56.661792784380424
+  },
+  {
+   "ts": "2026-09-02T12:00:00Z",
+   "o": 76790.3,
+   "h": 77459.9,
+   "l": 76565.1,
+   "c": 77250.4,
+   "v": 2005.557,
+   "rsi": 39.31284148034643,
+   "surge": 3.039015577864776,
+   "flujo": 99.99732666171155,
+   "tend": -33.58126107066719,
+   "omb": 33.208032795522186,
+   "div": 133.57858773237874
+  },
+  {
+   "ts": "2026-09-02T16:00:00Z",
+   "o": 77253.6,
+   "h": 77544.5,
+   "l": 76917.6,
+   "c": 77314,
+   "v": 630.9722,
+   "rsi": 40.22781730957025,
+   "surge": 0.9204712115780249,
+   "flujo": 98.31366965492323,
+   "tend": -28.25512790158954,
+   "omb": 35.02927087666684,
+   "div": 126.56879755651278
+  },
+  {
+   "ts": "2026-09-02T20:00:00Z",
+   "o": 77311.6,
+   "h": 77505.1,
+   "l": 76975.4,
+   "c": 77304.7,
+   "v": 329.5682,
+   "rsi": 40.13253332518445,
+   "surge": 0.4807787733779536,
+   "flujo": 83.35281902758278,
+   "tend": -26.86523848835002,
+   "omb": 28.243790269616383,
+   "div": 110.2180575159328
+  },
+  {
+   "ts": "2026-09-03T00:00:00Z",
+   "o": 77303,
+   "h": 77882,
+   "l": 76935.1,
+   "c": 77669,
+   "v": 820.9568,
+   "rsi": 45.57109369671898,
+   "surge": 1.2439938151615821,
+   "flujo": 53.06947450388907,
+   "tend": -5.616620317433144,
+   "omb": 23.72642709322796,
+   "div": 58.686094821322214
+  },
+  {
+   "ts": "2026-09-03T04:00:00Z",
+   "o": 77672.3,
+   "h": 78143.7,
+   "l": 77067.6,
+   "c": 77631.6,
+   "v": 510.2298,
+   "rsi": 45.11794627862255,
+   "surge": 0.6837019831090451,
+   "flujo": 23.526722857479445,
+   "tend": -6.9151430810629755,
+   "omb": 8.305789888208235,
+   "div": 30.44186593854242
+  },
+  {
+   "ts": "2026-09-03T08:00:00Z",
+   "o": 77634,
+   "h": 78033.6,
+   "l": 77431.9,
+   "c": 77904,
+   "v": 464.5703,
+   "rsi": 49.08879734921375,
+   "surge": 0.7039622302997682,
+   "flujo": 0,
+   "tend": 7.934667414044365,
+   "omb": 3.9673337070221826,
+   "div": -7.934667414044365
+  },
+  {
+   "ts": "2026-09-03T12:00:00Z",
+   "o": 77902.8,
+   "h": 81380,
+   "l": 77847.7,
+   "c": 81361,
+   "v": 2579.75,
+   "rsi": 74.40168181677348,
+   "surge": 4.033217862163929,
+   "flujo": 99.99999811481727,
+   "tend": 91.37215894252918,
+   "omb": 95.68607852867322,
+   "div": 8.627839172288091
+  },
+  {
+   "ts": "2026-09-03T16:00:00Z",
+   "o": 81358.5,
+   "h": 81802.3,
+   "l": 80610.6,
+   "c": 81759.7,
+   "v": 1749.2035,
+   "rsi": 75.8905205337635,
+   "surge": 2.6505637512948215,
+   "flujo": 99.98129024741064,
+   "tend": 91.52293247495834,
+   "omb": 95.75211136118449,
+   "div": 8.458357772452302
+  },
+  {
+   "ts": "2026-09-03T20:00:00Z",
+   "o": 81758.8,
+   "h": 82300,
+   "l": 80905.2,
+   "c": 81261.2,
+   "v": 1202.041,
+   "rsi": 70.37886473187675,
+   "surge": 1.6107209251172305,
+   "flujo": 98.48902162701512,
+   "tend": 82.45807188894388,
+   "omb": 90.4735467579795,
+   "div": 16.030949738071243
+  },
+  {
+   "ts": "2026-09-04T00:00:00Z",
+   "o": 81265.1,
+   "h": 81440.4,
+   "l": 80661.9,
+   "c": 80835.2,
+   "v": 656.1524,
+   "rsi": 65.96958712617496,
+   "surge": 0.8792365657626413,
+   "flujo": 85.99093546088774,
+   "tend": 71.61061850602039,
+   "omb": 78.80077698345406,
+   "div": 14.380316954867354
+  },
+  {
+   "ts": "2026-09-04T04:00:00Z",
+   "o": 80839.3,
+   "h": 81290.3,
+   "l": 80566.4,
+   "c": 80644.8,
+   "v": 384.8068,
+   "rsi": 64.0384719607296,
+   "surge": 0.5796392216311872,
+   "flujo": 53.482020978878765,
+   "tend": 63.5037472208381,
+   "omb": 58.49288409985843,
+   "div": -10.021726241959335
+  },
+  {
+   "ts": "2026-09-04T08:00:00Z",
+   "o": 80645.3,
+   "h": 81425,
+   "l": 80488,
+   "c": 81220,
+   "v": 663.1355,
+   "rsi": 67.16549774471083,
+   "surge": 0.9988891699835036,
+   "flujo": 22.1373467715508,
+   "tend": 73.3246340442779,
+   "omb": 47.73099040791435,
+   "div": -51.187287272727104
+  },
+  {
+   "ts": "2026-09-04T12:00:00Z",
+   "o": 81218.3,
+   "h": 81354,
+   "l": 78974,
+   "c": 79425.6,
+   "v": 1933.3657,
+   "rsi": 51.980388711162504,
+   "surge": 2.930923113901068,
+   "flujo": -99.63427553173999,
+   "tend": 5.354345165970159,
+   "omb": -47.139965182884914,
+   "div": -104.98862069771015
+  }
+ ],
+ "estrictas": [],
+ "casi": [
+  {
+   "ts": "2026-09-01T16:00:00Z",
+   "rsi": 35.475631678182864,
+   "surge": 3.238677097870038,
+   "distancia": 0.18252105593942883
+  },
+  {
+   "ts": "2026-09-02T12:00:00Z",
+   "rsi": 39.31284148034643,
+   "surge": 3.039015577864776,
+   "distancia": 0.31042804934488094
+  },
+  {
+   "ts": "2026-09-01T12:00:00Z",
+   "rsi": 40.68101928029091,
+   "surge": 3.494509262259891,
+   "distancia": 0.35603397600969705
+  },
+  {
+   "ts": "2026-08-31T00:00:00Z",
+   "rsi": 38.08925320140351,
+   "surge": 2.3995539539036095,
+   "distancia": 0.4697904554122472
+  },
+  {
+   "ts": "2026-08-30T20:00:00Z",
+   "rsi": 37.20929778455638,
+   "surge": 2.1620968436771477,
+   "distancia": 0.5196109782594966
+  },
+  {
+   "ts": "2026-09-02T00:00:00Z",
+   "rsi": 38.863605741707126,
+   "surge": 2.2007853202636904,
+   "distancia": 0.5618584179690074
+  }
+ ],
+ "ops40": [
+  {
+   "senal": "2026-09-01T16:00:00Z",
+   "rsi": 35.475631678182864,
+   "surge": 3.238677097870038,
+   "entradaTs": "2026-09-01T20:00:00Z",
+   "entrada": 77290.4,
+   "stop": 75933.54605865508,
+   "objetivo": 80004.10788268983,
+   "salidaTs": "2026-09-03T12:00:00Z",
+   "salida": 80004.10788268983,
+   "motivo": "objetivo",
+   "R": 2,
+   "pct": 3.5110542611887583
+  },
+  {
+   "senal": "2026-09-02T12:00:00Z",
+   "rsi": 39.31284148034643,
+   "surge": 3.039015577864776,
+   "entradaTs": "2026-09-02T16:00:00Z",
+   "entrada": 77253.6,
+   "stop": 76114.78116931602,
+   "objetivo": 79531.23766136798,
+   "salidaTs": "2026-09-03T12:00:00Z",
+   "salida": 79531.23766136798,
+   "motivo": "objetivo",
+   "R": 2,
+   "pct": 2.9482608724615744
+  }
+ ],
+ "res40": {
+  "n": 2,
+  "ganadoras": 2,
+  "aciertoPct": 100,
+  "sumaR": 4,
+  "esperanzaR": 2
+ },
+ "ops45": [
+  {
+   "senal": "2026-08-30T20:00:00Z",
+   "rsi": 37.20929778455638,
+   "surge": 2.1620968436771477,
+   "entradaTs": "2026-08-31T00:00:00Z",
+   "entrada": 77668.8,
+   "stop": 76544.07791517764,
+   "objetivo": 79918.24416964473,
+   "salidaTs": "2026-09-01T16:00:00Z",
+   "salida": 76544.07791517764,
+   "motivo": "stop",
+   "R": -1,
+   "pct": -1.448100247232307
+  },
+  {
+   "senal": "2026-08-31T00:00:00Z",
+   "rsi": 38.08925320140351,
+   "surge": 2.3995539539036095,
+   "entradaTs": "2026-08-31T04:00:00Z",
+   "entrada": 77744.8,
+   "stop": 76950.90449266494,
+   "objetivo": 79332.59101467014,
+   "salidaTs": "2026-09-01T16:00:00Z",
+   "salida": 76950.90449266494,
+   "motivo": "stop",
+   "R": -1,
+   "pct": -1.0211557651895253
+  },
+  {
+   "senal": "2026-09-01T12:00:00Z",
+   "rsi": 40.68101928029091,
+   "surge": 3.494509262259891,
+   "entradaTs": "2026-09-01T16:00:00Z",
+   "entrada": 77886.4,
+   "stop": 77031.15729393622,
+   "objetivo": 79596.88541212754,
+   "salidaTs": "2026-09-01T16:00:00Z",
+   "salida": 77031.15729393622,
+   "motivo": "stop",
+   "R": -1,
+   "pct": -1.0980642397951004
+  },
+  {
+   "senal": "2026-09-01T16:00:00Z",
+   "rsi": 35.475631678182864,
+   "surge": 3.238677097870038,
+   "entradaTs": "2026-09-01T20:00:00Z",
+   "entrada": 77290.4,
+   "stop": 75933.54605865508,
+   "objetivo": 80004.10788268983,
+   "salidaTs": "2026-09-03T12:00:00Z",
+   "salida": 80004.10788268983,
+   "motivo": "objetivo",
+   "R": 2,
+   "pct": 3.5110542611887583
+  },
+  {
+   "senal": "2026-09-02T00:00:00Z",
+   "rsi": 38.863605741707126,
+   "surge": 2.2007853202636904,
+   "entradaTs": "2026-09-02T04:00:00Z",
+   "entrada": 77520.2,
+   "stop": 76220.11598935054,
+   "objetivo": 80120.36802129891,
+   "salidaTs": "2026-09-02T08:00:00Z",
+   "salida": 76220.11598935054,
+   "motivo": "stop",
+   "R": -1,
+   "pct": -1.6770906301189343
+  },
+  {
+   "senal": "2026-09-02T12:00:00Z",
+   "rsi": 39.31284148034643,
+   "surge": 3.039015577864776,
+   "entradaTs": "2026-09-02T16:00:00Z",
+   "entrada": 77253.6,
+   "stop": 76114.78116931602,
+   "objetivo": 79531.23766136798,
+   "salidaTs": "2026-09-03T12:00:00Z",
+   "salida": 79531.23766136798,
+   "motivo": "objetivo",
+   "R": 2,
+   "pct": 2.9482608724615744
+  }
+ ],
+ "res45": {
+  "n": 6,
+  "ganadoras": 2,
+  "aciertoPct": 33.33333333333333,
+  "sumaR": 0,
+  "esperanzaR": 0
+ },
+ "ombSenales": [
+  {
+   "ts": "2026-09-01T16:00:00Z",
+   "tipo": "acumulacion_oculta",
+   "close": 77295.3,
+   "flujo": 82.6869295881087,
+   "tendencia": -50.125851039051824,
+   "omb": 16.280539274528437,
+   "divergencia": 132.81278062716052
+  },
+  {
+   "ts": "2026-09-01T20:00:00Z",
+   "tipo": "acumulacion_oculta",
+   "close": 77397.6,
+   "flujo": 56.03389114247798,
+   "tendencia": -42.40280494139065,
+   "omb": 6.815543100543664,
+   "divergencia": 98.43669608386863
+  },
+  {
+   "ts": "2026-09-02T00:00:00Z",
+   "tipo": "acumulacion_oculta",
+   "close": 77521.4,
+   "flujo": 32.318270009409936,
+   "tendencia": -32.796532835938585,
+   "omb": -0.23913141326432452,
+   "divergencia": 65.11480284534852
+  },
+  {
+   "ts": "2026-09-02T12:00:00Z",
+   "tipo": "acumulacion_oculta",
+   "close": 77250.4,
+   "flujo": 99.99732666171155,
+   "tendencia": -33.58126107066719,
+   "omb": 33.208032795522186,
+   "divergencia": 133.57858773237874
+  },
+  {
+   "ts": "2026-09-03T12:00:00Z",
+   "tipo": "impulso_confirmado",
+   "close": 81361,
+   "flujo": 99.99999811481727,
+   "tendencia": 91.37215894252918,
+   "omb": 95.68607852867322,
+   "divergencia": 8.627839172288091
+  },
+  {
+   "ts": "2026-09-03T16:00:00Z",
+   "tipo": "impulso_confirmado",
+   "close": 81759.7,
+   "flujo": 99.98129024741064,
+   "tendencia": 91.52293247495834,
+   "omb": 95.75211136118449,
+   "divergencia": 8.458357772452302
+  },
+  {
+   "ts": "2026-09-03T20:00:00Z",
+   "tipo": "impulso_confirmado",
+   "close": 81261.2,
+   "flujo": 98.48902162701512,
+   "tendencia": 82.45807188894388,
+   "omb": 90.4735467579795,
+   "divergencia": 16.030949738071243
+  },
+  {
+   "ts": "2026-09-04T00:00:00Z",
+   "tipo": "impulso_confirmado",
+   "close": 80835.2,
+   "flujo": 85.99093546088774,
+   "tendencia": 71.61061850602039,
+   "omb": 78.80077698345406,
+   "divergencia": 14.380316954867354
+  },
+  {
+   "ts": "2026-09-04T04:00:00Z",
+   "tipo": "impulso_confirmado",
+   "close": 80644.8,
+   "flujo": 53.482020978878765,
+   "tendencia": 63.5037472208381,
+   "omb": 58.49288409985843,
+   "divergencia": -10.021726241959335
+  }
+ ],
+ "minRsi": 32.31832620117825,
+ "maxSurge": 4.677575905685848
+};
+</script>
+<script>
+(function(){
+  var css = function(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); };
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(t, a){ var e = document.createElementNS(SVGNS, t);
+    for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function fnum(x, n){ return x == null ? '—' : Number(x).toLocaleString('es-CL',
+    {minimumFractionDigits:n, maximumFractionDigits:n}); }
+  function hora(ts){ return ts.slice(8,10) + '/' + ts.slice(5,7) + ' ' + ts.slice(11,16); }
+
+  var filas = D.filas.filter(function(f){ return f.rsi != null; });
+
+  /* ---------- tiles ---------- */
+  var tiles = [
+    ['Señales estrictas', '0', 'RSI &lt; 30 y volumen ≥ +200% a la vez'],
+    ['RSI mínimo de la semana', fnum(D.minRsi,1), 'nunca tocó la zona de sobreventa'],
+    ['Volumen máximo', 'x' + fnum(D.maxSurge,2), 'sobre la mediana de 20 velas'],
+    ['Futuros BTC con liquidez', '1 de 8', 'los otros 7 no negocian ni 1 BTC por semana']
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(function(t){
+    return '<div class="tile"><span class="etq">' + t[0] + '</span><span class="val">' +
+      t[1] + '</span><span class="pie">' + t[2] + '</span></div>';
+  }).join('');
+
+  /* ---------- utilidades de dibujo ---------- */
+  function marco(svg, W, H, m){
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    return { x0:m.l, x1:W-m.r, y0:m.t, y1:H-m.b };
+  }
+  function ejeY(svg, r, escala, ticks, sufijo, dec){
+    ticks.forEach(function(v){
+      var y = escala(v);
+      svg.appendChild(el('line', {x1:r.x0, x2:r.x1, y1:y, y2:y, stroke:css('--grid'), 'stroke-width':1}));
+      var t = el('text', {x:r.x0-9, y:y+4, fill:css('--muted'), 'font-size':11,
+        'text-anchor':'end', 'font-family':css('--f-num')});
+      t.textContent = fnum(v, dec == null ? 0 : dec) + (sufijo || '');
+      svg.appendChild(t);
+    });
+  }
+  function ejeX(svg, r, xs, etiquetas){
+    etiquetas.forEach(function(i){
+      var t = el('text', {x:xs(i), y:r.y1+20, fill:css('--muted'), 'font-size':11,
+        'text-anchor':'middle', 'font-family':css('--f-num')});
+      t.textContent = hora(filas[i].ts);
+      svg.appendChild(t);
+    });
+  }
+  function ruta(svg, pts, color, ancho){
+    var d = pts.map(function(p,i){ return (i?'L':'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    svg.appendChild(el('path', {d:d, fill:'none', stroke:color, 'stroke-width':ancho||2,
+      'stroke-linejoin':'round', 'stroke-linecap':'round'}));
+  }
+  function etiquetaFin(svg, x, y, texto, color){
+    var t = el('text', {x:x+8, y:y+4, fill:color, 'font-size':12, 'font-weight':600,
+      'font-family':css('--f-texto')});
+    t.textContent = texto; svg.appendChild(t);
+  }
+  /* crosshair + tooltip compartido */
+  function interactivo(svg, r, xs, globo, texto){
+    var linea = el('line', {y1:r.y0, y2:r.y1, stroke:css('--muted'), 'stroke-width':1,
+      'stroke-dasharray':'3 3', opacity:0});
+    svg.appendChild(linea);
+    var capa = el('rect', {x:r.x0, y:r.y0, width:r.x1-r.x0, height:r.y1-r.y0,
+      fill:'transparent', style:'cursor:crosshair'});
+    svg.appendChild(capa);
+    function mover(ev){
+      var caja = svg.getBoundingClientRect();
+      var vb = svg.viewBox.baseVal;
+      var px = (ev.clientX - caja.left) / caja.width * vb.width;
+      var i = 0, mejor = Infinity;
+      for (var k = 0; k < filas.length; k++){
+        var d = Math.abs(xs(k) - px);
+        if (d < mejor){ mejor = d; i = k; }
+      }
+      linea.setAttribute('x1', xs(i)); linea.setAttribute('x2', xs(i));
+      linea.setAttribute('opacity', 1);
+      globo.innerHTML = texto(i);
+      globo.style.opacity = 1;
+      var izq = xs(i) / vb.width * caja.width;
+      globo.style.left = Math.min(caja.width - globo.offsetWidth - 8, Math.max(8, izq + 14)) + 'px';
+      globo.style.top = '18px';
+    }
+    capa.addEventListener('mousemove', mover);
+    capa.addEventListener('mouseleave', function(){
+      linea.setAttribute('opacity', 0); globo.style.opacity = 0; });
+  }
+
+  /* ---------- 1. precio ---------- */
+  (function(){
+    var svg = document.getElementById('g-precio'), W = 960, H = 380,
+        m = {l:62, r:80, t:16, b:34};
+    var r = marco(svg, W, H, m);
+    var lo = Math.min.apply(null, filas.map(function(f){ return f.l; }));
+    var hi = Math.max.apply(null, filas.map(function(f){ return f.h; }));
+    var pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+    var y = function(v){ return r.y1 - (v - lo) / (hi - lo) * (r.y1 - r.y0); };
+    var xs = function(i){ return r.x0 + i / (filas.length - 1) * (r.x1 - r.x0); };
+
+    var ticks = []; for (var v = Math.ceil(lo/1000)*1000; v < hi; v += 1000) ticks.push(v);
+    ejeY(svg, r, y, ticks, '', 0);
+    ejeX(svg, r, xs, [0, 9, 18, 27, filas.length-1]);
+
+    filas.forEach(function(f, i){
+      svg.appendChild(el('line', {x1:xs(i), x2:xs(i), y1:y(f.h), y2:y(f.l),
+        stroke:css('--hair'), 'stroke-width':2}));
+    });
+    ruta(svg, filas.map(function(f,i){ return [xs(i), y(f.c)]; }), css('--ink'), 2);
+
+    var idx = {}; filas.forEach(function(f,i){ idx[f.ts] = i; });
+    D.ops40.forEach(function(o, k){
+      var ie = idx[o.entradaTs], is = idx[o.salidaTs];
+      var col = o.R > 0 ? css('--ok') : css('--mal');
+      var dy = k % 2 ? 24 : -16;   // separa etiquetas de operaciones vecinas
+      if (ie != null){
+        svg.appendChild(el('line', {x1:xs(ie), x2:xs(ie), y1:r.y0, y2:r.y1,
+          stroke:css('--azul'), 'stroke-width':1, 'stroke-dasharray':'4 4', opacity:.55}));
+        svg.appendChild(el('circle', {cx:xs(ie), cy:y(o.entrada), r:6,
+          fill:css('--azul'), stroke:css('--panel'), 'stroke-width':2}));
+        etiquetaFin(svg, xs(ie)-4, y(o.entrada)+dy, 'entra ' + fnum(o.entrada,0), css('--azul'));
+      }
+      if (is != null){
+        svg.appendChild(el('circle', {cx:xs(is), cy:y(o.salida), r:6,
+          fill:col, stroke:css('--panel'), 'stroke-width':2}));
+        etiquetaFin(svg, xs(is)-4, y(o.salida)+dy, 'sale ' + fnum(o.R,1) + 'R', col);
+      }
+    });
+
+    interactivo(svg, r, xs, document.getElementById('t-precio'), function(i){
+      var f = filas[i];
+      return '<b>' + hora(f.ts) + '</b><br>cierre ' + fnum(f.c,1) +
+        '<br>RSI ' + fnum(f.rsi,1) + ' · vol x' + fnum(f.surge,2);
+    });
+  })();
+
+  /* ---------- 2. RSI ---------- */
+  (function(){
+    var svg = document.getElementById('g-rsi'), W = 960, H = 250, m = {l:52, r:56, t:16, b:34};
+    var r = marco(svg, W, H, m);
+    var y = function(v){ return r.y1 - (v - 20) / 60 * (r.y1 - r.y0); };
+    var xs = function(i){ return r.x0 + i / (filas.length - 1) * (r.x1 - r.x0); };
+    ejeY(svg, r, y, [30, 50, 70], '', 0);
+    ejeX(svg, r, xs, [0, 24, filas.length-1]);
+    svg.appendChild(el('line', {x1:r.x0, x2:r.x1, y1:y(30), y2:y(30),
+      stroke:css('--mal'), 'stroke-width':2, 'stroke-dasharray':'6 4'}));
+    etiquetaFin(svg, r.x1-6, y(30), 'umbral 30', css('--mal'));
+    ruta(svg, filas.map(function(f,i){ return [xs(i), y(Math.max(20, Math.min(80, f.rsi)))]; }),
+      css('--ink'), 2);
+    var mi = 0; filas.forEach(function(f,i){ if (f.rsi < filas[mi].rsi) mi = i; });
+    svg.appendChild(el('circle', {cx:xs(mi), cy:y(filas[mi].rsi), r:5,
+      fill:css('--ink'), stroke:css('--panel'), 'stroke-width':2}));
+    etiquetaFin(svg, xs(mi)-6, y(filas[mi].rsi)-14, 'mín ' + fnum(filas[mi].rsi,1), css('--ink'));
+    var tit = el('text', {x:r.x0, y:r.y0-2, fill:css('--muted'), 'font-size':11,
+      'font-family':css('--f-texto'), 'letter-spacing':'.08em'});
+    tit.textContent = 'RSI(14)'; svg.appendChild(tit);
+    interactivo(svg, r, xs, document.getElementById('t-rsi'), function(i){
+      return '<b>' + hora(filas[i].ts) + '</b><br>RSI ' + fnum(filas[i].rsi,1); });
+  })();
+
+  /* ---------- 3. surge de volumen ---------- */
+  (function(){
+    var svg = document.getElementById('g-vol'), W = 960, H = 250, m = {l:52, r:56, t:16, b:34};
+    var r = marco(svg, W, H, m);
+    var max = 5;
+    var y = function(v){ return r.y1 - Math.min(v, max) / max * (r.y1 - r.y0); };
+    var xs = function(i){ return r.x0 + i / (filas.length - 1) * (r.x1 - r.x0); };
+    ejeY(svg, r, y, [1, 2, 3, 4], 'x', 0);
+    ejeX(svg, r, xs, [0, 24, filas.length-1]);
+    var w = (r.x1 - r.x0) / filas.length - 2;
+    filas.forEach(function(f, i){
+      var alto = r.y1 - y(f.surge);
+      svg.appendChild(el('rect', {x:xs(i)-w/2, y:y(f.surge), width:w, height:Math.max(1,alto), rx:2,
+        fill: f.surge >= 3 ? css('--azul') : css('--hair')}));
+    });
+    svg.appendChild(el('line', {x1:r.x0, x2:r.x1, y1:y(3), y2:y(3),
+      stroke:css('--mal'), 'stroke-width':2, 'stroke-dasharray':'6 4'}));
+    etiquetaFin(svg, r.x1-6, y(3), '+200%', css('--mal'));
+    var tit = el('text', {x:r.x0, y:r.y0-2, fill:css('--muted'), 'font-size':11,
+      'font-family':css('--f-texto'), 'letter-spacing':'.08em'});
+    tit.textContent = 'Volumen / mediana de las 20 velas previas'; svg.appendChild(tit);
+    interactivo(svg, r, xs, document.getElementById('t-vol'), function(i){
+      return '<b>' + hora(filas[i].ts) + '</b><br>x' + fnum(filas[i].surge,2) +
+        '<br>' + fnum(filas[i].v,1) + ' BTC'; });
+  })();
+
+  /* ---------- 4. OMB ---------- */
+  (function(){
+    var svg = document.getElementById('g-omb'), W = 960, H = 340, m = {l:56, r:96, t:20, b:34};
+    var r = marco(svg, W, H, m);
+    var y = function(v){ return r.y1 - (v + 100) / 200 * (r.y1 - r.y0); };
+    var con = filas.filter(function(f){ return f.flujo != null; });
+    var i0 = filas.indexOf(con[0]);
+    var xs = function(i){ return r.x0 + (i - i0) / (filas.length - 1 - i0) * (r.x1 - r.x0); };
+    ejeY(svg, r, y, [-100, -30, 0, 30, 100], '', 0);
+    svg.appendChild(el('line', {x1:r.x0, x2:r.x1, y1:y(0), y2:y(0),
+      stroke:css('--muted'), 'stroke-width':1.5}));
+    [0, Math.floor(con.length/2), con.length-1].forEach(function(k){
+      var i = filas.indexOf(con[k]);
+      var t = el('text', {x:xs(i), y:r.y1+20, fill:css('--muted'), 'font-size':11,
+        'text-anchor':'middle', 'font-family':css('--f-num')});
+      t.textContent = hora(filas[i].ts); svg.appendChild(t);
+    });
+    con.forEach(function(f){
+      var i = filas.indexOf(f);
+      if (f.flujo > 30 && f.tend < -30){
+        svg.appendChild(el('rect', {x:xs(i)-4, y:r.y0, width:8, height:r.y1-r.y0,
+          fill:css('--ambar'), opacity:.16}));
+      }
+    });
+    ruta(svg, con.map(function(f){ return [xs(filas.indexOf(f)), y(f.tend)]; }), css('--naranja'), 2);
+    ruta(svg, con.map(function(f){ return [xs(filas.indexOf(f)), y(f.flujo)]; }), css('--azul'), 2);
+    var ult = con[con.length-1], iu = filas.indexOf(ult);
+    etiquetaFin(svg, xs(iu), y(ult.flujo), 'flujo', css('--azul'));
+    etiquetaFin(svg, xs(iu), y(ult.tend), 'tendencia', css('--naranja'));
+    interactivo(svg, r, xs, document.getElementById('t-omb'), function(i){
+      var f = filas[i];
+      if (f.flujo == null) return '<b>' + hora(f.ts) + '</b><br>sin dato';
+      return '<b>' + hora(f.ts) + '</b><br>flujo ' + fnum(f.flujo,0) +
+        '<br>tendencia ' + fnum(f.tend,0) + '<br>divergencia ' + fnum(f.div,0);
+    });
+  })();
+
+  /* ---------- tabla ---------- */
+  var cuerpo = document.querySelector('#tabla-ops tbody');
+  cuerpo.innerHTML = D.ops40.map(function(o){
+    var c = o.R > 0 ? 'pos' : 'neg';
+    return '<tr><td>' + hora(o.senal) + '</td><td>' + fnum(o.rsi,1) + '</td><td>x' + fnum(o.surge,2) +
+      '</td><td>' + fnum(o.entrada,1) + '</td><td>' + fnum(o.stop,1) + '</td><td>' + fnum(o.objetivo,1) +
+      '</td><td>' + fnum(o.salida,1) + '</td><td><span class="chip">' + o.motivo +
+      '</span></td><td class="' + c + '">' + fnum(o.R,2) + '</td><td class="' + c + '">' +
+      fnum(o.pct,2) + '%</td></tr>';
+  }).join('');
+  document.getElementById('pie-tabla').innerHTML =
+    D.res40.ganadoras + ' de ' + D.res40.n + ' ganadoras · suma ' + fnum(D.res40.sumaR,2) +
+    'R · esperanza ' + fnum(D.res40.esperanzaR,2) + 'R por operación. ' +
+    'Con RSI &lt; 45 y volumen x2 la misma semana entrega ' + D.res45.n + ' entradas y ' +
+    fnum(D.res45.sumaR,2) + 'R: el resultado depende del umbral, no del mercado.';
+
+  var acum = D.ombSenales.filter(function(s){ return s.tipo === 'acumulacion_oculta'; });
+  document.getElementById('pie-omb').innerHTML =
+    'El oscilador marcó ' + acum.length + ' velas de acumulación oculta, la primera el ' +
+    (acum.length ? hora(acum[0].ts) : '—') +
+    ' — flujo comprador con la tendencia todavía hundida. El impulso a 82.300 llegó después. ' +
+    'Es una coincidencia interesante sobre una sola muestra, no una validación.';
+})();
+</script>
