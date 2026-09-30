@@ -13,7 +13,13 @@
 // ============================================================
 
 (function () {
-  const DC = typeof module !== 'undefined' ? require('./doble-chequeo.js') : window.PepeDobleChequeo;
+  const EN_NODE = typeof module !== 'undefined';
+  const DC = EN_NODE ? require('./doble-chequeo.js') : window.PepeDobleChequeo;
+  const CL = EN_NODE ? require('./checklist.js') : window.PepeChecklist;
+  // Protocolos por patología, desde la mirada de enfermería. Por ahora: SCA.
+  const PROTOCOLOS = EN_NODE ? { sca: require('./protocolos/sca.js') } : (window.PEPE_PROTOCOLOS || {});
+  // Sospechas o diagnósticos de kb.js que se atienden con un protocolo.
+  const USA_PROTOCOLO = { sca: 'sca', iamcest: 'sca' };
 
   const NUMEROS = {
     uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10,
@@ -52,6 +58,7 @@
     ['mas', /^(y )?(que mas|mas|dime mas|algo mas|sigue|siguiente|continua|continuar|dale|otro|y ahora|listo|ok)$/],
     ['repetir', /^(repite|repetir|otra vez|de nuevo|como|que)$/],
     ['anterior', /^(anterior|atras|vuelve|el anterior)$/],
+    ['porque', /^(por que|porque|explica|explicame|fundamento|y eso)$/],
   ];
   function navegacion(t) {
     const resto = t.replace(/^pepe\s*/, '').replace(/\b(?:box|cama|camilla|sala)\s+\S+/, '').replace(/\bpepe\b/, '').trim();
@@ -88,6 +95,14 @@
     return pool[0] || null;
   }
 
+  function buscarFase(t) {
+    let mejor = null;
+    Object.values(PROTOCOLOS).forEach((proto) => proto.fases.forEach((fase) => fase.activadores.forEach((a) => {
+      if (contiene(t, a) && (!mejor || a.length > mejor.largo)) mejor = { proto, fase, largo: a.length };
+    })));
+    return mejor;
+  }
+
   function interpretar(texto, kb) {
     const t = normalizar(texto);
     const intencion = detectarIntencion(t);
@@ -96,8 +111,11 @@
     const motivos = kb.motivos.filter((m) => m.activadores.some((a) => contiene(t, a)));
     const sospecha = buscarSospecha(t, kb, intencion, motivos[0]);
     const motivo = sospecha ? sospecha.motivo : motivos[0] || null;
+    // Un protocolo se usa si no hay sospecha de otra patología ("dolor torácico, sospecha de TEP" no es SCA).
+    const fase = intencion !== 'descartado' && (!sospecha || USA_PROTOCOLO[sospecha.item.id]) ? buscarFase(t) : null;
     return {
-      intencion: motivo ? intencion : 'desconocido',
+      intencion: motivo || fase ? intencion : 'desconocido',
+      fase,
       ...datos,
       motivo,
       otrosMotivos: motivos.filter((m) => m !== motivo),
@@ -263,6 +281,46 @@
     };
   }
 
+  function respFase(i, kb, inst) {
+    const { proto, fase } = i.fase;
+    const clave = fase.claveInstitucional;
+    const local = (inst && inst.tips[clave]) || [];
+    const contacto = inst && (inst.contactos[clave] || inst.contactos[proto.id]);
+    const quien = describirPaciente(i);
+    const corte = fase.localDespuesDe || 1;
+    const primeros = fase.pasos.slice(0, corte);
+    const resto = fase.pasos.slice(corte);
+    // En el primer contacto, lo que no se puede perder del dolor torácico.
+    const dolor = kb.motivos.find((m) => m.id === 'dolor-toracico');
+    const descartar = fase.id === 'primer-contacto' && dolor ? otrosNoPerder(dolor, 'sca') : [];
+    const pasos = [
+      ...primeros,
+      ...local.map((t) => ({ voz: 'Protocolo local: ' + t, porque: 'Es el protocolo vigente de esta institución.' })),
+      ...resto,
+      descartar.length && { voz: lista('No olvides descartar', descartar),
+        porque: 'Comparten el dolor torácico y algunos se agravan con antitrombóticos, como la disección aórtica.' },
+      contacto && { voz: contacto, porque: 'Contacto definido por la institución.' },
+    ].filter(Boolean);
+    return {
+      clave: proto.id + ':' + fase.id,
+      titulo: (quien ? quien + ' · ' : '') + 'SCA · ' + fase.nombre,
+      intro: (quien ? quien + '. ' : '') + fase.intro,
+      pasos: pasos.map((p) => p.voz),
+      porques: pasos.map((p) => p.porque || ''),
+      secciones: [
+        local.length && { titulo: 'Protocolo institucional', items: local, destacar: true },
+        contacto && { titulo: 'Contacto', items: [contacto] },
+        { titulo: 'Pasos de enfermería', items: fase.pasos.map((p) => p.voz + (p.detalle ? ' — ' + p.detalle : '')) },
+        descartar.length && { titulo: 'No olvidar descartar', items: descartar, alerta: true },
+        fase.id === 'primer-contacto' && {
+          titulo: 'Proceso de enfermería',
+          items: proto.procesoEnfermeria.map((d) => d.dx + ': ' + d.intervenciones.join('; ') + '. Meta: ' + d.resultado),
+        },
+      ].filter(Boolean),
+      hitos: fase.hitos,
+    };
+  }
+
   function responder(i, kb, inst) {
     if (i.intencion === 'desconocido') {
       return {
@@ -271,6 +329,7 @@
         pasos: [], secciones: [], hitos: [],
       };
     }
+    if (i.fase) return respFase(i, kb, inst);
     if (i.intencion === 'confirmado' && i.sospecha && i.sospecha.tipo === 'confirmado') return respConfirmado(i, kb, inst);
     if (i.intencion === 'descartado' && i.sospecha) return respDescartado(i);
     if (i.sospecha && i.sospecha.tipo === 'diferencial') return respIngresoSospecha(i, kb, inst);
@@ -304,7 +363,14 @@
           const respuesta = chequeo.responder(texto);
           return { box: chequeo.box, interpretacion: { intencion: 'dialogo' }, respuesta };
         }
-        // 2. Inicio de doble chequeo: "Pepe, doble chequeo de heparina, box 3".
+        // 2. Checklist de contraindicaciones de fibrinólisis.
+        if (CL && PROTOCOLOS.sca && CL.detectar(texto)) {
+          const box = extraerDatos(normalizar(texto)).box || ultimoBox;
+          ultimoBox = box;
+          chequeo = CL.crear(PROTOCOLOS.sca, box === '—' ? null : box);
+          return { box, interpretacion: { intencion: 'dialogo' }, respuesta: chequeo.iniciar() };
+        }
+        // 3. Inicio de doble chequeo: "Pepe, doble chequeo de heparina, box 3".
         const medId = DC && DC.detectar(texto, kb);
         if (medId) {
           const box = extraerDatos(normalizar(texto)).box || ultimoBox;
@@ -319,7 +385,7 @@
         const previo = porBox[box];
 
         // Navegación por los pasos: la enfermera marca el ritmo.
-        if (['mas', 'repetir', 'anterior'].includes(i.intencion)) {
+        if (['mas', 'repetir', 'anterior', 'porque'].includes(i.intencion)) {
           if (!previo) {
             return { box, interpretacion: i, respuesta: {
               clave: null, titulo: 'Sin paciente', intro: '', pasos: [], secciones: [], hitos: [],
@@ -328,14 +394,18 @@
           const total = previo.respuesta.pasos.length;
           if (i.intencion === 'mas') previo.cursor = Math.min(previo.cursor + 1, total);
           if (i.intencion === 'anterior') previo.cursor = Math.max(previo.cursor - 1, 0);
+          const fundamento = previo.respuesta.porques && previo.respuesta.porques[Math.min(previo.cursor, total - 1)];
           return { box, interpretacion: i, respuesta: {
             ...previo.respuesta, hitos: [],
             paso: Math.min(previo.cursor + 1, total), total,
-            hablar: decirPaso(previo.respuesta, previo.cursor, box, false),
+            hablar: i.intencion === 'porque'
+              ? paraVoz(fundamento || 'No tengo el fundamento de este punto todavía.')
+              : decirPaso(previo.respuesta, previo.cursor, box, false),
           } };
         }
 
-        if (previo && i.intencion !== 'ingreso') {
+        // Mismo paciente salvo que la frase diga "ingresa": hereda sus datos.
+        if (previo && !/\bingres/.test(normalizar(texto))) {
           if (!i.box) i.box = previo.interpretacion.box;
           if (!i.edad) i.edad = previo.interpretacion.edad;
           if (!i.sexo) i.sexo = previo.interpretacion.sexo;
@@ -352,7 +422,7 @@
   }
 
   const esNavegacion = (texto) => !!navegacion(normalizar(texto));
-  const API = { normalizar, interpretar, responder, crearSesion, paraVoz, esNavegacion };
+  const API = { normalizar, interpretar, responder, crearSesion, paraVoz, esNavegacion, PROTOCOLOS };
   if (typeof module !== 'undefined') module.exports = API;
   else window.PepeMotor = API;
 })();

@@ -87,3 +87,36 @@ Object.values(kb.altoRiesgo).forEach((m) => {
 
 fs.writeFileSync(path.join(__dirname, 'REVISION.md'), L.join('\n'));
 console.log('REVISION.md generado');
+
+// ── Documento del protocolo SCA ─────────────────────────────
+const sca = require('./protocolos/sca.js');
+const S = [];
+S.push(`# Pepe Grillo — Protocolo de enfermería: ${sca.nombre}`, '');
+S.push(`> **${sca.estado}** · v${sca.version}`, '> Generado desde `protocolos/sca.js`. No editar a mano.', '');
+S.push('Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").', '');
+S.push('```', 'primer contacto → IAMCEST → fibrinólisis → traslado', '               ↘ SCASEST ↗', '```', '');
+sca.fases.forEach((f, n) => {
+  S.push(`## ${n + 1}. ${f.nombre}`, '');
+  S.push(`**Se activa con:** _${f.activadores.join(', ')}_`, '');
+  f.pasos.forEach((p, j) => {
+    S.push(`${j + 1}. **${p.voz}**${j === 0 ? ' 🔊' : ''}`);
+    if (p.detalle) S.push(`   - _Detalle:_ ${p.detalle}`);
+    S.push(`   - _Por qué:_ ${p.porque}`);
+  });
+  S.push('', '**Recordatorios:**', '');
+  f.hitos.forEach((h) => S.push(`- ⏱ min ${h.min}: ${h.texto}`));
+  S.push('');
+});
+S.push('## Checklist de contraindicaciones de fibrinólisis', '');
+S.push('Pepe las pregunta una a una ("Pepe, checklist de fibrinólisis"). Un "sí" a una absoluta detiene el checklist; "no sé" queda como pendiente.', '');
+S.push('**Absolutas**', '');
+sca.contraindicaciones.absolutas.forEach((q) => S.push(`- ${q}`));
+S.push('', '**Relativas**', '');
+sca.contraindicaciones.relativas.forEach((q) => S.push(`- ${q}`));
+S.push('', '## Proceso de enfermería', '', '_Etiquetas NANDA-I: verificar con la edición vigente._', '');
+S.push('| Diagnóstico | Intervenciones | Resultado esperado |', '|---|---|---|');
+sca.procesoEnfermeria.forEach((d) => S.push(`| ${d.dx} | ${d.intervenciones.join('; ')} | ${d.resultado} |`));
+S.push('', '## Fuentes', '');
+sca.fuentes.forEach((f) => S.push(`- ${f}`));
+fs.writeFileSync(path.join(__dirname, 'REVISION-SCA.md'), S.join('\n'));
+console.log('REVISION-SCA.md generado');

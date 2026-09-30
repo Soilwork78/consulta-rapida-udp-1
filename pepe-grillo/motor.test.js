@@ -46,46 +46,80 @@ test('frase incomprensible', () => {
   assert.strictEqual(interpretar('hola qué tal', kb).intencion, 'desconocido');
 });
 
-test('sesión completa: la enfermera marca el ritmo con "sigue"', () => {
+test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () => {
   const s = crearSesion(kb, inst);
   const r1 = s.procesar('Pepe, ingresa box 3, hombre de 58 años, dolor torácico, sospecha SCA').respuesta;
-  // Un solo punto por vez: lo más urgente primero, y la ayuda solo la primera vez.
-  assert.match(r1.hablar, /^Box 3, hombre de 58 años\. Sospecha de Síndrome coronario agudo\. ECG de 12 derivaciones/);
+  assert.match(r1.hablar, /^Box 3, hombre de 58 años\. Sospecha de síndrome coronario agudo\. Primer contacto\. ECG de 12 derivaciones/);
   assert.match(r1.hablar, /Cuando quieras, dime sigue\.$/);
-  assert.ok(!/Protocolo local/.test(r1.hablar));
-  assert.strictEqual(r1.paso, 1);
+  assert.strictEqual(r1.clave, 'sca:primer-contacto');
   assert.strictEqual(r1.hitos[0].min, 5);
-  const porProtocolo = r1.secciones.find((x) => x.titulo === 'Exámenes: tomar por protocolo').items;
-  assert.ok(porProtocolo.includes('Troponina ultrasensible'));
-  assert.ok(!porProtocolo.includes('Rx de tórax'));
 
-  const r2 = s.procesar('sigue').respuesta;
-  assert.match(r2.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
-  assert.strictEqual(r2.paso, 2);
-  assert.strictEqual(r2.hitos.length, 0, 'navegar no reprograma recordatorios');
-  assert.match(s.procesar('¿qué más?').respuesta.hablar, /^Protocolo local: La troponina/);
-  assert.match(s.procesar('Pepe, repite').respuesta.hablar, /^Protocolo local: La troponina/);
+  assert.match(s.procesar('por qué').respuesta.hablar, /se diagnostica con el ECG/);
+  const banderas = s.procesar('sigue').respuesta;
+  assert.match(banderas.hablar, /^Banderas rojas/, 'banderas rojas en segundo lugar');
+  assert.match(s.procesar('repite').respuesta.hablar, /^Banderas rojas/);
+  assert.match(s.procesar('qué más').respuesta.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
+  assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: La troponina/);
   assert.match(s.procesar('anterior').respuesta.hablar, /^Protocolo local: En este hospital/);
 
   let r;
   for (let k = 0; k < 30; k++) r = s.procesar('sigue').respuesta;
   assert.match(r.hablar, /^Eso es todo para el box 3\. Te aviso al minuto 5\.$/);
+  const pasos = r1.pasos;
+  assert.match(pasos[pasos.length - 2], /No olvides descartar: Disección aórtica/);
+  assert.match(pasos[pasos.length - 1], /Código IAM: anexo 1111/);
 
-  const r3 = s.procesar('Pepe, confirmado IAMCEST').respuesta;
-  assert.match(r3.titulo, /Box 3, hombre de 58 años · Confirmado: IAM con supradesnivel/);
+  const r3 = s.procesar('Pepe, el ECG muestra supradesnivel').respuesta;
+  assert.strictEqual(r3.clave, 'sca:iamcest');
+  assert.match(r3.hablar, /^Box 3, hombre de 58 años\. IAM con supradesnivel confirmado.*Activa el código IAM/);
   assert.ok(!/dime sigue/.test(r3.hablar), 'la ayuda no se repite');
-  assert.match(s.procesar('sigue').respuesta.hablar, /Fibrinolítico en el carro/);
+
+  assert.strictEqual(s.procesar('va a fibrinólisis').respuesta.clave, 'sca:fibrinolisis');
+  assert.strictEqual(s.procesar('se traslada a hemodinamia').respuesta.clave, 'sca:traslado');
 
   const r4 = s.procesar('Pepe, box 3 descartado SCA').respuesta;
   assert.ok(r4.detenerHitos);
   assert.match(r4.hablar, /Disección aórtica/);
 });
 
+test('SCA: rutas de entrada a cada fase', () => {
+  const f = (t) => crearSesion(kb, inst).procesar(t).respuesta.clave;
+  assert.strictEqual(f('ingresa con dolor torácico'), 'sca:primer-contacto');
+  assert.strictEqual(f('confirmado IAMCEST'), 'sca:iamcest');
+  assert.strictEqual(f('SCA sin supradesnivel'), 'sca:scasest');
+  assert.strictEqual(f('troponina positiva, angina inestable'), 'sca:scasest');
+  assert.strictEqual(f('dolor torácico, sospecha de TEP'), 'tep', 'otra sospecha no entra al protocolo SCA');
+  assert.strictEqual(f('sospecha de disección'), 'diseccion');
+});
+
+test('checklist de fibrinólisis: absoluta detiene, relativas y "no sé" se informan', () => {
+  const s = crearSesion(kb, inst);
+  const r0 = s.procesar('Pepe, checklist de fibrinólisis, box 3').respuesta;
+  assert.match(r0.hablar, /ACV hemorrágico/);
+  assert.strictEqual(r0.esperando, 'sino');
+  const abs = kb && require('./protocolos/sca.js').contraindicaciones;
+  let r;
+  for (let k = 0; k < abs.absolutas.length; k++) r = s.procesar(k === 2 ? 'no sé' : 'no').respuesta;
+  assert.match(r.hablar, /Ahora las relativas/);
+  r = s.procesar('sí').respuesta; // TIA en 6 meses
+  for (let k = 1; k < abs.relativas.length; k++) r = s.procesar('no').respuesta;
+  assert.match(r.hablar, /Sin contraindicaciones absolutas\. Relativas: Crisis isquémica/);
+  assert.match(r.hablar, /Quedan sin verificar: Tumor/);
+  assert.strictEqual(r.esperando, null);
+
+  const s2 = crearSesion(kb, inst);
+  s2.procesar('contraindicaciones de trombolisis');
+  s2.procesar('no');
+  const stop = s2.procesar('sí').respuesta;
+  assert.match(stop.hablar, /Contraindicación absoluta: acv isquémico en los últimos 6 meses\. No se fibrinoliza/);
+  assert.ok(!s2.enDialogo);
+});
+
 test('"sigue" en otro box y sin paciente', () => {
   const s = crearSesion(kb, inst);
   s.procesar('box 3 sospecha SCA');
   s.procesar('box 5 sospecha sepsis');
-  assert.match(s.procesar('Pepe, box 3, sigue').respuesta.hablar, /^Protocolo local: En este hospital/);
+  assert.match(s.procesar('Pepe, box 3, sigue').respuesta.hablar, /^Banderas rojas/);
   assert.match(s.procesar('box 9 sigue').respuesta.hablar, /No tengo un paciente activo en el box 9/);
 });
 
@@ -112,7 +146,11 @@ test('toda sospecha y confirmado con alias produce respuesta', () => {
 });
 
 test('las claves institucionales existen en la base', () => {
-  const ids = new Set(kb.motivos.flatMap((m) => [...m.diferenciales, ...m.confirmados]).map((d) => d.id));
+  const sca = require('./protocolos/sca.js');
+  const ids = new Set([
+    ...kb.motivos.flatMap((m) => [...m.diferenciales, ...m.confirmados]).map((d) => d.id),
+    sca.id, ...sca.fases.map((f) => f.claveInstitucional),
+  ]);
   [...Object.keys(inst.tips), ...Object.keys(inst.contactos)].forEach((k) => assert.ok(ids.has(k), k));
   const exs = new Set(kb.motivos.flatMap((m) => m.examenes.basales.map((e) => e.ex)));
   inst.enfermeriaPorProtocolo.forEach((e) => assert.ok(exs.has(e), e));

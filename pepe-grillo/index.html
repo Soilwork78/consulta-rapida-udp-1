@@ -114,7 +114,7 @@
 <div class="wrap">
   <header>
     <div>
-      <h1>Pepe Grillo <small>copiloto de urgencia · prototipo</small></h1>
+      <h1>Pepe Grillo <small>síndrome coronario agudo · enfermería · prototipo</small></h1>
       <p class="aviso">Solo para simulación y docencia. Contenido en borrador, pendiente de validación clínica.</p>
     </div>
     <div class="ajustes">
@@ -145,6 +145,7 @@
           <button type="button" class="mic" id="mic" aria-pressed="false" hidden>🎙 Hablar</button>
           <button type="button" id="mas">Sigue</button>
           <button type="button" id="repite">Repite</button>
+          <button type="button" id="porque">¿Por qué?</button>
           <button type="button" id="callar">Callar</button>
         </div>
         <div class="rapidas" id="rapidas" hidden></div>
@@ -183,22 +184,24 @@
 
 <script src="kb.js"></script>
 <script src="instituciones/ejemplo.js"></script>
+<script src="protocolos/sca.js"></script>
+<script src="checklist.js"></script>
 <script src="doble-chequeo.js"></script>
 <script src="motor.js"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
+  // Un caso de SCA de principio a fin.
   const EJEMPLOS = [
     'Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA',
     'sigue',
-    'qué más',
-    'Pepe, box 3 confirmado IAM con supradesnivel',
-    'Pepe, box 5 mujer de 72 años con fiebre y confusión',
-    'Pepe, box 5 sospecha sepsis',
-    'Pepe, box 7 mujer de 34 años con dolor abdominal, sospecha embarazo ectópico',
-    'Pepe, doble chequeo de heparina en BIC, box 3',
-    'Pepe, instalar insulina en bomba, box 5',
-    'Pepe, box 3 descartado SCA',
+    'por qué',
+    'Pepe, el ECG muestra supradesnivel',
+    'Pepe, checklist de fibrinólisis',
+    'Pepe, va a fibrinólisis',
+    'Pepe, traslado a hemodinamia',
+    'Pepe, box 5, mujer de 67 años, SCA sin supradesnivel',
+    'Pepe, doble chequeo de heparina en BIC, box 5',
   ];
 
   let sesion;
@@ -353,6 +356,7 @@
   });
   $('mas').addEventListener('click', () => procesar('sigue', true));
   $('repite').addEventListener('click', () => procesar('repite', true));
+  $('porque').addEventListener('click', () => procesar('por qué', true));
   $('callar').addEventListener('click', () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); });
   $('inst').addEventListener('change', nuevaSesion);
   EJEMPLOS.forEach((f) => {

@@ -44,8 +44,13 @@
         'La troponina aquí va en tubo verde, con algoritmo de 0 y 3 horas',
       ],
       iamcest: [
-        'Fibrinolítico en el carro de la sala de reanimación',
-        'Coordinar traslado a centro con hemodinamia después de la fibrinólisis',
+        'Sin hemodinamia de turno: la estrategia habitual aquí es fibrinólisis y luego traslado',
+      ],
+      fibrinolisis: [
+        'Fibrinolítico en el carro de la sala de reanimación: tenecteplasa',
+      ],
+      traslado: [
+        'Centro de referencia con hemodinamia: coordinar por la central de la red',
       ],
       acv: [
         'Sin trombectomía en este centro: con oclusión de gran vaso, se coordina traslado con la red',
@@ -58,6 +63,8 @@
     contactos: {
       sca: 'Código IAM: anexo 1111',
       iamcest: 'Código IAM: anexo 1111',
+      fibrinolisis: 'Código IAM: anexo 1111',
+      traslado: 'Central de traslados de la red: anexo 4444',
       acv: 'Código ACV: anexo 2222',
       'acv-trombolisis': 'Código ACV: anexo 2222',
       aaa: 'Cirugía vascular: central telefónica',

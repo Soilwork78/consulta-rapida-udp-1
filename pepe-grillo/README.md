@@ -63,10 +63,30 @@ Lo institucional complementa la base: nunca oculta las banderas rojas.
 
 - `kb.js`: la base de conocimiento, que es la fuente única del contenido (incluye los tips por sospecha y los alias de voz).
 - `motor.js`: interpreta la frase y arma la respuesta.
-- `doble-chequeo.js`: diálogo guiado del doble chequeo en BIC. Pruebas: `node --test pepe-grillo/motor.test.js`.
+- `doble-chequeo.js`: diálogo guiado del doble chequeo en BIC.
+- `checklist.js`: checklist guiado de sí / no (contraindicaciones de fibrinólisis).
+- `protocolos/sca.js`: protocolo de enfermería del SCA por fases. Pruebas: `node --test pepe-grillo/motor.test.js`.
 - `index.html`: demo con voz (Chrome o Edge para el micrófono) y reloj de simulación (1 min = 1 s).
 - `instituciones/`: protocolos por centro.
 - `REVISION.md`: versión legible para la revisión clínica. Se genera con `node pepe-grillo/generar-revision.js`.
+
+## Foco actual: síndrome coronario agudo
+
+Por ahora el desarrollo se concentra en **una sola patología, SCA, desde la mirada de enfermería** (`protocolos/sca.js`, revisión en `REVISION-SCA.md`). El protocolo tiene cinco fases, y Pepe cambia de fase cuando la enfermera informa lo que pasa:
+
+| Fase | Se activa con, por ejemplo |
+|---|---|
+| Primer contacto (0–10 min) | "dolor torácico", "sospecha SCA" |
+| IAM con supradesnivel | "el ECG muestra supradesnivel", "IAMCEST", "código IAM" |
+| Fibrinólisis (antes, durante y después) | "va a fibrinólisis", "tenecteplasa" |
+| SCA sin supradesnivel | "sin supradesnivel", "troponina positiva" |
+| Traslado a hemodinamia | "traslado", "angioplastía" |
+
+Además:
+- **"Por qué"**: Pepe explica el fundamento del paso actual (uso docente).
+- **"Checklist de fibrinólisis"**: Pepe pregunta las contraindicaciones una a una. Un "sí" a una absoluta detiene el checklist; "no sé" queda como pendiente.
+
+Los otros cuatro motivos de consulta siguen en `kb.js`, sin desarrollo nuevo.
 
 ## Motivos de consulta de la versión 0.1
 
