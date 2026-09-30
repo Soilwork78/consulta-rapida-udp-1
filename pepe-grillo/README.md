@@ -67,7 +67,10 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
 - La **hora de inicio del dolor** se toma de la anamnesis ("desde las 12:30", "a las 8", "hace 2 horas").
 - Los **recordatorios registran**: a "¿ECG ya tomado?" basta responder "sí" y queda anotado con la hora de la confirmación (marcado como "confirmado al recordatorio", porque el hecho pudo ser antes). "No" o "todavía no" lo deja pendiente.
 - **Pepe no pregunta lo que ya está anotado**: si el ECG se dictó antes del minuto 5, ese recordatorio no suena.
-- **Tiempos con su meta**, en pantalla, en la evolución y en voz ("Pepe, tiempos"): inicio del dolor → llegada, puerta-ECG (≤ 10 min), diagnóstico-fibrinolítico (≤ 10 min), puerta-aguja (≤ 30 min), inicio del dolor → fibrinolítico y diagnóstico → salida a hemodinamia. La hora del diagnóstico es cuando la enfermera informa "el ECG muestra supradesnivel".
+- **Tiempos con las metas del GES** (garantías de oportunidad del problema de salud n.º 5, [auge.minsal.cl](https://auge.minsal.cl/problemasdesalud/index/5)), en pantalla, en la evolución y en voz ("Pepe, tiempos"):
+  - **Sospecha → ECG: ≤ 30 min.** La sospecha es cuando la enfermera informa "sospecha SCA" o "dolor torácico"; si no se informa, se cuenta desde el ingreso.
+  - **Confirmación diagnóstica → trombólisis: ≤ 30 min.** La confirmación es cuando la enfermera informa "el ECG muestra supradesnivel".
+  - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis y diagnóstico → salida a hemodinamia.
 
 **Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
 

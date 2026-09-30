@@ -17,7 +17,7 @@
 //   "plan: …"                                  → P
 //   "evaluación: dolor disminuye a EVA 3…"     → E
 //   "anota: …"                                 → nota libre
-//   "tiempos"                                  → Pepe dice los tiempos GES y si están en meta
+//   "tiempos"                                  → Pepe dice los tiempos y si cumplen el GES
 //   "redacta la evolución"                     → borrador SOAPIE (sin diagnósticos de enfermería;
 //                                                 EVA en S; A solo con análisis de enfermería)
 // ============================================================
@@ -205,13 +205,16 @@
       });
     }
 
-    // Tiempos del SCA con su meta. `aprox`: la hora es la de confirmación (el hecho fue antes o igual).
-    // Metas: puerta-ECG ≤ 10 min y diagnóstico-fibrinolítico ≤ 10 min (ESC 2023); puerta-aguja ≤ 30 min (ACC/AHA).
+    // Tiempos del SCA. Metas = garantías de oportunidad GES, problema de salud n.º 5 (auge.minsal.cl):
+    //   ECG dentro de 30 min desde la sospecha; trombólisis dentro de 30 min desde la
+    //   confirmación diagnóstica de supradesnivel ST. El resto se muestra sin meta (informativo).
+    // `aprox`: la hora es la de confirmación al recordatorio (el hecho fue antes o igual).
     function tiemposDetalle() {
       const proc = (m) => r.procedimientos.filter((p) => p.tags.includes(m)).sort((a, b) => a.hora - b.hora)[0];
       const ecg = proc('ecg');
       const fib = proc('fibrinolitico');
       const salida = proc('salida');
+      const sospecha = r.clinico.find((e) => e.marca === 'sospecha');
       const dx = r.clinico.find((e) => e.marca === 'diagnostico');
       const t = [];
       const add = (nombre, desde, hasta, meta, aprox) => {
@@ -219,24 +222,24 @@
         t.push({ nombre, min, meta, aprox: !!aprox, ok: meta == null ? null : min <= meta });
       };
       if (r.inicioDolor != null) add('Inicio del dolor → llegada', r.inicioDolor, r.ingreso, null);
-      if (ecg) add('Puerta-ECG', r.ingreso, ecg.hora, 10, ecg.aprox);
-      if (dx && fib) add('Diagnóstico-fibrinolítico', dx.hora, fib.hora, 10, fib.aprox);
-      if (fib) add('Puerta-aguja', r.ingreso, fib.hora, 30, fib.aprox);
-      if (fib && r.inicioDolor != null) add('Inicio del dolor → fibrinolítico', r.inicioDolor, fib.hora, null);
+      if (ecg) add('Sospecha → ECG', sospecha ? sospecha.hora : r.ingreso, ecg.hora, 30, ecg.aprox);
+      if (dx && fib) add('Confirmación diagnóstica → trombólisis', dx.hora, fib.hora, 30, fib.aprox);
+      if (fib) add('Puerta-aguja', r.ingreso, fib.hora, null, fib.aprox);
+      if (fib && r.inicioDolor != null) add('Inicio del dolor → trombólisis', r.inicioDolor, fib.hora, null);
       if (dx && salida) add('Diagnóstico → salida a hemodinamia', dx.hora, salida.hora, null, salida.aprox);
       return t;
     }
 
     const describirTiempo = (x) => x.nombre + ': ' + (x.aprox ? '≤ ' : '') + x.min + ' min' +
-      (x.meta == null ? '' : ' (meta ≤ ' + x.meta + ')' + (x.ok ? ' ✓' : ' ✗'));
+      (x.meta == null ? '' : ' (GES ≤ ' + x.meta + ')' + (x.ok ? ' ✓' : ' ✗'));
     const tiempos = () => tiemposDetalle().map(describirTiempo);
 
     function tiemposVoz() {
       const t = tiemposDetalle().filter((x) => x.meta != null);
       if (!t.length) return r.procedimientos.some((p) => p.tags.includes('ecg'))
         ? 'Sin tiempos con meta todavía.' : 'Aún no tengo la hora del ECG.';
-      return t.map((x) => x.nombre + ', ' + (x.aprox ? 'hasta ' : '') + x.min + ' minutos, ' +
-        (x.ok ? 'en meta' : 'fuera de meta')).join('. ') + '.';
+      return t.map((x) => x.nombre.replace(' → ', ' a ') + ', ' + (x.aprox ? 'hasta ' : '') + x.min + ' minutos, ' +
+        (x.ok ? 'dentro del GES' : 'fuera del GES')).join('. ') + '.';
     }
 
     // Borrador en formato SOAPIE, sin diagnósticos de enfermería.

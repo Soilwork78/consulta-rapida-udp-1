@@ -336,9 +336,9 @@ test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tie
   assert.match(ev, /- 14:04 ECG tomado\./);
   assert.match(ev, /Inicio del dolor: 12:30 \(según anamnesis\)\./);
   assert.match(ev, /- Inicio del dolor → llegada: 90 min\./);
-  assert.match(ev, /- Puerta-ECG: 4 min \(meta ≤ 10\) ✓\./);
-  assert.match(ev, /- Diagnóstico-fibrinolítico: 22 min \(meta ≤ 10\) ✗\./);
-  assert.match(ev, /- Puerta-aguja: 29 min \(meta ≤ 30\) ✓\./);
+  assert.match(ev, /- Sospecha → ECG: 4 min \(GES ≤ 30\) ✓\./);
+  assert.match(ev, /- Confirmación diagnóstica → trombólisis: 22 min \(GES ≤ 30\) ✓\./);
+  assert.match(ev, /- Puerta-aguja: 29 min\./, 'sin meta GES: informativo');
   assert.match(ev, /Revisar, completar y firmar/);
   assert.ok(!/sin alergias|niega alergias/i.test(ev), 'no inventa lo que no se dictó');
   assert.ok(falta.registroBox.length > 5);
@@ -400,10 +400,10 @@ test('recordatorio que registra: "¿ECG ya tomado?" → "sí" anota la hora', ()
   assert.deepStrictEqual(s.hitoDisparado('3', hitos[0]), { omitir: false });
   const r = s.procesar('sí').respuesta;
   assert.strictEqual(r.hablar, 'Anotado, 14:05.');
-  const pe = r.tiempos.find((x) => x.nombre === 'Puerta-ECG');
-  assert.deepStrictEqual([pe.min, pe.aprox, pe.ok], [5, true, true]);
-  assert.match(s.procesar('tiempos').respuesta.hablar, /^Puerta-ECG, hasta 5 minutos, en meta\.$/);
-  assert.match(s.procesar('redacta la evolución').respuesta.evolucion, /- 14:05 ECG de 12 derivaciones tomado \(confirmado al recordatorio\)\.[\s\S]*Puerta-ECG: ≤ 5 min/);
+  const pe = r.tiempos.find((x) => x.nombre === 'Sospecha → ECG');
+  assert.deepStrictEqual([pe.min, pe.aprox, pe.ok, pe.meta], [5, true, true, 30]);
+  assert.match(s.procesar('tiempos').respuesta.hablar, /^Sospecha a ECG, hasta 5 minutos, dentro del GES\.$/);
+  assert.match(s.procesar('redacta la evolución').respuesta.evolucion, /- 14:05 ECG de 12 derivaciones tomado \(confirmado al recordatorio\)\.[\s\S]*Sospecha → ECG: ≤ 5 min \(GES ≤ 30\) ✓/);
 });
 
 test('Pepe no pregunta lo que ya está registrado', () => {
@@ -434,5 +434,21 @@ test('ECG de control no cuenta para puerta-ECG', () => {
   s.procesar('ingresa box 3, sospecha SCA');
   t += 90 * 60000;
   const r = s.procesar('ECG de control tomado').respuesta;
-  assert.ok(!r.tiempos.some((x) => x.nombre === 'Puerta-ECG'));
+  assert.ok(!r.tiempos.some((x) => x.nombre === 'Sospecha → ECG'));
+});
+
+test('metas GES: 30 min sospecha → ECG y 30 min confirmación → trombólisis; se cuentan desde el hito correcto', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  s.procesar('ingresa box 3, hombre de 70 años, dolor abdominal');   // ingreso 14:00, sin sospecha de SCA aún
+  t += 20 * 60000; s.procesar('el médico sospecha SCA');             // sospecha 14:20
+  t += 25 * 60000; s.procesar('ECG tomado');                         // 14:45 → 25 min desde la sospecha
+  t += 5 * 60000; s.procesar('el ECG muestra supradesnivel');        // diagnóstico 14:50
+  t += 35 * 60000;
+  const r = s.procesar('tenecteplasa administrada').respuesta;      // 15:25 → 35 min
+  const x = Object.fromEntries(r.tiempos.map((k) => [k.nombre, k]));
+  assert.deepStrictEqual([x['Sospecha → ECG'].min, x['Sospecha → ECG'].ok], [25, true]);
+  assert.deepStrictEqual([x['Confirmación diagnóstica → trombólisis'].min, x['Confirmación diagnóstica → trombólisis'].ok], [35, false]);
+  assert.strictEqual(x['Puerta-aguja'].meta, null);
+  assert.match(s.procesar('tiempos').respuesta.hablar, /Confirmación diagnóstica a trombólisis, 35 minutos, fuera del GES\./);
 });

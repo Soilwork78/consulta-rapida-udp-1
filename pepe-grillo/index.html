@@ -413,7 +413,7 @@
     if (r.tiempos) {
       $('regTiempos').replaceChildren(...r.tiempos.map((x) => el('span',
         'tiempo' + (x.meta == null ? ' sin-meta' : x.ok ? '' : ' fuera'),
-        x.nombre + ' ' + (x.aprox ? '≤ ' : '') + x.min + ' min' + (x.meta == null ? '' : (x.ok ? ' ✓' : ' ✗') + ' meta ' + x.meta))));
+        x.nombre + ' ' + (x.aprox ? '≤ ' : '') + x.min + ' min' + (x.meta == null ? '' : (x.ok ? ' ✓' : ' ✗') + ' GES ≤ ' + x.meta))));
     }
     if (r.evolucion) {
       $('evolucionCaja').hidden = false;
