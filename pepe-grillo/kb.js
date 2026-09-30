@@ -73,6 +73,203 @@ const PEPE_GRILLO_KB = {
   // ──────────────────────────────────────────────────────────
   // CAPAS 1–3 — POR MOTIVO DE CONSULTA
   // ──────────────────────────────────────────────────────────
+  // ──────────────────────────────────────────────────────────
+  // TIPS POR SOSPECHA — lo que Pepe Grillo dice al oído.
+  // Ordenados por prioridad: se hablan los 3 primeros; el resto con "Pepe, más".
+  // Frases cortas, pensadas para escucharse, no para leerse.
+  // ──────────────────────────────────────────────────────────
+  tips: {
+    sca: [
+      'ECG de 12 derivaciones antes de 10 minutos, y que el médico lo vea de inmediato',
+      'Si el ECG muestra supradesnivel, corre el reloj de reperfusión: activa el código IAM',
+      'Troponina a tiempo cero; anota la hora exacta para la segunda muestra',
+      'Oxígeno solo si la saturación es menor de 90%',
+      'Antes de nitratos: PAS mayor de 90, sin infarto de ventrículo derecho y sin sildenafil',
+      'Desfibrilador a mano: la fibrilación ventricular es más frecuente en la primera hora',
+    ],
+    diseccion: [
+      'Nada de antiagregantes ni anticoagulantes hasta descartar disección',
+      'Presión en ambos brazos y pulsos en las cuatro extremidades',
+      'Dos vías gruesas; grupo, Rh y pruebas cruzadas',
+      'Meta habitual: frecuencia menor de 60 y PAS entre 100 y 120, según indicación médica',
+      'Controla el dolor: el dolor sube la presión',
+    ],
+    tep: [
+      'Hipotensión o shock significa TEP de alto riesgo: avisa de inmediato',
+      'Vigila saturación y signos de falla del ventrículo derecho, como ingurgitación yugular',
+      'Antes de anticoagular: pregunta por sangrado activo, cirugía reciente y anticoagulantes',
+      'Cuidado con el volumen: el ventrículo derecho dilatado tolera mal la sobrecarga',
+    ],
+    neumotorax: [
+      'Murmullo abolido de un lado con hipotensión: neumotórax a tensión, avisa ya',
+      'Prepara material de descompresión con aguja y pleurostomía',
+      'Oxígeno a alto flujo',
+    ],
+    taponamiento: [
+      'Hipotensión, ingurgitación yugular y ruidos apagados: avisa de inmediato',
+      'Prepara pericardiocentesis y ecografía',
+      'Volumen según indicación; evita la sedación que baje la precarga',
+    ],
+    anafilaxia: [
+      'Adrenalina intramuscular en el muslo es lo primero; no la retrases por antihistamínicos ni corticoides',
+      'Adulto: 0,5 miligramos de la ampolla de 1 mg por mL; repetir a los 5 minutos si no responde',
+      'Retira el alérgeno: suspende la infusión sospechosa',
+      'Voz ronca o estridor: la vía aérea se está cerrando, avisa',
+      'Observación posterior por riesgo de reacción bifásica',
+    ],
+    'ic-aguda': [
+      'Siéntalo con las piernas colgando, si la presión lo permite',
+      'Oxígeno para saturar 90% o más; prepara ventilación no invasiva si hay trabajo respiratorio',
+      'Nitratos si la PAS es mayor de 110, según indicación; furosemida EV y medir diuresis',
+      'Balance hídrico estricto',
+      'ECG y troponina: busca el gatillante, sea SCA, arritmia o crisis hipertensiva',
+    ],
+    asma: [
+      'No completa frases, tórax silente o confusión: crisis de riesgo vital',
+      'Salbutamol con bromuro de ipratropio, según indicación',
+      'Corticoide sistémico dentro de la primera hora',
+      'PEF antes y después del broncodilatador',
+      'PaCO2 normal o alta en crisis asmática es signo de agotamiento',
+    ],
+    epoc: [
+      'Meta de saturación entre 88 y 92%: el exceso de oxígeno produce hipercapnia',
+      'Gasometría precoz: pH menor de 7,35 con PaCO2 sobre 45 obliga a evaluar ventilación no invasiva',
+      'Broncodilatadores de acción corta y corticoide, según indicación',
+      'Busca el gatillante: infección, neumotórax, TEP o insuficiencia cardíaca',
+    ],
+    neumonia: [
+      'Calcula CURB-65 para orientar la gravedad',
+      'Si es grave: hemocultivos y expectoración antes del antibiótico, sin retrasarlo',
+      'Antibiótico precoz; si hay sepsis, dentro de la primera hora',
+      'Aislamiento respiratorio si se sospecha influenza o COVID',
+    ],
+    aaa: [
+      'Avisa a cirugía vascular de inmediato',
+      'Dos vías gruesas; grupo, Rh y pruebas cruzadas es la primera muestra',
+      'Hipotensión permisiva: no busques una presión normal con volumen, según indicación',
+      'Si está inestable no va al TC: va a pabellón',
+    ],
+    ectopico: [
+      'β-hCG a toda mujer en edad fértil con dolor abdominal',
+      'Hipotensión con β-hCG positiva: ectópico roto hasta demostrar lo contrario; avisa a ginecología',
+      'Dos vías gruesas; grupo, Rh y pruebas cruzadas',
+      'Si es Rh negativo, recuerda la inmunoglobulina anti-D, según indicación',
+    ],
+    'isquemia-mesenterica': [
+      'Dolor desproporcionado al examen, sobre todo con fibrilación auricular: avisa',
+      'Lactato normal NO la descarta',
+      'Régimen cero, vía venosa, y prepara angioTC',
+    ],
+    'abdomen-quirurgico': [
+      'Régimen cero y vía venosa',
+      'Sonda nasogástrica si hay vómitos por obstrucción, según indicación',
+      'Signos de peritonitis o shock: avisa a cirugía',
+    ],
+    pielonefritis: [
+      'Urocultivo antes del antibiótico',
+      'Busca criterios de sepsis: NEWS2 y lactato',
+      'Pielonefritis con obstrucción es urgencia urológica: ecografía',
+      'Si está embarazada: hospitalización y evaluación obstétrica',
+    ],
+    apendicitis: [
+      'Régimen cero y vía venosa',
+      'La analgesia no enmascara el diagnóstico: no la retrases',
+      'β-hCG en mujer en edad fértil antes de imágenes',
+      'Fiebre alta, peritonitis difusa o shock sugieren perforación: avisa',
+    ],
+    colecistitis: [
+      'Fiebre con ictericia: sospecha colangitis, busca criterios de sepsis',
+      'Régimen cero, analgesia según indicación',
+      'Perfil hepático y lipasa',
+    ],
+    'colico-renal': [
+      'Analgesia precoz según indicación',
+      'Fiebre con cólico renal: sospecha obstrucción infectada, es urgencia',
+      'Mayor de 60 años con primer cólico renal: descarta aneurisma aórtico',
+    ],
+    lumbago: [
+      'Descarta banderas rojas: fiebre, déficit neurológico, retención urinaria o anestesia en silla de montar',
+      'Mayor de 60 años con dolor lumbar súbito: descarta aneurisma',
+      'Analgesia y reevaluación del dolor',
+    ],
+    hipoglicemia: [
+      'Trata sin esperar la confirmación del laboratorio',
+      'Si está consciente y traga, glucosa oral; si no, glucosa EV o glucagón IM',
+      'HGT de control a los 15 minutos',
+      'Con sulfonilureas o insulina lenta la hipoglicemia vuelve: observa más tiempo',
+    ],
+    acv: [
+      'HGT inmediato: la hipoglicemia simula un ACV',
+      'La hora que importa es la última vez que lo vieron normal',
+      'Activa el código ACV y lleva al paciente al TC: meta de 20 minutos',
+      'Régimen cero hasta el test de deglución',
+      'Pregunta por anticoagulantes y la hora de la última dosis',
+      'No bajes la presión de rutina: si va a trombólisis, la meta es menor de 185 sobre 110',
+    ],
+    hic: [
+      'Controles neurológicos seriados: Glasgow y pupilas',
+      'Si usa anticoagulantes, avisa: puede requerir reversión urgente',
+      'Glasgow 8 o menos: prepara manejo de vía aérea',
+      'Cabecera a 30 grados; manejo del dolor y los vómitos',
+      'Control de presión según la meta indicada',
+    ],
+    status: [
+      'Mide el tiempo: más de 5 minutos es status',
+      'Protege de lesiones y lateraliza; nada en la boca',
+      'Benzodiacepina de primera línea según indicación, IM o EV',
+      'HGT inmediato',
+      'Si no despierta después de la crisis, sospecha status no convulsivo',
+    ],
+    meningitis: [
+      'Hemocultivos y antibiótico sin esperar la punción lumbar',
+      'Aislamiento por gotitas hasta descartar meningococo',
+      'Con compromiso de conciencia o focalidad, TC antes de la punción',
+      'Registra las petequias: pueden progresar en horas',
+    ],
+    intoxicacion: [
+      'Pregunta qué tomó, cuánto y a qué hora',
+      'Guarda envases y blísteres',
+      'Glasgow 8 o menos: protege la vía aérea',
+      'HGT y ECG: busca QT largo o QRS ancho',
+      'Consulta al centro de información toxicológica según protocolo',
+    ],
+    postictal: [
+      'Si no recupera la conciencia progresivamente, sospecha status no convulsivo',
+      'HGT y busca lesiones por la caída',
+    ],
+    delirium: [
+      'Delirium en adulto mayor: busca infección, fármacos, retención urinaria y electrolitos',
+      'HGT y sodio',
+      'Evita contenciones; acompañante si es posible',
+    ],
+    sepsis: [
+      'Hemocultivos antes del antibiótico, pero sin retrasarlo',
+      'Antibiótico dentro de la primera hora si hay shock o sepsis probable',
+      'Lactato ahora; si es mayor de 2, se repite en 2 a 4 horas',
+      'Hipotensión o lactato de 4 o más: cristaloides 30 mL por kilo, reevaluando',
+      'PAM menor de 65 pese al volumen: noradrenalina, puede partir por vía periférica',
+      'Diuresis horaria',
+    ],
+    'neutropenia-febril': [
+      'Antibiótico dentro de 60 minutos desde el ingreso',
+      'Aislamiento protector',
+      'Hemocultivos periféricos, y del catéter si tiene',
+      'Nada rectal: ni temperatura ni supositorios',
+    ],
+    meningococcemia: [
+      'Antibiótico de inmediato: es de las sepsis más rápidas',
+      'Aislamiento por gotitas; notificación inmediata y quimioprofilaxis de contactos',
+      'Marca el borde de las petequias con la hora, para ver la progresión',
+      'Vigila el shock: puede requerir volumen y vasopresores precoces',
+    ],
+    fascitis: [
+      'Dolor desproporcionado es la clave precoz',
+      'Marca los bordes del eritema con la hora',
+      'Avisa a cirugía: el tratamiento es quirúrgico y urgente',
+      'Antibiótico precoz de amplio espectro, según indicación',
+    ],
+  },
+
   motivos: [
     // ════════════════════════════════════════════════════════
     {
@@ -116,17 +313,17 @@ const PEPE_GRILLO_KB = {
         'Síncope o déficit neurológico asociado',
       ],
       diferenciales: [
-        { dx: 'Síndrome coronario agudo (IAMCEST / SCASEST)', noPerder: true,
+        { id: 'sca', alias: ['sca', 'sindrome coronario', 'sindrome coronario agudo', 'coronario agudo', 'iam', 'infarto', 'angina inestable', 'scasest', 'iamsest'], dx: 'Síndrome coronario agudo (IAMCEST / SCASEST)', noPerder: true,
           discriminantes: ['ECG seriado', 'Troponina seriada (0/1 h o 0/2 h)', 'Dolor opresivo irradiado, diaforesis', 'HEART score'] },
-        { dx: 'Disección aórtica', noPerder: true,
+        { id: 'diseccion', alias: ['diseccion', 'diseccion aortica', 'sindrome aortico'], dx: 'Disección aórtica', noPerder: true,
           discriminantes: ['Dolor súbito desgarrante a dorso', 'Asimetría de pulsos/PA', 'Soplo de insuficiencia aórtica', 'ADD-RS'] },
-        { dx: 'Tromboembolismo pulmonar', noPerder: true,
+        { id: 'tep', alias: ['tep', 'tromboembolismo', 'tromboembolismo pulmonar', 'embolia pulmonar'], dx: 'Tromboembolismo pulmonar', noPerder: true,
           discriminantes: ['Disnea súbita, taquicardia, hipoxemia', 'Factores de riesgo TVP', 'Wells / PERC', 'Dímero D según probabilidad'] },
-        { dx: 'Neumotórax a tensión', noPerder: true,
+        { id: 'neumotorax', alias: ['neumotorax', 'neumotorax a tension'], dx: 'Neumotórax a tensión', noPerder: true,
           discriminantes: ['MP abolido unilateral', 'Desviación traqueal', 'Hipotensión + ingurgitación yugular'] },
-        { dx: 'Taponamiento cardíaco', noPerder: true,
+        { id: 'taponamiento', alias: ['taponamiento', 'taponamiento cardiaco'], dx: 'Taponamiento cardíaco', noPerder: true,
           discriminantes: ['Tríada de Beck', 'Pulso paradójico', 'POCUS'] },
-        { dx: 'Pericarditis', noPerder: false,
+        { id: 'pericarditis', alias: ['pericarditis'], dx: 'Pericarditis', noPerder: false,
           discriminantes: ['Dolor pleurítico que alivia al inclinarse adelante', 'Frote pericárdico', 'Supradesnivel ST difuso + infradesnivel PR'] },
         { dx: 'Dolor musculoesquelético / ERGE / ansiedad', noPerder: false,
           discriminantes: ['Diagnóstico de exclusión: solo tras descartar los anteriores'] },
@@ -134,6 +331,7 @@ const PEPE_GRILLO_KB = {
       confirmados: [
         {
           id: 'iamcest',
+          alias: ['iamcest', 'iam con supra', 'iam con supradesnivel', 'supradesnivel', 'stemi'],
           nombre: 'IAM con supradesnivel ST (IAMCEST)',
           algoritmo: [
             'Activar estrategia de reperfusión: angioplastía primaria si es alcanzable ≤ 120 min desde el diagnóstico; si no, fibrinólisis dentro de 10 min del diagnóstico',
@@ -212,26 +410,27 @@ const PEPE_GRILLO_KB = {
         'Hipotensión',
       ],
       diferenciales: [
-        { dx: 'Anafilaxia / obstrucción de vía aérea', noPerder: true,
+        { id: 'anafilaxia', alias: ['anafilaxia', 'shock anafilactico', 'reaccion alergica grave'], dx: 'Anafilaxia / obstrucción de vía aérea', noPerder: true,
           discriminantes: ['Exposición a alérgeno', 'Urticaria, angioedema, estridor', 'Hipotensión'] },
-        { dx: 'Neumotórax a tensión', noPerder: true,
+        { id: 'neumotorax', alias: ['neumotorax', 'neumotorax a tension'], dx: 'Neumotórax a tensión', noPerder: true,
           discriminantes: ['MP abolido unilateral', 'Hipotensión, ingurgitación yugular'] },
-        { dx: 'Tromboembolismo pulmonar', noPerder: true,
+        { id: 'tep', alias: ['tep', 'tromboembolismo', 'tromboembolismo pulmonar', 'embolia pulmonar'], dx: 'Tromboembolismo pulmonar', noPerder: true,
           discriminantes: ['Inicio súbito, taquicardia', 'Pulmón "limpio" con hipoxemia', 'Wells'] },
-        { dx: 'Edema pulmonar agudo / IC aguda', noPerder: true,
+        { id: 'ic-aguda', alias: ['edema pulmonar', 'edema pulmonar agudo', 'epa', 'insuficiencia cardiaca', 'ic descompensada', 'falla cardiaca'], dx: 'Edema pulmonar agudo / IC aguda', noPerder: true,
           discriminantes: ['Ortopnea, crepitaciones bibasales', 'Edema EEII, ingurgitación yugular', 'BNP / NT-proBNP'] },
-        { dx: 'SCA con equivalente anginoso', noPerder: true,
+        { id: 'sca', alias: ['sca', 'sindrome coronario', 'equivalente anginoso'], dx: 'SCA con equivalente anginoso', noPerder: true,
           discriminantes: ['ECG', 'Troponina', 'Diabético o adulto mayor'] },
-        { dx: 'Crisis asmática grave', noPerder: true,
+        { id: 'asma', alias: ['asma', 'crisis asmatica', 'crisis de asma'], dx: 'Crisis asmática grave', noPerder: true,
           discriminantes: ['Sibilancias o tórax silente', 'PEF < 50% del predicho'] },
-        { dx: 'Exacerbación de EPOC', noPerder: false,
+        { id: 'epoc', alias: ['epoc', 'exacerbacion epoc', 'epoc descompensado', 'epoc exacerbado'], dx: 'Exacerbación de EPOC', noPerder: false,
           discriminantes: ['Antecedente de EPOC', 'Aumento de disnea y expectoración purulenta', 'Gasometría: hipercapnia'] },
-        { dx: 'Neumonía', noPerder: false,
+        { id: 'neumonia', alias: ['neumonia', 'nac'], dx: 'Neumonía', noPerder: false,
           discriminantes: ['Fiebre, crepitaciones focales', 'Rx tórax', 'CURB-65'] },
       ],
       confirmados: [
         {
           id: 'anafilaxia',
+          alias: ['anafilaxia', 'shock anafilactico'],
           nombre: 'Anafilaxia',
           algoritmo: [
             'Adrenalina IM 0,01 mg/kg (máx 0,5 mg) en cara anterolateral del muslo — sin retraso',
@@ -250,6 +449,7 @@ const PEPE_GRILLO_KB = {
         },
         {
           id: 'epoc-exacerbacion',
+          alias: ['epoc', 'exacerbacion epoc'],
           nombre: 'Exacerbación de EPOC',
           algoritmo: [
             'O2 controlado: meta SpO2 88–92%',
@@ -326,30 +526,31 @@ const PEPE_GRILLO_KB = {
         'Fiebre + ictericia + dolor (colangitis)',
       ],
       diferenciales: [
-        { dx: 'Aneurisma aórtico abdominal roto', noPerder: true,
+        { id: 'aaa', alias: ['aneurisma', 'aaa', 'aneurisma roto', 'aneurisma aortico', 'aaa roto'], dx: 'Aneurisma aórtico abdominal roto', noPerder: true,
           discriminantes: ['Edad, tabaquismo, HTA', 'Masa pulsátil', 'Hipotensión', 'POCUS aorta'] },
-        { dx: 'Embarazo ectópico roto', noPerder: true,
+        { id: 'ectopico', alias: ['embarazo ectopico', 'ectopico'], dx: 'Embarazo ectópico roto', noPerder: true,
           discriminantes: ['β-hCG positiva', 'Amenorrea, sangrado', 'Hipotensión'] },
-        { dx: 'Isquemia mesentérica', noPerder: true,
+        { id: 'isquemia-mesenterica', alias: ['isquemia mesenterica'], dx: 'Isquemia mesentérica', noPerder: true,
           discriminantes: ['Fibrilación auricular', 'Dolor desproporcionado', 'Lactato'] },
-        { dx: 'Perforación / obstrucción intestinal', noPerder: true,
+        { id: 'abdomen-quirurgico', alias: ['perforacion', 'obstruccion intestinal', 'abdomen agudo'], dx: 'Perforación / obstrucción intestinal', noPerder: true,
           discriminantes: ['Vómitos, distensión, sin deposiciones ni gases', 'Peritonismo'] },
-        { dx: 'IAM de pared inferior', noPerder: true,
+        { id: 'sca', alias: ['iam inferior', 'infarto inferior'], dx: 'IAM de pared inferior', noPerder: true,
           discriminantes: ['Dolor epigástrico en diabético o adulto mayor', 'ECG'] },
-        { dx: 'Pielonefritis (± obstrucción)', noPerder: true,
+        { id: 'pielonefritis', alias: ['pielonefritis', 'itu alta', 'infeccion urinaria alta'], dx: 'Pielonefritis (± obstrucción)', noPerder: true,
           discriminantes: ['Fiebre', 'Puño percusión (+)', 'Disuria', 'Sedimento urinario'] },
-        { dx: 'Apendicitis aguda', noPerder: false,
+        { id: 'apendicitis', alias: ['apendicitis'], dx: 'Apendicitis aguda', noPerder: false,
           discriminantes: ['Migración periumbilical → FID', 'McBurney / Blumberg', 'Score de Alvarado'] },
-        { dx: 'Colecistitis / cólico biliar', noPerder: false,
+        { id: 'colecistitis', alias: ['colecistitis', 'colico biliar'], dx: 'Colecistitis / cólico biliar', noPerder: false,
           discriminantes: ['Dolor en HD posprandial', 'Murphy (+)', 'Ecografía'] },
-        { dx: 'Cólico renal', noPerder: false,
+        { id: 'colico-renal', alias: ['colico renal', 'litiasis renal', 'urolitiasis'], dx: 'Cólico renal', noPerder: false,
           discriminantes: ['Dolor cólico lumbar irradiado a genitales', 'Hematuria', 'Sin fiebre'] },
-        { dx: 'Lumbago mecánico', noPerder: false,
+        { id: 'lumbago', alias: ['lumbago', 'lumbalgia'], dx: 'Lumbago mecánico', noPerder: false,
           discriminantes: ['Relación con movimiento', 'Sin fiebre ni alteraciones urinarias', 'Sin banderas rojas neurológicas (cauda equina)'] },
       ],
       confirmados: [
         {
           id: 'pielonefritis',
+          alias: ['pielonefritis'],
           nombre: 'Pielonefritis aguda',
           algoritmo: [
             'Urocultivo (y hemocultivos si hay criterios de sepsis) ANTES del antibiótico, sin retrasarlo',
@@ -370,6 +571,7 @@ const PEPE_GRILLO_KB = {
         },
         {
           id: 'aaa-roto',
+          alias: ['aneurisma roto', 'aaa roto', 'aaa', 'aneurisma'],
           nombre: 'Aneurisma aórtico abdominal roto',
           algoritmo: [
             'Activar cirugía vascular de inmediato',
@@ -446,26 +648,27 @@ const PEPE_GRILLO_KB = {
         'Fiebre + rigidez de nuca',
       ],
       diferenciales: [
-        { dx: 'Hipoglicemia', noPerder: true,
+        { id: 'hipoglicemia', alias: ['hipoglicemia', 'hipoglucemia'], dx: 'Hipoglicemia', noPerder: true,
           discriminantes: ['HGT < 70 mg/dL', 'Diabético con insulina o sulfonilurea'] },
-        { dx: 'ACV isquémico', noPerder: true,
+        { id: 'acv', alias: ['acv', 'ave', 'ataque cerebrovascular', 'accidente cerebrovascular', 'accidente vascular', 'ictus', 'stroke', 'acv isquemico'], dx: 'ACV isquémico', noPerder: true,
           discriminantes: ['Déficit focal de inicio súbito', 'NIHSS', 'TC sin sangrado'] },
-        { dx: 'Hemorragia intracraneal / HSA', noPerder: true,
+        { id: 'hic', alias: ['hemorragia intracraneal', 'hsa', 'hemorragia subaracnoidea', 'hemorragia cerebral', 'acv hemorragico'], dx: 'Hemorragia intracraneal / HSA', noPerder: true,
           discriminantes: ['Cefalea intensa, vómitos', 'Anticoagulación', 'TC'] },
-        { dx: 'Status epiléptico', noPerder: true,
+        { id: 'status', alias: ['status', 'status epileptico', 'estado epileptico', 'convulsion', 'crisis convulsiva'], dx: 'Status epiléptico', noPerder: true,
           discriminantes: ['Convulsión > 5 min o sin recuperación entre crisis'] },
-        { dx: 'Meningitis / encefalitis', noPerder: true,
+        { id: 'meningitis', alias: ['meningitis', 'encefalitis'], dx: 'Meningitis / encefalitis', noPerder: true,
           discriminantes: ['Fiebre, rigidez de nuca', 'Petequias'] },
-        { dx: 'Intoxicación', noPerder: true,
+        { id: 'intoxicacion', alias: ['intoxicacion', 'sobredosis'], dx: 'Intoxicación', noPerder: true,
           discriminantes: ['Fármacos disponibles', 'Pupilas', 'Toxíndromes'] },
-        { dx: 'Estado postictal / parálisis de Todd', noPerder: false,
+        { id: 'postictal', alias: ['postictal', 'paralisis de todd'], dx: 'Estado postictal / parálisis de Todd', noPerder: false,
           discriminantes: ['Convulsión presenciada', 'Mordedura de lengua', 'Recuperación progresiva'] },
-        { dx: 'Delirium por causa sistémica (sepsis, hiponatremia)', noPerder: false,
+        { id: 'delirium', alias: ['delirium', 'sindrome confusional'], dx: 'Delirium por causa sistémica (sepsis, hiponatremia)', noPerder: false,
           discriminantes: ['Adulto mayor', 'Curso fluctuante', 'Sin focalidad'] },
       ],
       confirmados: [
         {
           id: 'acv-trombolisis',
+          alias: ['acv', 'ave', 'ictus', 'trombolisis', 'candidato a trombolisis', 'acv isquemico'],
           nombre: 'ACV isquémico candidato a trombólisis',
           algoritmo: [
             'Meta: puerta-aguja ≤ 60 min (ideal ≤ 45)',
@@ -487,6 +690,7 @@ const PEPE_GRILLO_KB = {
         },
         {
           id: 'hipoglicemia',
+          alias: ['hipoglicemia', 'hipoglucemia'],
           nombre: 'Hipoglicemia sintomática',
           algoritmo: [
             'Glucosa hipertónica EV según protocolo local; si no hay acceso venoso, glucagón 1 mg IM',
@@ -561,13 +765,13 @@ const PEPE_GRILLO_KB = {
         'Dolor desproporcionado o crepitación en piel (fascitis necrotizante)',
       ],
       diferenciales: [
-        { dx: 'Shock séptico', noPerder: true,
+        { id: 'sepsis', alias: ['sepsis', 'shock septico', 'septico', 'sepsis grave'], dx: 'Shock séptico', noPerder: true,
           discriminantes: ['Hipotensión que requiere vasopresor', 'Lactato > 2 pese a volumen'] },
-        { dx: 'Neutropenia febril', noPerder: true,
+        { id: 'neutropenia-febril', alias: ['neutropenia febril', 'neutropenico', 'neutropenica'], dx: 'Neutropenia febril', noPerder: true,
           discriminantes: ['Quimioterapia reciente', 'RAN < 500/mm³'] },
-        { dx: 'Meningococcemia / meningitis', noPerder: true,
+        { id: 'meningococcemia', alias: ['meningococcemia', 'meningococo', 'purpura fulminante'], dx: 'Meningococcemia / meningitis', noPerder: true,
           discriminantes: ['Petequias/púrpura', 'Rigidez de nuca', 'Cefalea, fotofobia'] },
-        { dx: 'Fascitis necrotizante', noPerder: true,
+        { id: 'fascitis', alias: ['fascitis', 'fascitis necrotizante'], dx: 'Fascitis necrotizante', noPerder: true,
           discriminantes: ['Dolor desproporcionado', 'Crepitación, bulas', 'Toxicidad sistémica'] },
         { dx: 'Simuladores no infecciosos', noPerder: true,
           discriminantes: ['Golpe de calor', 'Síndrome serotoninérgico / neuroléptico maligno', 'Tormenta tiroidea', 'Reacción transfusional', 'Pancreatitis'] },
@@ -577,6 +781,7 @@ const PEPE_GRILLO_KB = {
       confirmados: [
         {
           id: 'shock-septico',
+          alias: ['shock septico', 'sepsis'],
           nombre: 'Sepsis / shock séptico — paquete de la hora 1',
           algoritmo: [
             'Lactato (repetir si inicial > 2 mmol/L)',

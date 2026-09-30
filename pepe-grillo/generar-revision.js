@@ -47,7 +47,16 @@ kb.motivos.forEach((m, i) => {
   L.push('| Diagnóstico | No perder | Hallazgos discriminantes |', '|---|:-:|---|');
   m.diferenciales.forEach((d) =>
     L.push(`| ${d.dx} | ${d.noPerder ? '🔴' : ''} | ${d.discriminantes.join('; ')} |`));
-  L.push('', '### Hitos de la capa 1', '');
+  L.push('', '### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)', '');
+  const vistos = new Set();
+  m.diferenciales.forEach((d) => {
+    if (!d.id || !kb.tips[d.id] || vistos.has(d.id)) return;
+    vistos.add(d.id);
+    L.push(`**${d.dx}** — se activa con: _${d.alias.join(', ')}_`, '');
+    kb.tips[d.id].forEach((t, j) => L.push(`${j + 1}. ${t}${j < 3 ? ' 🔊' : ''}`));
+    L.push('');
+  });
+  L.push('### Hitos de la capa 1', '');
   hitos(m.hitos);
   m.confirmados.forEach((c) => {
     L.push('', `### Capa 3 — ${c.nombre}`, '');

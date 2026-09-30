@@ -101,6 +101,44 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 | Pericarditis |  | Dolor pleurítico que alivia al inclinarse adelante; Frote pericárdico; Supradesnivel ST difuso + infradesnivel PR |
 | Dolor musculoesquelético / ERGE / ansiedad |  | Diagnóstico de exclusión: solo tras descartar los anteriores |
 
+### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)
+
+**Síndrome coronario agudo (IAMCEST / SCASEST)** — se activa con: _sca, sindrome coronario, sindrome coronario agudo, coronario agudo, iam, infarto, angina inestable, scasest, iamsest_
+
+1. ECG de 12 derivaciones antes de 10 minutos, y que el médico lo vea de inmediato 🔊
+2. Si el ECG muestra supradesnivel, corre el reloj de reperfusión: activa el código IAM 🔊
+3. Troponina a tiempo cero; anota la hora exacta para la segunda muestra 🔊
+4. Oxígeno solo si la saturación es menor de 90%
+5. Antes de nitratos: PAS mayor de 90, sin infarto de ventrículo derecho y sin sildenafil
+6. Desfibrilador a mano: la fibrilación ventricular es más frecuente en la primera hora
+
+**Disección aórtica** — se activa con: _diseccion, diseccion aortica, sindrome aortico_
+
+1. Nada de antiagregantes ni anticoagulantes hasta descartar disección 🔊
+2. Presión en ambos brazos y pulsos en las cuatro extremidades 🔊
+3. Dos vías gruesas; grupo, Rh y pruebas cruzadas 🔊
+4. Meta habitual: frecuencia menor de 60 y PAS entre 100 y 120, según indicación médica
+5. Controla el dolor: el dolor sube la presión
+
+**Tromboembolismo pulmonar** — se activa con: _tep, tromboembolismo, tromboembolismo pulmonar, embolia pulmonar_
+
+1. Hipotensión o shock significa TEP de alto riesgo: avisa de inmediato 🔊
+2. Vigila saturación y signos de falla del ventrículo derecho, como ingurgitación yugular 🔊
+3. Antes de anticoagular: pregunta por sangrado activo, cirugía reciente y anticoagulantes 🔊
+4. Cuidado con el volumen: el ventrículo derecho dilatado tolera mal la sobrecarga
+
+**Neumotórax a tensión** — se activa con: _neumotorax, neumotorax a tension_
+
+1. Murmullo abolido de un lado con hipotensión: neumotórax a tensión, avisa ya 🔊
+2. Prepara material de descompresión con aguja y pleurostomía 🔊
+3. Oxígeno a alto flujo 🔊
+
+**Taponamiento cardíaco** — se activa con: _taponamiento, taponamiento cardiaco_
+
+1. Hipotensión, ingurgitación yugular y ruidos apagados: avisa de inmediato 🔊
+2. Prepara pericardiocentesis y ecografía 🔊
+3. Volumen según indicación; evita la sedación que baje la precarga 🔊
+
 ### Hitos de la capa 1
 
 - ⏱ **min 5:** Dolor torácico: ¿ECG ya tomado?
@@ -197,6 +235,68 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 | Crisis asmática grave | 🔴 | Sibilancias o tórax silente; PEF < 50% del predicho |
 | Exacerbación de EPOC |  | Antecedente de EPOC; Aumento de disnea y expectoración purulenta; Gasometría: hipercapnia |
 | Neumonía |  | Fiebre, crepitaciones focales; Rx tórax; CURB-65 |
+
+### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)
+
+**Anafilaxia / obstrucción de vía aérea** — se activa con: _anafilaxia, shock anafilactico, reaccion alergica grave_
+
+1. Adrenalina intramuscular en el muslo es lo primero; no la retrases por antihistamínicos ni corticoides 🔊
+2. Adulto: 0,5 miligramos de la ampolla de 1 mg por mL; repetir a los 5 minutos si no responde 🔊
+3. Retira el alérgeno: suspende la infusión sospechosa 🔊
+4. Voz ronca o estridor: la vía aérea se está cerrando, avisa
+5. Observación posterior por riesgo de reacción bifásica
+
+**Neumotórax a tensión** — se activa con: _neumotorax, neumotorax a tension_
+
+1. Murmullo abolido de un lado con hipotensión: neumotórax a tensión, avisa ya 🔊
+2. Prepara material de descompresión con aguja y pleurostomía 🔊
+3. Oxígeno a alto flujo 🔊
+
+**Tromboembolismo pulmonar** — se activa con: _tep, tromboembolismo, tromboembolismo pulmonar, embolia pulmonar_
+
+1. Hipotensión o shock significa TEP de alto riesgo: avisa de inmediato 🔊
+2. Vigila saturación y signos de falla del ventrículo derecho, como ingurgitación yugular 🔊
+3. Antes de anticoagular: pregunta por sangrado activo, cirugía reciente y anticoagulantes 🔊
+4. Cuidado con el volumen: el ventrículo derecho dilatado tolera mal la sobrecarga
+
+**Edema pulmonar agudo / IC aguda** — se activa con: _edema pulmonar, edema pulmonar agudo, epa, insuficiencia cardiaca, ic descompensada, falla cardiaca_
+
+1. Siéntalo con las piernas colgando, si la presión lo permite 🔊
+2. Oxígeno para saturar 90% o más; prepara ventilación no invasiva si hay trabajo respiratorio 🔊
+3. Nitratos si la PAS es mayor de 110, según indicación; furosemida EV y medir diuresis 🔊
+4. Balance hídrico estricto
+5. ECG y troponina: busca el gatillante, sea SCA, arritmia o crisis hipertensiva
+
+**SCA con equivalente anginoso** — se activa con: _sca, sindrome coronario, equivalente anginoso_
+
+1. ECG de 12 derivaciones antes de 10 minutos, y que el médico lo vea de inmediato 🔊
+2. Si el ECG muestra supradesnivel, corre el reloj de reperfusión: activa el código IAM 🔊
+3. Troponina a tiempo cero; anota la hora exacta para la segunda muestra 🔊
+4. Oxígeno solo si la saturación es menor de 90%
+5. Antes de nitratos: PAS mayor de 90, sin infarto de ventrículo derecho y sin sildenafil
+6. Desfibrilador a mano: la fibrilación ventricular es más frecuente en la primera hora
+
+**Crisis asmática grave** — se activa con: _asma, crisis asmatica, crisis de asma_
+
+1. No completa frases, tórax silente o confusión: crisis de riesgo vital 🔊
+2. Salbutamol con bromuro de ipratropio, según indicación 🔊
+3. Corticoide sistémico dentro de la primera hora 🔊
+4. PEF antes y después del broncodilatador
+5. PaCO2 normal o alta en crisis asmática es signo de agotamiento
+
+**Exacerbación de EPOC** — se activa con: _epoc, exacerbacion epoc, epoc descompensado, epoc exacerbado_
+
+1. Meta de saturación entre 88 y 92%: el exceso de oxígeno produce hipercapnia 🔊
+2. Gasometría precoz: pH menor de 7,35 con PaCO2 sobre 45 obliga a evaluar ventilación no invasiva 🔊
+3. Broncodilatadores de acción corta y corticoide, según indicación 🔊
+4. Busca el gatillante: infección, neumotórax, TEP o insuficiencia cardíaca
+
+**Neumonía** — se activa con: _neumonia, nac_
+
+1. Calcula CURB-65 para orientar la gravedad 🔊
+2. Si es grave: hemocultivos y expectoración antes del antibiótico, sin retrasarlo 🔊
+3. Antibiótico precoz; si hay sepsis, dentro de la primera hora 🔊
+4. Aislamiento respiratorio si se sospecha influenza o COVID
 
 ### Hitos de la capa 1
 
@@ -312,6 +412,75 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 | Cólico renal |  | Dolor cólico lumbar irradiado a genitales; Hematuria; Sin fiebre |
 | Lumbago mecánico |  | Relación con movimiento; Sin fiebre ni alteraciones urinarias; Sin banderas rojas neurológicas (cauda equina) |
 
+### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)
+
+**Aneurisma aórtico abdominal roto** — se activa con: _aneurisma, aaa, aneurisma roto, aneurisma aortico, aaa roto_
+
+1. Avisa a cirugía vascular de inmediato 🔊
+2. Dos vías gruesas; grupo, Rh y pruebas cruzadas es la primera muestra 🔊
+3. Hipotensión permisiva: no busques una presión normal con volumen, según indicación 🔊
+4. Si está inestable no va al TC: va a pabellón
+
+**Embarazo ectópico roto** — se activa con: _embarazo ectopico, ectopico_
+
+1. β-hCG a toda mujer en edad fértil con dolor abdominal 🔊
+2. Hipotensión con β-hCG positiva: ectópico roto hasta demostrar lo contrario; avisa a ginecología 🔊
+3. Dos vías gruesas; grupo, Rh y pruebas cruzadas 🔊
+4. Si es Rh negativo, recuerda la inmunoglobulina anti-D, según indicación
+
+**Isquemia mesentérica** — se activa con: _isquemia mesenterica_
+
+1. Dolor desproporcionado al examen, sobre todo con fibrilación auricular: avisa 🔊
+2. Lactato normal NO la descarta 🔊
+3. Régimen cero, vía venosa, y prepara angioTC 🔊
+
+**Perforación / obstrucción intestinal** — se activa con: _perforacion, obstruccion intestinal, abdomen agudo_
+
+1. Régimen cero y vía venosa 🔊
+2. Sonda nasogástrica si hay vómitos por obstrucción, según indicación 🔊
+3. Signos de peritonitis o shock: avisa a cirugía 🔊
+
+**IAM de pared inferior** — se activa con: _iam inferior, infarto inferior_
+
+1. ECG de 12 derivaciones antes de 10 minutos, y que el médico lo vea de inmediato 🔊
+2. Si el ECG muestra supradesnivel, corre el reloj de reperfusión: activa el código IAM 🔊
+3. Troponina a tiempo cero; anota la hora exacta para la segunda muestra 🔊
+4. Oxígeno solo si la saturación es menor de 90%
+5. Antes de nitratos: PAS mayor de 90, sin infarto de ventrículo derecho y sin sildenafil
+6. Desfibrilador a mano: la fibrilación ventricular es más frecuente en la primera hora
+
+**Pielonefritis (± obstrucción)** — se activa con: _pielonefritis, itu alta, infeccion urinaria alta_
+
+1. Urocultivo antes del antibiótico 🔊
+2. Busca criterios de sepsis: NEWS2 y lactato 🔊
+3. Pielonefritis con obstrucción es urgencia urológica: ecografía 🔊
+4. Si está embarazada: hospitalización y evaluación obstétrica
+
+**Apendicitis aguda** — se activa con: _apendicitis_
+
+1. Régimen cero y vía venosa 🔊
+2. La analgesia no enmascara el diagnóstico: no la retrases 🔊
+3. β-hCG en mujer en edad fértil antes de imágenes 🔊
+4. Fiebre alta, peritonitis difusa o shock sugieren perforación: avisa
+
+**Colecistitis / cólico biliar** — se activa con: _colecistitis, colico biliar_
+
+1. Fiebre con ictericia: sospecha colangitis, busca criterios de sepsis 🔊
+2. Régimen cero, analgesia según indicación 🔊
+3. Perfil hepático y lipasa 🔊
+
+**Cólico renal** — se activa con: _colico renal, litiasis renal, urolitiasis_
+
+1. Analgesia precoz según indicación 🔊
+2. Fiebre con cólico renal: sospecha obstrucción infectada, es urgencia 🔊
+3. Mayor de 60 años con primer cólico renal: descarta aneurisma aórtico 🔊
+
+**Lumbago mecánico** — se activa con: _lumbago, lumbalgia_
+
+1. Descarta banderas rojas: fiebre, déficit neurológico, retención urinaria o anestesia en silla de montar 🔊
+2. Mayor de 60 años con dolor lumbar súbito: descarta aneurisma 🔊
+3. Analgesia y reevaluación del dolor 🔊
+
 ### Hitos de la capa 1
 
 - ⏱ **min 5:** Dolor abdominal: ¿test de embarazo solicitado si corresponde?
@@ -426,6 +595,66 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 | Estado postictal / parálisis de Todd |  | Convulsión presenciada; Mordedura de lengua; Recuperación progresiva |
 | Delirium por causa sistémica (sepsis, hiponatremia) |  | Adulto mayor; Curso fluctuante; Sin focalidad |
 
+### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)
+
+**Hipoglicemia** — se activa con: _hipoglicemia, hipoglucemia_
+
+1. Trata sin esperar la confirmación del laboratorio 🔊
+2. Si está consciente y traga, glucosa oral; si no, glucosa EV o glucagón IM 🔊
+3. HGT de control a los 15 minutos 🔊
+4. Con sulfonilureas o insulina lenta la hipoglicemia vuelve: observa más tiempo
+
+**ACV isquémico** — se activa con: _acv, ave, ataque cerebrovascular, accidente cerebrovascular, accidente vascular, ictus, stroke, acv isquemico_
+
+1. HGT inmediato: la hipoglicemia simula un ACV 🔊
+2. La hora que importa es la última vez que lo vieron normal 🔊
+3. Activa el código ACV y lleva al paciente al TC: meta de 20 minutos 🔊
+4. Régimen cero hasta el test de deglución
+5. Pregunta por anticoagulantes y la hora de la última dosis
+6. No bajes la presión de rutina: si va a trombólisis, la meta es menor de 185 sobre 110
+
+**Hemorragia intracraneal / HSA** — se activa con: _hemorragia intracraneal, hsa, hemorragia subaracnoidea, hemorragia cerebral, acv hemorragico_
+
+1. Controles neurológicos seriados: Glasgow y pupilas 🔊
+2. Si usa anticoagulantes, avisa: puede requerir reversión urgente 🔊
+3. Glasgow 8 o menos: prepara manejo de vía aérea 🔊
+4. Cabecera a 30 grados; manejo del dolor y los vómitos
+5. Control de presión según la meta indicada
+
+**Status epiléptico** — se activa con: _status, status epileptico, estado epileptico, convulsion, crisis convulsiva_
+
+1. Mide el tiempo: más de 5 minutos es status 🔊
+2. Protege de lesiones y lateraliza; nada en la boca 🔊
+3. Benzodiacepina de primera línea según indicación, IM o EV 🔊
+4. HGT inmediato
+5. Si no despierta después de la crisis, sospecha status no convulsivo
+
+**Meningitis / encefalitis** — se activa con: _meningitis, encefalitis_
+
+1. Hemocultivos y antibiótico sin esperar la punción lumbar 🔊
+2. Aislamiento por gotitas hasta descartar meningococo 🔊
+3. Con compromiso de conciencia o focalidad, TC antes de la punción 🔊
+4. Registra las petequias: pueden progresar en horas
+
+**Intoxicación** — se activa con: _intoxicacion, sobredosis_
+
+1. Pregunta qué tomó, cuánto y a qué hora 🔊
+2. Guarda envases y blísteres 🔊
+3. Glasgow 8 o menos: protege la vía aérea 🔊
+4. HGT y ECG: busca QT largo o QRS ancho
+5. Consulta al centro de información toxicológica según protocolo
+
+**Estado postictal / parálisis de Todd** — se activa con: _postictal, paralisis de todd_
+
+1. Si no recupera la conciencia progresivamente, sospecha status no convulsivo 🔊
+2. HGT y busca lesiones por la caída 🔊
+
+**Delirium por causa sistémica (sepsis, hiponatremia)** — se activa con: _delirium, sindrome confusional_
+
+1. Delirium en adulto mayor: busca infección, fármacos, retención urinaria y electrolitos 🔊
+2. HGT y sodio 🔊
+3. Evita contenciones; acompañante si es posible 🔊
+
 ### Hitos de la capa 1
 
 - ⏱ **min 0:** ¿HGT tomado?
@@ -536,6 +765,38 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 | Fascitis necrotizante | 🔴 | Dolor desproporcionado; Crepitación, bulas; Toxicidad sistémica |
 | Simuladores no infecciosos | 🔴 | Golpe de calor; Síndrome serotoninérgico / neuroléptico maligno; Tormenta tiroidea; Reacción transfusional; Pancreatitis |
 | Infección localizada sin disfunción orgánica |  | NEWS2 bajo; Lactato normal; Foco claro |
+
+### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)
+
+**Shock séptico** — se activa con: _sepsis, shock septico, septico, sepsis grave_
+
+1. Hemocultivos antes del antibiótico, pero sin retrasarlo 🔊
+2. Antibiótico dentro de la primera hora si hay shock o sepsis probable 🔊
+3. Lactato ahora; si es mayor de 2, se repite en 2 a 4 horas 🔊
+4. Hipotensión o lactato de 4 o más: cristaloides 30 mL por kilo, reevaluando
+5. PAM menor de 65 pese al volumen: noradrenalina, puede partir por vía periférica
+6. Diuresis horaria
+
+**Neutropenia febril** — se activa con: _neutropenia febril, neutropenico, neutropenica_
+
+1. Antibiótico dentro de 60 minutos desde el ingreso 🔊
+2. Aislamiento protector 🔊
+3. Hemocultivos periféricos, y del catéter si tiene 🔊
+4. Nada rectal: ni temperatura ni supositorios
+
+**Meningococcemia / meningitis** — se activa con: _meningococcemia, meningococo, purpura fulminante_
+
+1. Antibiótico de inmediato: es de las sepsis más rápidas 🔊
+2. Aislamiento por gotitas; notificación inmediata y quimioprofilaxis de contactos 🔊
+3. Marca el borde de las petequias con la hora, para ver la progresión 🔊
+4. Vigila el shock: puede requerir volumen y vasopresores precoces
+
+**Fascitis necrotizante** — se activa con: _fascitis, fascitis necrotizante_
+
+1. Dolor desproporcionado es la clave precoz 🔊
+2. Marca los bordes del eritema con la hora 🔊
+3. Avisa a cirugía: el tratamiento es quirúrgico y urgente 🔊
+4. Antibiótico precoz de amplio espectro, según indicación
 
 ### Hitos de la capa 1
 
