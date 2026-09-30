@@ -35,6 +35,7 @@
     --local: #f3c178; --local-soft: #3a2c14; color-scheme: dark;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; } /* también al abrir el archivo fuera del visor */
   body {
     background: var(--bg); color: var(--ink);
     font: 15px/1.5 var(--font-body);
@@ -338,6 +339,7 @@
     const b = boxes[box] || (boxes[box] = { titulo: '', hitos: [] });
     if (r.titulo && !(mantenerTitulo && b.titulo)) b.titulo = r.titulo.split(' · ').pop();
     if (r.detenerHitos) b.hitos = b.hitos.filter((h) => h.hecho);
+    if (r.nuevoIngreso) b.hitos = []; // reingreso del box: recordatorios desde cero
     const factor = Number($('velocidad').value);
     const ahora = Date.now();
     r.hitos.forEach((h) => b.hitos.push({ ...h, vence: ahora + (h.min * 60000) / factor }));
@@ -375,7 +377,7 @@
     cont.hidden = !enDialogo;
     $('ejemplos').hidden = enDialogo; // durante el chequeo, solo lo necesario
     if (!enDialogo) return;
-    [...RAPIDAS[esperando], ['Repite', ''], ['Cancelar', '']].forEach(([txt, cls]) => {
+    [...RAPIDAS[esperando], ['Cancelar', '']].forEach(([txt, cls]) => {
       const b = el('button', cls, txt);
       b.type = 'button';
       b.addEventListener('click', () => procesar(txt, true));

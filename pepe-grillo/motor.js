@@ -506,7 +506,7 @@
         if (i.intencion !== 'desconocido') porBox[box] = { interpretacion: i, respuesta: r, cursor: 0 };
         // Registro para la evolución: un "ingresa" abre un registro nuevo.
         if (RG && i.intencion !== 'desconocido') {
-          if (/\bingres/.test(normalizar(texto))) registros[box] = RG.crear(reloj());
+          if (/\bingres/.test(normalizar(texto))) { registros[box] = RG.crear(reloj()); respuesta.nuevoIngreso = true; }
           const reg = registroDe(box);
           Object.assign(reg.datos.paciente, { box: box !== '—' ? box : undefined, edad: i.edad, sexo: i.sexo },
             Object.fromEntries(Object.entries(reg.datos.paciente).filter(([, v]) => v != null)));

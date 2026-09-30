@@ -462,3 +462,10 @@ test('decisión: 10 minutos en la voz (meta clínica) y 30 en el registro (garan
   const ecg = s.procesar('ECG tomado').respuesta.tiempos.find((x) => x.nombre === 'Sospecha → ECG');
   assert.deepStrictEqual([ecg.meta, ecg.ok], [30, true]);
 });
+
+test('un reingreso del mismo box se marca para reiniciar sus recordatorios', () => {
+  const s = crearSesion(kb, inst);
+  assert.ok(s.procesar('ingresa box 3, sospecha SCA').respuesta.nuevoIngreso);
+  assert.ok(!s.procesar('sigue').respuesta.nuevoIngreso);
+  assert.ok(s.procesar('ingresa box 3, sospecha SCA').respuesta.nuevoIngreso);
+});
