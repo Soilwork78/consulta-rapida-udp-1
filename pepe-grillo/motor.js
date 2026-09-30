@@ -289,9 +289,10 @@
     const local = (inst && inst.tips[clave]) || [];
     const contacto = inst && (inst.contactos[clave] || inst.contactos[proto.id]);
     const quien = describirPaciente(i);
+    const hablados = fase.pasos.filter((p) => p.hablado !== false);
     const corte = fase.localDespuesDe || 1;
-    const primeros = fase.pasos.slice(0, corte);
-    const resto = fase.pasos.slice(corte);
+    const primeros = hablados.slice(0, corte);
+    const resto = hablados.slice(corte);
     // En el primer contacto, lo que no se puede perder del dolor torácico.
     const dolor = kb.motivos.find((m) => m.id === 'dolor-toracico');
     const descartar = fase.id === 'primer-contacto' && dolor ? otrosNoPerder(dolor, 'sca') : [];
@@ -312,11 +313,10 @@
       secciones: [
         local.length && { titulo: 'Protocolo institucional', items: local, destacar: true },
         contacto && { titulo: 'Contacto', items: [contacto] },
-        { titulo: 'Pasos de enfermería', items: fase.pasos.map((p) => p.voz + (p.detalle ? ' — ' + p.detalle : '')) },
+        { titulo: 'Pasos de enfermería', items: hablados.map((p) => p.voz + (p.detalle ? ' — ' + p.detalle : '')) },
         descartar.length && { titulo: 'No olvidar descartar', items: descartar, alerta: true },
-        fase.id === 'primer-contacto' && {
-          titulo: 'Proceso de enfermería',
-          items: proto.procesoEnfermeria.map((d) => d.dx + ': ' + d.intervenciones.join('; ') + '. Meta: ' + d.resultado),
+        fase.pasos.some((p) => p.hablado === false) && {
+          titulo: 'También', items: fase.pasos.filter((p) => p.hablado === false).map((p) => p.voz),
         },
       ].filter(Boolean),
       hitos: fase.hitos,

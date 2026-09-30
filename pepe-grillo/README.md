@@ -1,6 +1,6 @@
 # Pepe Grillo — copiloto clínico por audio (prototipo)
 
-Pepe Grillo es un asistente que la enfermera de urgencia escucha por un audífono y que le recuerda las tareas de cada paciente según el contexto clínico. **Por ahora es un prototipo para simulación y docencia. No es un dispositivo médico.**
+Pepe Grillo es una **herramienta para el turno**: un asistente que la enfermera de urgencia escucha por un audífono y que le recuerda las tareas de cada paciente según el contexto clínico. Pepe solo dice lo que cambia el resultado del paciente; el resto queda en la tarjeta o se explica con "por qué". **Es un prototipo: no usar con pacientes reales hasta validar el contenido y cumplir los requisitos regulatorios.**
 
 ## Modelo de capas
 
@@ -48,7 +48,7 @@ Pepe elimina la fricción inútil (anotar, calcular de memoria, recordar los pas
 
 ## Manos libres
 
-En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe", cuando es "sigue", "qué más", "repite" o "anterior", o cuando hay un diálogo en curso, y mientras Pepe habla sigue escuchando solo órdenes cortas ("detente", "sigue", "repite"), para que la enfermera pueda interrumpirlo. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para simulación, pero no para datos reales de pacientes.
+En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe", cuando es "sigue", "qué más", "repite" o "anterior", o cuando hay un diálogo en curso, y mientras Pepe habla sigue escuchando solo órdenes cortas ("detente", "sigue", "repite"), para que la enfermera pueda interrumpirlo. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para probar el prototipo, pero no para datos reales de pacientes.
 
 ## Protocolo institucional
 
@@ -67,7 +67,7 @@ Lo institucional complementa la base: nunca oculta las banderas rojas.
 - `doble-chequeo.js`: diálogo guiado del doble chequeo en BIC.
 - `checklist.js`: checklist guiado de sí / no (contraindicaciones de fibrinólisis).
 - `protocolos/sca.js`: protocolo de enfermería del SCA por fases. Pruebas: `node --test pepe-grillo/motor.test.js`.
-- `index.html`: demo con voz (Chrome o Edge para el micrófono) y reloj de simulación (1 min = 1 s).
+- `index.html`: demo con voz (Chrome o Edge para el micrófono). El reloj va en tiempo real; hay un modo de prueba rápida (1 min = 1 s).
 - `instituciones/`: protocolos por centro.
 - `REVISION.md`: versión legible para la revisión clínica. Se genera con `node pepe-grillo/generar-revision.js`.
 

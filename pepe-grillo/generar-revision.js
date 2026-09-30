@@ -99,7 +99,7 @@ sca.fases.forEach((f, n) => {
   S.push(`## ${n + 1}. ${f.nombre}`, '');
   S.push(`**Se activa con:** _${f.activadores.join(', ')}_`, '');
   f.pasos.forEach((p, j) => {
-    S.push(`${j + 1}. **${p.voz}**${j === 0 ? ' 🔊' : ''}`);
+    S.push(`${j + 1}. **${p.voz}**${j === 0 ? ' 🔊' : ''}${p.hablado === false ? ' _(solo en la tarjeta, Pepe no lo dice)_' : ''}`);
     if (p.detalle) S.push(`   - _Detalle:_ ${p.detalle}`);
     S.push(`   - _Por qué:_ ${p.porque}`);
   });

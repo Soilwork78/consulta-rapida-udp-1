@@ -24,19 +24,17 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 4. **Signos vitales completos, con presión en ambos brazos. Oxígeno solo si la saturación es menor de 90%**
    - _Detalle:_ PA en ambos brazos, FC, FR, SpO2, T°. Diferencia de PAS > 20 mmHg entre brazos: sospechar disección.
    - _Por qué:_ El oxígeno en pacientes sin hipoxemia no reduce la mortalidad y puede aumentar el daño por vasoconstricción coronaria. La asimetría de presión orienta a disección.
-5. **Valora el dolor: hora exacta de inicio, carácter, irradiación, intensidad de 0 a 10 y síntomas acompañantes**
-   - _Detalle:_ Inicio (hora) · Tipo (opresivo) · Irradiación (brazo, mandíbula, dorso) · EVA · Diaforesis, náuseas, disnea. En mujeres, diabéticos y adultos mayores: disnea, fatiga o dolor epigástrico sin dolor típico.
-   - _Por qué:_ La hora de inicio define si el paciente está en ventana de reperfusión. Los equivalentes anginosos explican por qué a mujeres, diabéticos y adultos mayores se les diagnostica más tarde.
-6. **Vía venosa periférica, sin punciones arteriales ni intramusculares**
-   - _Detalle:_ Idealmente 18 G. Preferir sitios que no interfieran con el acceso radial para coronariografía.
-   - _Por qué:_ Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado.
-7. **Muestras: troponina ultrasensible anotando la hora exacta, hemograma, electrolitos con magnesio, creatinina, glicemia y coagulación**
-   - _Por qué:_ La curva de troponina se interpreta por intervalos exactos (0/1 h o 0/2 h). El potasio y el magnesio bajos favorecen arritmias. La creatinina condiciona el contraste y las dosis.
-8. **Pregunta dirigida: alergia a aspirina, uso de anticoagulantes, sildenafil o tadalafil en los últimos días, sangrados, cirugías o ACV recientes**
+5. **Hora exacta de inicio del dolor, e intensidad de 0 a 10**
+   - _Detalle:_ Además: carácter (opresivo), irradiación (brazo, mandíbula, dorso), diaforesis, náuseas, disnea. En mujeres, diabéticos y adultos mayores: disnea, fatiga o dolor epigástrico sin dolor típico.
+   - _Por qué:_ La hora de inicio define si el paciente está en ventana de reperfusión. La escala de 0 a 10 permite saber si el dolor cede con el tratamiento o si la isquemia progresa.
+6. **Vía venosa, sin punciones arteriales ni intramusculares. Troponina ultrasensible anotando la hora exacta, y exámenes basales**
+   - _Detalle:_ Vía idealmente 18 G, en un sitio que no interfiera con el acceso radial. Exámenes: hemograma, electrolitos con magnesio, creatinina, glicemia, TP/INR y TTPA.
+   - _Por qué:_ Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado. La curva de troponina se interpreta por intervalos exactos.
+7. **Pregunta dirigida: alergia a aspirina, uso de anticoagulantes, sildenafil o tadalafil en los últimos días, sangrados, cirugías o ACV recientes**
    - _Por qué:_ Anticipa contraindicaciones de fármacos y de fibrinólisis. Los nitratos con sildenafil o tadalafil pueden producir hipotensión grave.
-9. **Reposo absoluto, posición cómoda, y explícale al paciente y a su familia qué está pasando**
-   - _Por qué:_ El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio. Una información clara reduce la ansiedad.
-10. **Registra tres horas: inicio del dolor, llegada y toma del ECG**
+8. **Reposo absoluto, posición cómoda, y explícale al paciente y a su familia qué está pasando** _(solo en la tarjeta, Pepe no lo dice)_
+   - _Por qué:_ El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio.
+9. **Registra tres horas: inicio del dolor, llegada y toma del ECG** _(solo en la tarjeta, Pepe no lo dice)_
    - _Por qué:_ Son los indicadores de calidad del GES de infarto y permiten auditar los tiempos de reperfusión.
 
 **Recordatorios:**

@@ -10,6 +10,8 @@
 // (fundamento, lo que responde a "Pepe, ¿por qué?").
 // El protocolo institucional se intercala después de los primeros
 // `localDespuesDe` pasos (1 si no se indica).
+// HERRAMIENTA DE TURNO: Pepe solo dice lo que cambia el resultado del paciente.
+// Los pasos con `hablado: false` quedan solo en la tarjeta.
 // ============================================================
 
 (function () {
@@ -26,7 +28,7 @@
         nombre: 'Primer contacto (minutos 0 a 10)',
         intro: 'Sospecha de síndrome coronario agudo. Primer contacto.',
         claveInstitucional: 'sca',
-        localDespuesDe: 2, // el protocolo local va después del ECG y de las banderas rojas
+        localDespuesDe: 3, // el protocolo local va después del ECG, las banderas rojas y el monitor
         activadores: ['sca', 'sindrome coronario', 'sindrome coronario agudo', 'coronario agudo', 'infarto', 'iam',
           'dolor toracico', 'dolor de pecho', 'opresion toracica', 'dolor precordial', 'dolor anginoso'],
         pasos: [
@@ -40,19 +42,18 @@
           { voz: 'Signos vitales completos, con presión en ambos brazos. Oxígeno solo si la saturación es menor de 90%',
             detalle: 'PA en ambos brazos, FC, FR, SpO2, T°. Diferencia de PAS > 20 mmHg entre brazos: sospechar disección.',
             porque: 'El oxígeno en pacientes sin hipoxemia no reduce la mortalidad y puede aumentar el daño por vasoconstricción coronaria. La asimetría de presión orienta a disección.' },
-          { voz: 'Valora el dolor: hora exacta de inicio, carácter, irradiación, intensidad de 0 a 10 y síntomas acompañantes',
-            detalle: 'Inicio (hora) · Tipo (opresivo) · Irradiación (brazo, mandíbula, dorso) · EVA · Diaforesis, náuseas, disnea. En mujeres, diabéticos y adultos mayores: disnea, fatiga o dolor epigástrico sin dolor típico.',
-            porque: 'La hora de inicio define si el paciente está en ventana de reperfusión. Los equivalentes anginosos explican por qué a mujeres, diabéticos y adultos mayores se les diagnostica más tarde.' },
-          { voz: 'Vía venosa periférica, sin punciones arteriales ni intramusculares',
-            detalle: 'Idealmente 18 G. Preferir sitios que no interfieran con el acceso radial para coronariografía.',
-            porque: 'Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado.' },
-          { voz: 'Muestras: troponina ultrasensible anotando la hora exacta, hemograma, electrolitos con magnesio, creatinina, glicemia y coagulación',
-            porque: 'La curva de troponina se interpreta por intervalos exactos (0/1 h o 0/2 h). El potasio y el magnesio bajos favorecen arritmias. La creatinina condiciona el contraste y las dosis.' },
+          { voz: 'Hora exacta de inicio del dolor, e intensidad de 0 a 10',
+            detalle: 'Además: carácter (opresivo), irradiación (brazo, mandíbula, dorso), diaforesis, náuseas, disnea. En mujeres, diabéticos y adultos mayores: disnea, fatiga o dolor epigástrico sin dolor típico.',
+            porque: 'La hora de inicio define si el paciente está en ventana de reperfusión. La escala de 0 a 10 permite saber si el dolor cede con el tratamiento o si la isquemia progresa.' },
+          { voz: 'Vía venosa, sin punciones arteriales ni intramusculares. Troponina ultrasensible anotando la hora exacta, y exámenes basales',
+            detalle: 'Vía idealmente 18 G, en un sitio que no interfiera con el acceso radial. Exámenes: hemograma, electrolitos con magnesio, creatinina, glicemia, TP/INR y TTPA.',
+            porque: 'Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado. La curva de troponina se interpreta por intervalos exactos.' },
           { voz: 'Pregunta dirigida: alergia a aspirina, uso de anticoagulantes, sildenafil o tadalafil en los últimos días, sangrados, cirugías o ACV recientes',
             porque: 'Anticipa contraindicaciones de fármacos y de fibrinólisis. Los nitratos con sildenafil o tadalafil pueden producir hipotensión grave.' },
-          { voz: 'Reposo absoluto, posición cómoda, y explícale al paciente y a su familia qué está pasando',
-            porque: 'El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio. Una información clara reduce la ansiedad.' },
-          { voz: 'Registra tres horas: inicio del dolor, llegada y toma del ECG',
+          // Solo en la tarjeta: buena práctica, pero Pepe no lo dice en el turno.
+          { hablado: false, voz: 'Reposo absoluto, posición cómoda, y explícale al paciente y a su familia qué está pasando',
+            porque: 'El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio.' },
+          { hablado: false, voz: 'Registra tres horas: inicio del dolor, llegada y toma del ECG',
             porque: 'Son los indicadores de calidad del GES de infarto y permiten auditar los tiempos de reperfusión.' },
         ],
         hitos: [

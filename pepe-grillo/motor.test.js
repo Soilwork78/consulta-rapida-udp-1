@@ -58,9 +58,9 @@ test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () =>
   const banderas = s.procesar('sigue').respuesta;
   assert.match(banderas.hablar, /^Banderas rojas/, 'banderas rojas en segundo lugar');
   assert.match(s.procesar('repite').respuesta.hablar, /^Banderas rojas/);
-  assert.match(s.procesar('qué más').respuesta.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
-  assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: La troponina/);
-  assert.match(s.procesar('anterior').respuesta.hablar, /^Protocolo local: En este hospital/);
+  assert.match(s.procesar('qué más').respuesta.hablar, /^Monitor cardíaco continuo/);
+  assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
+  assert.match(s.procesar('anterior').respuesta.hablar, /^Monitor cardíaco/);
 
   let r;
   for (let k = 0; k < 30; k++) r = s.procesar('sigue').respuesta;
@@ -244,9 +244,9 @@ test('"detente" calla a Pepe, "avanza" retoma, y los recordatorios siguen activo
   assert.strictEqual(p.paso, 1, 'la pausa no avanza');
   assert.match(s.procesar('avanza').respuesta.hablar, /^Banderas rojas/);
   s.procesar('espera');
-  assert.match(s.procesar('continúa').respuesta.hablar, /^Protocolo local: En este hospital/);
+  assert.match(s.procesar('continúa').respuesta.hablar, /^Monitor cardíaco/);
   s.procesar('pausa');
-  assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: La troponina/);
+  assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: En este hospital/);
 });
 
 test('"detente" durante un diálogo no lo cancela', () => {
@@ -262,4 +262,11 @@ test('las palabras de avance y pausa valen sin decir "Pepe"', () => {
   ['sigue', 'Continúa', 'dale', 'avanza', '¿Qué más?', 'Detente ahí', 'espera'].forEach((f) => assert.ok(esNavegacion(f), f));
   assert.ok(!esNavegacion('el paciente para de respirar'));
   assert.ok(!esNavegacion('para'), '"para" se eliminó por falsos positivos');
+});
+
+test('herramienta de turno: el primer contacto solo dice lo esencial', () => {
+  const r = crearSesion(kb, null).procesar('sospecha SCA').respuesta;
+  assert.ok(r.pasos.length <= 9, 'sin protocolo local: ' + r.pasos.length + ' pasos');
+  assert.ok(!r.pasos.some((p) => /Reposo absoluto|Registra tres horas/.test(p)), 'lo no esencial queda solo en la tarjeta');
+  assert.ok(r.secciones.some((x) => x.titulo === 'También'));
 });
