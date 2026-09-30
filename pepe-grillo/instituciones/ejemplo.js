@@ -31,6 +31,9 @@
       'Orina completa con sedimento',
     ],
 
+    // ¿Hemodinamia de turno en el centro? Define la meta ESC al paso de la guía (60 min; 90 si hay que trasladar).
+    hemodinamia: true,
+
     // Preparaciones estándar de BIC en este centro (reemplazan las de kb.js).
     preparaciones: {
       heparina: { ui: 25000, ml: 500 },

@@ -331,7 +331,7 @@
     if (i.intencion === 'desconocido') {
       return {
         clave: null, titulo: 'No entendí',
-        intro: 'No te entendí. Dime el motivo de consulta o la sospecha del médico.',
+        intro: 'No te entendí. Dime el motivo de consulta o la sospecha del médico. Si es para la evolución, empieza con anota.',
         pasos: [], secciones: [], hitos: [],
       };
     }
@@ -359,7 +359,9 @@
   function crearSesion(kb, inst, opciones = {}) {
     const reloj = opciones.ahora || Date.now;
     const registros = {}; // box → registro para la evolución
-    const registroDe = (box) => registros[box] || (registros[box] = RG.crear(reloj()));
+    const opcionesRegistro = { hemodinamia: inst && inst.hemodinamia };
+    const nuevoRegistro = () => RG.crear(reloj(), opcionesRegistro);
+    const registroDe = (box) => registros[box] || (registros[box] = nuevoRegistro());
     const porBox = {};
     let ultimoBox = '—';
     let chequeo = null; // diálogo de doble chequeo en curso
@@ -387,8 +389,10 @@
       // La interfaz avisa cuando vence un recordatorio. Devuelve { omitir: true }
       // si lo que pregunta ya está registrado (Pepe no pregunta lo que ya sabe).
       hitoDisparado(box, hito) {
-        if (!RG || !hito || !hito.registra) return { omitir: false };
+        if (!RG || !hito) return { omitir: false };
         const reg = registros[box];
+        if (reg && (hito.omitirSi || []).some((m) => reg.tiene(m))) return { omitir: true, noAplica: true };
+        if (!hito.registra) return { omitir: false };
         if (reg && reg.tiene(hito.registra.marca)) return { omitir: true };
         pregunta = { box, registra: hito.registra };
         return { omitir: false };
@@ -506,12 +510,20 @@
         if (i.intencion !== 'desconocido') porBox[box] = { interpretacion: i, respuesta: r, cursor: 0 };
         // Registro para la evolución: un "ingresa" abre un registro nuevo.
         if (RG && i.intencion !== 'desconocido') {
-          if (/\bingres/.test(normalizar(texto))) { registros[box] = RG.crear(reloj()); respuesta.nuevoIngreso = true; }
+          if (/\bingres/.test(normalizar(texto))) { registros[box] = nuevoRegistro(); respuesta.nuevoIngreso = true; }
           const reg = registroDe(box);
           Object.assign(reg.datos.paciente, { box: box !== '—' ? box : undefined, edad: i.edad, sexo: i.sexo },
             Object.fromEntries(Object.entries(reg.datos.paciente).filter(([, v]) => v != null)));
           const texto2 = r.evento || r.titulo.split(' · ').slice(1).join(' · ') || r.titulo;
           reg.evento(texto2, reloj(), undefined, r.marcaTiempo);
+          // Recordatorios con meta desde el diagnóstico: se descuenta lo que ya pasó; sin diagnóstico no aplican.
+          if (r.hitos.some((h) => h.desde === 'diagnostico')) {
+            const dx = reg.datos.clinico.find((e) => e.marca === 'diagnostico');
+            const pasado = dx ? (reloj() - dx.hora) / 60000 : 0;
+            respuesta.hitos = r.hitos.filter((h) => !h.desde || (dx && h.min - pasado > 0))
+              .map((h) => (h.desde ? { ...h, min: Math.round((h.min - pasado) * 10) / 10 } : h));
+            r.hitos = respuesta.hitos;
+          }
         }
         return { box, interpretacion: i, respuesta };
       },

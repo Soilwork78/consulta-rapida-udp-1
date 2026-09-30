@@ -375,7 +375,7 @@ test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
   assert.match(ev, /S:\n[\s\S]*Dolor \(EVA\): 8\/10 \(14:01\), 3\/10 \(14:21\)\.\n\nO:/, 'EVA en S');
   assert.ok(!/O:[\s\S]*Signos vitales[^\n]*EVA[\s\S]*A:/.test(ev), 'EVA fuera de O');
   assert.match(ev, /P:\nECG de control a los 90 minutos y preparar traslado\./);
-  assert.match(ev, /I:\n- 14:06 Nitroglicerina sublingual administrada\./);
+  assert.match(ev, /I:\nFármacos:\n- 14:06 Nitroglicerina sublingual administrada\./);
   assert.match(ev, /E:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);
   assert.ok(!/diagn[oó]stico de enfermer|NANDA/i.test(ev));
 });
@@ -480,4 +480,36 @@ test('SCA: hemodinamia es la primera opción de reperfusión', () => {
   assert.strictEqual(f('va a pabellón de hemodinamia'), 'sca:hemodinamia');
   assert.strictEqual(f('se hará ACTP'), 'sca:hemodinamia');
   assert.strictEqual(f('coronariografía de urgencia'), 'sca:hemodinamia');
+});
+
+test('hemodinamia: metas ESC desde el diagnóstico, en recordatorios y en el registro', () => {
+  let t = new Date(2026, 8, 30, 10, 0).getTime();
+  const min = (n) => { t += n * 60000; };
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  s.procesar('Pepe, ingresa box 2, hombre de 61 años, el médico sospecha SCA');
+  min(8); s.procesar('tomé ECG');
+  min(2); s.procesar('el ECG muestra supradesnivel');
+  min(5); s.procesar('avisé a hemodinamia');
+  min(15);
+  const h = s.procesar('va a pabellón de hemodinamia').respuesta.hitos;
+  // Activada 20 min después del diagnóstico: la meta de 60 min queda a 40.
+  assert.deepStrictEqual(h.map((x) => x.min), [20, 40, 70, 100]);
+  assert.strictEqual(s.hitoDisparado('2', h[3]).omitir, false, 'sin guía, el aviso de 120 min suena');
+  min(10); s.procesar('sale a pabellón de hemodinamia');
+  min(25); s.procesar('pasó la guía');
+  assert.strictEqual(s.hitoDisparado('2', h[3]).omitir, true, 'con guía, no suena');
+  const ev = s.procesar('redacta la evolución').respuesta.evolucion;
+  assert.match(ev, /Coordinación y traslado:\n- 10:15 Se avisa a hemodinamia\.\n- 10:40 Sale a pabellón de hemodinamia\.\n- 11:05 Pasó la guía\./);
+  assert.match(ev, /Monitorización y ECG:\n- 10:08 Se toma ECG\./);
+  assert.match(ev, /Diagnóstico → aviso a hemodinamia: 5 min\./);
+  assert.match(ev, /Diagnóstico → paso de la guía: 55 min \(ESC ≤ 60\) ✓/);
+  assert.match(ev, /Sospecha → ECG: 8 min \(GES ≤ 30\) ✓/);
+});
+
+test('hemodinamia: si se fibrinolizó, los recordatorios de angioplastía primaria no aplican', () => {
+  let t = 0;
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  s.procesar('box 4, IAM con supradesnivel');
+  const aviso = s.procesar('va a fibrinólisis').respuesta && { min: 10, texto: 'x', omitirSi: ['fibrinolisis'] };
+  assert.deepStrictEqual(s.hitoDisparado('4', aviso), { omitir: true, noAplica: true });
 });

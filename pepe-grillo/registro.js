@@ -55,11 +55,20 @@
   const describirSignos = (sv) => SV.filter(([k]) => sv[k]).map(([k, , , et]) => et + ' ' + sv[k]).join(', ');
 
   // ── Procedimientos: verbo de acción cumplida ──
-  const HECHO = /\b(tomad[oa]s?|tome|realizad[oa]s?|realice|administrad[oa]s?|administre|instalad[oa]s?|instale|colocad[oa]s?|coloque|puest[oa]s?|puse|conectad[oa]s?|conecte|enviad[oa]s?|envie|iniciad[oa]s?|inicie|dad[oa]s?|le di|retirad[oa]s?|retire|listo|lista)\b|\bse (tomo|administro|instalo|realizo|coloco|inicio|envio|dio|conecto|retiro)\b/;
+  const HECHO = new RegExp('\\b(tomad[oa]s?|tome|realizad[oa]s?|realice|administrad[oa]s?|administre|instalad[oa]s?|instale|' +
+    'colocad[oa]s?|coloque|puest[oa]s?|puse|conectad[oa]s?|conecte|enviad[oa]s?|envie|iniciad[oa]s?|inicie|dad[oa]s?|le di|' +
+    'retirad[oa]s?|retire|listo|lista|avisad[oa]s?|avise|activad[oa]s?|active|llame|coordinad[oa]s?|coordine|informad[oa]s?|informe|' +
+    'comunique|preparad[oa]s?|prepare|entregad[oa]s?|entregue|trasladad[oa]s?|traslade|marcad[oa]s?|marque|educad[oa]s?|eduque|' +
+    'controlad[oa]s?|controle|suspendid[oa]s?|suspendi|' +
+    'sal(e|io) a (pabellon|hemodinamia)|paso (de )?la guia|cruzo la guia)\\b|' +
+    '\\bse (tomo|administro|instalo|realizo|coloco|inicio|envio|dio|conecto|retiro|aviso|activo|coordino|informo|preparo|' +
+    'entrego|traslado|marco|educo|controlo|suspendio)\\b');
   const ETIQUETAS = [
     ['ecg-control', /\becg\b.*\bcontrol\b|\bcontrol\b.*\becg\b/],
     ['ecg', /\becg\b|electrocardiograma/],
-    ['salida', /\bsal(e|io)\b.*(hemodinamia|pabellon)|trasladad[oa]\b/],
+    ['salida', /\bsal(e|io)\b.*(hemodinamia|pabellon)|trasladad[oa]\b|\btraslade\b|\bse traslado\b/],
+    ['guia', /paso (de )?la guia|cruz(a|o) la guia|guia (pasada|cruzada)/],
+    ['aviso-hemodinamia', /(avis|activ|llam|coordin|inform|comuni)\w*\b.*hemodinamia/],
     ['troponina-2', /(segunda|control).*troponina|troponina.*(segunda|control)/],
     ['fibrinolitico', /tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|fibrinolisis|trombolisis/],
     ['aas', /aspirina|\baas\b/],
@@ -97,7 +106,7 @@
     }
     if (HECHO.test(t)) {
       const sustantivo = t.replace(HECHO, ' ').replace(/[^a-z0-9ñ\s]/g, ' ').trim();
-      if (sustantivo) return { tipo: 'procedimiento', texto: mayuscula(sinPunto(o)) };
+      if (sustantivo || /guia|pabellon|hemodinamia/.test(t)) return { tipo: 'procedimiento', texto: mayuscula(sinPunto(o)) };
     }
     const sv = Object.keys(leerSignos(o)).length;
     if (sv >= 2 || (sv === 1 && o.split(/\s+/).length <= 6)) return { tipo: 'signos', texto: o };
@@ -123,10 +132,40 @@
     return null;
   }
 
+  // Registro clínico en forma impersonal: "tomé ECG" → "Se toma ECG".
+  const IMPERSONAL = [
+    [/\ble di\b/i, 'se administra'], [/\ble (puse|coloque|coloqué)\b/i, 'se coloca'],
+    ...[['tome', 'toma'], ['realice', 'realiza'], ['administre', 'administra'], ['instale', 'instala'], ['coloque', 'coloca'],
+      ['puse', 'coloca'], ['conecte', 'conecta'], ['envie', 'envía'], ['inicie', 'inicia'], ['retire', 'retira'],
+      ['avise', 'avisa'], ['active', 'activa'], ['llame', 'llama'], ['coordine', 'coordina'], ['informe', 'informa'],
+      ['comunique', 'comunica'], ['prepare', 'prepara'], ['entregue', 'entrega'], ['traslade', 'traslada'],
+      ['marque', 'marca'], ['eduque', 'educa'], ['controle', 'controla'], ['suspendi', 'suspende']]
+      .map(([yo, se]) => [new RegExp('(?<![\\wáéíóúñ])' + yo.replace(/e$/, '[eé]').replace(/i$/, '[ií]') + '(?![\\wáéíóúñ])', 'i'), 'se ' + se]),
+    [/\b(ya|oye|bueno|entonces)\b[\s,]*/gi, ''],
+  ];
+  function impersonal(texto) {
+    let t = texto;
+    IMPERSONAL.forEach(([re, por]) => { t = t.replace(re, por); });
+    return mayuscula(t.replace(/\s{2,}/g, ' ').trim());
+  }
+
+  // Intervenciones agrupadas para que la I se lea ordenada; dentro de cada grupo, por hora.
+  // El orden de esta lista es el de clasificación (la primera que calza), no el de lectura.
+  const GRUPOS_I = [
+    ['Coordinación y traslado', /hemodinamia|pabellon|traslad|entrega|isbar|\bguia\b|codigo iam|\bavis|\bllam|\binform|\bcomunic|\bsale\b/],
+    ['Fármacos', /aspirina|\baas\b|clopidogrel|ticagrelor|prasugrel|heparina|enoxaparina|nitro|morfina|fentanilo|opioide|tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|atropina|insulina|oxigeno|doble chequeo|\bmg\b|administra/],
+    ['Monitorización y ECG', /\becg\b|electrocardiograma|monitor|desfibrilador|pulsos|\bv3r|\bv4r|marcapaso/],
+    ['Accesos venosos y exámenes', /\bvia\b|vvp|cateter|\bbic\b|troponina|examen|examenes|muestra|hemograma|creatinina|gases|\bhgt\b|glicemia|orina/],
+    ['Preparación, educación y confort', /educa|familia|reposo|confort|protesis|joyas|consentimiento|posicion|contencion/],
+  ];
+  const grupoDe = (texto) => (GRUPOS_I.find(([, re]) => re.test(sinTildes(texto))) || ['Otras intervenciones'])[0];
+
   const hhmm = (ms) => new Date(ms).toTimeString().slice(0, 5);
   const minutos = (a, b) => Math.round((b - a) / 60000);
 
-  function crear(ahora) {
+  // opciones.hemodinamia: true si el centro tiene hemodinamia de turno (meta ESC 60 min al paso de la guía);
+  // false si hay que trasladar (meta 90 min, y puerta de entrada → salida ≤ 30 min). Sin dato: se muestran ambas.
+  function crear(ahora, opciones = {}) {
     const r = {
       ingreso: ahora, paciente: {}, clinico: [], proxima: [], remota: [], farmacos: [],
       alergias: [], signos: [], procedimientos: [], notas: [],
@@ -144,7 +183,7 @@
       if (tipo === 'procedimiento') {
         let tags = ETIQUETAS.filter(([, re]) => re.test(sinTildes(texto))).map(([k]) => k);
         if (tags.includes('ecg-control')) tags = tags.filter((k) => k !== 'ecg'); // no cuenta para puerta-ECG
-        r.procedimientos.push({ hora: cuando, texto, tags });
+        r.procedimientos.push({ hora: cuando, texto: impersonal(texto), tags });
         return 'Anotado, ' + hhmm(cuando) + '.';
       }
       if (tipo === 'proxima') {
@@ -171,7 +210,7 @@
     // ¿Ya está anotado? (para que Pepe no pregunte lo que ya sabe)
     const tiene = (marca) => marca === 'eva'
       ? r.signos.filter((s) => s.sv.eva).length >= 2
-      : r.procedimientos.some((p) => p.tags.includes(marca));
+      : r.procedimientos.some((p) => p.tags.includes(marca)) || r.clinico.some((e) => e.marca === marca);
 
     // Respuesta "sí" a un recordatorio: la hora real fue antes o igual a la confirmación.
     function confirmar(registra, cuando) {
@@ -214,24 +253,31 @@
       const ecg = proc('ecg');
       const fib = proc('fibrinolitico');
       const salida = proc('salida');
+      const aviso = proc('aviso-hemodinamia');
+      const guia = proc('guia');
       const sospecha = r.clinico.find((e) => e.marca === 'sospecha');
       const dx = r.clinico.find((e) => e.marca === 'diagnostico');
       const t = [];
-      const add = (nombre, desde, hasta, meta, aprox) => {
+      const add = (nombre, desde, hasta, meta, aprox, fuente = 'GES') => {
         const min = minutos(desde, hasta);
-        t.push({ nombre, min, meta, aprox: !!aprox, ok: meta == null ? null : min <= meta });
+        t.push({ nombre, min, meta, fuente, aprox: !!aprox, ok: meta == null ? null : min <= meta });
       };
+      const hd = opciones.hemodinamia;
       if (r.inicioDolor != null) add('Inicio del dolor → llegada', r.inicioDolor, r.ingreso, null);
       if (ecg) add('Sospecha → ECG', sospecha ? sospecha.hora : r.ingreso, ecg.hora, 30, ecg.aprox);
       if (dx && fib) add('Confirmación diagnóstica → trombólisis', dx.hora, fib.hora, 30, fib.aprox);
       if (fib) add('Puerta-aguja', r.ingreso, fib.hora, null, fib.aprox);
       if (fib && r.inicioDolor != null) add('Inicio del dolor → trombólisis', r.inicioDolor, fib.hora, null);
+      // Estrategia invasiva (ESC 2023): no son garantías GES, son metas de guía clínica.
+      if (dx && aviso) add('Diagnóstico → aviso a hemodinamia', dx.hora, aviso.hora, null, aviso.aprox);
       if (dx && salida) add('Diagnóstico → salida a pabellón de hemodinamia', dx.hora, salida.hora, null, salida.aprox);
+      if (hd === false && salida) add('Puerta de entrada → salida del centro', r.ingreso, salida.hora, 30, salida.aprox, 'ESC');
+      if (dx && guia) add('Diagnóstico → paso de la guía', dx.hora, guia.hora, hd === false ? 90 : 60, guia.aprox, 'ESC');
       return t;
     }
 
     const describirTiempo = (x) => x.nombre + ': ' + (x.aprox ? '≤ ' : '') + x.min + ' min' +
-      (x.meta == null ? '' : ' (GES ≤ ' + x.meta + ')' + (x.ok ? ' ✓' : ' ✗'));
+      (x.meta == null ? '' : ' (' + x.fuente + ' ≤ ' + x.meta + ')' + (x.ok ? ' ✓' : ' ✗'));
     const tiempos = () => tiemposDetalle().map(describirTiempo);
 
     function tiemposVoz() {
@@ -239,7 +285,7 @@
       if (!t.length) return r.procedimientos.some((p) => p.tags.includes('ecg'))
         ? 'Sin tiempos con meta todavía.' : 'Aún no tengo la hora del ECG.';
       return t.map((x) => x.nombre.replace(' → ', ' a ') + ', ' + (x.aprox ? 'hasta ' : '') + x.min + ' minutos, ' +
-        (x.ok ? 'dentro del GES' : 'fuera del GES')).join('. ') + '.';
+        (x.ok ? 'dentro de' : 'fuera de') + (x.fuente === 'GES' ? 'l GES' : ' la meta')).join('. ') + '.';
     }
 
     // Borrador en formato SOAPIE, sin diagnósticos de enfermería.
@@ -285,12 +331,20 @@
 
       L.push('', 'I:');
       if (r.procedimientos.length) {
+        // Orden de lectura: de la evaluación inicial a la salida del paciente.
+        const orden = ['Monitorización y ECG', 'Accesos venosos y exámenes', 'Fármacos',
+          'Preparación, educación y confort', 'Otras intervenciones', 'Coordinación y traslado'];
+        const porGrupo = {};
         [...r.procedimientos].sort((a, b) => a.hora - b.hora)
-          .forEach((x) => L.push('- ' + hhmm(x.hora) + ' ' + sinPunto(x.texto) + '.'));
+          .forEach((x) => (porGrupo[grupoDe(x.texto)] = porGrupo[grupoDe(x.texto)] || []).push(x));
+        orden.filter((g) => porGrupo[g]).forEach((g) => {
+          L.push(g + ':');
+          porGrupo[g].forEach((x) => L.push('- ' + hhmm(x.hora) + ' ' + sinPunto(x.texto) + '.'));
+        });
       } else L.push(falta);
       const t = tiempos();
       if (r.inicioDolor != null) L.push('Inicio del dolor: ' + hhmm(r.inicioDolor) + ' (según anamnesis).');
-      if (t.length) { L.push('Tiempos:'); t.forEach((x) => L.push('- ' + x + '.')); }
+      if (t.length) { L.push('Tiempos de atención:'); t.forEach((x) => L.push('- ' + x + '.')); }
 
       L.push('', 'E:');
       r.evaluacion.forEach((x) => L.push(sinPunto(x) + '.'));

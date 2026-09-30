@@ -234,16 +234,18 @@
     'fármacos: losartán y metformina, niega anticoagulantes',
     'signos vitales: presión 158 sobre 94, FC 102, FR 22, saturación 95',
     'Pepe, el ECG muestra supradesnivel',
+    'avisé a hemodinamia',
     'aspirina 300 masticada administrada',
     'vía venosa 18 en antebrazo izquierdo instalada',
-    'Pepe, checklist de fibrinólisis',
-    'tenecteplasa administrada',
+    'Pepe, va a pabellón de hemodinamia',
+    'marqué pulsos radiales y pedios',
+    'eduqué al paciente y a su esposa sobre la angioplastía',
     'examen físico: diaforético, sin crepitaciones',
-    'análisis: IAM con supradesnivel en ventana de reperfusión',
-    'plan: ECG de control a los 90 minutos y preparar traslado',
+    'análisis: IAM con supradesnivel en ventana de angioplastía primaria, hemodinámicamente estable',
+    'plan: traslado monitorizado a pabellón y control del sitio de punción al regreso',
     'EVA 3',
     'evaluación: dolor disminuye, sin arritmias',
-    'anota: se informa a la esposa',
+    'sale a pabellón de hemodinamia',
     'tiempos',
     'Pepe, redacta la evolución',
     'Pepe, box 5, mujer de 67 años, SCA sin supradesnivel',
@@ -327,7 +329,7 @@
       if (!b.hitos.length) d.append(el('p', 'vacio', 'Sin recordatorios pendientes'));
       b.hitos.forEach((h) => {
         const row = el('div', 'hito' + (h.hecho ? ' hecho' : '') + (h.sonando ? ' sonando' : ''));
-        const t = el('time', null, h.omitido ? 'anotado' : h.hecho ? 'dicho' : fmt(h.vence - ahora));
+        const t = el('time', null, h.omitido ? h.omitido : h.hecho ? 'dicho' : fmt(h.vence - ahora));
         row.append(t, el('span', null, h.texto));
         d.append(row);
       });
@@ -353,7 +355,8 @@
       if (!h.hecho && h.vence <= ahora) {
         h.hecho = true;
         // Si lo que pregunta ya está anotado, Pepe no pregunta.
-        if (sesion.hitoDisparado(k, h).omitir) { h.omitido = true; return; }
+        const disparo = sesion.hitoDisparado(k, h);
+        if (disparo.omitir) { h.omitido = disparo.noAplica ? 'no aplica' : 'anotado'; return; }
         h.sonando = true;
         decir('Box ' + k + '. ' + PepeMotor.paraVoz(h.texto));
         if (h.registra && !sesion.enDialogo) pintarRapidas('sino'); // "sí" lo anota con la hora
