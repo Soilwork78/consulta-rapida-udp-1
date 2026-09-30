@@ -68,8 +68,6 @@
     ['ecg', /\becg\b|electrocardiograma/],
     ['salida', /\bsal(e|io)\b.*(hemodinamia|pabellon)|trasladad[oa]\b|\btraslade\b|\bse traslado\b/],
     ['guia', /paso (de )?la guia|cruz(a|o) la guia|guia (pasada|cruzada)/],
-    ['control-puncion', /sitio de puncion|pulso (radial|pedio|distal|femoral)/],
-    ['banda-radial', /banda (radial|compresiva)/],
     ['aviso-hemodinamia', /(avis|activ|llam|coordin|inform|comuni)\w*\b.*hemodinamia/],
     ['troponina-2', /(segunda|control).*troponina|troponina.*(segunda|control)/],
     ['fibrinolitico', /tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|fibrinolisis|trombolisis/],
@@ -156,7 +154,7 @@
   const GRUPOS_I = [
     ['Coordinación y traslado', /hemodinamia|pabellon|traslad|entrega|isbar|\bguia\b|codigo iam|\bavis|\bllam|\binform|\bcomunic|\bsale\b/],
     ['Fármacos', /aspirina|\baas\b|clopidogrel|ticagrelor|prasugrel|heparina|enoxaparina|nitro|morfina|fentanilo|opioide|tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|atropina|insulina|oxigeno|doble chequeo|\bmg\b|administra/],
-    ['Monitorización y ECG', /\becg\b|electrocardiograma|monitor|desfibrilador|pulsos?\b|\bv3r|\bv4r|marcapaso|puncion|hematoma|banda/],
+    ['Monitorización y ECG', /\becg\b|electrocardiograma|monitor|desfibrilador|pulsos?\b|\bv3r|\bv4r|marcapaso/],
     ['Accesos venosos y exámenes', /\bvia\b|vvp|cateter|\bbic\b|troponina|examen|examenes|muestra|hemograma|creatinina|gases|\bhgt\b|glicemia|orina/],
     ['Preparación, educación y confort', /educa|familia|reposo|confort|protesis|joyas|consentimiento|posicion|contencion/],
   ];
@@ -289,7 +287,6 @@
       const salida = proc('salida');
       const aviso = proc('aviso-hemodinamia');
       const guia = proc('guia');
-      const regreso = r.clinico.find((e) => e.marca === 'regreso');
       const sospecha = r.clinico.find((e) => e.marca === 'sospecha');
       const dx = r.clinico.find((e) => e.marca === 'diagnostico');
       const t = [];
@@ -307,7 +304,6 @@
       if (dx && aviso) add('Diagnóstico → aviso a hemodinamia', dx.hora, aviso.hora, null, aviso.aprox);
       if (dx && salida) add('Diagnóstico → salida a pabellón de hemodinamia', dx.hora, salida.hora, null, salida.aprox);
       if (hd === false && salida) add('Puerta de entrada → salida del centro', r.ingreso, salida.hora, 30, salida.aprox, 'ESC');
-      if (salida && regreso) add('Salida → regreso de hemodinamia', salida.hora, regreso.hora, null, salida.aprox);
       if (dx && guia) add('Diagnóstico → paso de la guía', dx.hora, guia.hora, hd === false ? 90 : 60, guia.aprox, 'ESC');
       return t;
     }

@@ -514,27 +514,6 @@ test('hemodinamia: si se fibrinolizó, los recordatorios de angioplastía primar
   assert.deepStrictEqual(s.hitoDisparado('4', aviso), { omitir: true, noAplica: true });
 });
 
-test('regreso de hemodinamia: fase propia, recordatorios del sitio de punción y fin de los de la ida', () => {
-  let t = new Date(2026, 8, 30, 10, 0).getTime();
-  const s = crearSesion(kb, inst, { ahora: () => t });
-  s.procesar('box 2, IAM con supradesnivel');
-  const ida = s.procesar('va a pabellón de hemodinamia').respuesta.hitos;
-  t += 30 * 60000; s.procesar('sale a pabellón de hemodinamia');
-  t += 60 * 60000;
-  const r = s.procesar('Pepe, vuelve de hemodinamia');
-  assert.strictEqual(r.respuesta.clave, 'sca:post-hemodinamia');
-  assert.match(r.respuesta.hablar, /Regreso de hemodinamia\. Recibe con ISBAR/);
-  const aviso120 = ida.find((h) => /Dos horas del diagnóstico/.test(h.texto));
-  assert.strictEqual(s.hitoDisparado('2', aviso120).omitir, true, 'de vuelta, los recordatorios de la ida no suenan');
-  const control = r.respuesta.hitos[0];
-  s.procesar('controlé sitio de punción radial sin hematoma, pulso radial presente');
-  assert.strictEqual(s.hitoDisparado('2', control).omitir, true, 'ya anotado');
-  const ev = s.procesar('redacta la evolución').respuesta.evolucion;
-  assert.match(ev, /Regresa de pabellón de hemodinamia/);
-  assert.match(ev, /Salida → regreso de hemodinamia: 60 min\./);
-  assert.match(ev, /Monitorización y ECG:\n- 11:30 Se controla sitio de punción radial/);
-});
-
 test('hora dictada: "a las 10:05" y "hace 20 minutos" fijan la hora del registro', () => {
   const RG = require('./registro.js');
   const base = new Date(2026, 8, 30, 10, 30).getTime();

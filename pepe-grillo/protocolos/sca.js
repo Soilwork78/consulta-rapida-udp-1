@@ -7,7 +7,7 @@
 //   primer-contacto → iamcest → hemodinamia (primera opción: coronariografía / ACTP)
 //                   │         ↘ fibrinolisis → hemodinamia (rescate o farmacoinvasiva)
 //                   ↘ scasest → hemodinamia (muy alto riesgo < 2 h; alto riesgo < 24 h)
-//   hemodinamia → post-hemodinamia (regreso: sitio de punción, ECG, contraste)
+//   Pepe acompaña hasta la entrega en pabellón: después el paciente se hospitaliza en otra unidad.
 // Cada paso: `voz` (lo que Pepe dice), `detalle` (tarjeta) y `porque`
 // (fundamento, lo que responde a "Pepe, ¿por qué?").
 // El protocolo institucional se intercala después de los primeros
@@ -210,55 +210,17 @@
             porque: 'El ECG inicial es la referencia después de la reperfusión. Una entrega estructurada reduce los errores de comunicación.' },
         ],
         hitos: [
-          { min: 20, texto: 'Hemodinamia: ¿el paciente ya salió a pabellón?', registra: { texto: 'Sale a pabellón de hemodinamia', marca: 'salida' },
-            omitirSi: ['regreso'] },
+          { min: 20, texto: 'Hemodinamia: ¿el paciente ya salió a pabellón?', registra: { texto: 'Sale a pabellón de hemodinamia', marca: 'salida' } },
           // Metas ESC 2023 contadas desde el diagnóstico (ECG), no desde que se activa esta fase.
           { min: 60, desde: 'diagnostico', texto: 'Una hora del diagnóstico, meta con hemodinamia en el centro: ¿ya pasó la guía?',
-            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico', 'regreso'] },
+            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico'] },
           { min: 90, desde: 'diagnostico', texto: '90 minutos del diagnóstico, meta con traslado: ¿ya pasó la guía?',
-            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico', 'regreso'] },
+            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico'] },
           { min: 120, desde: 'diagnostico', texto: 'Dos horas del diagnóstico sin guía: se pierde la ventaja de la angioplastía. Avisa al médico',
-            omitirSi: ['guia', 'fibrinolisis', 'fibrinolitico', 'regreso'] },
+            omitirSi: ['guia', 'fibrinolisis', 'fibrinolitico'] },
         ],
       },
 
-      // ════════════════════════════════════════════════════
-      {
-        id: 'post-hemodinamia',
-        evento: 'Regresa de pabellón de hemodinamia', // cómo queda en la evolución
-        marcaTiempo: 'regreso', // los recordatorios de la ida a pabellón dejan de aplicar
-        nombre: 'Regreso de hemodinamia',
-        intro: 'Regreso de hemodinamia.',
-        claveInstitucional: 'post-hemodinamia',
-        activadores: ['regreso de hemodinamia', 'regresa de hemodinamia', 'vuelve de hemodinamia', 'volvio de hemodinamia',
-          'llega de hemodinamia', 'llego de hemodinamia', 'regresa de pabellon', 'vuelve de pabellon', 'llega de pabellon',
-          'post angioplastia', 'post coronariografia', 'post hemodinamia', 'postangioplastia'],
-        pasos: [
-          { voz: 'Recibe con ISBAR: acceso, arteria tratada, stents, heparina en pabellón y complicaciones',
-            porque: 'El acceso y la heparina que recibió definen los cuidados y el riesgo de sangrado de las próximas horas.' },
-          { voz: 'Sitio de punción y pulso distal cada 15 minutos la primera hora',
-            detalle: 'Buscar sangrado, hematoma, dolor y cambios de color o temperatura de la extremidad. Luego cada 30 a 60 minutos, según protocolo.',
-            porque: 'Las complicaciones del acceso arterial (sangrado, hematoma, oclusión) aparecen sobre todo en las primeras horas.' },
-          { voz: 'Radial: banda compresiva según protocolo; en ese brazo, ni presión ni punciones',
-            detalle: 'Desinflado gradual de la banda según protocolo local (habitualmente desde las 2 horas). Vigilar color, temperatura y llene capilar de la mano.',
-            porque: 'La compresión prolongada o excesiva favorece la oclusión de la arteria radial; la insuficiente, el hematoma.' },
-          { voz: 'Femoral: pierna extendida y reposo según indicación. Dolor lumbar o hipotensión: avisa',
-            porque: 'El hematoma retroperitoneal es una complicación grave del acceso femoral y se manifiesta con dolor lumbar o hipotensión sin sangrado visible.' },
-          { voz: 'ECG post procedimiento; compáralo. Dolor torácico nuevo: ECG y avisa',
-            porque: 'El dolor nuevo con cambios del ST puede ser trombosis aguda del stent, que requiere volver a hemodinamia.' },
-          { voz: 'Diuresis e hidratación según indicación, por el contraste',
-            porque: 'El contraste yodado puede producir nefropatía, más en diabéticos, adultos mayores e insuficiencia renal previa.' },
-          { voz: 'Doble antiagregación sin suspender; educa al paciente',
-            porque: 'Suspender la doble antiagregación en los primeros meses es la principal causa de trombosis del stent.' },
-        ],
-        hitos: [
-          { min: 15, texto: 'Regreso de hemodinamia: ¿sitio de punción y pulso distal controlados?',
-            registra: { texto: 'Control de sitio de punción y pulso distal', marca: 'control-puncion' } },
-          { min: 60, texto: 'Una hora del regreso: control de sitio de punción y pulso distal' },
-          { min: 120, texto: 'Dos horas del regreso: si es radial, ¿desinflado de la banda según protocolo?',
-            registra: { texto: 'Desinflado de banda radial según protocolo', marca: 'banda-radial' } },
-        ],
-      },
     ],
 
     // Checklist de contraindicaciones de fibrinólisis (ESC 2017, vigente en ESC 2023).
