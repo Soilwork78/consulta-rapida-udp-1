@@ -17,7 +17,8 @@
 //   "plan: …"                                  → P
 //   "evaluación: dolor disminuye a EVA 3…"     → E
 //   "anota: …"                                 → nota libre
-//   "redacta la evolución"                     → borrador SOAPIE (sin diagnósticos de enfermería)
+//   "redacta la evolución"                     → borrador SOAPIE (sin diagnósticos de enfermería;
+//                                                 EVA en S; A solo con análisis de enfermería)
 // ============================================================
 
 (function () {
@@ -154,6 +155,7 @@
       if (!r.alergias.length) f.push('alergias');
       ['pa', 'fc', 'sat'].forEach((k) => { if (!ultimo[k]) f.push({ pa: 'PA', fc: 'FC', sat: 'SatO2' }[k]); });
       if (!r.procedimientos.some((p) => p.tags.includes('ecg'))) f.push('hora del ECG');
+      if (!r.analisis.length) f.push('análisis');
       if (!r.plan.length) f.push('plan');
       if (!r.evaluacion.length && !tendencias().length) f.push('evaluación');
       return f;
@@ -177,6 +179,7 @@
     }
 
     // Borrador en formato SOAPIE, sin diagnósticos de enfermería.
+    // Contexto clínico (hitos del equipo médico) va antes de la S; la A es solo análisis de enfermería.
     function evolucion(cuando) {
       const p = r.paciente;
       const quien = [p.sexo ? mayuscula(p.sexo) : 'Paciente', p.edad ? p.edad + ' años' : ''].filter(Boolean).join(', ');
@@ -187,22 +190,31 @@
       L.push('EVOLUCIÓN DE ENFERMERÍA — URGENCIA');
       L.push(fecha + ' · ' + hhmm(cuando) + (p.box ? ' · Box ' + p.box : ''));
       L.push(quien + '. Ingreso ' + hhmm(r.ingreso) + '.');
+      // Hitos del equipo médico: contexto, fuera del SOAPIE de enfermería.
+      if (r.clinico.length) {
+        L.push('', 'Contexto clínico:');
+        r.clinico.forEach((e) => L.push('- ' + hhmm(e.hora) + ' ' + sinPunto(e.texto) + '.'));
+      }
 
       L.push('', 'S:');
       L.push('Anamnesis próxima: ' + (r.proxima.length ? frases(r.proxima) : falta));
       L.push('Anamnesis remota: ' + (r.remota.length ? frases(r.remota) : falta));
       L.push('Fármacos habituales: ' + (r.farmacos.length ? frases(r.farmacos) : falta));
       L.push('Alergias: ' + (r.alergias.length ? frases(r.alergias) : falta));
+      // La EVA la reporta el paciente: va en S.
+      const evas = r.signos.filter((s) => s.sv.eva);
+      L.push('Dolor (EVA): ' + (evas.length ? evas.map((s) => s.sv.eva + ' (' + hhmm(s.hora) + ')').join(', ') + '.' : falta));
 
       L.push('', 'O:');
-      if (r.signos.length) r.signos.forEach((s) => L.push('Signos vitales ' + hhmm(s.hora) + ': ' + describirSignos(s.sv) + '.'));
+      const objetivos = r.signos.map((s) => ({ hora: s.hora, sv: Object.fromEntries(Object.entries(s.sv).filter(([k]) => k !== 'eva')) }))
+        .filter((s) => Object.keys(s.sv).length);
+      if (objetivos.length) objetivos.forEach((s) => L.push('Signos vitales ' + hhmm(s.hora) + ': ' + describirSignos(s.sv) + '.'));
       else L.push('Signos vitales: ' + falta);
       r.objetivo.forEach((x) => L.push(sinPunto(x) + '.'));
 
+      // A: solo el análisis de enfermería dictado.
       L.push('', 'A:');
-      r.clinico.forEach((e) => L.push('- ' + hhmm(e.hora) + ' ' + sinPunto(e.texto) + '.'));
-      r.analisis.forEach((x) => L.push(sinPunto(x) + '.'));
-      if (!r.clinico.length && !r.analisis.length) L.push(falta);
+      L.push(r.analisis.length ? frases(r.analisis) : falta);
 
       L.push('', 'P:');
       L.push(r.plan.length ? frases(r.plan) : falta);

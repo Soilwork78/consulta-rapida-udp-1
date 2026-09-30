@@ -325,7 +325,7 @@ test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tie
   di('aspirina 300 masticada administrada', 2);
   di('tenecteplasa administrada', 20);
   const falta = di('Pepe, redacta la evolución', 5);
-  assert.match(falta.hablar, /Falta registrar: alergias, plan, evaluación\.$/);
+  assert.match(falta.hablar, /Falta registrar: alergias, análisis, plan, evaluación\.$/);
   const ev = falta.evolucion;
   assert.match(ev, /Box 3/);
   assert.match(ev, /Hombre, 58 años\. Ingreso 14:00\./);
@@ -366,7 +366,10 @@ test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
   const orden = ['\nS:', '\nO:', '\nA:', '\nP:', '\nI:', '\nE:'].map((x) => ev.indexOf(x));
   assert.ok(orden.every((x, k) => x > 0 && (k === 0 || x > orden[k - 1])), 'secciones S, O, A, P, I, E en orden');
   assert.match(ev, /O:\n[\s\S]*Diaforético, sin crepitaciones\./);
-  assert.match(ev, /A:\n- 14:00 Sospecha médica de síndrome coronario agudo\.\nIAM con supradesnivel en ventana de reperfusión\./);
+  assert.match(ev, /Contexto clínico:\n- 14:00 Sospecha médica de síndrome coronario agudo\.\n\nS:/);
+  assert.match(ev, /A:\nIAM con supradesnivel en ventana de reperfusión\.\n\nP:/, 'A solo con análisis de enfermería');
+  assert.match(ev, /S:\n[\s\S]*Dolor \(EVA\): 8\/10 \(14:01\), 3\/10 \(14:21\)\.\n\nO:/, 'EVA en S');
+  assert.ok(!/O:[\s\S]*Signos vitales[^\n]*EVA[\s\S]*A:/.test(ev), 'EVA fuera de O');
   assert.match(ev, /P:\nECG de control a los 90 minutos y preparar traslado\./);
   assert.match(ev, /I:\n- 14:06 Nitroglicerina sublingual administrada\./);
   assert.match(ev, /E:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);

@@ -55,9 +55,10 @@ Durante la atención, la enfermera dicta y Pepe anota con la hora:
 
 Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable en formato **SOAPIE, sin diagnósticos de enfermería**:
 
-- **S:** anamnesis próxima y remota, fármacos habituales, alergias.
+- **Contexto clínico** (antes de la S): los hitos del equipo médico que Pepe registró (sospecha, fases, decisiones).
+- **S:** anamnesis próxima y remota, fármacos habituales, alergias y **EVA** (la reporta el paciente).
 - **O:** signos vitales con hora y hallazgos dictados.
-- **A:** contexto clínico registrado por Pepe (sospecha médica, fases, decisiones) y el análisis que dicte la enfermera.
+- **A:** solo el análisis de enfermería dictado.
 - **P:** solo el plan dictado. Pepe no lo propone.
 - **I:** procedimientos e intervenciones en orden cronológico, con los tiempos puerta-ECG y puerta-aguja.
 - **E:** la evaluación dictada y, además, la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
