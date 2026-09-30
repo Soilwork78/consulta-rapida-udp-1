@@ -4,7 +4,8 @@
 //
 // Ejemplos de frases:
 //   "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA"
-//   "sigue" / "qué más"   → Pepe dice el siguiente punto (la enfermera marca el ritmo)
+//   "sigue" / "continúa" / "dale" / "avanza" / "qué más" → siguiente punto (la enfermera marca el ritmo)
+//   "detente" / "espera" → Pepe se calla y se queda en ese punto hasta que le digan "sigue"
 //   "repite" / "anterior"
 //   "Pepe, box 3 confirmado IAM con supradesnivel"
 //   "Pepe, box 3 descartado SCA"
@@ -55,7 +56,8 @@
 
   // Navegación: la enfermera marca el ritmo. Frases cortas, con o sin "Pepe" y box.
   const NAV = [
-    ['mas', /^(y )?(que mas|mas|dime mas|algo mas|sigue|siguiente|continua|continuar|dale|otro|y ahora|listo|ok)$/],
+    ['mas', /^(y )?(que mas|mas|dime mas|algo mas|sigue|siguiente|sigamos|siga|continua|continuar|continuemos|dale|avanza|avanzar|adelante|otro|y ahora|listo|ok)$/],
+    ['pausa', /^(detente|detente ahi|detenete|para|para ahi|pausa|espera|esperate|un momento|momento|stop|silencio|calla|callate|basta)$/],
     ['repetir', /^(repite|repetir|otra vez|de nuevo|como|que)$/],
     ['anterior', /^(anterior|atras|vuelve|el anterior)$/],
     ['porque', /^(por que|porque|explica|explicame|fundamento|y eso)$/],
@@ -358,6 +360,17 @@
     return {
       get enDialogo() { return !!(chequeo && chequeo.activo); },
       procesar(texto) {
+        // 0. "Detente": Pepe se calla y conserva el punto (y el diálogo, si hay uno).
+        if (navegacion(normalizar(texto)) === 'pausa') {
+          const b = extraerDatos(normalizar(texto)).box || (chequeo && chequeo.activo ? chequeo.box : ultimoBox);
+          const previo = porBox[b];
+          return { box: b, interpretacion: { intencion: 'pausa' }, respuesta: {
+            ...(previo ? previo.respuesta : { clave: null, titulo: 'En pausa', intro: '', pasos: [], secciones: [] }),
+            hitos: [], pausa: true, hablar: '',
+            paso: previo ? Math.min(previo.cursor + 1, previo.respuesta.pasos.length) : 0,
+            total: previo ? previo.respuesta.pasos.length : 0,
+          } };
+        }
         // 1. Diálogo en curso: la respuesta va directo, sin "Pepe".
         if (chequeo && chequeo.activo) {
           const respuesta = chequeo.responder(texto);

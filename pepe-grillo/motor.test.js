@@ -234,3 +234,31 @@ test('cancelar sale del diálogo y la sesión vuelve a lo clínico', () => {
   assert.match(s.procesar('cancelar').respuesta.hablar, /Chequeo detenido/);
   assert.strictEqual(s.procesar('sospecha de ACV').respuesta.clave, 'acv');
 });
+
+test('"detente" calla a Pepe y "avanza" retoma desde el mismo punto', () => {
+  const s = crearSesion(kb, inst);
+  s.procesar('box 3 sospecha SCA'); // paso 1: ECG
+  const p = s.procesar('Pepe, detente ahí').respuesta;
+  assert.ok(p.pausa);
+  assert.strictEqual(p.hablar, '');
+  assert.strictEqual(p.paso, 1, 'la pausa no avanza');
+  assert.match(s.procesar('avanza').respuesta.hablar, /^Banderas rojas/);
+  s.procesar('espera');
+  assert.match(s.procesar('continúa').respuesta.hablar, /^Protocolo local: En este hospital/);
+  s.procesar('para');
+  assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: La troponina/);
+});
+
+test('"detente" durante un diálogo no lo cancela', () => {
+  const s = crearSesion(kb, null);
+  s.procesar('chequeo heparina bic');
+  assert.ok(s.procesar('detente').respuesta.pausa);
+  assert.ok(s.enDialogo);
+  assert.match(s.procesar('listo').respuesta.hablar, /Verifiquen el frasco/);
+});
+
+test('las palabras de avance y pausa valen sin decir "Pepe"', () => {
+  const { esNavegacion } = require('./motor.js');
+  ['sigue', 'Continúa', 'dale', 'avanza', '¿Qué más?', 'Detente ahí', 'espera'].forEach((f) => assert.ok(esNavegacion(f), f));
+  assert.ok(!esNavegacion('el paciente para de respirar'));
+});

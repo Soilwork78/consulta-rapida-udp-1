@@ -24,7 +24,8 @@ La enfermera le habla a Pepe (o escribe la frase en la demo):
 | Frase | Qué hace Pepe |
 |---|---|
 | "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA" | Dice quién es y el punto más urgente (ECG en 10 min), y programa los recordatorios |
-| "sigue" / "qué más" | Dice el siguiente punto del protocolo. Pepe avanza solo cuando la enfermera lo pide |
+| "sigue" / "continúa" / "dale" / "avanza" / "qué más" | Dice el siguiente punto del protocolo. Pepe avanza solo cuando la enfermera lo pide |
+| "detente" / "detente ahí" / "espera" / "para" | Pepe se calla de inmediato, incluso a mitad de frase, y se queda en ese punto hasta que le digan "sigue" |
 | "repite" / "anterior" | Repite el punto actual o vuelve al anterior |
 | "Pepe, box 3 confirmado IAM con supradesnivel" | Dice el algoritmo del diagnóstico confirmado y sus hitos |
 | "Pepe, box 3 descartado SCA" | Cancela los recordatorios y dice lo que aún falta descartar |
@@ -47,7 +48,7 @@ Pepe elimina la fricción inútil (anotar, calcular de memoria, recordar los pas
 
 ## Manos libres
 
-En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe", cuando es "sigue", "qué más", "repite" o "anterior", o cuando hay un diálogo en curso, y deja de escuchar mientras Pepe habla. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para simulación, pero no para datos reales de pacientes.
+En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe", cuando es "sigue", "qué más", "repite" o "anterior", o cuando hay un diálogo en curso, y mientras Pepe habla sigue escuchando solo órdenes cortas ("detente", "sigue", "repite"), para que la enfermera pueda interrumpirlo. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para simulación, pero no para datos reales de pacientes.
 
 ## Protocolo institucional
 

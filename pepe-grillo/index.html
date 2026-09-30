@@ -146,7 +146,7 @@
           <button type="button" id="mas">Sigue</button>
           <button type="button" id="repite">Repite</button>
           <button type="button" id="porque">¿Por qué?</button>
-          <button type="button" id="callar">Callar</button>
+          <button type="button" id="callar">Detente</button>
         </div>
         <div class="rapidas" id="rapidas" hidden></div>
         <p class="nota-mic" id="notaMic" hidden></p>
@@ -195,6 +195,8 @@
   const EJEMPLOS = [
     'Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA',
     'sigue',
+    'detente',
+    'avanza',
     'por qué',
     'Pepe, el ECG muestra supradesnivel',
     'Pepe, checklist de fibrinólisis',
@@ -214,7 +216,8 @@
   function nuevaSesion() { sesion = PepeMotor.crearSesion(PEPE_GRILLO_KB, institucion()); }
 
   // ── Voz ──
-  // Mientras Pepe habla, el micrófono se pausa para que no se escuche a sí mismo.
+  // Mientras Pepe habla, el micrófono sigue abierto solo para órdenes cortas
+  // ("detente", "sigue", "repite"), así la enfermera puede interrumpirlo.
   let hablando = false;
   function decir(texto) {
     if (!$('voz').checked || !('speechSynthesis' in window) || !texto) return;
@@ -223,8 +226,8 @@
     u.voice = voces.find((v) => v.lang === 'es-CL') || voces.find((v) => v.lang.startsWith('es')) || null;
     u.lang = u.voice ? u.voice.lang : 'es-CL';
     u.rate = 1.05;
-    u.onstart = () => { hablando = true; pausarEscucha(); };
-    u.onend = u.onerror = () => { hablando = false; if (!speechSynthesis.pending) reanudarEscucha(); };
+    u.onstart = () => { hablando = true; };
+    u.onend = u.onerror = () => { hablando = false; };
     speechSynthesis.speak(u);
   }
 
@@ -334,10 +337,17 @@
   function procesar(frase, conVoz) {
     const { box, interpretacion, respuesta } = sesion.procesar(frase);
     if (!respuesta) return;
+    if (respuesta.pausa) {
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      $('dijo').textContent = '« ' + frase + ' »';
+      $('hablar').textContent = 'En pausa. Di «sigue», «continúa», «dale» o «avanza» cuando quieras.';
+      $('frase').value = '';
+      return;
+    }
     mostrar(frase, respuesta);
     const dialogo = interpretacion.intencion === 'dialogo';
     if (dialogo) { if (respuesta.hitos.length) programar(box, respuesta, true); }
-    else if (!['mas', 'repetir', 'anterior', 'desconocido'].includes(interpretacion.intencion)) programar(box, respuesta);
+    else if (!['mas', 'repetir', 'anterior', 'porque', 'desconocido'].includes(interpretacion.intencion)) programar(box, respuesta);
     pintarRapidas(dialogo ? respuesta.esperando : null);
     $('frase').value = '';
     if (conVoz) { if ('speechSynthesis' in window) speechSynthesis.cancel(); decir(respuesta.hablar); }
@@ -357,7 +367,7 @@
   $('mas').addEventListener('click', () => procesar('sigue', true));
   $('repite').addEventListener('click', () => procesar('repite', true));
   $('porque').addEventListener('click', () => procesar('por qué', true));
-  $('callar').addEventListener('click', () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); });
+  $('callar').addEventListener('click', () => procesar('detente', false));
   $('inst').addEventListener('change', nuevaSesion);
   EJEMPLOS.forEach((f) => {
     const b = el('button', null, f.replace(/^Pepe,\s*/, ''));
@@ -374,7 +384,7 @@
   let rec = null, escuchando = false;
   function pausarEscucha() { if (rec && escuchando) { try { rec.abort(); } catch (_) {} } }
   function reanudarEscucha() {
-    if (rec && $('manosLibres').checked && !hablando) { try { rec.start(); } catch (_) {} }
+    if (rec && $('manosLibres').checked) { try { rec.start(); } catch (_) {} }
   }
   if (SR) {
     rec = new SR();
@@ -387,8 +397,10 @@
     rec.onresult = (e) => {
       const f = e.results[e.results.length - 1][0].transcript.trim();
       const manos = $('manosLibres').checked;
-      // "sigue", "qué más", "repite" y "anterior" valen sin decir "Pepe".
-      if (!manos || sesion.enDialogo || /\bpepe\b/i.test(f) || PepeMotor.esNavegacion(f)) {
+      // "sigue", "detente", "repite"... valen sin decir "Pepe" y aunque Pepe esté hablando.
+      // Mientras habla, se ignora todo lo demás (podría ser su propia voz).
+      const nav = PepeMotor.esNavegacion(f);
+      if (hablando ? nav : (!manos || sesion.enDialogo || /\bpepe\b/i.test(f) || nav)) {
         $('frase').value = f;
         procesar(f, true);
       }
@@ -397,7 +409,7 @@
     rec.onend = () => {
       escuchando = false;
       $('mic').setAttribute('aria-pressed', 'false');
-      if ($('manosLibres').checked && !hablando) setTimeout(reanudarEscucha, 250);
+      if ($('manosLibres').checked) setTimeout(reanudarEscucha, 250);
     };
     rec.onerror = (e) => {
       if (e.error === 'no-speech' || e.error === 'aborted') return;
