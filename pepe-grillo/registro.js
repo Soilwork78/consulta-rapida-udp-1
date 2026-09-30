@@ -68,6 +68,8 @@
     ['ecg', /\becg\b|electrocardiograma/],
     ['salida', /\bsal(e|io)\b.*(hemodinamia|pabellon)|trasladad[oa]\b|\btraslade\b|\bse traslado\b/],
     ['guia', /paso (de )?la guia|cruz(a|o) la guia|guia (pasada|cruzada)/],
+    ['control-puncion', /sitio de puncion|pulso (radial|pedio|distal|femoral)/],
+    ['banda-radial', /banda (radial|compresiva)/],
     ['aviso-hemodinamia', /(avis|activ|llam|coordin|inform|comuni)\w*\b.*hemodinamia/],
     ['troponina-2', /(segunda|control).*troponina|troponina.*(segunda|control)/],
     ['fibrinolitico', /tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|fibrinolisis|trombolisis/],
@@ -154,11 +156,41 @@
   const GRUPOS_I = [
     ['Coordinación y traslado', /hemodinamia|pabellon|traslad|entrega|isbar|\bguia\b|codigo iam|\bavis|\bllam|\binform|\bcomunic|\bsale\b/],
     ['Fármacos', /aspirina|\baas\b|clopidogrel|ticagrelor|prasugrel|heparina|enoxaparina|nitro|morfina|fentanilo|opioide|tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|atropina|insulina|oxigeno|doble chequeo|\bmg\b|administra/],
-    ['Monitorización y ECG', /\becg\b|electrocardiograma|monitor|desfibrilador|pulsos|\bv3r|\bv4r|marcapaso/],
+    ['Monitorización y ECG', /\becg\b|electrocardiograma|monitor|desfibrilador|pulsos?\b|\bv3r|\bv4r|marcapaso|puncion|hematoma|banda/],
     ['Accesos venosos y exámenes', /\bvia\b|vvp|cateter|\bbic\b|troponina|examen|examenes|muestra|hemograma|creatinina|gases|\bhgt\b|glicemia|orina/],
     ['Preparación, educación y confort', /educa|familia|reposo|confort|protesis|joyas|consentimiento|posicion|contencion/],
   ];
   const grupoDe = (texto) => (GRUPOS_I.find(([, re]) => re.test(sinTildes(texto))) || ['Otras intervenciones'])[0];
+
+  // Hora dicha en la frase ("tomé ECG a las 10:05", "hace 10 minutos"): la más reciente que no sea futura,
+  // dentro de las últimas 12 horas. Devuelve { hora, texto sin la hora } o null.
+  function horaDictada(texto, cuando) {
+    const t = sinTildes(texto);
+    const m = t.match(/\ba las (\d{1,2})(?:\s*(?::|\.|h)\s*(\d{2}))?(?:\s*(?:hrs?|horas))?\b/);
+    let hora = null;
+    if (m && Number(m[1]) < 24 && Number(m[2] || 0) < 60) {
+      const candidatos = [];
+      [0, -1].forEach((dia) => [Number(m[1]), Number(m[1]) + 12].filter((h) => h < 24).forEach((h) => {
+        const d = new Date(cuando); d.setDate(d.getDate() + dia); d.setHours(h, Number(m[2] || 0), 0, 0);
+        candidatos.push(d.getTime());
+      }));
+      const validos = candidatos.filter((c) => c <= cuando && cuando - c <= 12 * 3600000);
+      if (validos.length) hora = Math.max(...validos);
+    }
+    const h = t.match(/\bhace\s+(\d+|un|una|media)\s*(minutos?|min|horas?)\b/);
+    if (hora == null && h) {
+      const n = h[1] === 'media' ? 0.5 : /^un/.test(h[1]) ? 1 : Number(h[1]);
+      const ms = n * (/^h/.test(h[2]) ? 3600000 : 60000);
+      if (ms <= 12 * 3600000) hora = cuando - ms;
+    }
+    if (hora == null) return null;
+    // Se quita la hora del texto (va al inicio de la línea); la frase se busca sin tildes, con el mismo largo.
+    const re = m && hora != null && !h ? /\s*,?\s*\ba las \d{1,2}(?:\s*(?::|\.|h)\s*\d{2})?(?:\s*(?:hrs?|horas))?\b/i
+      : /\s*,?\s*\bhace\s+(?:\d+|un|una|media)\s*(?:minutos?|min|horas?)\b/i;
+    const i = sinTildes(texto).search(re);
+    const largo = i < 0 ? 0 : sinTildes(texto).slice(i).match(re)[0].length;
+    return { hora, texto: i < 0 ? texto : (texto.slice(0, i) + texto.slice(i + largo)).trim() };
+  }
 
   const hhmm = (ms) => new Date(ms).toTimeString().slice(0, 5);
   const minutos = (a, b) => Math.round((b - a) / 60000);
@@ -183,8 +215,10 @@
       if (tipo === 'procedimiento') {
         let tags = ETIQUETAS.filter(([, re]) => re.test(sinTildes(texto))).map(([k]) => k);
         if (tags.includes('ecg-control')) tags = tags.filter((k) => k !== 'ecg'); // no cuenta para puerta-ECG
-        r.procedimientos.push({ hora: cuando, texto: impersonal(texto), tags });
-        return 'Anotado, ' + hhmm(cuando) + '.';
+        const dicha = horaDictada(texto, cuando);
+        const hora = dicha ? dicha.hora : cuando;
+        r.procedimientos.push({ hora, texto: impersonal(dicha ? dicha.texto : texto), tags, horaDicha: !!dicha });
+        return 'Anotado, ' + hhmm(hora) + '.';
       }
       if (tipo === 'proxima') {
         r.proxima.push(texto);
@@ -255,6 +289,7 @@
       const salida = proc('salida');
       const aviso = proc('aviso-hemodinamia');
       const guia = proc('guia');
+      const regreso = r.clinico.find((e) => e.marca === 'regreso');
       const sospecha = r.clinico.find((e) => e.marca === 'sospecha');
       const dx = r.clinico.find((e) => e.marca === 'diagnostico');
       const t = [];
@@ -272,6 +307,7 @@
       if (dx && aviso) add('Diagnóstico → aviso a hemodinamia', dx.hora, aviso.hora, null, aviso.aprox);
       if (dx && salida) add('Diagnóstico → salida a pabellón de hemodinamia', dx.hora, salida.hora, null, salida.aprox);
       if (hd === false && salida) add('Puerta de entrada → salida del centro', r.ingreso, salida.hora, 30, salida.aprox, 'ESC');
+      if (salida && regreso) add('Salida → regreso de hemodinamia', salida.hora, regreso.hora, null, salida.aprox);
       if (dx && guia) add('Diagnóstico → paso de la guía', dx.hora, guia.hora, hd === false ? 90 : 60, guia.aprox, 'ESC');
       return t;
     }

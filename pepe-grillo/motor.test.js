@@ -513,3 +513,39 @@ test('hemodinamia: si se fibrinolizó, los recordatorios de angioplastía primar
   const aviso = s.procesar('va a fibrinólisis').respuesta && { min: 10, texto: 'x', omitirSi: ['fibrinolisis'] };
   assert.deepStrictEqual(s.hitoDisparado('4', aviso), { omitir: true, noAplica: true });
 });
+
+test('regreso de hemodinamia: fase propia, recordatorios del sitio de punción y fin de los de la ida', () => {
+  let t = new Date(2026, 8, 30, 10, 0).getTime();
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  s.procesar('box 2, IAM con supradesnivel');
+  const ida = s.procesar('va a pabellón de hemodinamia').respuesta.hitos;
+  t += 30 * 60000; s.procesar('sale a pabellón de hemodinamia');
+  t += 60 * 60000;
+  const r = s.procesar('Pepe, vuelve de hemodinamia');
+  assert.strictEqual(r.respuesta.clave, 'sca:post-hemodinamia');
+  assert.match(r.respuesta.hablar, /Regreso de hemodinamia\. Recibe con ISBAR/);
+  const aviso120 = ida.find((h) => /Dos horas del diagnóstico/.test(h.texto));
+  assert.strictEqual(s.hitoDisparado('2', aviso120).omitir, true, 'de vuelta, los recordatorios de la ida no suenan');
+  const control = r.respuesta.hitos[0];
+  s.procesar('controlé sitio de punción radial sin hematoma, pulso radial presente');
+  assert.strictEqual(s.hitoDisparado('2', control).omitir, true, 'ya anotado');
+  const ev = s.procesar('redacta la evolución').respuesta.evolucion;
+  assert.match(ev, /Regresa de pabellón de hemodinamia/);
+  assert.match(ev, /Salida → regreso de hemodinamia: 60 min\./);
+  assert.match(ev, /Monitorización y ECG:\n- 11:30 Se controla sitio de punción radial/);
+});
+
+test('hora dictada: "a las 10:05" y "hace 20 minutos" fijan la hora del registro', () => {
+  const RG = require('./registro.js');
+  const base = new Date(2026, 8, 30, 10, 30).getTime();
+  const r = RG.crear(base);
+  assert.strictEqual(r.agregar(RG.interpretar('tomé ECG a las 10:05'), base), 'Anotado, 10:05.');
+  assert.strictEqual(r.agregar(RG.interpretar('vía venosa instalada hace 20 minutos'), base), 'Anotado, 10:10.');
+  assert.deepStrictEqual(r.datos.procedimientos.map((p) => p.texto), ['Se toma ECG', 'Vía venosa instalada']);
+  // "a las 10" a las 22:30 es a las 22:00, no en la mañana.
+  const noche = new Date(2026, 8, 30, 22, 30).getTime();
+  const r2 = RG.crear(noche);
+  assert.strictEqual(r2.agregar(RG.interpretar('ECG tomado a las 10'), noche), 'Anotado, 22:00.');
+  // Una hora futura no se usa: queda la hora en que se dicta.
+  assert.strictEqual(r2.agregar(RG.interpretar('tomé ECG a las 23:00'), noche), 'Anotado, 22:30.');
+});
