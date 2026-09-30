@@ -60,7 +60,8 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
 - **O:** signos vitales con hora y hallazgos dictados.
 - **A:** solo el análisis de enfermería dictado.
 - **P:** solo el plan dictado. Pepe no lo propone.
-- **I:** procedimientos e intervenciones en orden cronológico, con los tiempos puerta-ECG y puerta-aguja.
+- **I:** intervenciones agrupadas en el orden en que se leen, de la evaluación inicial a la salida del paciente: monitorización y ECG → accesos venosos y exámenes → fármacos → preparación, educación y confort → coordinación y traslado. Dentro de cada grupo van por hora. Al final, los tiempos de atención.
+- Lo que la enfermera dice en primera persona queda **impersonal**: "avisé a hemodinamia" → "Se avisa a hemodinamia"; "le di aspirina" → "Se administra aspirina". Pepe reconoce acciones como tomé, instalé, administré, avisé, activé, coordiné, preparé, marqué, eduqué, entregué, trasladé o suspendí. Lo que no reconoce no lo guarda: pide empezar con "anota".
 - **E:** la evaluación dictada y, además, la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
 
 **Horas automáticas.** Todo lo dictado queda con su hora, sin decirla. Además:
@@ -71,7 +72,13 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
   - **Sospecha → ECG: ≤ 30 min.** La sospecha es cuando la enfermera informa "sospecha SCA" o "dolor torácico"; si no se informa, se cuenta desde el ingreso.
   - **Confirmación diagnóstica → trombólisis: ≤ 30 min.** La confirmación es cuando la enfermera informa "el ECG muestra supradesnivel".
   - **Decisión:** en la voz Pepe dice "ECG, meta 10 minutos" (meta clínica de las guías); el registro audita contra 30 minutos (garantía legal GES). Son dos cosas distintas a propósito.
-  - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis y diagnóstico → salida a pabellón de hemodinamia.
+  - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis, diagnóstico → aviso a hemodinamia y diagnóstico → salida a pabellón.
+- **Metas de la estrategia invasiva (ESC 2023)**, marcadas como "ESC" para no confundirlas con el GES:
+  - **Diagnóstico → paso de la guía: ≤ 60 min** si el centro tiene hemodinamia (`hemodinamia: true` en la institución); **≤ 90 min** si hay que trasladar (`hemodinamia: false`). Sobre 120 min, la fibrinólisis habría sido mejor opción.
+  - **Puerta de entrada → salida del centro: ≤ 30 min** si hay traslado a otro centro.
+  - Recordatorios en voz contados **desde el diagnóstico**, no desde que se activa la fase: ¿hemodinamia avisada? (10 min), ¿ya pasó la guía? (60 y 90 min), dos horas sin guía: avisa al médico (120 min). Si el paciente se fibrinolizó, estos recordatorios no suenan ("no aplica").
+  - Tras la fibrinólisis: ECG de control a los 60–90 min, rescate si no reperfunde y coronariografía entre 2 y 24 h si reperfunde (recordatorio a los 120 min).
+  - "Pasó la guía" o "sale a pabellón" quedan en el registro con su hora.
 
 **Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
 

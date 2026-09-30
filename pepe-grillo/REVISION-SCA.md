@@ -105,6 +105,7 @@ primer contacto → IAMCEST → pabellón de hemodinamia (primera opción)
 - ⏱ min 15: Fibrinólisis: presión y ritmo de control
 - ⏱ min 60: ECG de control: ¿ya se tomó?
 - ⏱ min 90: Si no hay reperfusión: ¿hemodinamia avisada para angioplastía de rescate?
+- ⏱ min 120: Si reperfundió: coronariografía entre 2 y 24 horas. ¿Hemodinamia coordinada?
 
 ## 4. SCA sin supradesnivel ST
 
@@ -152,6 +153,9 @@ primer contacto → IAMCEST → pabellón de hemodinamia (primera opción)
 **Recordatorios:**
 
 - ⏱ min 20: Hemodinamia: ¿el paciente ya salió a pabellón?
+- ⏱ min 60: Una hora del diagnóstico, meta con hemodinamia en el centro: ¿ya pasó la guía?
+- ⏱ min 90: 90 minutos del diagnóstico, meta con traslado: ¿ya pasó la guía?
+- ⏱ min 120: Dos horas del diagnóstico sin guía: se pierde la ventaja de la angioplastía. Avisa al médico
 
 ## Checklist de contraindicaciones de fibrinólisis
 

@@ -104,7 +104,8 @@
             porque: 'Pepe cambia a la fase que corresponda.' },
         ],
         hitos: [
-          { min: 10, texto: 'IAMCEST: ¿hemodinamia avisada?' },
+          { min: 10, texto: 'IAMCEST: ¿hemodinamia avisada?', registra: { texto: 'Hemodinamia avisada', marca: 'aviso-hemodinamia' },
+            omitirSi: ['fibrinolisis'] },
           { min: 30, texto: '¿Paciente en camino a pabellón de hemodinamia o fibrinolítico administrado?' },
         ],
       },
@@ -113,6 +114,7 @@
       {
         id: 'fibrinolisis',
         evento: 'Se indica fibrinólisis', // cómo queda en la evolución
+        marcaTiempo: 'fibrinolisis', // los recordatorios de la angioplastía primaria dejan de aplicar
         nombre: 'Fibrinólisis: antes, durante y después',
         intro: 'Fibrinólisis.',
         claveInstitucional: 'fibrinolisis',
@@ -144,6 +146,8 @@
           { min: 15, texto: 'Fibrinólisis: presión y ritmo de control' },
           { min: 60, texto: 'ECG de control: ¿ya se tomó?', registra: { texto: 'ECG de control post fibrinólisis tomado', marca: 'ecg-control' } },
           { min: 90, texto: 'Si no hay reperfusión: ¿hemodinamia avisada para angioplastía de rescate?' },
+          { min: 120, texto: 'Si reperfundió: coronariografía entre 2 y 24 horas. ¿Hemodinamia coordinada?',
+            registra: { texto: 'Coronariografía coordinada con hemodinamia', marca: 'aviso-hemodinamia' } },
         ],
       },
 
@@ -206,6 +210,13 @@
         ],
         hitos: [
           { min: 20, texto: 'Hemodinamia: ¿el paciente ya salió a pabellón?', registra: { texto: 'Sale a pabellón de hemodinamia', marca: 'salida' } },
+          // Metas ESC 2023 contadas desde el diagnóstico (ECG), no desde que se activa esta fase.
+          { min: 60, desde: 'diagnostico', texto: 'Una hora del diagnóstico, meta con hemodinamia en el centro: ¿ya pasó la guía?',
+            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico'] },
+          { min: 90, desde: 'diagnostico', texto: '90 minutos del diagnóstico, meta con traslado: ¿ya pasó la guía?',
+            registra: { texto: 'Paso de la guía', marca: 'guia' }, omitirSi: ['fibrinolisis', 'fibrinolitico'] },
+          { min: 120, desde: 'diagnostico', texto: 'Dos horas del diagnóstico sin guía: se pierde la ventaja de la angioplastía. Avisa al médico',
+            omitirSi: ['guia', 'fibrinolisis', 'fibrinolitico'] },
         ],
       },
     ],
