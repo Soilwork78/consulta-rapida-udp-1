@@ -25,7 +25,7 @@ La enfermera le habla a Pepe (o escribe la frase en la demo):
 |---|---|
 | "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA" | Dice quién es y el punto más urgente (ECG en 10 min), y programa los recordatorios |
 | "sigue" / "continúa" / "dale" / "avanza" / "qué más" | Dice el siguiente punto del protocolo. Pepe avanza solo cuando la enfermera lo pide |
-| "detente" / "detente ahí" / "espera" / "para" | Pepe se calla de inmediato, incluso a mitad de frase, y se queda en ese punto hasta que le digan "sigue" |
+| "detente" / "detente ahí" / "espera" / "pausa" | Pepe se calla de inmediato, incluso a mitad de frase, y se queda en ese punto hasta que le digan "sigue". Los recordatorios de tiempo siguen activos |
 | "repite" / "anterior" | Repite el punto actual o vuelve al anterior |
 | "Pepe, box 3 confirmado IAM con supradesnivel" | Dice el algoritmo del diagnóstico confirmado y sus hitos |
 | "Pepe, box 3 descartado SCA" | Cancela los recordatorios y dice lo que aún falta descartar |

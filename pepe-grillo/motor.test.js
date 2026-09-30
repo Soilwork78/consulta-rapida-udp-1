@@ -235,7 +235,7 @@ test('cancelar sale del diálogo y la sesión vuelve a lo clínico', () => {
   assert.strictEqual(s.procesar('sospecha de ACV').respuesta.clave, 'acv');
 });
 
-test('"detente" calla a Pepe y "avanza" retoma desde el mismo punto', () => {
+test('"detente" calla a Pepe, "avanza" retoma, y los recordatorios siguen activos', () => {
   const s = crearSesion(kb, inst);
   s.procesar('box 3 sospecha SCA'); // paso 1: ECG
   const p = s.procesar('Pepe, detente ahí').respuesta;
@@ -245,7 +245,7 @@ test('"detente" calla a Pepe y "avanza" retoma desde el mismo punto', () => {
   assert.match(s.procesar('avanza').respuesta.hablar, /^Banderas rojas/);
   s.procesar('espera');
   assert.match(s.procesar('continúa').respuesta.hablar, /^Protocolo local: En este hospital/);
-  s.procesar('para');
+  s.procesar('pausa');
   assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: La troponina/);
 });
 
@@ -261,4 +261,5 @@ test('las palabras de avance y pausa valen sin decir "Pepe"', () => {
   const { esNavegacion } = require('./motor.js');
   ['sigue', 'Continúa', 'dale', 'avanza', '¿Qué más?', 'Detente ahí', 'espera'].forEach((f) => assert.ok(esNavegacion(f), f));
   assert.ok(!esNavegacion('el paciente para de respirar'));
+  assert.ok(!esNavegacion('para'), '"para" se eliminó por falsos positivos');
 });

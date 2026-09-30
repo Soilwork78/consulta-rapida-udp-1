@@ -57,7 +57,7 @@
   // Navegación: la enfermera marca el ritmo. Frases cortas, con o sin "Pepe" y box.
   const NAV = [
     ['mas', /^(y )?(que mas|mas|dime mas|algo mas|sigue|siguiente|sigamos|siga|continua|continuar|continuemos|dale|avanza|avanzar|adelante|otro|y ahora|listo|ok)$/],
-    ['pausa', /^(detente|detente ahi|detenete|para|para ahi|pausa|espera|esperate|un momento|momento|stop|silencio|calla|callate|basta)$/],
+    ['pausa', /^(detente|detente ahi|detenete|pausa|espera|esperate|un momento|momento|stop|silencio|calla|callate|basta)$/],
     ['repetir', /^(repite|repetir|otra vez|de nuevo|como|que)$/],
     ['anterior', /^(anterior|atras|vuelve|el anterior)$/],
     ['porque', /^(por que|porque|explica|explicame|fundamento|y eso)$/],
