@@ -46,34 +46,59 @@ test('frase incomprensible', () => {
   assert.strictEqual(interpretar('hola qué tal', kb).intencion, 'desconocido');
 });
 
-test('sesión completa: ingreso, más, confirmado, descartado', () => {
+test('sesión completa: la enfermera marca el ritmo con "sigue"', () => {
   const s = crearSesion(kb, inst);
   const r1 = s.procesar('Pepe, ingresa box 3, hombre de 58 años, dolor torácico, sospecha SCA').respuesta;
-  assert.match(r1.hablar, /Protocolo local: En este hospital no hay hemodinamia/);
-  assert.match(r1.hablar, /ECG de 12 derivaciones antes de 10 minutos/);
-  assert.ok(!/Desfibrilador/.test(r1.hablar), 'solo 3 tips hablados');
+  // Un solo punto por vez: lo más urgente primero, y la ayuda solo la primera vez.
+  assert.match(r1.hablar, /^Box 3, hombre de 58 años\. Sospecha de Síndrome coronario agudo\. ECG de 12 derivaciones/);
+  assert.match(r1.hablar, /Cuando quieras, dime sigue\.$/);
+  assert.ok(!/Protocolo local/.test(r1.hablar));
+  assert.strictEqual(r1.paso, 1);
   assert.strictEqual(r1.hitos[0].min, 5);
   const porProtocolo = r1.secciones.find((x) => x.titulo === 'Exámenes: tomar por protocolo').items;
   assert.ok(porProtocolo.includes('Troponina ultrasensible'));
   assert.ok(!porProtocolo.includes('Rx de tórax'));
 
-  const r2 = s.procesar('Pepe, más').respuesta;
-  assert.match(r2.hablar, /Desfibrilador/);
-  assert.match(r2.hablar, /No olvides descartar: Disección aórtica/);
+  const r2 = s.procesar('sigue').respuesta;
+  assert.match(r2.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
+  assert.strictEqual(r2.paso, 2);
+  assert.strictEqual(r2.hitos.length, 0, 'navegar no reprograma recordatorios');
+  assert.match(s.procesar('¿qué más?').respuesta.hablar, /^Protocolo local: La troponina/);
+  assert.match(s.procesar('Pepe, repite').respuesta.hablar, /^Protocolo local: La troponina/);
+  assert.match(s.procesar('anterior').respuesta.hablar, /^Protocolo local: En este hospital/);
+
+  let r;
+  for (let k = 0; k < 30; k++) r = s.procesar('sigue').respuesta;
+  assert.match(r.hablar, /^Eso es todo para el box 3\. Te aviso al minuto 5\.$/);
 
   const r3 = s.procesar('Pepe, confirmado IAMCEST').respuesta;
   assert.match(r3.titulo, /Box 3, hombre de 58 años · Confirmado: IAM con supradesnivel/);
-  assert.match(r3.hablar, /Fibrinolítico en el carro/);
+  assert.ok(!/dime sigue/.test(r3.hablar), 'la ayuda no se repite');
+  assert.match(s.procesar('sigue').respuesta.hablar, /Fibrinolítico en el carro/);
 
   const r4 = s.procesar('Pepe, box 3 descartado SCA').respuesta;
   assert.ok(r4.detenerHitos);
   assert.match(r4.hablar, /Disección aórtica/);
 });
 
+test('"sigue" en otro box y sin paciente', () => {
+  const s = crearSesion(kb, inst);
+  s.procesar('box 3 sospecha SCA');
+  s.procesar('box 5 sospecha sepsis');
+  assert.match(s.procesar('Pepe, box 3, sigue').respuesta.hablar, /^Protocolo local: En este hospital/);
+  assert.match(s.procesar('box 9 sigue').respuesta.hablar, /No tengo un paciente activo en el box 9/);
+});
+
+test('"sigue" también avanza el doble chequeo', () => {
+  const s = crearSesion(kb, null);
+  s.procesar('chequeo heparina bic');
+  assert.match(s.procesar('sigue').respuesta.hablar, /Verifiquen el frasco/);
+});
+
 test('sin institución: exámenes quedan "según indicación"', () => {
   const r = crearSesion(kb, null).procesar('sospecha de ACV').respuesta;
   assert.ok(r.secciones.some((x) => x.titulo === 'Exámenes basales (según indicación)'));
-  assert.ok(!/Protocolo local/.test(r.hablar));
+  assert.ok(!r.pasos.some((p) => /Protocolo local/.test(p)));
 });
 
 test('toda sospecha y confirmado con alias produce respuesta', () => {

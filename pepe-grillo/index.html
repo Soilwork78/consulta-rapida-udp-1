@@ -78,6 +78,7 @@
   .burbuja { background: var(--accent-soft); border-radius: 4px 14px 14px 14px; padding: 12px 14px; min-width: 0; }
   .burbuja .dijo { font-size: 12px; color: var(--muted); margin: 0 0 4px; }
   .burbuja p.texto { margin: 0; font-size: 16px; }
+  .burbuja .paso { font: 500 12px var(--font-mono); color: var(--accent); white-space: nowrap; }
 
   .tarjeta { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 14px; min-width: 0; }
   .tarjeta h2 { font: 600 20px/1.25 var(--font-display); margin: 0; text-wrap: balance; }
@@ -142,7 +143,8 @@
         <div class="acciones">
           <button type="submit" class="primario">Enviar</button>
           <button type="button" class="mic" id="mic" aria-pressed="false" hidden>🎙 Hablar</button>
-          <button type="button" id="mas">Pepe, más</button>
+          <button type="button" id="mas">Sigue</button>
+          <button type="button" id="repite">Repite</button>
           <button type="button" id="callar">Callar</button>
         </div>
         <div class="rapidas" id="rapidas" hidden></div>
@@ -159,7 +161,7 @@
           </svg>
         </div>
         <div class="burbuja" aria-live="polite">
-          <p class="dijo" id="dijo"></p>
+          <p class="dijo"><span id="dijo"></span> <span class="paso" id="paso"></span></p>
           <p class="texto" id="hablar"></p>
         </div>
       </div>
@@ -188,7 +190,8 @@
   const $ = (id) => document.getElementById(id);
   const EJEMPLOS = [
     'Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA',
-    'Pepe, más',
+    'sigue',
+    'qué más',
     'Pepe, box 3 confirmado IAM con supradesnivel',
     'Pepe, box 5 mujer de 72 años con fiebre y confusión',
     'Pepe, box 5 sospecha sepsis',
@@ -233,6 +236,7 @@
   function mostrar(frase, r) {
     $('dijo').textContent = frase ? '« ' + frase + ' »' : '';
     $('hablar').textContent = r.hablar;
+    $('paso').textContent = r.total > 1 ? 'paso ' + Math.min(r.paso, r.total) + ' de ' + r.total : '';
     if (r.secciones.length || !$('titulo').textContent) {
       $('titulo').textContent = r.titulo;
       const cont = $('secciones');
@@ -330,7 +334,7 @@
     mostrar(frase, respuesta);
     const dialogo = interpretacion.intencion === 'dialogo';
     if (dialogo) { if (respuesta.hitos.length) programar(box, respuesta, true); }
-    else if (interpretacion.intencion !== 'mas' && interpretacion.intencion !== 'desconocido') programar(box, respuesta);
+    else if (!['mas', 'repetir', 'anterior', 'desconocido'].includes(interpretacion.intencion)) programar(box, respuesta);
     pintarRapidas(dialogo ? respuesta.esperando : null);
     $('frase').value = '';
     if (conVoz) { if ('speechSynthesis' in window) speechSynthesis.cancel(); decir(respuesta.hablar); }
@@ -347,7 +351,8 @@
   $('frase').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('form').requestSubmit(); }
   });
-  $('mas').addEventListener('click', () => procesar('Pepe, más', true));
+  $('mas').addEventListener('click', () => procesar('sigue', true));
+  $('repite').addEventListener('click', () => procesar('repite', true));
   $('callar').addEventListener('click', () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); });
   $('inst').addEventListener('change', nuevaSesion);
   EJEMPLOS.forEach((f) => {
@@ -359,7 +364,8 @@
 
   // Micrófono: funciona en Chrome/Edge con la página servida desde el propio sitio;
   // dentro de un visor embebido suele estar bloqueado.
-  // Manos libres: escucha continua; actúa si la frase dice "Pepe" o si hay un diálogo en curso.
+  // Manos libres: escucha continua; actúa si la frase dice "Pepe", si es "sigue"/"qué más"/"repite",
+  // o si hay un diálogo en curso.
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   let rec = null, escuchando = false;
   function pausarEscucha() { if (rec && escuchando) { try { rec.abort(); } catch (_) {} } }
@@ -377,7 +383,8 @@
     rec.onresult = (e) => {
       const f = e.results[e.results.length - 1][0].transcript.trim();
       const manos = $('manosLibres').checked;
-      if (!manos || sesion.enDialogo || /\bpepe\b/i.test(f)) {
+      // "sigue", "qué más", "repite" y "anterior" valen sin decir "Pepe".
+      if (!manos || sesion.enDialogo || /\bpepe\b/i.test(f) || PepeMotor.esNavegacion(f)) {
         $('frase').value = f;
         procesar(f, true);
       }

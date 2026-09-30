@@ -4,7 +4,8 @@
 //
 // Ejemplos de frases:
 //   "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA"
-//   "Pepe, más"
+//   "sigue" / "qué más"   → Pepe dice el siguiente punto (la enfermera marca el ritmo)
+//   "repite" / "anterior"
 //   "Pepe, box 3 confirmado IAM con supradesnivel"
 //   "Pepe, box 3 descartado SCA"
 //
@@ -12,8 +13,6 @@
 // ============================================================
 
 (function () {
-  const TIPS_HABLADOS = 3;
-  const LOCALES_HABLADOS = 1; // el resto del protocolo local va en "Pepe, más"
   const DC = typeof module !== 'undefined' ? require('./doble-chequeo.js') : window.PepeDobleChequeo;
 
   const NUMEROS = {
@@ -48,9 +47,21 @@
     return datos;
   }
 
+  // Navegación: la enfermera marca el ritmo. Frases cortas, con o sin "Pepe" y box.
+  const NAV = [
+    ['mas', /^(y )?(que mas|mas|dime mas|algo mas|sigue|siguiente|continua|continuar|dale|otro|y ahora|listo|ok)$/],
+    ['repetir', /^(repite|repetir|otra vez|de nuevo|como|que)$/],
+    ['anterior', /^(anterior|atras|vuelve|el anterior)$/],
+  ];
+  function navegacion(t) {
+    const resto = t.replace(/^pepe\s*/, '').replace(/\b(?:box|cama|camilla|sala)\s+\S+/, '').replace(/\bpepe\b/, '').trim();
+    const hit = NAV.find(([, re]) => re.test(resto));
+    return hit ? hit[0] : null;
+  }
+
   function detectarIntencion(t) {
-    const sinPepe = t.replace(/^pepe\s*/, '');
-    if (/^(dime |que |algo )?mas\b/.test(sinPepe) && sinPepe.split(' ').length <= 4) return 'mas';
+    const nav = navegacion(t);
+    if (nav) return nav;
     if (/\bdescart/.test(t)) return 'descartado';
     if (/\bconfirm/.test(t)) return 'confirmado';
     return 'ingreso';
@@ -81,7 +92,7 @@
     const t = normalizar(texto);
     const intencion = detectarIntencion(t);
     const datos = extraerDatos(t);
-    if (intencion === 'mas') return { intencion, ...datos };
+    if (NAV.some(([n]) => n === intencion)) return { intencion, ...datos };
     const motivos = kb.motivos.filter((m) => m.activadores.some((a) => contiene(t, a)));
     const sospecha = buscarSospecha(t, kb, intencion, motivos[0]);
     const motivo = sospecha ? sospecha.motivo : motivos[0] || null;
@@ -132,6 +143,19 @@
     motivo.diferenciales.filter((d) => d.noPerder && d.id !== excluirId).map((d) => d.dx);
 
   // ── Respuestas por intención ──────────────────────────────
+  // Cada respuesta trae `intro` (quién y qué) y `pasos`: la lista que Pepe
+  // recorre de a uno, en orden de prioridad clínica. La sesión arma `hablar`.
+
+  const lista = (etiqueta, items) => (items.length ? etiqueta + ': ' + items.join(', ') : '');
+
+  function examenesPasos(m, inst) {
+    const basales = m.examenes.basales.map((e) => e.ex);
+    if (!inst) return [lista('Exámenes basales, según indicación', basales)];
+    return [
+      lista('Exámenes que tomas por protocolo', basales.filter((e) => inst.enfermeriaPorProtocolo.includes(e))),
+      lista('Exámenes para sugerir al médico', basales.filter((e) => !inst.enfermeriaPorProtocolo.includes(e))),
+    ];
+  }
 
   function respIngresoSospecha(i, kb, inst) {
     const d = i.sospecha.item;
@@ -140,23 +164,20 @@
     const tips = kb.tips[d.id] || d.discriminantes.map((x) => 'Busca: ' + x);
     const contacto = inst && inst.contactos[d.id];
     const quien = describirPaciente(i);
-    const hablar = [
-      (quien ? quien + '. ' : '') + 'Sospecha de ' + nombreVoz(d.dx),
-      local.length ? 'Protocolo local: ' + unir(local.slice(0, LOCALES_HABLADOS)) : '',
-      'Recuerda: ' + unir(tips.slice(0, TIPS_HABLADOS)),
-      m.hitos.length ? 'Te aviso al minuto ' + m.hitos[0].min : '',
-      tips.length > TIPS_HABLADOS || local.length > LOCALES_HABLADOS ? 'Di Pepe, más, para el resto' : '',
-    ].filter(Boolean);
     return {
       clave: d.id,
       titulo: (quien ? quien + ' · ' : '') + 'Sospecha: ' + d.dx,
-      hablar: paraVoz(unir(hablar) + '.'),
-      mas: paraVoz(unir([
-        local.length > LOCALES_HABLADOS ? 'Protocolo local: ' + unir(local.slice(LOCALES_HABLADOS)) : '',
-        tips.length > TIPS_HABLADOS ? 'Además: ' + unir(tips.slice(TIPS_HABLADOS)) : '',
-        'No olvides descartar: ' + otrosNoPerder(m, d.id).join(', '),
+      intro: (quien ? quien + '. ' : '') + 'Sospecha de ' + nombreVoz(d.dx) + '.',
+      // Lo más urgente primero; el protocolo local justo después.
+      pasos: [
+        tips[0],
+        ...local.map((t) => 'Protocolo local: ' + t),
+        ...tips.slice(1),
+        'Banderas rojas: ' + m.banderasRojas.join('; '),
+        ...examenesPasos(m, inst),
+        lista('No olvides descartar', otrosNoPerder(m, d.id)),
         contacto || '',
-      ].filter(Boolean)) + '.'),
+      ].filter(Boolean),
       secciones: [
         local.length && { titulo: 'Protocolo institucional', items: local, destacar: true },
         contacto && { titulo: 'Contacto', items: [contacto] },
@@ -172,21 +193,20 @@
   function respIngresoMotivo(i, kb, inst) {
     const m = i.motivo;
     const quien = describirPaciente(i);
-    const hablar = [
-      (quien ? quien + '. ' : '') + m.nombre,
-      i.otrosMotivos.length ? 'Ojo, también calza con ' + i.otrosMotivos.map((o) => o.nombre).join(' y ') : '',
-      'Recuerda: ' + unir(m.acciones.slice(0, TIPS_HABLADOS)),
-      'Banderas rojas: ' + unir(m.banderasRojas.slice(0, 2)),
-      'Cuando el médico tenga una sospecha, dímela',
-    ].filter(Boolean);
+    const otros = i.otrosMotivos.map((o) => o.nombre);
     return {
       clave: m.id,
       titulo: (quien ? quien + ' · ' : '') + m.nombre,
-      hablar: paraVoz(unir(hablar) + '.'),
-      mas: paraVoz(unir([
-        'Además: ' + unir(m.acciones.slice(TIPS_HABLADOS)),
-        'No olvides descartar: ' + otrosNoPerder(m).join(', '),
-      ]) + '.'),
+      intro: (quien ? quien + '. ' : '') + m.nombre + '.' +
+        (otros.length ? ' Ojo, también calza con ' + otros.join(' y ') + '.' : ''),
+      pasos: [
+        ...m.acciones,
+        'Banderas rojas: ' + m.banderasRojas.join('; '),
+        ...examenesPasos(m, inst),
+        lista('No olvides descartar', otrosNoPerder(m)),
+        ...i.otrosMotivos.map((o) => lista('Por ' + o.nombre.toLowerCase() + ', descarta también', otrosNoPerder(o))),
+        'Cuando el médico tenga una sospecha, dímela',
+      ].filter(Boolean),
       secciones: [
         { titulo: 'Acciones inmediatas', items: m.acciones },
         { titulo: 'Banderas rojas', items: m.banderasRojas, alerta: true },
@@ -206,21 +226,17 @@
     const local = (inst && inst.tips[c.id]) || [];
     const contacto = inst && inst.contactos[c.id];
     const quien = describirPaciente(i);
-    const hablar = [
-      (quien ? quien + ': ' : '') + 'confirmado ' + nombreVoz(c.nombre),
-      local.length ? 'Protocolo local: ' + unir(local.slice(0, LOCALES_HABLADOS)) : '',
-      'Pasos: ' + unir(c.algoritmo.slice(0, TIPS_HABLADOS)),
-      c.hitos.length ? 'Te aviso al minuto ' + c.hitos[0].min : '',
-    ].filter(Boolean);
     return {
       clave: c.id,
       titulo: (quien ? quien + ' · ' : '') + 'Confirmado: ' + c.nombre,
-      hablar: paraVoz(unir(hablar) + '.'),
-      mas: paraVoz(unir([
-        local.length > LOCALES_HABLADOS ? 'Protocolo local: ' + unir(local.slice(LOCALES_HABLADOS)) : '',
-        'Además: ' + unir(c.algoritmo.slice(TIPS_HABLADOS)),
+      intro: (quien ? quien + ': ' : '') + 'confirmado ' + nombreVoz(c.nombre) + '.',
+      pasos: [
+        c.algoritmo[0],
+        ...local.map((t) => 'Protocolo local: ' + t),
+        ...c.algoritmo.slice(1),
+        ...(c.examenes || []).map((e) => e.ex + ': ' + e.det),
         contacto || '',
-      ].filter(Boolean)) + '.'),
+      ].filter(Boolean),
       secciones: [
         local.length && { titulo: 'Protocolo institucional', items: local, destacar: true },
         contacto && { titulo: 'Contacto', items: [contacto] },
@@ -239,8 +255,8 @@
     return {
       clave: null,
       titulo: (quien ? quien + ' · ' : '') + 'Descartado: ' + nombre,
-      hablar: paraVoz('Descartado ' + nombreVoz(nombre) + '. Aún quedan por descartar: ' + pendientes.join(', ') + '.'),
-      mas: '',
+      intro: 'Descartado ' + nombreVoz(nombre) + '. Cancelo sus recordatorios.',
+      pasos: [lista('Aún quedan por descartar', pendientes)].filter(Boolean),
       secciones: [{ titulo: 'Aún por descartar', items: pendientes, alerta: true }],
       hitos: [],
       detenerHitos: true,
@@ -251,8 +267,8 @@
     if (i.intencion === 'desconocido') {
       return {
         clave: null, titulo: 'No entendí',
-        hablar: 'No te entendí. Dime el motivo de consulta o la sospecha del médico.',
-        mas: '', secciones: [], hitos: [],
+        intro: 'No te entendí. Dime el motivo de consulta o la sospecha del médico.',
+        pasos: [], secciones: [], hitos: [],
       };
     }
     if (i.intencion === 'confirmado' && i.sospecha && i.sospecha.tipo === 'confirmado') return respConfirmado(i, kb, inst);
@@ -262,12 +278,24 @@
     return respIngresoMotivo(i, kb, inst);
   }
 
-  // Sesión con varios pacientes: recuerda el contexto de cada box
-  // para "Pepe, más" y para heredar el motivo en "confirmado"/"descartado".
+  // Texto que Pepe dice para el paso `n` de una respuesta.
+  function decirPaso(r, n, box, primeraVez) {
+    if (n >= r.pasos.length) {
+      const aviso = r.hitos.length ? ' Te aviso al minuto ' + r.hitos[0].min + '.' : '';
+      return paraVoz('Eso es todo' + (box && box !== '—' ? ' para el box ' + box : '') + '.' + aviso);
+    }
+    const texto = n === 0 ? r.intro + ' ' + r.pasos[0] : r.pasos[n];
+    const ayuda = primeraVez && r.pasos.length > 1 ? ' Cuando quieras, dime sigue.' : '';
+    return paraVoz(texto.replace(/[.\s]+$/, '') + '.' + ayuda);
+  }
+
+  // Sesión con varios pacientes: recuerda, por box, la respuesta y en qué
+  // paso va, para "sigue"/"repite"/"anterior" y para heredar datos del paciente.
   function crearSesion(kb, inst) {
     const porBox = {};
     let ultimoBox = '—';
     let chequeo = null; // diálogo de doble chequeo en curso
+    let yaExplicado = false; // "dime sigue" se explica solo la primera vez
     return {
       get enDialogo() { return !!(chequeo && chequeo.activo); },
       procesar(texto) {
@@ -289,28 +317,42 @@
         const box = i.box || ultimoBox;
         ultimoBox = box;
         const previo = porBox[box];
-        if (i.intencion === 'mas') {
-          const r = previo && previo.respuesta;
-          return {
-            box, interpretacion: i,
-            respuesta: r && r.mas
-              ? { ...r, hablar: r.mas, mas: '', hitos: [] }
-              : { clave: null, titulo: 'Sin contexto', hablar: 'No tengo más para este paciente.', mas: '', secciones: [], hitos: [] },
-          };
+
+        // Navegación por los pasos: la enfermera marca el ritmo.
+        if (['mas', 'repetir', 'anterior'].includes(i.intencion)) {
+          if (!previo) {
+            return { box, interpretacion: i, respuesta: {
+              clave: null, titulo: 'Sin paciente', intro: '', pasos: [], secciones: [], hitos: [],
+              hablar: 'No tengo un paciente activo' + (box !== '—' ? ' en el box ' + box : '') + '.' } };
+          }
+          const total = previo.respuesta.pasos.length;
+          if (i.intencion === 'mas') previo.cursor = Math.min(previo.cursor + 1, total);
+          if (i.intencion === 'anterior') previo.cursor = Math.max(previo.cursor - 1, 0);
+          return { box, interpretacion: i, respuesta: {
+            ...previo.respuesta, hitos: [],
+            paso: Math.min(previo.cursor + 1, total), total,
+            hablar: decirPaso(previo.respuesta, previo.cursor, box, false),
+          } };
         }
+
         if (previo && i.intencion !== 'ingreso') {
           if (!i.box) i.box = previo.interpretacion.box;
           if (!i.edad) i.edad = previo.interpretacion.edad;
           if (!i.sexo) i.sexo = previo.interpretacion.sexo;
         }
-        const respuesta = responder(i, kb, inst);
-        if (i.intencion !== 'desconocido') porBox[box] = { interpretacion: i, respuesta };
+        const r = responder(i, kb, inst);
+        const primeraVez = !yaExplicado && r.pasos.length > 1;
+        if (primeraVez) yaExplicado = true;
+        const respuesta = { ...r, paso: r.pasos.length ? 1 : 0, total: r.pasos.length,
+          hablar: r.pasos.length ? decirPaso(r, 0, box, primeraVez) : paraVoz(r.intro) };
+        if (i.intencion !== 'desconocido') porBox[box] = { interpretacion: i, respuesta: r, cursor: 0 };
         return { box, interpretacion: i, respuesta };
       },
     };
   }
 
-  const API = { normalizar, interpretar, responder, crearSesion, paraVoz };
+  const esNavegacion = (texto) => !!navegacion(normalizar(texto));
+  const API = { normalizar, interpretar, responder, crearSesion, paraVoz, esNavegacion };
   if (typeof module !== 'undefined') module.exports = API;
   else window.PepeMotor = API;
 })();

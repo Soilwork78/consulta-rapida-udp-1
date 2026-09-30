@@ -47,13 +47,13 @@ kb.motivos.forEach((m, i) => {
   L.push('| Diagnóstico | No perder | Hallazgos discriminantes |', '|---|:-:|---|');
   m.diferenciales.forEach((d) =>
     L.push(`| ${d.dx} | ${d.noPerder ? '🔴' : ''} | ${d.discriminantes.join('; ')} |`));
-  L.push('', '### 🗣 Tips por sospecha (lo que Pepe dice al oído; los 3 primeros en voz)', '');
+  L.push('', '### 🗣 Tips por sospecha (en orden: Pepe dice uno por vez cuando la enfermera dice "sigue"; 🔊 = el que dice al ingreso)', '');
   const vistos = new Set();
   m.diferenciales.forEach((d) => {
     if (!d.id || !kb.tips[d.id] || vistos.has(d.id)) return;
     vistos.add(d.id);
     L.push(`**${d.dx}** — se activa con: _${d.alias.join(', ')}_`, '');
-    kb.tips[d.id].forEach((t, j) => L.push(`${j + 1}. ${t}${j < 3 ? ' 🔊' : ''}`));
+    kb.tips[d.id].forEach((t, j) => L.push(`${j + 1}. ${t}${j === 0 ? ' 🔊' : ''}`));
     L.push('');
   });
   L.push('### Hitos de la capa 1', '');

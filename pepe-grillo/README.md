@@ -12,7 +12,7 @@ Pepe Grillo es un asistente que la enfermera de urgencia escucha por un audífon
 | 3. Diagnóstico confirmado | El médico confirma el diagnóstico (y puede cambiarlo o descartarlo) | Algoritmo específico con hitos de tiempo |
 
 Principios:
-- Pepe Grillo habla solo en los **hitos de tiempo** o cuando se le pregunta. No recita.
+- Pepe Grillo habla solo cuando la enfermera se lo pide o en los **hitos de tiempo**. No recita.
 - **Las banderas rojas van primero.** Nunca entrega un "diagnóstico probable" único.
 - Enfermería **comunica hallazgos y pregunta** por la hipótesis médica. No diagnostica.
 - Cada recomendación lleva su fuente.
@@ -23,12 +23,15 @@ La enfermera le habla a Pepe (o escribe la frase en la demo):
 
 | Frase | Qué hace Pepe |
 |---|---|
-| "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA" | Dice primero el protocolo local, después los 3 tips más importantes, y programa los recordatorios |
-| "Pepe, más" | Dice el resto de los tips, los diagnósticos que falta descartar y el contacto |
+| "Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA" | Dice quién es y el punto más urgente (ECG en 10 min), y programa los recordatorios |
+| "sigue" / "qué más" | Dice el siguiente punto del protocolo. Pepe avanza solo cuando la enfermera lo pide |
+| "repite" / "anterior" | Repite el punto actual o vuelve al anterior |
 | "Pepe, box 3 confirmado IAM con supradesnivel" | Dice el algoritmo del diagnóstico confirmado y sus hitos |
 | "Pepe, box 3 descartado SCA" | Cancela los recordatorios y dice lo que aún falta descartar |
 
 | "Pepe, doble chequeo de heparina en BIC, box 3" | Guía el doble chequeo paso a paso; se responde sin decir "Pepe": "listo", "sí", "no", un número, "repite" o "cancelar" |
+
+**La enfermera marca el ritmo.** Pepe dice un punto a la vez, en orden de prioridad: primero lo más urgente, luego el protocolo local, los demás tips, las banderas rojas, los exámenes, lo que falta descartar y el contacto. "Sigue" funciona también con otro box ("box 5, sigue"). Los recordatorios de tiempo son la única excepción: suenan aunque nadie pregunte.
 
 Si la frase calza con dos motivos de consulta (por ejemplo fiebre y confusión), Pepe lo advierte.
 
@@ -44,13 +47,13 @@ Pepe elimina la fricción inútil (anotar, calcular de memoria, recordar los pas
 
 ## Manos libres
 
-En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe" o cuando hay un diálogo en curso, y deja de escuchar mientras Pepe habla. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para simulación, pero no para datos reales de pacientes.
+En Chrome o Edge, con la página abierta desde el repositorio, el modo manos libres escucha de forma continua. Actúa cuando la frase dice "Pepe", cuando es "sigue", "qué más", "repite" o "anterior", o cuando hay un diálogo en curso, y deja de escuchar mientras Pepe habla. Ojo: el reconocimiento de voz de Chrome envía el audio a servidores de Google. Sirve para simulación, pero no para datos reales de pacientes.
 
 ## Protocolo institucional
 
 Cada centro tiene su archivo en `instituciones/`. `ejemplo.js` es una plantilla **ficticia** con:
 - `preparaciones`: las soluciones estándar de BIC del centro.
-- `tips` por sospecha o diagnóstico: el primero se dice **antes** que los tips generales; el resto va en "Pepe, más".
+- `tips` por sospecha o diagnóstico: van justo después del punto más urgente de la base.
 - `contactos`: anexos de los códigos IAM, ACV, etc.
 - `enfermeriaPorProtocolo`: los exámenes que enfermería toma por protocolo firmado. El resto aparece como "sugerir al médico".
 

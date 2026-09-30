@@ -27,7 +27,7 @@
   }
 
   const es = (t, re) => re.test(' ' + limpiar(t).replace(/[^a-z0-9ñ\s]/g, ' ') + ' ');
-  const SI = /\s(si|listo|lista|listas|listos|ok|okay|correcto|correcta|verificado|confirmado|confirmada|dale|ya)\s/;
+  const SI = /\s(si|listo|lista|listas|listos|ok|okay|correcto|correcta|verificado|confirmado|confirmada|dale|ya|sigue|siguiente|continua|continuar|mas)\s/;
   const NO = /\s(no|negativo)\s/;
   const CANCELAR = /\s(cancelar|cancela|abortar|detener|salir)\s/;
   const REPETIR = /\s(repite|repetir|de nuevo|otra vez|como)\s/;
