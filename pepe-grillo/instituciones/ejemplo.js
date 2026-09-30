@@ -55,6 +55,9 @@
       hemodinamia: [
         'Pabellón de hemodinamia en el tercer piso: la enfermera acompaña con TENS y monitor desfibrilador',
       ],
+      'post-hemodinamia': [
+        'Banda radial: desinflar 2 ml cada 15 minutos desde las 2 horas del regreso',
+      ],
       acv: [
         'Sin trombectomía en este centro: con oclusión de gran vaso, se coordina traslado con la red',
       ],

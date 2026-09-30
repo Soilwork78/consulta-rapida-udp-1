@@ -65,6 +65,7 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
 - **E:** la evaluación dictada y, además, la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
 
 **Horas automáticas.** Todo lo dictado queda con su hora, sin decirla. Además:
+- Si la enfermera **dice la hora** ("tomé ECG a las 10:05", "vía instalada hace 20 minutos"), queda esa hora y no la del dictado. Se toma la más reciente dentro de las últimas 12 horas ("a las 10" dicho a las 22:30 es 22:00). Una hora futura no se usa.
 - La **hora de inicio del dolor** se toma de la anamnesis ("desde las 12:30", "a las 8", "hace 2 horas").
 - Los **recordatorios registran**: a "¿ECG ya tomado?" basta responder "sí" y queda anotado con la hora de la confirmación (marcado como "confirmado al recordatorio", porque el hecho pudo ser antes). "No" o "todavía no" lo deja pendiente.
 - **Pepe no pregunta lo que ya está anotado**: si el ECG se dictó antes del minuto 5, ese recordatorio no suena.
@@ -127,6 +128,7 @@ Por ahora el desarrollo se concentra en **una sola patología, SCA, desde la mir
 | Primer contacto (0–10 min) | "dolor torácico", "sospecha SCA" |
 | IAM con supradesnivel | "el ECG muestra supradesnivel", "IAMCEST", "código IAM" |
 | **Pabellón de hemodinamia** (coronariografía / ACTP) | "hemodinamia", "pabellón", "ACTP", "angioplastía", "coronariografía" |
+| Regreso de hemodinamia (sitio de punción, ECG, contraste) | "vuelve de hemodinamia", "regresa de pabellón", "post angioplastía" |
 | Fibrinólisis (antes, durante y después) | "va a fibrinólisis", "tenecteplasa" |
 | SCA sin supradesnivel | "sin supradesnivel", "troponina positiva" |
 
