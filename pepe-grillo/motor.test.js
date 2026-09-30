@@ -294,6 +294,10 @@ test('interpretación de lo dictado', () => {
   assert.strictEqual(t('box 3, se administró aspirina 300'), 'procedimiento');
   assert.strictEqual(t('anota: familia informada'), 'nota');
   assert.strictEqual(t('Pepe, redacta la evolución'), 'evolucion');
+  assert.strictEqual(t('examen físico: diaforético, sin crepitaciones'), 'objetivo');
+  assert.strictEqual(t('análisis: IAM con supradesnivel en ventana de reperfusión'), 'analisis');
+  assert.strictEqual(t('plan: ECG de control a los 90 minutos'), 'plan');
+  assert.strictEqual(t('evaluación: dolor disminuye'), 'evaluacion');
   // No debe capturar órdenes clínicas ni de navegación
   ['sigue', 'listo', 'Pepe, el ECG muestra supradesnivel', 'va a fibrinólisis', 'sospecha SCA',
     'Pepe, ingresa box 3, hombre de 58 años con dolor torácico', 'checklist de fibrinólisis',
@@ -321,7 +325,7 @@ test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tie
   di('aspirina 300 masticada administrada', 2);
   di('tenecteplasa administrada', 20);
   const falta = di('Pepe, redacta la evolución', 5);
-  assert.match(falta.hablar, /Falta registrar: alergias\.$/);
+  assert.match(falta.hablar, /Falta registrar: alergias, plan, evaluación\.$/);
   const ev = falta.evolucion;
   assert.match(ev, /Box 3/);
   assert.match(ev, /Hombre, 58 años\. Ingreso 14:00\./);
@@ -344,4 +348,27 @@ test('el doble chequeo queda en la evolución como procedimiento', () => {
   const ev = s.procesar('box 5 redacta la evolución').respuesta.evolucion;
   assert.match(ev, /Heparina sódica en BIC · 1\.260 UI\/h .* verificado por dos enfermeras\./);
   assert.match(ev, /SCA sin supradesnivel ST/);
+});
+
+test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const di = (f, min) => { t += (min || 0) * 60000; return s.procesar(f).respuesta; };
+  di('Pepe, ingresa box 3, hombre de 58 años, sospecha SCA');
+  di('refiere dolor opresivo desde las 12:30, EVA 8', 1);
+  di('examen físico: diaforético, sin crepitaciones');
+  di('análisis: IAM con supradesnivel en ventana de reperfusión');
+  di('plan: ECG de control a los 90 minutos y preparar traslado');
+  di('nitroglicerina sublingual administrada', 5);
+  di('EVA 3', 15);
+  di('evaluación: sin arritmias');
+  const ev = di('redacta la evolución').evolucion;
+  const orden = ['\nS:', '\nO:', '\nA:', '\nP:', '\nI:', '\nE:'].map((x) => ev.indexOf(x));
+  assert.ok(orden.every((x, k) => x > 0 && (k === 0 || x > orden[k - 1])), 'secciones S, O, A, P, I, E en orden');
+  assert.match(ev, /O:\n[\s\S]*Diaforético, sin crepitaciones\./);
+  assert.match(ev, /A:\n- 14:00 Sospecha médica de síndrome coronario agudo\.\nIAM con supradesnivel en ventana de reperfusión\./);
+  assert.match(ev, /P:\nECG de control a los 90 minutos y preparar traslado\./);
+  assert.match(ev, /I:\n- 14:06 Nitroglicerina sublingual administrada\./);
+  assert.match(ev, /E:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);
+  assert.ok(!/diagn[oó]stico de enfermer|NANDA/i.test(ev));
 });

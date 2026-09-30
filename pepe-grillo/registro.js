@@ -12,8 +12,12 @@
 //   "fármacos: losartán…" / "alergias: niega"
 //   "signos vitales: presión 158 sobre 94, FC 102, saturación 95…"
 //   "ECG tomado" / "vía venosa 18 instalada" / "aspirina administrada" → procedimiento con hora
+//   "examen físico: …" / "hallazgos: …"        → O
+//   "análisis: …"                              → A
+//   "plan: …"                                  → P
+//   "evaluación: dolor disminuye a EVA 3…"     → E
 //   "anota: …"                                 → nota libre
-//   "redacta la evolución"                     → borrador
+//   "redacta la evolución"                     → borrador SOAPIE (sin diagnósticos de enfermería)
 // ============================================================
 
 (function () {
@@ -59,6 +63,10 @@
   const REGLAS = [
     ['evolucion', /^((redacta|redactar|genera|arma|prepara|dame|hazme)\b.*\bevoluci[oó]n|evoluci[oó]n)\s*$/i, 'todo'],
     ['nota', /^(anota|anotar|registra|nota|observaci[oó]n)\b\s*[:,.]?\s*(que\s+)?/i, 'resto'],
+    ['objetivo', /^(examen\s+f[ií]sico|hallazgos?|al\s+examen)\s*[:,.]?\s*/i, 'resto'],
+    ['analisis', /^(an[aá]lisis|apreciaci[oó]n)\s*[:,.]?\s*/i, 'resto'],
+    ['plan', /^plan\b\s*[:,.]?\s*/i, 'resto'],
+    ['evaluacion', /^(evaluaci[oó]n|eval[uú]o)\b\s*[:,.]?\s*/i, 'resto'],
     ['proxima', /^(anamnesis\s+pr[oó]xima|anamnesis\s+actual|historia\s+actual)\s*[:,.]?\s*/i, 'resto'],
     ['remota', /^(anamnesis\s+remota|antecedentes?(\s+m[oó]rbidos)?)\s*[:,.]?\s*/i, 'resto'],
     ['alergias', /^(sin alergias|niega alergias|no tiene alergias|no es al[eé]rgic[oa])/i, 'niega'],
@@ -97,6 +105,7 @@
     const r = {
       ingreso: ahora, paciente: {}, clinico: [], proxima: [], remota: [], farmacos: [],
       alergias: [], signos: [], procedimientos: [], notas: [],
+      objetivo: [], analisis: [], plan: [], evaluacion: [],
     };
 
     function agregar(entrada, cuando) {
@@ -118,10 +127,12 @@
         if (sv.eva) r.signos.push({ hora: cuando, sv: { eva: sv.eva } });
         return 'Anotado en anamnesis próxima.';
       }
-      const destino = { remota: 'remota', alergias: 'alergias', farmacos: 'farmacos', nota: 'notas' }[tipo];
+      const destino = { remota: 'remota', alergias: 'alergias', farmacos: 'farmacos', nota: 'notas',
+        objetivo: 'objetivo', analisis: 'analisis', plan: 'plan', evaluacion: 'evaluacion' }[tipo];
       r[destino].push(texto);
       return { remota: 'Anotado en anamnesis remota.', alergias: 'Alergias anotadas.',
-        farmacos: 'Fármacos anotados.', notas: 'Nota anotada.' }[destino];
+        farmacos: 'Fármacos anotados.', notas: 'Nota anotada.', objetivo: 'Anotado en objetivo.',
+        analisis: 'Anotado en análisis.', plan: 'Anotado en plan.', evaluacion: 'Anotado en evaluación.' }[destino];
     }
 
     // Eventos clínicos que Pepe ya conoce (sospecha, fases, doble chequeo…).
@@ -143,7 +154,17 @@
       if (!r.alergias.length) f.push('alergias');
       ['pa', 'fc', 'sat'].forEach((k) => { if (!ultimo[k]) f.push({ pa: 'PA', fc: 'FC', sat: 'SatO2' }[k]); });
       if (!r.procedimientos.some((p) => p.tags.includes('ecg'))) f.push('hora del ECG');
+      if (!r.plan.length) f.push('plan');
+      if (!r.evaluacion.length && !tendencias().length) f.push('evaluación');
       return f;
+    }
+
+    // E objetiva: cómo cambió cada parámetro medido más de una vez (solo datos, sin interpretar).
+    function tendencias() {
+      return SV.filter(([k]) => r.signos.filter((s) => s.sv[k]).length >= 2).map(([k, , , et]) => {
+        const serie = r.signos.filter((s) => s.sv[k]);
+        return et + ' ' + serie.map((s) => s.sv[k] + ' (' + hhmm(s.hora) + ')').join(' → ');
+      });
     }
 
     function tiempos() {
@@ -155,38 +176,53 @@
       return t;
     }
 
+    // Borrador en formato SOAPIE, sin diagnósticos de enfermería.
     function evolucion(cuando) {
       const p = r.paciente;
       const quien = [p.sexo ? mayuscula(p.sexo) : 'Paciente', p.edad ? p.edad + ' años' : ''].filter(Boolean).join(', ');
       const fecha = new Date(cuando).toLocaleDateString('es-CL');
       const falta = '[falta registrar]';
+      const frases = (xs) => xs.map(sinPunto).join('. ') + '.';
       const L = [];
       L.push('EVOLUCIÓN DE ENFERMERÍA — URGENCIA');
       L.push(fecha + ' · ' + hhmm(cuando) + (p.box ? ' · Box ' + p.box : ''));
       L.push(quien + '. Ingreso ' + hhmm(r.ingreso) + '.');
-      if (r.clinico.length) {
-        L.push('', 'Contexto clínico:');
-        r.clinico.forEach((e) => L.push('- ' + hhmm(e.hora) + ' ' + e.texto + '.'));
-      }
+
       L.push('', 'S:');
-      L.push('Anamnesis próxima: ' + (r.proxima.length ? r.proxima.map(sinPunto).join('. ') + '.' : falta));
-      L.push('Anamnesis remota: ' + (r.remota.length ? r.remota.map(sinPunto).join('. ') + '.' : falta));
-      L.push('Fármacos habituales: ' + (r.farmacos.length ? r.farmacos.map(sinPunto).join('. ') + '.' : falta));
-      L.push('Alergias: ' + (r.alergias.length ? r.alergias.map(sinPunto).join('. ') + '.' : falta));
+      L.push('Anamnesis próxima: ' + (r.proxima.length ? frases(r.proxima) : falta));
+      L.push('Anamnesis remota: ' + (r.remota.length ? frases(r.remota) : falta));
+      L.push('Fármacos habituales: ' + (r.farmacos.length ? frases(r.farmacos) : falta));
+      L.push('Alergias: ' + (r.alergias.length ? frases(r.alergias) : falta));
+
       L.push('', 'O:');
       if (r.signos.length) r.signos.forEach((s) => L.push('Signos vitales ' + hhmm(s.hora) + ': ' + describirSignos(s.sv) + '.'));
       else L.push('Signos vitales: ' + falta);
-      L.push('', 'Procedimientos e intervenciones:');
+      r.objetivo.forEach((x) => L.push(sinPunto(x) + '.'));
+
+      L.push('', 'A:');
+      r.clinico.forEach((e) => L.push('- ' + hhmm(e.hora) + ' ' + sinPunto(e.texto) + '.'));
+      r.analisis.forEach((x) => L.push(sinPunto(x) + '.'));
+      if (!r.clinico.length && !r.analisis.length) L.push(falta);
+
+      L.push('', 'P:');
+      L.push(r.plan.length ? frases(r.plan) : falta);
+
+      L.push('', 'I:');
       if (r.procedimientos.length) {
         [...r.procedimientos].sort((a, b) => a.hora - b.hora)
           .forEach((x) => L.push('- ' + hhmm(x.hora) + ' ' + sinPunto(x.texto) + '.'));
-      } else L.push('- ' + falta);
+      } else L.push(falta);
       const t = tiempos();
-      if (t.length) L.push('', 'Tiempos: ' + t.join(' · ') + '.');
+      if (t.length) L.push('Tiempos: ' + t.join(' · ') + '.');
+
+      L.push('', 'E:');
+      r.evaluacion.forEach((x) => L.push(sinPunto(x) + '.'));
+      tendencias().forEach((x) => L.push(x + '.'));
+      if (!r.evaluacion.length && !tendencias().length) L.push(falta);
+
       if (r.notas.length) { L.push('', 'Observaciones:'); r.notas.forEach((n) => L.push('- ' + sinPunto(n) + '.')); }
-      const f = faltantes();
       L.push('', 'Borrador generado a partir de lo dictado. Revisar, completar y firmar.');
-      return { texto: L.join('\n'), faltantes: f };
+      return { texto: L.join('\n'), faltantes: faltantes() };
     }
 
     // Líneas para mostrar el registro en vivo.
@@ -200,6 +236,10 @@
         .concat(r.remota.map((x) => 'Antecedentes · ' + x))
         .concat(r.farmacos.map((x) => 'Fármacos · ' + x))
         .concat(r.alergias.map((x) => 'Alergias · ' + x))
+        .concat(r.objetivo.map((x) => 'Objetivo · ' + x))
+        .concat(r.analisis.map((x) => 'Análisis · ' + x))
+        .concat(r.plan.map((x) => 'Plan · ' + x))
+        .concat(r.evaluacion.map((x) => 'Evaluación · ' + x))
         .concat(r.notas.map((x) => 'Nota · ' + x));
     }
 

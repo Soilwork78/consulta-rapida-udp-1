@@ -47,9 +47,20 @@ Durante la atención, la enfermera dicta y Pepe anota con la hora:
 | "fármacos: …" / "alergias: niega" | Fármacos habituales / alergias |
 | "signos vitales: presión 158 sobre 94, FC 102…" | Signos vitales (Pepe los repite para confirmar) |
 | "ECG tomado", "aspirina 300 administrada", "vía venosa 18 instalada" | Procedimientos, con hora |
+| "examen físico: …" / "hallazgos: …" | O |
+| "análisis: …" | A |
+| "plan: …" | P |
+| "evaluación: dolor disminuye…" | E |
 | "anota: …" | Observaciones |
 
-Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable en formato S/O, con procedimientos en orden cronológico y los tiempos puerta-ECG y puerta-aguja.
+Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable en formato **SOAPIE, sin diagnósticos de enfermería**:
+
+- **S:** anamnesis próxima y remota, fármacos habituales, alergias.
+- **O:** signos vitales con hora y hallazgos dictados.
+- **A:** contexto clínico registrado por Pepe (sospecha médica, fases, decisiones) y el análisis que dicte la enfermera.
+- **P:** solo el plan dictado. Pepe no lo propone.
+- **I:** procedimientos e intervenciones en orden cronológico, con los tiempos puerta-ECG y puerta-aguja.
+- **E:** la evaluación dictada y, además, la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
 
 **Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
 
