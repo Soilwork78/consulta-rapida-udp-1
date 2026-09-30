@@ -40,17 +40,17 @@
     // Se dicen ANTES de los tips generales.
     tips: {
       sca: [
-        'En este hospital no hay hemodinamia de turno: si se confirma IAMCEST, prepara el checklist de fibrinólisis',
+        'Hemodinamia de turno 24/7: si se confirma IAMCEST, el código IAM activa el pabellón de hemodinamia',
         'La troponina aquí va en tubo verde, con algoritmo de 0 y 3 horas',
       ],
       iamcest: [
-        'Sin hemodinamia de turno: la estrategia habitual aquí es fibrinólisis y luego traslado',
+        'Aquí la estrategia es angioplastía primaria. Fibrinólisis solo si hemodinamia no está disponible',
       ],
       fibrinolisis: [
         'Fibrinolítico en el carro de la sala de reanimación: tenecteplasa',
       ],
-      traslado: [
-        'Centro de referencia con hemodinamia: coordinar por la central de la red',
+      hemodinamia: [
+        'Pabellón de hemodinamia en el tercer piso: la enfermera acompaña con TENS y monitor desfibrilador',
       ],
       acv: [
         'Sin trombectomía en este centro: con oclusión de gran vaso, se coordina traslado con la red',
@@ -62,9 +62,9 @@
 
     contactos: {
       sca: 'Código IAM: anexo 1111',
-      iamcest: 'Código IAM: anexo 1111',
+      iamcest: 'Código IAM: anexo 1111. Hemodinamia: anexo 5555',
       fibrinolisis: 'Código IAM: anexo 1111',
-      traslado: 'Central de traslados de la red: anexo 4444',
+      hemodinamia: 'Pabellón de hemodinamia: anexo 5555',
       acv: 'Código ACV: anexo 2222',
       'acv-trombolisis': 'Código ACV: anexo 2222',
       aaa: 'Cirugía vascular: central telefónica',

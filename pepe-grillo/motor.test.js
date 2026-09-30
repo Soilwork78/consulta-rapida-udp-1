@@ -59,7 +59,7 @@ test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () =>
   assert.match(banderas.hablar, /^Banderas rojas/, 'banderas rojas en segundo lugar');
   assert.match(s.procesar('repite').respuesta.hablar, /^Banderas rojas/);
   assert.match(s.procesar('qué más').respuesta.hablar, /^Monitor continuo/);
-  assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
+  assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: Hemodinamia de turno 24\/7/);
   assert.match(s.procesar('anterior').respuesta.hablar, /^Monitor continuo/);
 
   let r;
@@ -75,7 +75,7 @@ test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () =>
   assert.ok(!/dime sigue/.test(r3.hablar), 'la ayuda no se repite');
 
   assert.strictEqual(s.procesar('va a fibrinólisis').respuesta.clave, 'sca:fibrinolisis');
-  assert.strictEqual(s.procesar('se traslada a hemodinamia').respuesta.clave, 'sca:traslado');
+  assert.strictEqual(s.procesar('se traslada a hemodinamia').respuesta.clave, 'sca:hemodinamia');
 
   const r4 = s.procesar('Pepe, box 3 descartado SCA').respuesta;
   assert.ok(r4.detenerHitos);
@@ -246,7 +246,7 @@ test('"detente" calla a Pepe, "avanza" retoma, y los recordatorios siguen activo
   s.procesar('espera');
   assert.match(s.procesar('continúa').respuesta.hablar, /^Monitor continuo/);
   s.procesar('pausa');
-  assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: En este hospital/);
+  assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: Hemodinamia de turno/);
 });
 
 test('"detente" durante un diálogo no lo cancela', () => {
@@ -468,4 +468,16 @@ test('un reingreso del mismo box se marca para reiniciar sus recordatorios', () 
   assert.ok(s.procesar('ingresa box 3, sospecha SCA').respuesta.nuevoIngreso);
   assert.ok(!s.procesar('sigue').respuesta.nuevoIngreso);
   assert.ok(s.procesar('ingresa box 3, sospecha SCA').respuesta.nuevoIngreso);
+});
+
+test('SCA: hemodinamia es la primera opción de reperfusión', () => {
+  const s = crearSesion(kb, inst);
+  s.procesar('confirmado IAMCEST');
+  const pasos = s.procesar('sigue').respuesta.hablar + ' ' + s.procesar('sigue').respuesta.hablar + ' ' + s.procesar('sigue').respuesta.hablar;
+  assert.ok(pasos.indexOf('hemodinamia') >= 0 && pasos.indexOf('hemodinamia') < pasos.indexOf('fibrinólisis'),
+    'hemodinamia se nombra antes que la fibrinólisis: ' + pasos);
+  const f = (t) => crearSesion(kb, inst).procesar(t).respuesta.clave;
+  assert.strictEqual(f('va a pabellón de hemodinamia'), 'sca:hemodinamia');
+  assert.strictEqual(f('se hará ACTP'), 'sca:hemodinamia');
+  assert.strictEqual(f('coronariografía de urgencia'), 'sca:hemodinamia');
 });

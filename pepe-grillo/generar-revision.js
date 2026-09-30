@@ -93,8 +93,8 @@ const sca = require('./protocolos/sca.js');
 const S = [];
 S.push(`# Pepe Grillo — Protocolo de enfermería: ${sca.nombre}`, '');
 S.push(`> **${sca.estado}** · v${sca.version}`, '> Generado desde `protocolos/sca.js`. No editar a mano.', '');
-S.push('Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"fundamento"** o **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").', '');
-S.push('```', 'primer contacto → IAMCEST → fibrinólisis → traslado', '               ↘ SCASEST ↗', '```', '');
+S.push('Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"fundamento"** o **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "va a hemodinamia").', '');
+S.push('```', 'primer contacto → IAMCEST → pabellón de hemodinamia (primera opción)', '                │        ↘ fibrinólisis → hemodinamia (rescate o farmacoinvasiva)', '                ↘ SCASEST → hemodinamia (< 2 h o < 24 h según riesgo)', '```', '');
 sca.fases.forEach((f, n) => {
   S.push(`## ${n + 1}. ${f.nombre}`, '');
   S.push(`**Se activa con:** _${f.activadores.join(', ')}_`, '');
