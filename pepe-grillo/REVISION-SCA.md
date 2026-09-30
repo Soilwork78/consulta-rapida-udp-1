@@ -157,33 +157,6 @@ primer contacto → IAMCEST → pabellón de hemodinamia (primera opción)
 - ⏱ min 90: 90 minutos del diagnóstico, meta con traslado: ¿ya pasó la guía?
 - ⏱ min 120: Dos horas del diagnóstico sin guía: se pierde la ventaja de la angioplastía. Avisa al médico
 
-## 6. Regreso de hemodinamia
-
-**Se activa con:** _regreso de hemodinamia, regresa de hemodinamia, vuelve de hemodinamia, volvio de hemodinamia, llega de hemodinamia, llego de hemodinamia, regresa de pabellon, vuelve de pabellon, llega de pabellon, post angioplastia, post coronariografia, post hemodinamia, postangioplastia_
-
-1. **Recibe con ISBAR: acceso, arteria tratada, stents, heparina en pabellón y complicaciones** 🔊
-   - _Fundamento (si lo piden):_ El acceso y la heparina que recibió definen los cuidados y el riesgo de sangrado de las próximas horas.
-2. **Sitio de punción y pulso distal cada 15 minutos la primera hora**
-   - _Detalle:_ Buscar sangrado, hematoma, dolor y cambios de color o temperatura de la extremidad. Luego cada 30 a 60 minutos, según protocolo.
-   - _Fundamento (si lo piden):_ Las complicaciones del acceso arterial (sangrado, hematoma, oclusión) aparecen sobre todo en las primeras horas.
-3. **Radial: banda compresiva según protocolo; en ese brazo, ni presión ni punciones**
-   - _Detalle:_ Desinflado gradual de la banda según protocolo local (habitualmente desde las 2 horas). Vigilar color, temperatura y llene capilar de la mano.
-   - _Fundamento (si lo piden):_ La compresión prolongada o excesiva favorece la oclusión de la arteria radial; la insuficiente, el hematoma.
-4. **Femoral: pierna extendida y reposo según indicación. Dolor lumbar o hipotensión: avisa**
-   - _Fundamento (si lo piden):_ El hematoma retroperitoneal es una complicación grave del acceso femoral y se manifiesta con dolor lumbar o hipotensión sin sangrado visible.
-5. **ECG post procedimiento; compáralo. Dolor torácico nuevo: ECG y avisa**
-   - _Fundamento (si lo piden):_ El dolor nuevo con cambios del ST puede ser trombosis aguda del stent, que requiere volver a hemodinamia.
-6. **Diuresis e hidratación según indicación, por el contraste**
-   - _Fundamento (si lo piden):_ El contraste yodado puede producir nefropatía, más en diabéticos, adultos mayores e insuficiencia renal previa.
-7. **Doble antiagregación sin suspender; educa al paciente**
-   - _Fundamento (si lo piden):_ Suspender la doble antiagregación en los primeros meses es la principal causa de trombosis del stent.
-
-**Recordatorios:**
-
-- ⏱ min 15: Regreso de hemodinamia: ¿sitio de punción y pulso distal controlados?
-- ⏱ min 60: Una hora del regreso: control de sitio de punción y pulso distal
-- ⏱ min 120: Dos horas del regreso: si es radial, ¿desinflado de la banda según protocolo?
-
 ## Checklist de contraindicaciones de fibrinólisis
 
 Pepe las pregunta una a una ("Pepe, checklist de fibrinólisis"). Un "sí" a una absoluta detiene el checklist; "no sé" queda como pendiente.

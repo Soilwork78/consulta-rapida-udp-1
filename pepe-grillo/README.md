@@ -128,7 +128,6 @@ Por ahora el desarrollo se concentra en **una sola patología, SCA, desde la mir
 | Primer contacto (0–10 min) | "dolor torácico", "sospecha SCA" |
 | IAM con supradesnivel | "el ECG muestra supradesnivel", "IAMCEST", "código IAM" |
 | **Pabellón de hemodinamia** (coronariografía / ACTP) | "hemodinamia", "pabellón", "ACTP", "angioplastía", "coronariografía" |
-| Regreso de hemodinamia (sitio de punción, ECG, contraste) | "vuelve de hemodinamia", "regresa de pabellón", "post angioplastía" |
 | Fibrinólisis (antes, durante y después) | "va a fibrinólisis", "tenecteplasa" |
 | SCA sin supradesnivel | "sin supradesnivel", "troponina positiva" |
 
