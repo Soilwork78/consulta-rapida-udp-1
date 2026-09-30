@@ -74,6 +74,51 @@ const PEPE_GRILLO_KB = {
   // CAPAS 1–3 — POR MOTIVO DE CONSULTA
   // ──────────────────────────────────────────────────────────
   // ──────────────────────────────────────────────────────────
+  // MEDICAMENTOS DE ALTO RIESGO EN BIC — doble chequeo independiente
+  // Pepe guía y calcula; NO reemplaza a la segunda enfermera: cada una
+  // calcula por separado y Pepe compara los tres resultados.
+  // Rangos = límites "blandos" (como el software de las bombas inteligentes):
+  // fuera de rango no bloquea, obliga a confirmar con el médico.
+  // ──────────────────────────────────────────────────────────
+  altoRiesgo: {
+    heparina: {
+      nombre: 'Heparina sódica en BIC',
+      alias: ['heparina', 'heparina sodica'],
+      preparacionEstandar: { ui: 25000, ml: 250 },
+      rango: { porKiloMax: 25, porHoraMax: 2000 },
+      verificacion:
+        'Verifiquen el frasco: heparina sódica, concentración y vencimiento. ' +
+        'Si hay bolo indicado, va aparte y no desde la BIC. Digan listo.',
+      controles: [
+        { min: 360, texto: 'Heparina: TTPA de control a las 6 horas del inicio' },
+      ],
+      fuentes: [
+        'ISMP List of High-Alert Medications in Acute Care Settings (2024)',
+        'ISMP — Independent double checks: worth the effort if used judiciously and properly (2019)',
+        'Raschke RA et al. Weight-based heparin dosing nomogram. Ann Intern Med 1993',
+      ],
+    },
+    insulina: {
+      nombre: 'Insulina cristalina en BIC',
+      alias: ['insulina', 'insulina cristalina', 'insulina regular', 'insulina rapida'],
+      preparacionEstandar: { ui: 100, ml: 100 },
+      rango: { porKiloMax: 0.15, porHoraMax: 15 },
+      potasioMinimo: 3.3,
+      verificacion:
+        'Verifiquen que sea insulina cristalina, y purguen la línea con la solución ' +
+        'antes de conectar, porque la insulina se adhiere al plástico. Digan listo.',
+      controles: [
+        { min: 60, texto: 'Insulina: HGT horario' },
+        { min: 120, texto: 'Insulina: ¿potasio de control según protocolo?' },
+      ],
+      fuentes: [
+        'ISMP List of High-Alert Medications in Acute Care Settings (2024)',
+        'ADA/EASD/JBDS/AACE/DTS — Hyperglycemic crises in adults with diabetes: consensus report (2024)',
+      ],
+    },
+  },
+
+  // ──────────────────────────────────────────────────────────
   // TIPS POR SOSPECHA — lo que Pepe Grillo dice al oído.
   // Ordenados por prioridad: se hablan los 3 primeros; el resto con "Pepe, más".
   // Frases cortas, pensadas para escucharse, no para leerse.

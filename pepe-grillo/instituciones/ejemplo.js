@@ -31,6 +31,12 @@
       'Orina completa con sedimento',
     ],
 
+    // Preparaciones estándar de BIC en este centro (reemplazan las de kb.js).
+    preparaciones: {
+      heparina: { ui: 25000, ml: 500 },
+      insulina: { ui: 100, ml: 100 },
+    },
+
     // Se dicen ANTES de los tips generales.
     tips: {
       sca: [

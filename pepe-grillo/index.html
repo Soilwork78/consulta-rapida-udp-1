@@ -65,6 +65,12 @@
   .ejemplos { display: flex; flex-wrap: wrap; gap: 6px; }
   .ejemplos button { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); border-color: transparent; color: var(--ink); text-align: left; }
   .nota-mic { font-size: 12.5px; color: var(--muted); margin: 0; }
+  .rapidas { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .rapidas button { min-width: 72px; font-weight: 600; }
+  .rapidas button.si { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+  .rapidas span { font-size: 13px; color: var(--muted); }
+  .dictado.dialogo { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .escuchando { font-size: 12.5px; color: var(--alert); font-weight: 600; }
 
   .voz { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
   .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
@@ -124,13 +130,14 @@
         </select>
       </label>
       <label for="voz"><input type="checkbox" id="voz" checked> Voz</label>
+      <label for="manosLibres" id="lblManos" hidden><input type="checkbox" id="manosLibres"> Manos libres</label>
     </div>
   </header>
 
   <div class="grid">
     <div class="col">
       <form class="dictado" id="form">
-        <label for="frase">Dile a Pepe</label>
+        <label for="frase" id="lblFrase">Dile a Pepe</label>
         <textarea id="frase">Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA</textarea>
         <div class="acciones">
           <button type="submit" class="primario">Enviar</button>
@@ -138,6 +145,7 @@
           <button type="button" id="mas">Pepe, más</button>
           <button type="button" id="callar">Callar</button>
         </div>
+        <div class="rapidas" id="rapidas" hidden></div>
         <p class="nota-mic" id="notaMic" hidden></p>
         <div class="ejemplos" id="ejemplos"></div>
       </form>
@@ -173,6 +181,7 @@
 
 <script src="kb.js"></script>
 <script src="instituciones/ejemplo.js"></script>
+<script src="doble-chequeo.js"></script>
 <script src="motor.js"></script>
 <script>
 (function () {
@@ -184,6 +193,8 @@
     'Pepe, box 5 mujer de 72 años con fiebre y confusión',
     'Pepe, box 5 sospecha sepsis',
     'Pepe, box 7 mujer de 34 años con dolor abdominal, sospecha embarazo ectópico',
+    'Pepe, doble chequeo de heparina en BIC, box 3',
+    'Pepe, instalar insulina en bomba, box 5',
     'Pepe, box 3 descartado SCA',
   ];
 
@@ -197,6 +208,8 @@
   function nuevaSesion() { sesion = PepeMotor.crearSesion(PEPE_GRILLO_KB, institucion()); }
 
   // ── Voz ──
+  // Mientras Pepe habla, el micrófono se pausa para que no se escuche a sí mismo.
+  let hablando = false;
   function decir(texto) {
     if (!$('voz').checked || !('speechSynthesis' in window) || !texto) return;
     const u = new SpeechSynthesisUtterance(texto);
@@ -204,6 +217,8 @@
     u.voice = voces.find((v) => v.lang === 'es-CL') || voces.find((v) => v.lang.startsWith('es')) || null;
     u.lang = u.voice ? u.voice.lang : 'es-CL';
     u.rate = 1.05;
+    u.onstart = () => { hablando = true; pausarEscucha(); };
+    u.onend = u.onerror = () => { hablando = false; if (!speechSynthesis.pending) reanudarEscucha(); };
     speechSynthesis.speak(u);
   }
 
@@ -263,9 +278,9 @@
     });
   }
 
-  function programar(box, r) {
+  function programar(box, r, mantenerTitulo) {
     const b = boxes[box] || (boxes[box] = { titulo: '', hitos: [] });
-    if (r.titulo) b.titulo = r.titulo.split(' · ').pop();
+    if (r.titulo && !(mantenerTitulo && b.titulo)) b.titulo = r.titulo.split(' · ').pop();
     if (r.detenerHitos) b.hitos = b.hitos.filter((h) => h.hecho);
     const factor = Number($('velocidad').value);
     const ahora = Date.now();
@@ -285,10 +300,39 @@
     pintarBoxes();
   }
 
+  const RAPIDAS = {
+    confirmar: [['Listo', 'si']],
+    sino: [['Sí', 'si'], ['No', '']],
+    numero: [],
+  };
+  function pintarRapidas(esperando) {
+    const cont = $('rapidas');
+    cont.replaceChildren();
+    const enDialogo = !!esperando;
+    $('form').classList.toggle('dialogo', enDialogo);
+    $('lblFrase').textContent = enDialogo ? 'Responde a Pepe (sin decir "Pepe")' : 'Dile a Pepe';
+    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : '';
+    cont.hidden = !enDialogo;
+    $('ejemplos').hidden = enDialogo; // durante el chequeo, solo lo necesario
+    if (!enDialogo) return;
+    [...RAPIDAS[esperando], ['Repite', ''], ['Cancelar', '']].forEach(([txt, cls]) => {
+      const b = el('button', cls, txt);
+      b.type = 'button';
+      b.addEventListener('click', () => procesar(txt, true));
+      cont.append(b);
+    });
+    if (esperando === 'numero') cont.append(el('span', null, 'Esperando un número'));
+  }
+
   function procesar(frase, conVoz) {
     const { box, interpretacion, respuesta } = sesion.procesar(frase);
+    if (!respuesta) return;
     mostrar(frase, respuesta);
-    if (interpretacion.intencion !== 'mas' && interpretacion.intencion !== 'desconocido') programar(box, respuesta);
+    const dialogo = interpretacion.intencion === 'dialogo';
+    if (dialogo) { if (respuesta.hitos.length) programar(box, respuesta, true); }
+    else if (interpretacion.intencion !== 'mas' && interpretacion.intencion !== 'desconocido') programar(box, respuesta);
+    pintarRapidas(dialogo ? respuesta.esperando : null);
+    $('frase').value = '';
     if (conVoz) { if ('speechSynthesis' in window) speechSynthesis.cancel(); decir(respuesta.hablar); }
     pintarBoxes();
   }
@@ -298,6 +342,10 @@
     e.preventDefault();
     const f = $('frase').value.trim();
     if (f) procesar(f, true);
+  });
+  // Enter envía; Shift+Enter hace salto de línea.
+  $('frase').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('form').requestSubmit(); }
   });
   $('mas').addEventListener('click', () => procesar('Pepe, más', true));
   $('callar').addEventListener('click', () => { if ('speechSynthesis' in window) speechSynthesis.cancel(); });
@@ -309,24 +357,40 @@
     $('ejemplos').append(b);
   });
 
-  // Micrófono: disponible en Chrome/Edge servido desde el propio sitio;
+  // Micrófono: funciona en Chrome/Edge con la página servida desde el propio sitio;
   // dentro de un visor embebido suele estar bloqueado.
+  // Manos libres: escucha continua; actúa si la frase dice "Pepe" o si hay un diálogo en curso.
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, escuchando = false;
+  function pausarEscucha() { if (rec && escuchando) { try { rec.abort(); } catch (_) {} } }
+  function reanudarEscucha() {
+    if (rec && $('manosLibres').checked && !hablando) { try { rec.start(); } catch (_) {} }
+  }
   if (SR) {
-    const rec = new SR();
-    rec.lang = 'es-CL'; rec.interimResults = false;
+    rec = new SR();
+    rec.lang = 'es-CL'; rec.interimResults = false; rec.continuous = true;
     $('mic').hidden = false;
-    $('mic').addEventListener('click', () => {
-      try { rec.start(); $('mic').setAttribute('aria-pressed', 'true'); } catch (_) {}
-    });
+    $('lblManos').hidden = false;
+    $('mic').addEventListener('click', () => { try { rec.start(); } catch (_) {} });
+    $('manosLibres').addEventListener('change', (e) => (e.target.checked ? reanudarEscucha() : pausarEscucha()));
+    rec.onstart = () => { escuchando = true; $('mic').setAttribute('aria-pressed', 'true'); };
     rec.onresult = (e) => {
-      const f = e.results[0][0].transcript;
-      $('frase').value = f;
-      procesar(f, true);
+      const f = e.results[e.results.length - 1][0].transcript.trim();
+      const manos = $('manosLibres').checked;
+      if (!manos || sesion.enDialogo || /\bpepe\b/i.test(f)) {
+        $('frase').value = f;
+        procesar(f, true);
+      }
+      if (!manos) pausarEscucha();
     };
-    rec.onend = () => $('mic').setAttribute('aria-pressed', 'false');
-    rec.onerror = (e) => {
+    rec.onend = () => {
+      escuchando = false;
       $('mic').setAttribute('aria-pressed', 'false');
+      if ($('manosLibres').checked && !hablando) setTimeout(reanudarEscucha, 250);
+    };
+    rec.onerror = (e) => {
+      if (e.error === 'no-speech' || e.error === 'aborted') return;
+      $('manosLibres').checked = false;
       $('notaMic').hidden = false;
       $('notaMic').textContent = e.error === 'not-allowed' || e.error === 'service-not-allowed'
         ? 'El micrófono está bloqueado en esta vista. Escribe la frase o abre la página desde el repositorio.'

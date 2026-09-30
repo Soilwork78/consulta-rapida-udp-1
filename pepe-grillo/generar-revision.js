@@ -70,5 +70,20 @@ kb.motivos.forEach((m, i) => {
   L.push('', '---', '');
 });
 
+L.push('## Doble chequeo de medicamentos de alto riesgo en BIC', '');
+L.push('Pepe guía y calcula, pero no reemplaza a la segunda enfermera: cada una calcula por separado y Pepe compara los tres resultados.', '');
+L.push('Pasos: paciente y orden → fármaco y presentación → (potasio, solo insulina) → peso → dosis (Pepe la repite en UI/h) → preparación → velocidad de enfermera 1 → velocidad de enfermera 2 → lectura de la BIC → trazado de la línea → registro.', '');
+Object.values(kb.altoRiesgo).forEach((m) => {
+  L.push(`### ${m.nombre}`, '');
+  L.push(`- Preparación estándar (base): ${m.preparacionEstandar.ui.toLocaleString('es-CL')} UI en ${m.preparacionEstandar.ml} mL`);
+  L.push(`- Límite blando: > ${m.rango.porKiloMax} UI/kg/h o > ${m.rango.porHoraMax} UI/h → confirmar con el médico`);
+  if (m.potasioMinimo != null) L.push(`- Potasio < ${m.potasioMinimo} mEq/L → no iniciar sin indicación médica`);
+  L.push(`- Verificación: ${m.verificacion}`);
+  m.controles.forEach((c) => L.push(`- ⏱ **min ${c.min}:** ${c.texto}`));
+  L.push('', '**Fuentes:**', '');
+  lista(m.fuentes);
+  L.push('');
+});
+
 fs.writeFileSync(path.join(__dirname, 'REVISION.md'), L.join('\n'));
 console.log('REVISION.md generado');

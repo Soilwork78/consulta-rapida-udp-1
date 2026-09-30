@@ -98,3 +98,76 @@ test('fiebre + confusión avisa que calza con dos motivos', () => {
   assert.match(r.hablar, /también calza con/);
   assert.ok(r.secciones.some((x) => x.titulo === 'También calza con'));
 });
+
+// ── Doble chequeo ─────────────────────────────────────────
+const DC = require('./doble-chequeo.js');
+
+test('lectura de números dictados', () => {
+  assert.strictEqual(DC.leerNumero('25.000 unidades'), 25000);
+  assert.strictEqual(DC.leerNumero('0,1 por kilo'), 0.1);
+  assert.strictEqual(DC.leerNumero('cero coma uno'), 0.1);
+  assert.strictEqual(DC.leerNumero('25 mil'), 25000);
+  assert.strictEqual(DC.leerNumero('doce coma seis'), 12.6);
+  assert.strictEqual(DC.leerNumero('listo'), null);
+});
+
+function dialogo(s, frases) {
+  return frases.map((f) => s.procesar(f).respuesta);
+}
+
+test('heparina: flujo completo concordante con preparación institucional', () => {
+  const s = crearSesion(kb, inst);
+  const r = dialogo(s, [
+    'Pepe, doble chequeo de heparina en BIC, box 3',
+    'listo', 'listo',
+    '70', // peso
+    '18 unidades por kilo por hora', // 1260 UI/h
+    'sí', // 25.000 en 500 → 50 UI/mL → 25,2 mL/h
+    '25,2', '25.2', '25,2', 'listo',
+  ]);
+  assert.match(r[0].hablar, /Doble chequeo de heparina/);
+  assert.match(r[4].hablar, /25\.000 unidades en 500 mL/);
+  assert.match(r[7].hablar, /Coinciden los tres cálculos: 25,2/);
+  const fin = r[9];
+  assert.strictEqual(fin.esperando, null);
+  assert.match(fin.registro, /1\.260 UI\/h/);
+  assert.strictEqual(fin.hitos[0].min, 360);
+  assert.ok(!s.enDialogo);
+});
+
+test('heparina: cálculos discordantes vuelven a pedir velocidades', () => {
+  const s = crearSesion(kb, null);
+  const r = dialogo(s, ['chequeo heparina bic', 'listo', 'listo', '70', '1000', 'si', '10', '100']);
+  // base: 25.000 en 250 → 100 UI/mL → 10 mL/h; la enfermera dos dijo 100
+  assert.match(r[7].hablar, /Alto, no coinciden/);
+  assert.strictEqual(r[7].esperando, 'numero');
+});
+
+test('BIC mal programada se detecta', () => {
+  const s = crearSesion(kb, null);
+  const r = dialogo(s, ['chequeo heparina bic', 'listo', 'listo', '70', '1000', 'si', '10', '10', '100']);
+  assert.match(r[8].hablar, /La BIC muestra 100 y debe ser 10/);
+});
+
+test('insulina: potasio bajo detiene si el médico no indicó iniciar', () => {
+  const s = crearSesion(kb, inst);
+  const r = dialogo(s, ['Pepe, vamos a instalar insulina en bomba', 'listo', 'listo', '3,1', 'no']);
+  assert.match(r[3].hablar, /Potasio de 3,1/);
+  assert.match(r[4].hablar, /Chequeo detenido/);
+  assert.ok(!s.enDialogo);
+});
+
+test('insulina: dosis sobre rango pide confirmación médica', () => {
+  const s = crearSesion(kb, null);
+  const r = dialogo(s, ['chequeo insulina bic', 'listo', 'listo', 'no aplica', '60', '0,3 por kilo', 'si', 'si']);
+  assert.match(r[5].hablar, /sobre el rango habitual/);
+  assert.match(r[7].hablar, /cuántos mL por hora/);
+});
+
+test('cancelar sale del diálogo y la sesión vuelve a lo clínico', () => {
+  const s = crearSesion(kb, inst);
+  s.procesar('chequeo de insulina en bic');
+  assert.ok(s.enDialogo);
+  assert.match(s.procesar('cancelar').respuesta.hablar, /Chequeo detenido/);
+  assert.strictEqual(s.procesar('sospecha de ACV').respuesta.clave, 'acv');
+});

@@ -13,6 +13,8 @@
 
 (function () {
   const TIPS_HABLADOS = 3;
+  const LOCALES_HABLADOS = 1; // el resto del protocolo local va en "Pepe, más"
+  const DC = typeof module !== 'undefined' ? require('./doble-chequeo.js') : window.PepeDobleChequeo;
 
   const NUMEROS = {
     uno: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10,
@@ -140,16 +142,17 @@
     const quien = describirPaciente(i);
     const hablar = [
       (quien ? quien + '. ' : '') + 'Sospecha de ' + nombreVoz(d.dx),
-      local.length ? 'Protocolo local: ' + unir(local) : '',
+      local.length ? 'Protocolo local: ' + unir(local.slice(0, LOCALES_HABLADOS)) : '',
       'Recuerda: ' + unir(tips.slice(0, TIPS_HABLADOS)),
       m.hitos.length ? 'Te aviso al minuto ' + m.hitos[0].min : '',
-      tips.length > TIPS_HABLADOS ? 'Di Pepe, más, para el resto' : '',
+      tips.length > TIPS_HABLADOS || local.length > LOCALES_HABLADOS ? 'Di Pepe, más, para el resto' : '',
     ].filter(Boolean);
     return {
       clave: d.id,
       titulo: (quien ? quien + ' · ' : '') + 'Sospecha: ' + d.dx,
       hablar: paraVoz(unir(hablar) + '.'),
       mas: paraVoz(unir([
+        local.length > LOCALES_HABLADOS ? 'Protocolo local: ' + unir(local.slice(LOCALES_HABLADOS)) : '',
         tips.length > TIPS_HABLADOS ? 'Además: ' + unir(tips.slice(TIPS_HABLADOS)) : '',
         'No olvides descartar: ' + otrosNoPerder(m, d.id).join(', '),
         contacto || '',
@@ -205,7 +208,7 @@
     const quien = describirPaciente(i);
     const hablar = [
       (quien ? quien + ': ' : '') + 'confirmado ' + nombreVoz(c.nombre),
-      local.length ? 'Protocolo local: ' + unir(local) : '',
+      local.length ? 'Protocolo local: ' + unir(local.slice(0, LOCALES_HABLADOS)) : '',
       'Pasos: ' + unir(c.algoritmo.slice(0, TIPS_HABLADOS)),
       c.hitos.length ? 'Te aviso al minuto ' + c.hitos[0].min : '',
     ].filter(Boolean);
@@ -214,6 +217,7 @@
       titulo: (quien ? quien + ' · ' : '') + 'Confirmado: ' + c.nombre,
       hablar: paraVoz(unir(hablar) + '.'),
       mas: paraVoz(unir([
+        local.length > LOCALES_HABLADOS ? 'Protocolo local: ' + unir(local.slice(LOCALES_HABLADOS)) : '',
         'Además: ' + unir(c.algoritmo.slice(TIPS_HABLADOS)),
         contacto || '',
       ].filter(Boolean)) + '.'),
@@ -263,8 +267,24 @@
   function crearSesion(kb, inst) {
     const porBox = {};
     let ultimoBox = '—';
+    let chequeo = null; // diálogo de doble chequeo en curso
     return {
+      get enDialogo() { return !!(chequeo && chequeo.activo); },
       procesar(texto) {
+        // 1. Diálogo en curso: la respuesta va directo, sin "Pepe".
+        if (chequeo && chequeo.activo) {
+          const respuesta = chequeo.responder(texto);
+          return { box: chequeo.box, interpretacion: { intencion: 'dialogo' }, respuesta };
+        }
+        // 2. Inicio de doble chequeo: "Pepe, doble chequeo de heparina, box 3".
+        const medId = DC && DC.detectar(texto, kb);
+        if (medId) {
+          const box = extraerDatos(normalizar(texto)).box || ultimoBox;
+          ultimoBox = box;
+          chequeo = DC.crear(medId, kb, inst, box === '—' ? null : box);
+          chequeo.box = box;
+          return { box, interpretacion: { intencion: 'dialogo' }, respuesta: chequeo.iniciar() };
+        }
         const i = interpretar(texto, kb);
         const box = i.box || ultimoBox;
         ultimoBox = box;

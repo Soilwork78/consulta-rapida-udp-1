@@ -831,3 +831,36 @@ _Enfermería comunica hallazgos y pregunta por la hipótesis médica; no emite d
 - IDSA/ASCO — Outpatient Management of Fever and Neutropenia
 
 ---
+
+## Doble chequeo de medicamentos de alto riesgo en BIC
+
+Pepe guía y calcula, pero no reemplaza a la segunda enfermera: cada una calcula por separado y Pepe compara los tres resultados.
+
+Pasos: paciente y orden → fármaco y presentación → (potasio, solo insulina) → peso → dosis (Pepe la repite en UI/h) → preparación → velocidad de enfermera 1 → velocidad de enfermera 2 → lectura de la BIC → trazado de la línea → registro.
+
+### Heparina sódica en BIC
+
+- Preparación estándar (base): 25.000 UI en 250 mL
+- Límite blando: > 25 UI/kg/h o > 2000 UI/h → confirmar con el médico
+- Verificación: Verifiquen el frasco: heparina sódica, concentración y vencimiento. Si hay bolo indicado, va aparte y no desde la BIC. Digan listo.
+- ⏱ **min 360:** Heparina: TTPA de control a las 6 horas del inicio
+
+**Fuentes:**
+
+- ISMP List of High-Alert Medications in Acute Care Settings (2024)
+- ISMP — Independent double checks: worth the effort if used judiciously and properly (2019)
+- Raschke RA et al. Weight-based heparin dosing nomogram. Ann Intern Med 1993
+
+### Insulina cristalina en BIC
+
+- Preparación estándar (base): 100 UI en 100 mL
+- Límite blando: > 0.15 UI/kg/h o > 15 UI/h → confirmar con el médico
+- Potasio < 3.3 mEq/L → no iniciar sin indicación médica
+- Verificación: Verifiquen que sea insulina cristalina, y purguen la línea con la solución antes de conectar, porque la insulina se adhiere al plástico. Digan listo.
+- ⏱ **min 60:** Insulina: HGT horario
+- ⏱ **min 120:** Insulina: ¿potasio de control según protocolo?
+
+**Fuentes:**
+
+- ISMP List of High-Alert Medications in Acute Care Settings (2024)
+- ADA/EASD/JBDS/AACE/DTS — Hyperglycemic crises in adults with diabetes: consensus report (2024)
