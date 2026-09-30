@@ -1,6 +1,6 @@
 # Pepe Grillo — copiloto clínico por audio (prototipo)
 
-Pepe Grillo es una **herramienta para el turno**: un asistente que la enfermera de urgencia escucha por un audífono y que le recuerda las tareas de cada paciente según el contexto clínico. Pepe solo dice lo que cambia el resultado del paciente; el resto queda en la tarjeta o se explica con "por qué". **Es un prototipo: no usar con pacientes reales hasta validar el contenido y cumplir los requisitos regulatorios.**
+Pepe Grillo es una **herramienta para el turno, dirigida a enfermeras y enfermeros profesionales** (no a estudiantes): un asistente que la enfermera de urgencia escucha por un audífono y que le recuerda las tareas de cada paciente según el contexto clínico. Pepe no enseña: da la señal breve para que no se escape nada, y solo dice lo que cambia el resultado del paciente. El resto queda en la tarjeta, y el fundamento se entrega solo si se pide ("fundamento" o "por qué"). **Es un prototipo: no usar con pacientes reales hasta validar el contenido y cumplir los requisitos regulatorios.**
 
 ## Modelo de capas
 
@@ -84,7 +84,7 @@ Por ahora el desarrollo se concentra en **una sola patología, SCA, desde la mir
 | Traslado a hemodinamia | "traslado", "angioplastía" |
 
 Además:
-- **"Por qué"**: Pepe explica el fundamento del paso actual (uso docente).
+- **"Fundamento"** o **"por qué"**: Pepe da el fundamento del paso actual, solo si se lo piden.
 - **"Checklist de fibrinólisis"**: Pepe pregunta las contraindicaciones una a una. Un "sí" a una absoluta detiene el checklist; "no sé" queda como pendiente.
 
 Los otros cuatro motivos de consulta siguen en `kb.js`, sin desarrollo nuevo.

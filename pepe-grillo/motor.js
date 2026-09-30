@@ -300,7 +300,7 @@
       ...primeros,
       ...local.map((t) => ({ voz: 'Protocolo local: ' + t, porque: 'Es el protocolo vigente de esta institución.' })),
       ...resto,
-      descartar.length && { voz: lista('No olvides descartar', descartar),
+      descartar.length && { voz: lista('Descartar', descartar),
         porque: 'Comparten el dolor torácico y algunos se agravan con antitrombóticos, como la disección aórtica.' },
       contacto && { voz: contacto, porque: 'Contacto definido por la institución.' },
     ].filter(Boolean);

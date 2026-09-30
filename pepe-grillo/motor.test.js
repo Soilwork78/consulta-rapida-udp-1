@@ -49,7 +49,7 @@ test('frase incomprensible', () => {
 test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () => {
   const s = crearSesion(kb, inst);
   const r1 = s.procesar('Pepe, ingresa box 3, hombre de 58 años, dolor torácico, sospecha SCA').respuesta;
-  assert.match(r1.hablar, /^Box 3, hombre de 58 años\. Sospecha de síndrome coronario agudo\. Primer contacto\. ECG de 12 derivaciones/);
+  assert.match(r1.hablar, /^Box 3, hombre de 58 años\. Sospecha de SCA\. ECG de 12 derivaciones, meta 10 minutos/);
   assert.match(r1.hablar, /Cuando quieras, dime sigue\.$/);
   assert.strictEqual(r1.clave, 'sca:primer-contacto');
   assert.strictEqual(r1.hitos[0].min, 5);
@@ -58,20 +58,20 @@ test('SCA: la enfermera marca el ritmo con "sigue" y pregunta "por qué"', () =>
   const banderas = s.procesar('sigue').respuesta;
   assert.match(banderas.hablar, /^Banderas rojas/, 'banderas rojas en segundo lugar');
   assert.match(s.procesar('repite').respuesta.hablar, /^Banderas rojas/);
-  assert.match(s.procesar('qué más').respuesta.hablar, /^Monitor cardíaco continuo/);
+  assert.match(s.procesar('qué más').respuesta.hablar, /^Monitor continuo/);
   assert.match(s.procesar('sigue').respuesta.hablar, /^Protocolo local: En este hospital no hay hemodinamia/);
-  assert.match(s.procesar('anterior').respuesta.hablar, /^Monitor cardíaco/);
+  assert.match(s.procesar('anterior').respuesta.hablar, /^Monitor continuo/);
 
   let r;
   for (let k = 0; k < 30; k++) r = s.procesar('sigue').respuesta;
   assert.match(r.hablar, /^Eso es todo para el box 3\. Te aviso al minuto 5\.$/);
   const pasos = r1.pasos;
-  assert.match(pasos[pasos.length - 2], /No olvides descartar: Disección aórtica/);
+  assert.match(pasos[pasos.length - 2], /^Descartar: Disección aórtica/);
   assert.match(pasos[pasos.length - 1], /Código IAM: anexo 1111/);
 
   const r3 = s.procesar('Pepe, el ECG muestra supradesnivel').respuesta;
   assert.strictEqual(r3.clave, 'sca:iamcest');
-  assert.match(r3.hablar, /^Box 3, hombre de 58 años\. IAM con supradesnivel confirmado.*Activa el código IAM/);
+  assert.match(r3.hablar, /^Box 3, hombre de 58 años\. IAM con supradesnivel\. Corre el reloj de reperfusión\. Código IAM; hora del diagnóstico/);
   assert.ok(!/dime sigue/.test(r3.hablar), 'la ayuda no se repite');
 
   assert.strictEqual(s.procesar('va a fibrinólisis').respuesta.clave, 'sca:fibrinolisis');
@@ -244,7 +244,7 @@ test('"detente" calla a Pepe, "avanza" retoma, y los recordatorios siguen activo
   assert.strictEqual(p.paso, 1, 'la pausa no avanza');
   assert.match(s.procesar('avanza').respuesta.hablar, /^Banderas rojas/);
   s.procesar('espera');
-  assert.match(s.procesar('continúa').respuesta.hablar, /^Monitor cardíaco/);
+  assert.match(s.procesar('continúa').respuesta.hablar, /^Monitor continuo/);
   s.procesar('pausa');
   assert.match(s.procesar('dale').respuesta.hablar, /^Protocolo local: En este hospital/);
 });
@@ -269,4 +269,10 @@ test('herramienta de turno: el primer contacto solo dice lo esencial', () => {
   assert.ok(r.pasos.length <= 9, 'sin protocolo local: ' + r.pasos.length + ' pasos');
   assert.ok(!r.pasos.some((p) => /Reposo absoluto|Registra tres horas/.test(p)), 'lo no esencial queda solo en la tarjeta');
   assert.ok(r.secciones.some((x) => x.titulo === 'También'));
+});
+
+test('profesionales: las señales habladas son breves', () => {
+  const sca = require('./protocolos/sca.js');
+  sca.fases.forEach((f) => f.pasos.forEach((p) =>
+    assert.ok(p.voz.split(' ').length <= 20, f.id + ': "' + p.voz + '" tiene ' + p.voz.split(' ').length + ' palabras')));
 });

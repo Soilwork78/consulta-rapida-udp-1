@@ -3,7 +3,7 @@
 > **BORRADOR — pendiente validación clínica** · v0.1.0
 > Generado desde `protocolos/sca.js`. No editar a mano.
 
-Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").
+Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"fundamento"** o **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").
 
 ```
 primer contacto → IAMCEST → fibrinólisis → traslado
@@ -14,28 +14,28 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 
 **Se activa con:** _sca, sindrome coronario, sindrome coronario agudo, coronario agudo, infarto, iam, dolor toracico, dolor de pecho, opresion toracica, dolor precordial, dolor anginoso_
 
-1. **ECG de 12 derivaciones antes de 10 minutos desde la llegada, y que el médico lo vea en el acto** 🔊
-   - _Por qué:_ El IAM con supradesnivel se diagnostica con el ECG, no con la troponina. Desde ese momento corre el reloj de reperfusión: el tiempo es miocardio.
-2. **Banderas rojas: hipotensión, arritmia, dolor desgarrante hacia la espalda, disnea o síncope. Si aparece una, avisa de inmediato**
+1. **ECG de 12 derivaciones, meta 10 minutos, y al médico en el acto** 🔊
+   - _Fundamento (si lo piden):_ El IAM con supradesnivel se diagnostica con el ECG, no con la troponina. Desde ese momento corre el reloj de reperfusión: el tiempo es miocardio.
+2. **Banderas rojas: hipotensión, arritmia, dolor a dorso, disnea, síncope**
    - _Detalle:_ Shock o hipotensión · arritmia ventricular o bloqueo AV · dolor desgarrante a dorso o asimetría de pulsos (disección) · disnea o crepitaciones (edema pulmonar) · síncope
-   - _Por qué:_ Indican shock cardiogénico, arritmia maligna, complicación mecánica o un diagnóstico alternativo grave como la disección aórtica, donde los antitrombóticos pueden ser letales.
-3. **Monitor cardíaco continuo, y el desfibrilador y el carro de paro al lado del paciente**
-   - _Por qué:_ La fibrilación ventricular es más frecuente en las primeras horas del infarto. Desfibrilar en menos de 3 minutos cambia la sobrevida.
-4. **Signos vitales completos, con presión en ambos brazos. Oxígeno solo si la saturación es menor de 90%**
+   - _Fundamento (si lo piden):_ Indican shock cardiogénico, arritmia maligna, complicación mecánica o un diagnóstico alternativo grave como la disección aórtica, donde los antitrombóticos pueden ser letales.
+3. **Monitor continuo; desfibrilador y carro de paro al lado**
+   - _Fundamento (si lo piden):_ La fibrilación ventricular es más frecuente en las primeras horas del infarto. Desfibrilar en menos de 3 minutos cambia la sobrevida.
+4. **Signos vitales con PA en ambos brazos. Oxígeno solo si satura bajo 90**
    - _Detalle:_ PA en ambos brazos, FC, FR, SpO2, T°. Diferencia de PAS > 20 mmHg entre brazos: sospechar disección.
-   - _Por qué:_ El oxígeno en pacientes sin hipoxemia no reduce la mortalidad y puede aumentar el daño por vasoconstricción coronaria. La asimetría de presión orienta a disección.
-5. **Hora exacta de inicio del dolor, e intensidad de 0 a 10**
+   - _Fundamento (si lo piden):_ El oxígeno en pacientes sin hipoxemia no reduce la mortalidad y puede aumentar el daño por vasoconstricción coronaria. La asimetría de presión orienta a disección.
+5. **Hora de inicio del dolor y EVA**
    - _Detalle:_ Además: carácter (opresivo), irradiación (brazo, mandíbula, dorso), diaforesis, náuseas, disnea. En mujeres, diabéticos y adultos mayores: disnea, fatiga o dolor epigástrico sin dolor típico.
-   - _Por qué:_ La hora de inicio define si el paciente está en ventana de reperfusión. La escala de 0 a 10 permite saber si el dolor cede con el tratamiento o si la isquemia progresa.
-6. **Vía venosa, sin punciones arteriales ni intramusculares. Troponina ultrasensible anotando la hora exacta, y exámenes basales**
+   - _Fundamento (si lo piden):_ La hora de inicio define si el paciente está en ventana de reperfusión. La escala de 0 a 10 permite saber si el dolor cede con el tratamiento o si la isquemia progresa.
+6. **Vía venosa, sin punciones arteriales ni IM. Troponina con hora exacta y basales**
    - _Detalle:_ Vía idealmente 18 G, en un sitio que no interfiera con el acceso radial. Exámenes: hemograma, electrolitos con magnesio, creatinina, glicemia, TP/INR y TTPA.
-   - _Por qué:_ Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado. La curva de troponina se interpreta por intervalos exactos.
-7. **Pregunta dirigida: alergia a aspirina, uso de anticoagulantes, sildenafil o tadalafil en los últimos días, sangrados, cirugías o ACV recientes**
-   - _Por qué:_ Anticipa contraindicaciones de fármacos y de fibrinólisis. Los nitratos con sildenafil o tadalafil pueden producir hipotensión grave.
-8. **Reposo absoluto, posición cómoda, y explícale al paciente y a su familia qué está pasando** _(solo en la tarjeta, Pepe no lo dice)_
-   - _Por qué:_ El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio.
-9. **Registra tres horas: inicio del dolor, llegada y toma del ECG** _(solo en la tarjeta, Pepe no lo dice)_
-   - _Por qué:_ Son los indicadores de calidad del GES de infarto y permiten auditar los tiempos de reperfusión.
+   - _Fundamento (si lo piden):_ Si el paciente recibe fibrinolítico o anticoagulantes, cada punción no compresible es un sitio de sangrado. La curva de troponina se interpreta por intervalos exactos.
+7. **Pregunta: alergia a aspirina, anticoagulantes, sildenafil o tadalafil, sangrado, cirugía o ACV recientes**
+   - _Fundamento (si lo piden):_ Anticipa contraindicaciones de fármacos y de fibrinólisis. Los nitratos con sildenafil o tadalafil pueden producir hipotensión grave.
+8. **Reposo; informar al paciente y a la familia** _(solo en la tarjeta, Pepe no lo dice)_
+   - _Fundamento (si lo piden):_ El dolor y la ansiedad elevan la frecuencia cardíaca y el consumo de oxígeno del miocardio.
+9. **Registrar hora de inicio del dolor, de llegada y del ECG** _(solo en la tarjeta, Pepe no lo dice)_
+   - _Fundamento (si lo piden):_ Son los indicadores de calidad del GES de infarto y permiten auditar los tiempos de reperfusión.
 
 **Recordatorios:**
 
@@ -47,24 +47,24 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 
 **Se activa con:** _iamcest, supradesnivel, supra desnivel, con supra, con supradesnivel, stemi, codigo iam, iam con supradesnivel, iam con supra, elevacion del st, supradesnivel del st_
 
-1. **Activa el código IAM y registra la hora del diagnóstico** 🔊
-   - _Por qué:_ La hora del diagnóstico por ECG es el tiempo cero para medir las metas de reperfusión.
-2. **Pregunta al médico la estrategia: angioplastía primaria si es posible antes de 120 minutos; si no, fibrinólisis antes de 10 minutos. Prepara ambas**
-   - _Por qué:_ La angioplastía primaria es superior solo si se realiza a tiempo. Si el traslado supera los 120 minutos, la fibrinólisis precoz salva más miocardio.
-3. **Aspirina 150 a 300 miligramos masticada, según indicación. Verifica que no sea alérgico**
+1. **Código IAM; hora del diagnóstico** 🔊
+   - _Fundamento (si lo piden):_ La hora del diagnóstico por ECG es el tiempo cero para medir las metas de reperfusión.
+2. **Estrategia: angioplastía si es posible antes de 120 minutos; si no, fibrinólisis antes de 10. Prepara ambas**
+   - _Fundamento (si lo piden):_ La angioplastía primaria es superior solo si se realiza a tiempo. Si el traslado supera los 120 minutos, la fibrinólisis precoz salva más miocardio.
+3. **Aspirina 150 a 300 masticada, según indicación**
    - _Detalle:_ Masticada y no entera: absorción más rápida.
-   - _Por qué:_ La aspirina reduce la mortalidad del infarto. Masticada, alcanza su efecto antiplaquetario en minutos.
-4. **Segundo antiagregante y anticoagulante según indicación. Verifica la dosis ajustada por edad y función renal**
+   - _Fundamento (si lo piden):_ La aspirina reduce la mortalidad del infarto. Masticada, alcanza su efecto antiplaquetario en minutos.
+4. **Segundo antiagregante y anticoagulante: ojo con el ajuste por edad y función renal**
    - _Detalle:_ Con fibrinólisis (ESC 2023): clopidogrel carga 300 mg si ≤ 75 años; 75 mg sin carga si > 75 años. Enoxaparina < 75 años: 30 mg EV en bolo + 1 mg/kg SC cada 12 h; ≥ 75 años: sin bolo, 0,75 mg/kg SC cada 12 h. Ajustar si hay insuficiencia renal.
-   - _Por qué:_ Los adultos mayores y los pacientes con insuficiencia renal tienen más riesgo de sangrado con dosis estándar. Es un punto clásico de error de medicación.
-5. **Si el infarto es inferior, toma derivaciones derechas V3R y V4R antes de dar nitratos**
-   - _Por qué:_ El infarto de ventrículo derecho depende de la precarga: los nitratos y los diuréticos pueden producir hipotensión grave.
-6. **Nitrato sublingual solo si la PAS es mayor de 90, sin infarto de ventrículo derecho y sin sildenafil. Opioide solo si el dolor persiste**
-   - _Por qué:_ Los nitratos alivian el dolor pero no reducen la mortalidad. La morfina puede retrasar la absorción de los antiagregantes orales.
-7. **Vigila arritmias: fibrilación ventricular, se desfibrila; en el infarto inferior, bradicardia o bloqueo AV, ten atropina y marcapaso transcutáneo**
-   - _Por qué:_ La arteria coronaria derecha irriga el nodo AV en la mayoría de las personas: el infarto inferior se asocia a bradiarritmias.
-8. **Si va a hemodinamia, prepara el traslado. Si se fibrinoliza, dime fibrinólisis**
-   - _Por qué:_ Pepe cambia a la fase que corresponda.
+   - _Fundamento (si lo piden):_ Los adultos mayores y los pacientes con insuficiencia renal tienen más riesgo de sangrado con dosis estándar. Es un punto clásico de error de medicación.
+5. **Si es inferior: V3R y V4R antes de nitratos**
+   - _Fundamento (si lo piden):_ El infarto de ventrículo derecho depende de la precarga: los nitratos y los diuréticos pueden producir hipotensión grave.
+6. **Nitrato solo con PAS sobre 90, sin VD y sin sildenafil. Opioide solo si persiste el dolor**
+   - _Fundamento (si lo piden):_ Los nitratos alivian el dolor pero no reducen la mortalidad. La morfina puede retrasar la absorción de los antiagregantes orales.
+7. **Inferior: atropina y marcapaso transcutáneo listos por bradicardia o BAV**
+   - _Fundamento (si lo piden):_ La arteria coronaria derecha irriga el nodo AV en la mayoría de las personas: el infarto inferior se asocia a bradiarritmias.
+8. **Si va a hemodinamia, dime traslado. Si se fibrinoliza, dime fibrinólisis**
+   - _Fundamento (si lo piden):_ Pepe cambia a la fase que corresponda.
 
 **Recordatorios:**
 
@@ -75,26 +75,26 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 
 **Se activa con:** _fibrinolisis, trombolisis, fibrinolitico, trombolitico, tenecteplasa, estreptoquinasa, alteplasa, trombolizar, fibrinolizar, se tromboliza, se fibrinoliza, va a fibrinolisis_
 
-1. **Revisa con el médico las contraindicaciones. Si quieres, dime checklist de fibrinólisis y te las pregunto una por una** 🔊
-   - _Por qué:_ El riesgo más grave de la fibrinólisis es la hemorragia intracraneal. Una contraindicación absoluta obliga a buscar otra estrategia.
-2. **Dos vías venosas: una exclusiva para el fibrinolítico**
-   - _Por qué:_ Evita incompatibilidades y permite suspender el fibrinolítico sin perder el acceso para otros fármacos.
-3. **Peso del paciente para la dosis. La tenecteplasa se dosifica por peso, y en mayores de 75 años se usa la mitad, según indicación**
+1. **Contraindicaciones con el médico. Para revisarlas una a una: checklist de fibrinólisis** 🔊
+   - _Fundamento (si lo piden):_ El riesgo más grave de la fibrinólisis es la hemorragia intracraneal. Una contraindicación absoluta obliga a buscar otra estrategia.
+2. **Dos vías; una exclusiva para el fibrinolítico**
+   - _Fundamento (si lo piden):_ Evita incompatibilidades y permite suspender el fibrinolítico sin perder el acceso para otros fármacos.
+3. **Peso para la dosis. Tenecteplasa: mitad de dosis sobre 75 años, según indicación**
    - _Detalle:_ Tenecteplasa: bolo único en 5 a 10 segundos, dosis por tramos de peso. Estreptoquinasa: 1.500.000 UI en 30 a 60 minutos.
-   - _Por qué:_ El estudio STREAM mostró más hemorragia intracraneal en los mayores de 75 años con la dosis completa.
-4. **Con estreptoquinasa, vigila hipotensión y reacción alérgica. Si baja la presión, disminuye la velocidad y avisa**
-   - _Por qué:_ La estreptoquinasa es una proteína bacteriana: produce hipotensión por liberación de bradicinina y puede generar alergia.
-5. **Presión y ritmo cada 15 minutos. Evita punciones, sondas e inyecciones intramusculares**
-   - _Por qué:_ Durante la fibrinólisis cualquier procedimiento invasivo puede sangrar sin control.
-6. **Cefalea, vómitos o compromiso de conciencia: suspende la infusión y avisa de inmediato**
-   - _Por qué:_ Es la forma de presentación de la hemorragia intracraneal, la complicación más temida.
-7. **A los 60 a 90 minutos, ECG de control. Busca reperfusión: el supradesnivel baja 50% o más y el dolor cede**
+   - _Fundamento (si lo piden):_ El estudio STREAM mostró más hemorragia intracraneal en los mayores de 75 años con la dosis completa.
+4. **Estreptoquinasa: hipotensión o alergia; si baja la PA, baja la velocidad y avisa**
+   - _Fundamento (si lo piden):_ La estreptoquinasa es una proteína bacteriana: produce hipotensión por liberación de bradicinina y puede generar alergia.
+5. **PA y ritmo cada 15 minutos. Sin punciones, sondas ni IM**
+   - _Fundamento (si lo piden):_ Durante la fibrinólisis cualquier procedimiento invasivo puede sangrar sin control.
+6. **Cefalea, vómitos o compromiso de conciencia: suspende y avisa**
+   - _Fundamento (si lo piden):_ Es la forma de presentación de la hemorragia intracraneal, la complicación más temida.
+7. **ECG a los 60 a 90 minutos: reperfusión si el ST baja 50% o más y cede el dolor**
    - _Detalle:_ Criterios de reperfusión: resolución del ST ≥ 50%, alivio del dolor, arritmias de reperfusión (ritmo idioventricular acelerado, que no se trata).
-   - _Por qué:_ Si no hay criterios de reperfusión, la fibrinólisis fracasó y el paciente necesita una angioplastía de rescate urgente.
-8. **Sin criterios de reperfusión, avisa ya: angioplastía de rescate. Con criterios, coordina el traslado para coronariografía dentro de las 24 horas**
-   - _Por qué:_ Es la estrategia farmacoinvasiva: la fibrinólisis abre la arteria, pero después hay que estudiarla y tratarla.
-9. **Vigila sangrado en sitios de punción, encías, orina y deposiciones**
-   - _Por qué:_ El riesgo de sangrado dura mientras dure el efecto de los antitrombóticos.
+   - _Fundamento (si lo piden):_ Si no hay criterios de reperfusión, la fibrinólisis fracasó y el paciente necesita una angioplastía de rescate urgente.
+8. **Sin reperfusión: rescate, avisa ya. Con reperfusión: coronariografía antes de 24 horas**
+   - _Fundamento (si lo piden):_ Es la estrategia farmacoinvasiva: la fibrinólisis abre la arteria, pero después hay que estudiarla y tratarla.
+9. **Sangrado: punciones, encías, orina, deposiciones**
+   - _Fundamento (si lo piden):_ El riesgo de sangrado dura mientras dure el efecto de los antitrombóticos.
 
 **Recordatorios:**
 
@@ -106,16 +106,16 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 
 **Se activa con:** _scasest, sin supradesnivel, sin supra, iamsest, nstemi, angina inestable, infradesnivel, troponina positiva, sin supradesnivel del st_
 
-1. **Repite el ECG si el dolor vuelve o cambia, y según el protocolo** 🔊
-   - _Por qué:_ Un SCA sin supradesnivel puede evolucionar a una oclusión: el ECG inicial normal no descarta el infarto.
-2. **Troponina seriada con hora exacta, a la hora o a las 2 horas según el laboratorio**
-   - _Por qué:_ El diagnóstico de infarto sin supradesnivel depende de la curva de troponina, no de un valor aislado.
-3. **Alto riesgo inmediato: dolor que no cede, hipotensión, arritmia, insuficiencia cardíaca o cambios del ST. Si aparece uno, avisa: cambia la urgencia de la coronariografía**
-   - _Por qué:_ Estos criterios de muy alto riesgo indican coronariografía en menos de 2 horas, igual que un infarto con supradesnivel.
-4. **Antiagregantes y anticoagulante según indicación. Si es heparina en BIC, dime doble chequeo de heparina**
-   - _Por qué:_ La heparina en infusión es un medicamento de alto riesgo: requiere doble chequeo independiente.
-5. **Reposo, manejo del dolor y de la ansiedad, y monitorización continua**
-   - _Por qué:_ Reducen el consumo de oxígeno del miocardio mientras se define la estrategia.
+1. **ECG seriado; repetir si el dolor vuelve o cambia** 🔊
+   - _Fundamento (si lo piden):_ Un SCA sin supradesnivel puede evolucionar a una oclusión: el ECG inicial normal no descarta el infarto.
+2. **Troponina seriada con hora exacta**
+   - _Fundamento (si lo piden):_ El diagnóstico de infarto sin supradesnivel depende de la curva de troponina, no de un valor aislado.
+3. **Muy alto riesgo: dolor refractario, hipotensión, arritmia, insuficiencia cardíaca o cambios del ST. Si aparece uno, avisa**
+   - _Fundamento (si lo piden):_ Estos criterios de muy alto riesgo indican coronariografía en menos de 2 horas, igual que un infarto con supradesnivel.
+4. **Antitrombóticos según indicación. Heparina en BIC: doble chequeo de heparina**
+   - _Fundamento (si lo piden):_ La heparina en infusión es un medicamento de alto riesgo: requiere doble chequeo independiente.
+5. **Reposo, analgesia y monitorización continua**
+   - _Fundamento (si lo piden):_ Reducen el consumo de oxígeno del miocardio mientras se define la estrategia.
 
 **Recordatorios:**
 
@@ -126,16 +126,16 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 
 **Se activa con:** _traslado, trasladar, hemodinamia, angioplastia, coronariografia, cateterismo, angioplastia primaria, angioplastia de rescate, va a hemodinamia_
 
-1. **Monitor desfibrilador de transporte cargado y encendido** 🔊
-   - _Por qué:_ El traslado es un período de alto riesgo de arritmia y con menos recursos a mano.
-2. **Dos vías permeables, y los fármacos administrados con su hora anotados**
-   - _Por qué:_ El equipo receptor necesita saber qué antitrombóticos y en qué dosis recibió el paciente para decidir el procedimiento.
-3. **Copia del ECG, exámenes, consentimiento firmado y ficha**
-   - _Por qué:_ El ECG inicial es la referencia para comparar después de la reperfusión.
-4. **Marca los pulsos distales y retira prótesis dentales y joyas**
-   - _Por qué:_ Los pulsos basales permiten detectar complicaciones vasculares del acceso arterial.
-5. **Entrega al equipo receptor con formato ISBAR: hora de inicio del dolor, hora del ECG, fármacos y estado actual**
-   - _Por qué:_ Una entrega estructurada reduce los errores de comunicación, una de las principales causas de eventos adversos.
+1. **Monitor desfibrilador de transporte cargado** 🔊
+   - _Fundamento (si lo piden):_ El traslado es un período de alto riesgo de arritmia y con menos recursos a mano.
+2. **Dos vías permeables; fármacos con su hora**
+   - _Fundamento (si lo piden):_ El equipo receptor necesita saber qué antitrombóticos y en qué dosis recibió el paciente para decidir el procedimiento.
+3. **ECG, exámenes, consentimiento y ficha**
+   - _Fundamento (si lo piden):_ El ECG inicial es la referencia para comparar después de la reperfusión.
+4. **Pulsos distales marcados; retirar prótesis y joyas**
+   - _Fundamento (si lo piden):_ Los pulsos basales permiten detectar complicaciones vasculares del acceso arterial.
+5. **Entrega ISBAR: inicio del dolor, hora del ECG, fármacos y estado actual**
+   - _Fundamento (si lo piden):_ Una entrega estructurada reduce los errores de comunicación, una de las principales causas de eventos adversos.
 
 **Recordatorios:**
 

@@ -93,7 +93,7 @@ const sca = require('./protocolos/sca.js');
 const S = [];
 S.push(`# Pepe Grillo — Protocolo de enfermería: ${sca.nombre}`, '');
 S.push(`> **${sca.estado}** · v${sca.version}`, '> Generado desde `protocolos/sca.js`. No editar a mano.', '');
-S.push('Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").', '');
+S.push('Pepe dice un paso a la vez. La enfermera avanza con **"sigue"** o **"qué más"**, pide el fundamento con **"fundamento"** o **"por qué"**, y cambia de fase informando lo que pasa ("el ECG muestra supradesnivel", "va a fibrinólisis", "sin supradesnivel", "traslado a hemodinamia").', '');
 S.push('```', 'primer contacto → IAMCEST → fibrinólisis → traslado', '               ↘ SCASEST ↗', '```', '');
 sca.fases.forEach((f, n) => {
   S.push(`## ${n + 1}. ${f.nombre}`, '');
@@ -101,7 +101,7 @@ sca.fases.forEach((f, n) => {
   f.pasos.forEach((p, j) => {
     S.push(`${j + 1}. **${p.voz}**${j === 0 ? ' 🔊' : ''}${p.hablado === false ? ' _(solo en la tarjeta, Pepe no lo dice)_' : ''}`);
     if (p.detalle) S.push(`   - _Detalle:_ ${p.detalle}`);
-    S.push(`   - _Por qué:_ ${p.porque}`);
+    S.push(`   - _Fundamento (si lo piden):_ ${p.porque}`);
   });
   S.push('', '**Recordatorios:**', '');
   f.hitos.forEach((h) => S.push(`- ⏱ min ${h.min}: ${h.texto}`));
