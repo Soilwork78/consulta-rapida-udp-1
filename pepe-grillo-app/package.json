@@ -1,0 +1,21 @@
+{
+  "name": "pepe-grillo-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "App Android (Capacitor) de Pepe Grillo: empaqueta la demo web de ../pepe-grillo con voz nativa de Android.",
+  "scripts": {
+    "postinstall": "node scripts/preferir-offline.js",
+    "build": "node scripts/copiar-web.js",
+    "sync": "npm run build && cap sync android",
+    "test": "node --test ../pepe-grillo/motor.test.js"
+  },
+  "dependencies": {
+    "@capacitor-community/speech-recognition": "7.0.1",
+    "@capacitor-community/text-to-speech": "8.0.2",
+    "@capacitor/android": "8.5.2",
+    "@capacitor/core": "8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.2"
+  }
+}

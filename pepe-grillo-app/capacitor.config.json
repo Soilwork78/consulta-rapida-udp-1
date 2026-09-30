@@ -1,0 +1,8 @@
+{
+  "appId": "cl.pepegrillo.prototipo",
+  "appName": "Pepe Grillo",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
