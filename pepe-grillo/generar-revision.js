@@ -7,6 +7,14 @@ const kb = require('./kb.js');
 const L = [];
 const lista = (items) => items.forEach((t) => L.push(`- ${t}`));
 const hitos = (hs) => hs.forEach((h) => L.push(`- ⏱ **min ${h.min}:** ${h.texto}`));
+const TUBO = {
+  hemocultivo: 'Frascos HC', celeste: '🔵 Celeste', suero: '🔴 Roja/amarilla', verde: '🟢 Verde',
+  lila: '🟣 Lila', gris: '⚪ Gris', gases: 'Jeringa gases', orina: 'Frasco estéril', otro: '—',
+};
+const tablaEx = (exs, col) => {
+  L.push(`| Examen | Muestra | ${col === 'ind' ? 'Cuándo / para qué' : 'Detalle'} |`, '|---|---|---|');
+  exs.forEach((e) => L.push(`| **${e.ex}** | ${TUBO[e.tubo]} | ${e[col] || ''} |`));
+};
 
 L.push('# Pepe Grillo — Base de conocimiento (revisión clínica)', '');
 L.push(`> **${kb.meta.estado}** · v${kb.meta.version} · ${kb.meta.fecha}`);
@@ -20,13 +28,19 @@ lista(kb.general.pasos);
 L.push('', `**Comunicación (${kb.general.comunicacion.formato}):** ${kb.general.comunicacion.plantilla}`, '');
 L.push(`_${kb.general.comunicacion.nota}_`, '');
 hitos(kb.general.hitos);
-L.push('');
+L.push('', '### Muestras', '', '> ⚠️ Colores de tubo según nomenclatura habitual: **verificar con el laboratorio local**.', '');
+Object.values(kb.general.tubos).forEach((t) => L.push(`- ${t}`));
+L.push('', `**${kb.general.ordenExtraccion}**`, '');
 
 kb.motivos.forEach((m, i) => {
   L.push(`## ${i + 1}. ${m.nombre}`, '');
   L.push(`**Se activa con:** ${m.activadores.join(', ')}`, '');
   L.push('### Capa 1 — Acciones inmediatas', '');
   lista(m.acciones);
+  L.push('', '### 🧪 Exámenes basales (al ingreso)', '');
+  tablaEx(m.examenes.basales, 'det');
+  L.push('', '### 🧪 Exámenes según evaluación', '');
+  tablaEx(m.examenes.segunEvaluacion, 'ind');
   L.push('', '### 🚩 Banderas rojas', '');
   lista(m.banderasRojas);
   L.push('', '### Capa 2 — Diferenciales', '');
@@ -38,6 +52,7 @@ kb.motivos.forEach((m, i) => {
   m.confirmados.forEach((c) => {
     L.push('', `### Capa 3 — ${c.nombre}`, '');
     c.algoritmo.forEach((p, j) => L.push(`${j + 1}. ${p}`));
+    if (c.examenes) { L.push('', '**Exámenes específicos:**', ''); tablaEx(c.examenes, 'det'); }
     L.push('');
     hitos(c.hitos);
   });
