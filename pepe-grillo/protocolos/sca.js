@@ -60,9 +60,11 @@
             porque: 'Son los indicadores de calidad del GES de infarto y permiten auditar los tiempos de reperfusión.' },
         ],
         hitos: [
-          { min: 5, texto: 'SCA: ¿ECG ya tomado?' },
+          // `registra`: si la enfermera responde "sí", Pepe lo anota con la hora.
+          // Si ya estaba anotado, Pepe no pregunta.
+          { min: 5, texto: 'SCA: ¿ECG ya tomado?', registra: { texto: 'ECG de 12 derivaciones tomado', marca: 'ecg' } },
           { min: 10, texto: 'Minuto 10: ¿el médico ya vio el ECG?' },
-          { min: 15, texto: '¿Dolor reevaluado con la escala de 0 a 10?' },
+          { min: 15, texto: '¿Dolor reevaluado con la escala de 0 a 10?', registra: { texto: 'Dolor reevaluado', marca: 'eva' } },
         ],
       },
 
@@ -70,6 +72,7 @@
       {
         id: 'iamcest',
         evento: 'ECG con supradesnivel ST: IAM con supradesnivel, se activa código IAM', // cómo queda en la evolución
+        marcaTiempo: 'diagnostico', // hora cero de la reperfusión
         nombre: 'IAM con supradesnivel ST confirmado',
         intro: 'IAM con supradesnivel. Corre el reloj de reperfusión.',
         claveInstitucional: 'iamcest',
@@ -134,7 +137,7 @@
         ],
         hitos: [
           { min: 15, texto: 'Fibrinólisis: presión y ritmo de control' },
-          { min: 60, texto: 'ECG de control: ¿bajó el supradesnivel 50% o más?' },
+          { min: 60, texto: 'ECG de control: ¿ya se tomó?', registra: { texto: 'ECG de control post fibrinólisis tomado', marca: 'ecg-control' } },
           { min: 90, texto: 'Si no hay reperfusión: ¿angioplastía de rescate coordinada?' },
         ],
       },
@@ -161,7 +164,7 @@
             porque: 'Reducen el consumo de oxígeno del miocardio mientras se define la estrategia.' },
         ],
         hitos: [
-          { min: 60, texto: 'SCASEST: ¿segunda troponina tomada?' },
+          { min: 60, texto: 'SCASEST: ¿segunda troponina tomada?', registra: { texto: 'Segunda troponina tomada', marca: 'troponina-2' } },
           { min: 120, texto: '¿ECG de control y reevaluación del dolor?' },
         ],
       },
@@ -188,7 +191,7 @@
             porque: 'Una entrega estructurada reduce los errores de comunicación, una de las principales causas de eventos adversos.' },
         ],
         hitos: [
-          { min: 20, texto: 'Traslado: ¿el paciente ya salió a hemodinamia?' },
+          { min: 20, texto: 'Traslado: ¿el paciente ya salió a hemodinamia?', registra: { texto: 'Sale a hemodinamia', marca: 'salida' } },
         ],
       },
     ],

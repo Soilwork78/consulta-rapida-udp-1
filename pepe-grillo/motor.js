@@ -309,6 +309,7 @@
     return {
       clave: proto.id + ':' + fase.id,
       evento: fase.evento,
+      marcaTiempo: fase.marcaTiempo,
       titulo: (quien ? quien + ' · ' : '') + 'SCA · ' + fase.nombre,
       intro: (quien ? quien + '. ' : '') + fase.intro,
       pasos: pasos.map((p) => p.voz),
@@ -363,15 +364,35 @@
     let ultimoBox = '—';
     let chequeo = null; // diálogo de doble chequeo en curso
     let yaExplicado = false; // "dime sigue" se explica solo la primera vez
-    // Toda respuesta lleva el registro vivo del box, para mostrarlo en pantalla.
+    // Toda respuesta lleva el registro vivo del box y sus tiempos, para mostrarlos en pantalla.
     function conRegistro(salida) {
-      if (salida.respuesta && RG && registros[salida.box]) salida.respuesta.registroBox = registros[salida.box].resumen();
+      const reg = RG && registros[salida.box];
+      if (salida.respuesta && reg) {
+        salida.respuesta.registroBox = reg.resumen();
+        salida.respuesta.tiempos = reg.tiemposDetalle();
+      }
       return salida;
     }
+
+    // Recordatorio que puede registrar: si la enfermera responde "sí", queda anotado.
+    // Queda abierta hasta que la respondan, llegue otra pregunta o la enfermera diga otra cosa.
+    let pregunta = null; // { box, registra }
+    const SI_CORTO = /^(si|listo|lista|ya|hecho|ok|tomado|tomada|realizado|realizada|afirmativo|confirmado)$/;
+    const NO_CORTO = /^(no|todavia no|aun no|pendiente|no todavia)$/;
 
     return {
       get enDialogo() { return !!(chequeo && chequeo.activo); },
       procesar(texto) { return conRegistro(this.procesarFrase(texto)); },
+
+      // La interfaz avisa cuando vence un recordatorio. Devuelve { omitir: true }
+      // si lo que pregunta ya está registrado (Pepe no pregunta lo que ya sabe).
+      hitoDisparado(box, hito) {
+        if (!RG || !hito || !hito.registra) return { omitir: false };
+        const reg = registros[box];
+        if (reg && reg.tiene(hito.registra.marca)) return { omitir: true };
+        pregunta = { box, registra: hito.registra };
+        return { omitir: false };
+      },
       procesarFrase(texto) {
         // 0. "Detente": Pepe se calla y conserva el punto (y el diálogo, si hay uno).
         if (navegacion(normalizar(texto)) === 'pausa') {
@@ -392,6 +413,24 @@
           }
           return { box: chequeo.box, interpretacion: { intencion: 'dialogo' }, respuesta };
         }
+        // 1a. Respuesta a un recordatorio que registra ("¿ECG ya tomado?" → "sí").
+        if (pregunta) {
+          const corto = normalizar(texto).replace(/^pepe\s*/, '').replace(/\b(?:box|cama)\s+\S+/, '').trim();
+          const box = pregunta.box;
+          const base = { clave: 'registro', titulo: (box !== '—' ? 'Box ' + box + ' · ' : '') + 'Registro',
+            intro: '', pasos: [], secciones: [], hitos: [] };
+          if (SI_CORTO.test(corto)) {
+            registroDe(box).confirmar(pregunta.registra, reloj());
+            const hora = new Date(reloj()).toTimeString().slice(0, 5);
+            pregunta = null;
+            return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, hablar: 'Anotado, ' + hora + '.' } };
+          }
+          if (NO_CORTO.test(corto)) {
+            pregunta = null;
+            return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, hablar: 'Queda pendiente.' } };
+          }
+          pregunta = null; // dijo otra cosa: la pregunta se descarta
+        }
         // 1b. Lo que la enfermera dicta para la evolución.
         const dictado = RG && RG.interpretar(texto);
         if (dictado) {
@@ -400,6 +439,9 @@
           const reg = registroDe(box);
           const base = { clave: 'registro', titulo: (box !== '—' ? 'Box ' + box + ' · ' : '') + 'Registro',
             intro: '', pasos: [], secciones: [], hitos: [] };
+          if (dictado.tipo === 'tiempos') {
+            return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, hablar: reg.tiemposVoz() } };
+          }
           if (dictado.tipo === 'evolucion') {
             const ev = reg.evolucion(reloj());
             return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, evolucion: ev.texto,
@@ -469,7 +511,7 @@
           Object.assign(reg.datos.paciente, { box: box !== '—' ? box : undefined, edad: i.edad, sexo: i.sexo },
             Object.fromEntries(Object.entries(reg.datos.paciente).filter(([, v]) => v != null)));
           const texto2 = r.evento || r.titulo.split(' · ').slice(1).join(' · ') || r.titulo;
-          reg.evento(texto2, reloj());
+          reg.evento(texto2, reloj(), undefined, r.marcaTiempo);
         }
         return { box, interpretacion: i, respuesta };
       },

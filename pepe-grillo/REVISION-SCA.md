@@ -99,7 +99,7 @@ primer contacto → IAMCEST → fibrinólisis → traslado
 **Recordatorios:**
 
 - ⏱ min 15: Fibrinólisis: presión y ritmo de control
-- ⏱ min 60: ECG de control: ¿bajó el supradesnivel 50% o más?
+- ⏱ min 60: ECG de control: ¿ya se tomó?
 - ⏱ min 90: Si no hay reperfusión: ¿angioplastía de rescate coordinada?
 
 ## 4. SCA sin supradesnivel ST

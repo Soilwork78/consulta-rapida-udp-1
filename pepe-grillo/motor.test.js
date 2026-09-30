@@ -334,7 +334,11 @@ test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tie
   assert.match(ev, /Anamnesis próxima: Refiere dolor opresivo desde las 12:30/);
   assert.match(ev, /Alergias: \[falta registrar\]/);
   assert.match(ev, /- 14:04 ECG tomado\./);
-  assert.match(ev, /Puerta-ECG: 4 min · Puerta-aguja: 29 min/);
+  assert.match(ev, /Inicio del dolor: 12:30 \(según anamnesis\)\./);
+  assert.match(ev, /- Inicio del dolor → llegada: 90 min\./);
+  assert.match(ev, /- Puerta-ECG: 4 min \(meta ≤ 10\) ✓\./);
+  assert.match(ev, /- Diagnóstico-fibrinolítico: 22 min \(meta ≤ 10\) ✗\./);
+  assert.match(ev, /- Puerta-aguja: 29 min \(meta ≤ 30\) ✓\./);
   assert.match(ev, /Revisar, completar y firmar/);
   assert.ok(!/sin alergias|niega alergias/i.test(ev), 'no inventa lo que no se dictó');
   assert.ok(falta.registroBox.length > 5);
@@ -374,4 +378,61 @@ test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
   assert.match(ev, /I:\n- 14:06 Nitroglicerina sublingual administrada\./);
   assert.match(ev, /E:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);
   assert.ok(!/diagn[oó]stico de enfermer|NANDA/i.test(ev));
+});
+
+// ── Registro automático de horas ─────────────────────────
+test('hora de inicio del dolor desde la anamnesis', () => {
+  const base = Date.parse('2026-09-30T14:00:00');
+  const h = (f) => new Date(RG.leerInicio(f, base)).toTimeString().slice(0, 5);
+  assert.strictEqual(h('refiere dolor desde las 12:30'), '12:30');
+  assert.strictEqual(h('dolor que comenzó a las 9'), '09:00');
+  assert.strictEqual(h('hace 2 horas'), '12:00');
+  assert.strictEqual(h('hace media hora'), '13:30');
+  assert.strictEqual(new Date(RG.leerInicio('desde las 22', base)).getDate(), 29, 'una hora posterior al ingreso es de ayer');
+  assert.strictEqual(RG.leerInicio('dolor opresivo', base), null);
+});
+
+test('recordatorio que registra: "¿ECG ya tomado?" → "sí" anota la hora', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const hitos = s.procesar('ingresa box 3, sospecha SCA').respuesta.hitos;
+  t += 5 * 60000;
+  assert.deepStrictEqual(s.hitoDisparado('3', hitos[0]), { omitir: false });
+  const r = s.procesar('sí').respuesta;
+  assert.strictEqual(r.hablar, 'Anotado, 14:05.');
+  const pe = r.tiempos.find((x) => x.nombre === 'Puerta-ECG');
+  assert.deepStrictEqual([pe.min, pe.aprox, pe.ok], [5, true, true]);
+  assert.match(s.procesar('tiempos').respuesta.hablar, /^Puerta-ECG, hasta 5 minutos, en meta\.$/);
+  assert.match(s.procesar('redacta la evolución').respuesta.evolucion, /- 14:05 ECG de 12 derivaciones tomado \(confirmado al recordatorio\)\.[\s\S]*Puerta-ECG: ≤ 5 min/);
+});
+
+test('Pepe no pregunta lo que ya está registrado', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const hitos = s.procesar('ingresa box 3, sospecha SCA').respuesta.hitos;
+  t += 3 * 60000;
+  s.procesar('ECG tomado');
+  t += 2 * 60000;
+  assert.deepStrictEqual(s.hitoDisparado('3', hitos[0]), { omitir: true });
+  assert.deepStrictEqual(s.hitoDisparado('3', hitos[1]), { omitir: false }, 'sin "registra", se dice igual');
+});
+
+test('"no" deja pendiente; si la enfermera dice otra cosa, la pregunta se descarta', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const hitos = s.procesar('ingresa box 3, sospecha SCA').respuesta.hitos;
+  s.hitoDisparado('3', hitos[0]);
+  assert.strictEqual(s.procesar('todavía no').respuesta.hablar, 'Queda pendiente.');
+  s.hitoDisparado('3', hitos[0]);
+  assert.match(s.procesar('sigue').respuesta.hablar, /^Banderas rojas/);
+  assert.notStrictEqual(s.procesar('sí').respuesta.hablar, 'Anotado, 14:00.', 'la pregunta ya se descartó');
+});
+
+test('ECG de control no cuenta para puerta-ECG', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  s.procesar('ingresa box 3, sospecha SCA');
+  t += 90 * 60000;
+  const r = s.procesar('ECG de control tomado').respuesta;
+  assert.ok(!r.tiempos.some((x) => x.nombre === 'Puerta-ECG'));
 });

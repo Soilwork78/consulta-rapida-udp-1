@@ -96,6 +96,11 @@
   .registro ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; font-size: 14px; font-variant-numeric: tabular-nums; }
   .registro label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
   #evolucion { font: 14px/1.5 var(--font-body); min-height: 360px; }
+  .tiempos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tiempos:empty { display: none; }
+  .tiempo { font: 500 13px var(--font-body); font-variant-numeric: tabular-nums; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+  .tiempo.fuera { background: var(--alert-soft); color: var(--alert); }
+  .tiempo.sin-meta { background: transparent; border: 1px solid var(--line); color: var(--muted); }
   .faltan { font-size: 13.5px; color: var(--alert); margin: 0; }
   .boxes { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
   .boxes h2 { font: 600 16px var(--font-display); margin: 0; }
@@ -184,6 +189,7 @@
           <h2 id="regTitulo">Registro</h2>
           <button type="button" id="btnEvolucion">Redactar evolución</button>
         </div>
+        <div class="tiempos" id="regTiempos" aria-label="Tiempos del SCA"></div>
         <ul id="regLista"><li>Lo que dictes (anamnesis, signos vitales, procedimientos) aparece aquí con su hora.</li></ul>
         <div id="evolucionCaja" hidden>
           <label for="evolucion">Borrador de evolución SOAPIE · editable · revisar y firmar</label>
@@ -237,6 +243,7 @@
     'EVA 3',
     'evaluación: dolor disminuye, sin arritmias',
     'anota: se informa a la esposa',
+    'tiempos',
     'Pepe, redacta la evolución',
     'Pepe, box 5, mujer de 67 años, SCA sin supradesnivel',
     'Pepe, doble chequeo de heparina en BIC, box 5',
@@ -249,7 +256,10 @@
     const id = $('inst').value;
     return id ? (window.PEPE_INSTITUCIONES || {})[id] : null;
   }
-  function nuevaSesion() { sesion = PepeMotor.crearSesion(PEPE_GRILLO_KB, institucion()); }
+  // Reloj de la sesión: en "prueba rápida" el registro avanza igual que los recordatorios.
+  let base = { real: Date.now(), sim: Date.now() };
+  const relojSesion = () => base.sim + (Date.now() - base.real) * Number($('velocidad').value);
+  function nuevaSesion() { sesion = PepeMotor.crearSesion(PEPE_GRILLO_KB, institucion(), { ahora: relojSesion }); }
 
   // ── Voz ──
   // Mientras Pepe habla, el micrófono sigue abierto solo para órdenes cortas
@@ -316,7 +326,7 @@
       if (!b.hitos.length) d.append(el('p', 'vacio', 'Sin recordatorios pendientes'));
       b.hitos.forEach((h) => {
         const row = el('div', 'hito' + (h.hecho ? ' hecho' : '') + (h.sonando ? ' sonando' : ''));
-        const t = el('time', null, h.hecho ? 'dicho' : fmt(h.vence - ahora));
+        const t = el('time', null, h.omitido ? 'anotado' : h.hecho ? 'dicho' : fmt(h.vence - ahora));
         row.append(t, el('span', null, h.texto));
         d.append(row);
       });
@@ -330,7 +340,7 @@
     if (r.detenerHitos) b.hitos = b.hitos.filter((h) => h.hecho);
     const factor = Number($('velocidad').value);
     const ahora = Date.now();
-    r.hitos.forEach((h) => b.hitos.push({ texto: h.texto, vence: ahora + (h.min * 60000) / factor }));
+    r.hitos.forEach((h) => b.hitos.push({ ...h, vence: ahora + (h.min * 60000) / factor }));
     b.hitos.sort((a, c) => a.vence - c.vence);
   }
 
@@ -339,8 +349,12 @@
     Object.entries(boxes).forEach(([k, b]) => b.hitos.forEach((h) => {
       h.sonando = false;
       if (!h.hecho && h.vence <= ahora) {
-        h.hecho = true; h.sonando = true;
+        h.hecho = true;
+        // Si lo que pregunta ya está anotado, Pepe no pregunta.
+        if (sesion.hitoDisparado(k, h).omitir) { h.omitido = true; return; }
+        h.sonando = true;
         decir('Box ' + k + '. ' + PepeMotor.paraVoz(h.texto));
+        if (h.registra && !sesion.enDialogo) pintarRapidas('sino'); // "sí" lo anota con la hora
       }
     }));
     pintarBoxes();
@@ -396,6 +410,11 @@
       $('regTitulo').textContent = 'Registro' + (box && box !== '—' ? ' · Box ' + box : '');
       $('regLista').replaceChildren(...r.registroBox.map((l) => el('li', null, l)));
     }
+    if (r.tiempos) {
+      $('regTiempos').replaceChildren(...r.tiempos.map((x) => el('span',
+        'tiempo' + (x.meta == null ? ' sin-meta' : x.ok ? '' : ' fuera'),
+        x.nombre + ' ' + (x.aprox ? '≤ ' : '') + x.min + ' min' + (x.meta == null ? '' : (x.ok ? ' ✓' : ' ✗') + ' meta ' + x.meta))));
+    }
     if (r.evolucion) {
       $('evolucionCaja').hidden = false;
       $('evolucion').value = r.evolucion;
@@ -428,6 +447,12 @@
   $('porque').addEventListener('click', () => procesar('por qué', true));
   $('callar').addEventListener('click', () => procesar('detente', false));
   $('inst').addEventListener('change', nuevaSesion);
+  let factorPrevio = Number($('velocidad').value);
+  $('velocidad').addEventListener('change', () => {
+    const ahora = Date.now();
+    base = { real: ahora, sim: base.sim + (ahora - base.real) * factorPrevio };
+    factorPrevio = Number($('velocidad').value);
+  });
   EJEMPLOS.forEach((f) => {
     const b = el('button', null, f.replace(/^Pepe,\s*/, ''));
     b.type = 'button';
