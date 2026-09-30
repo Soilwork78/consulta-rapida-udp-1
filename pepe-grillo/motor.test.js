@@ -452,3 +452,13 @@ test('metas GES: 30 min sospecha → ECG y 30 min confirmación → trombólisis
   assert.strictEqual(x['Puerta-aguja'].meta, null);
   assert.match(s.procesar('tiempos').respuesta.hablar, /Confirmación diagnóstica a trombólisis, 35 minutos, fuera del GES\./);
 });
+
+test('decisión: 10 minutos en la voz (meta clínica) y 30 en el registro (garantía GES)', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const r = s.procesar('ingresa box 3, sospecha SCA').respuesta;
+  assert.match(r.hablar, /meta 10 minutos/);
+  t += 25 * 60000;
+  const ecg = s.procesar('ECG tomado').respuesta.tiempos.find((x) => x.nombre === 'Sospecha → ECG');
+  assert.deepStrictEqual([ecg.meta, ecg.ok], [30, true]);
+});

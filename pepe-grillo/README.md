@@ -70,6 +70,7 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
 - **Tiempos con las metas del GES** (garantías de oportunidad del problema de salud n.º 5, [auge.minsal.cl](https://auge.minsal.cl/problemasdesalud/index/5)), en pantalla, en la evolución y en voz ("Pepe, tiempos"):
   - **Sospecha → ECG: ≤ 30 min.** La sospecha es cuando la enfermera informa "sospecha SCA" o "dolor torácico"; si no se informa, se cuenta desde el ingreso.
   - **Confirmación diagnóstica → trombólisis: ≤ 30 min.** La confirmación es cuando la enfermera informa "el ECG muestra supradesnivel".
+  - **Decisión:** en la voz Pepe dice "ECG, meta 10 minutos" (meta clínica de las guías); el registro audita contra 30 minutos (garantía legal GES). Son dos cosas distintas a propósito.
   - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis y diagnóstico → salida a hemodinamia.
 
 **Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
