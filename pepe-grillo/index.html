@@ -90,6 +90,13 @@
   .sec.local { background: var(--local-soft); border-radius: 8px; padding: 10px 12px; grid-column: 1 / -1; }
   .sec.local h3 { color: var(--local); }
 
+  .registro { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0; }
+  .reg-cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+  .reg-cab h2 { font: 600 17px var(--font-display); margin: 0; }
+  .registro ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .registro label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  #evolucion { font: 14px/1.5 var(--font-body); min-height: 360px; }
+  .faltan { font-size: 13.5px; color: var(--alert); margin: 0; }
   .boxes { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
   .boxes h2 { font: 600 16px var(--font-display); margin: 0; }
   .box { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 6px; }
@@ -171,6 +178,23 @@
         <h2 id="titulo"></h2>
         <div class="secciones" id="secciones"></div>
       </article>
+
+      <section class="registro" aria-labelledby="regTitulo">
+        <div class="reg-cab">
+          <h2 id="regTitulo">Registro</h2>
+          <button type="button" id="btnEvolucion">Redactar evolución</button>
+        </div>
+        <ul id="regLista"><li>Lo que dictes (anamnesis, signos vitales, procedimientos) aparece aquí con su hora.</li></ul>
+        <div id="evolucionCaja" hidden>
+          <label for="evolucion">Borrador de evolución · editable · revisar y firmar</label>
+          <p class="faltan" id="faltan" hidden></p>
+          <textarea id="evolucion" rows="18"></textarea>
+          <div class="acciones">
+            <button type="button" id="copiar" class="primario">Copiar</button>
+            <span class="nota-mic" id="copiado" aria-live="polite"></span>
+          </div>
+        </div>
+      </section>
     </div>
 
     <aside class="boxes" aria-label="Pacientes activos">
@@ -179,29 +203,36 @@
     </aside>
   </div>
 
-  <footer>Base: guías internacionales y MINSAL citadas en la base de conocimiento. El protocolo institucional se dice primero y complementa, sin ocultar, las banderas rojas.</footer>
+  <footer>Base: guías internacionales y MINSAL citadas en la base de conocimiento. El protocolo institucional complementa, sin ocultar, las banderas rojas. La evolución es un borrador con lo dictado: la revisa y firma la enfermera.</footer>
 </div>
 
 <script src="kb.js"></script>
 <script src="instituciones/ejemplo.js"></script>
 <script src="protocolos/sca.js"></script>
 <script src="checklist.js"></script>
+<script src="registro.js"></script>
 <script src="doble-chequeo.js"></script>
 <script src="motor.js"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  // Un caso de SCA de principio a fin.
+  // Un caso de SCA de principio a fin, con el dictado para la evolución.
   const EJEMPLOS = [
     'Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA',
+    'refiere dolor opresivo desde las 12:30, irradiado a brazo izquierdo, con sudoración, EVA 8',
+    'ECG tomado',
     'sigue',
-    'detente',
-    'avanza',
     'fundamento',
+    'antecedentes: hipertenso, diabético tipo 2, fumador',
+    'fármacos: losartán y metformina, niega anticoagulantes',
+    'signos vitales: presión 158 sobre 94, FC 102, FR 22, saturación 95',
     'Pepe, el ECG muestra supradesnivel',
+    'aspirina 300 masticada administrada',
+    'vía venosa 18 en antebrazo izquierdo instalada',
     'Pepe, checklist de fibrinólisis',
-    'Pepe, va a fibrinólisis',
-    'Pepe, traslado a hemodinamia',
+    'tenecteplasa administrada',
+    'anota: se informa a la esposa',
+    'Pepe, redacta la evolución',
     'Pepe, box 5, mujer de 67 años, SCA sin supradesnivel',
     'Pepe, doble chequeo de heparina en BIC, box 5',
   ];
@@ -345,16 +376,39 @@
       return;
     }
     mostrar(frase, respuesta);
+    pintarRegistro(box, respuesta);
     const dialogo = interpretacion.intencion === 'dialogo';
     if (dialogo) { if (respuesta.hitos.length) programar(box, respuesta, true); }
-    else if (!['mas', 'repetir', 'anterior', 'porque', 'desconocido'].includes(interpretacion.intencion)) programar(box, respuesta);
+    else if (!['mas', 'repetir', 'anterior', 'porque', 'desconocido', 'registro'].includes(interpretacion.intencion)) programar(box, respuesta);
     pintarRapidas(dialogo ? respuesta.esperando : null);
     $('frase').value = '';
     if (conVoz) { if ('speechSynthesis' in window) speechSynthesis.cancel(); decir(respuesta.hablar); }
     pintarBoxes();
   }
 
+  function pintarRegistro(box, r) {
+    if (r.registroBox) {
+      $('regTitulo').textContent = 'Registro' + (box && box !== '—' ? ' · Box ' + box : '');
+      $('regLista').replaceChildren(...r.registroBox.map((l) => el('li', null, l)));
+    }
+    if (r.evolucion) {
+      $('evolucionCaja').hidden = false;
+      $('evolucion').value = r.evolucion;
+      const f = r.hablar.match(/Falta registrar: (.*)$/);
+      $('faltan').hidden = !f;
+      $('faltan').textContent = f ? 'Falta registrar: ' + f[1] : '';
+      $('copiado').textContent = '';
+    }
+  }
+
   // ── Eventos ──
+  $('btnEvolucion').addEventListener('click', () => procesar('redacta la evolución', true));
+  $('copiar').addEventListener('click', () => {
+    const txt = $('evolucion').value;
+    const listo = () => { $('copiado').textContent = 'Copiado. Pégalo en el registro clínico y fírmalo.'; };
+    const manual = () => { $('evolucion').select(); $('copiado').textContent = 'Texto seleccionado: cópialo con Ctrl+C o Cmd+C.'; };
+    try { navigator.clipboard.writeText(txt).then(listo, manual); } catch (_) { manual(); }
+  });
   $('form').addEventListener('submit', (e) => {
     e.preventDefault();
     const f = $('frase').value.trim();

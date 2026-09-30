@@ -276,3 +276,72 @@ test('profesionales: las señales habladas son breves', () => {
   sca.fases.forEach((f) => f.pasos.forEach((p) =>
     assert.ok(p.voz.split(' ').length <= 20, f.id + ': "' + p.voz + '" tiene ' + p.voz.split(' ').length + ' palabras')));
 });
+
+// ── Registro y evolución ──────────────────────────────────
+const RG = require('./registro.js');
+
+test('interpretación de lo dictado', () => {
+  const t = (f) => (RG.interpretar(f) || {}).tipo || null;
+  assert.strictEqual(t('Pepe, refiere dolor opresivo desde las 8:30'), 'proxima');
+  assert.strictEqual(t('anamnesis próxima: dolor de 2 horas'), 'proxima');
+  assert.strictEqual(t('Pepe, antecedentes: hipertenso'), 'remota');
+  assert.strictEqual(t('alergias: niega'), 'alergias');
+  assert.strictEqual(t('sin alergias'), 'alergias');
+  assert.strictEqual(t('fármacos: losartán'), 'farmacos');
+  assert.strictEqual(t('presión 158 sobre 94, FC 102'), 'signos');
+  assert.strictEqual(t('saturación 95'), 'signos');
+  assert.strictEqual(t('Pepe, ECG tomado'), 'procedimiento');
+  assert.strictEqual(t('box 3, se administró aspirina 300'), 'procedimiento');
+  assert.strictEqual(t('anota: familia informada'), 'nota');
+  assert.strictEqual(t('Pepe, redacta la evolución'), 'evolucion');
+  // No debe capturar órdenes clínicas ni de navegación
+  ['sigue', 'listo', 'Pepe, el ECG muestra supradesnivel', 'va a fibrinólisis', 'sospecha SCA',
+    'Pepe, ingresa box 3, hombre de 58 años con dolor torácico', 'checklist de fibrinólisis',
+    'doble chequeo de heparina en BIC'].forEach((f) => assert.strictEqual(t(f), null, f));
+});
+
+test('signos vitales dictados, con read-back', () => {
+  const sv = RG.leerSignos('presión 158 sobre 94, FC 102, FR 22, saturación 95, temperatura 36,4, EVA 8');
+  assert.deepStrictEqual(sv, { pa: '158/94 mmHg', fc: '102 lpm', fr: '22 rpm', sat: '95%', t: '36,4 °C', eva: '8/10' });
+});
+
+test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tiempos GES', () => {
+  let t = Date.parse('2026-09-30T14:00:00');
+  const reloj = () => t;
+  const s = crearSesion(kb, inst, { ahora: reloj });
+  const di = (f, min) => { t += (min || 0) * 60000; return s.procesar(f).respuesta; };
+  di('Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA');
+  di('refiere dolor opresivo desde las 12:30, irradiado a brazo izquierdo, con sudoración, EVA 8', 1);
+  assert.strictEqual(di('ECG tomado', 3).hablar, 'Anotado, 14:04.');
+  di('antecedentes: hipertenso, diabético tipo 2, fumador', 1);
+  di('fármacos: losartán y metformina, niega anticoagulantes');
+  assert.match(di('signos vitales: presión 158 sobre 94, FC 102, FR 22, saturación 95').hablar,
+    /^Anotado: PA 158\/94 mmHg, FC 102 lpm, FR 22 rpm, SatO2 95%\.$/);
+  di('Pepe, el ECG muestra supradesnivel', 2);
+  di('aspirina 300 masticada administrada', 2);
+  di('tenecteplasa administrada', 20);
+  const falta = di('Pepe, redacta la evolución', 5);
+  assert.match(falta.hablar, /Falta registrar: alergias\.$/);
+  const ev = falta.evolucion;
+  assert.match(ev, /Box 3/);
+  assert.match(ev, /Hombre, 58 años\. Ingreso 14:00\./);
+  assert.match(ev, /14:00 Sospecha médica de síndrome coronario agudo\./);
+  assert.match(ev, /14:07 ECG con supradesnivel ST/);
+  assert.match(ev, /Anamnesis próxima: Refiere dolor opresivo desde las 12:30/);
+  assert.match(ev, /Alergias: \[falta registrar\]/);
+  assert.match(ev, /- 14:04 ECG tomado\./);
+  assert.match(ev, /Puerta-ECG: 4 min · Puerta-aguja: 29 min/);
+  assert.match(ev, /Revisar, completar y firmar/);
+  assert.ok(!/sin alergias|niega alergias/i.test(ev), 'no inventa lo que no se dictó');
+  assert.ok(falta.registroBox.length > 5);
+});
+
+test('el doble chequeo queda en la evolución como procedimiento', () => {
+  const s = crearSesion(kb, inst);
+  s.procesar('ingresa box 5, SCA sin supradesnivel');
+  ['doble chequeo de heparina en BIC, box 5', 'listo', 'listo', '70', '18 por kilo', 'sí', '25,2', '25,2', '25,2', 'listo']
+    .forEach((f) => s.procesar(f));
+  const ev = s.procesar('box 5 redacta la evolución').respuesta.evolucion;
+  assert.match(ev, /Heparina sódica en BIC · 1\.260 UI\/h .* verificado por dos enfermeras\./);
+  assert.match(ev, /SCA sin supradesnivel ST/);
+});

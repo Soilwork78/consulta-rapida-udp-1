@@ -36,6 +36,23 @@ La enfermera le habla a Pepe (o escribe la frase en la demo):
 
 Si la frase calza con dos motivos de consulta (por ejemplo fiebre y confusión), Pepe lo advierte.
 
+## Registro y evolución de enfermería
+
+Durante la atención, la enfermera dicta y Pepe anota con la hora:
+
+| Frase | Queda en |
+|---|---|
+| "refiere dolor opresivo desde las 12:30…" / "anamnesis próxima: …" | Anamnesis próxima |
+| "antecedentes: hipertenso, diabético…" | Anamnesis remota |
+| "fármacos: …" / "alergias: niega" | Fármacos habituales / alergias |
+| "signos vitales: presión 158 sobre 94, FC 102…" | Signos vitales (Pepe los repite para confirmar) |
+| "ECG tomado", "aspirina 300 administrada", "vía venosa 18 instalada" | Procedimientos, con hora |
+| "anota: …" | Observaciones |
+
+Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable en formato S/O, con procedimientos en orden cronológico y los tiempos puerta-ECG y puerta-aguja.
+
+**Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
+
 ## Doble chequeo de heparina e insulina en BIC
 
 Pepe elimina la fricción inútil (anotar, calcular de memoria, recordar los pasos) y conserva la que protege:
@@ -66,6 +83,7 @@ Lo institucional complementa la base: nunca oculta las banderas rojas.
 - `motor.js`: interpreta la frase y arma la respuesta.
 - `doble-chequeo.js`: diálogo guiado del doble chequeo en BIC.
 - `checklist.js`: checklist guiado de sí / no (contraindicaciones de fibrinólisis).
+- `registro.js`: registro de lo dictado y borrador de la evolución de enfermería.
 - `protocolos/sca.js`: protocolo de enfermería del SCA por fases. Pruebas: `node --test pepe-grillo/motor.test.js`.
 - `index.html`: demo con voz (Chrome o Edge para el micrófono). El reloj va en tiempo real; hay un modo de prueba rápida (1 min = 1 s).
 - `instituciones/`: protocolos por centro.

@@ -27,6 +27,7 @@
       // ════════════════════════════════════════════════════
       {
         id: 'primer-contacto',
+        evento: 'Sospecha médica de síndrome coronario agudo', // cómo queda en la evolución
         nombre: 'Primer contacto (minutos 0 a 10)',
         intro: 'Sospecha de SCA.',
         claveInstitucional: 'sca',
@@ -68,6 +69,7 @@
       // ════════════════════════════════════════════════════
       {
         id: 'iamcest',
+        evento: 'ECG con supradesnivel ST: IAM con supradesnivel, se activa código IAM', // cómo queda en la evolución
         nombre: 'IAM con supradesnivel ST confirmado',
         intro: 'IAM con supradesnivel. Corre el reloj de reperfusión.',
         claveInstitucional: 'iamcest',
@@ -102,6 +104,7 @@
       // ════════════════════════════════════════════════════
       {
         id: 'fibrinolisis',
+        evento: 'Se indica fibrinólisis', // cómo queda en la evolución
         nombre: 'Fibrinólisis: antes, durante y después',
         intro: 'Fibrinólisis.',
         claveInstitucional: 'fibrinolisis',
@@ -139,6 +142,7 @@
       // ════════════════════════════════════════════════════
       {
         id: 'scasest',
+        evento: 'SCA sin supradesnivel ST', // cómo queda en la evolución
         nombre: 'SCA sin supradesnivel ST',
         intro: 'SCA sin supradesnivel.',
         claveInstitucional: 'scasest',
@@ -165,6 +169,7 @@
       // ════════════════════════════════════════════════════
       {
         id: 'traslado',
+        evento: 'Traslado a hemodinamia', // cómo queda en la evolución
         nombre: 'Traslado a hemodinamia',
         intro: 'Traslado a hemodinamia.',
         claveInstitucional: 'traslado',

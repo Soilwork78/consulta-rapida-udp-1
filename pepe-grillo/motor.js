@@ -17,6 +17,7 @@
   const EN_NODE = typeof module !== 'undefined';
   const DC = EN_NODE ? require('./doble-chequeo.js') : window.PepeDobleChequeo;
   const CL = EN_NODE ? require('./checklist.js') : window.PepeChecklist;
+  const RG = EN_NODE ? require('./registro.js') : window.PepeRegistro;
   // Protocolos por patología, desde la mirada de enfermería. Por ahora: SCA.
   const PROTOCOLOS = EN_NODE ? { sca: require('./protocolos/sca.js') } : (window.PEPE_PROTOCOLOS || {});
   // Sospechas o diagnósticos de kb.js que se atienden con un protocolo.
@@ -280,6 +281,7 @@
       secciones: [{ titulo: 'Aún por descartar', items: pendientes, alerta: true }],
       hitos: [],
       detenerHitos: true,
+      evento: 'Se descarta ' + nombreVoz(nombre).toLowerCase(),
     };
   }
 
@@ -306,6 +308,7 @@
     ].filter(Boolean);
     return {
       clave: proto.id + ':' + fase.id,
+      evento: fase.evento,
       titulo: (quien ? quien + ' · ' : '') + 'SCA · ' + fase.nombre,
       intro: (quien ? quien + '. ' : '') + fase.intro,
       pasos: pasos.map((p) => p.voz),
@@ -352,14 +355,24 @@
 
   // Sesión con varios pacientes: recuerda, por box, la respuesta y en qué
   // paso va, para "sigue"/"repite"/"anterior" y para heredar datos del paciente.
-  function crearSesion(kb, inst) {
+  function crearSesion(kb, inst, opciones = {}) {
+    const reloj = opciones.ahora || Date.now;
+    const registros = {}; // box → registro para la evolución
+    const registroDe = (box) => registros[box] || (registros[box] = RG.crear(reloj()));
     const porBox = {};
     let ultimoBox = '—';
     let chequeo = null; // diálogo de doble chequeo en curso
     let yaExplicado = false; // "dime sigue" se explica solo la primera vez
+    // Toda respuesta lleva el registro vivo del box, para mostrarlo en pantalla.
+    function conRegistro(salida) {
+      if (salida.respuesta && RG && registros[salida.box]) salida.respuesta.registroBox = registros[salida.box].resumen();
+      return salida;
+    }
+
     return {
       get enDialogo() { return !!(chequeo && chequeo.activo); },
-      procesar(texto) {
+      procesar(texto) { return conRegistro(this.procesarFrase(texto)); },
+      procesarFrase(texto) {
         // 0. "Detente": Pepe se calla y conserva el punto (y el diálogo, si hay uno).
         if (navegacion(normalizar(texto)) === 'pausa') {
           const b = extraerDatos(normalizar(texto)).box || (chequeo && chequeo.activo ? chequeo.box : ultimoBox);
@@ -374,7 +387,27 @@
         // 1. Diálogo en curso: la respuesta va directo, sin "Pepe".
         if (chequeo && chequeo.activo) {
           const respuesta = chequeo.responder(texto);
+          if (respuesta && respuesta.registro && RG) {
+            registroDe(chequeo.box).evento(respuesta.registro.replace(/^\d{2}:\d{2} · /, ''), reloj(), 'procedimiento');
+          }
           return { box: chequeo.box, interpretacion: { intencion: 'dialogo' }, respuesta };
+        }
+        // 1b. Lo que la enfermera dicta para la evolución.
+        const dictado = RG && RG.interpretar(texto);
+        if (dictado) {
+          const box = extraerDatos(normalizar(texto)).box || ultimoBox;
+          ultimoBox = box;
+          const reg = registroDe(box);
+          const base = { clave: 'registro', titulo: (box !== '—' ? 'Box ' + box + ' · ' : '') + 'Registro',
+            intro: '', pasos: [], secciones: [], hitos: [] };
+          if (dictado.tipo === 'evolucion') {
+            const ev = reg.evolucion(reloj());
+            return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, evolucion: ev.texto,
+              hablar: 'Borrador de evolución en pantalla.' +
+                (ev.faltantes.length ? ' Falta registrar: ' + ev.faltantes.join(', ') + '.' : '') } };
+          }
+          return { box, interpretacion: { intencion: 'registro' },
+            respuesta: { ...base, hablar: reg.agregar(dictado, reloj()) } };
         }
         // 2. Checklist de contraindicaciones de fibrinólisis.
         if (CL && PROTOCOLOS.sca && CL.detectar(texto)) {
@@ -429,6 +462,15 @@
         const respuesta = { ...r, paso: r.pasos.length ? 1 : 0, total: r.pasos.length,
           hablar: r.pasos.length ? decirPaso(r, 0, box, primeraVez) : paraVoz(r.intro) };
         if (i.intencion !== 'desconocido') porBox[box] = { interpretacion: i, respuesta: r, cursor: 0 };
+        // Registro para la evolución: un "ingresa" abre un registro nuevo.
+        if (RG && i.intencion !== 'desconocido') {
+          if (/\bingres/.test(normalizar(texto))) registros[box] = RG.crear(reloj());
+          const reg = registroDe(box);
+          Object.assign(reg.datos.paciente, { box: box !== '—' ? box : undefined, edad: i.edad, sexo: i.sexo },
+            Object.fromEntries(Object.entries(reg.datos.paciente).filter(([, v]) => v != null)));
+          const texto2 = r.evento || r.titulo.split(' · ').slice(1).join(' · ') || r.titulo;
+          reg.evento(texto2, reloj());
+        }
         return { box, interpretacion: i, respuesta };
       },
     };

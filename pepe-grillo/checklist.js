@@ -65,7 +65,11 @@
       else partes.push('Tampoco relativas.');
       if (pendientes.length) partes.push('Quedan sin verificar: ' + pendientes.map(sinSignos).join(', ') + '.');
       partes.push('Dime sigue para continuar con la fibrinólisis.');
-      return respuesta(partes.join(' '));
+      const r = respuesta(partes.join(' '));
+      r.registro = 'Checklist de contraindicaciones de fibrinólisis: sin absolutas' +
+        (relativas.length ? '; relativas: ' + relativas.map(sinSignos).join(', ') : '') +
+        (pendientes.length ? '; sin verificar: ' + pendientes.map(sinSignos).join(', ') : '');
+      return r;
     }
 
     function responder(texto) {
@@ -78,8 +82,10 @@
       else if (SI.test(t) && !NO.test(t)) {
         if (p.tipo === 'absoluta') {
           terminado = true;
-          return respuesta('Contraindicación absoluta: ' + sinSignos(p.q).toLowerCase() +
+          const r = respuesta('Contraindicación absoluta: ' + sinSignos(p.q).toLowerCase() +
             '. No se fibrinoliza. Avisa al médico para evaluar el traslado a angioplastía.', true);
+          r.registro = 'Checklist de fibrinólisis: contraindicación absoluta (' + sinSignos(p.q).toLowerCase() + '), se informa al médico';
+          return r;
         }
         relativas.push(p.q);
       } else if (!NO.test(t)) return preguntar('Respondan sí, no, o no sé.');
