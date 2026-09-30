@@ -71,7 +71,7 @@ Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fa
   - **Sospecha → ECG: ≤ 30 min.** La sospecha es cuando la enfermera informa "sospecha SCA" o "dolor torácico"; si no se informa, se cuenta desde el ingreso.
   - **Confirmación diagnóstica → trombólisis: ≤ 30 min.** La confirmación es cuando la enfermera informa "el ECG muestra supradesnivel".
   - **Decisión:** en la voz Pepe dice "ECG, meta 10 minutos" (meta clínica de las guías); el registro audita contra 30 minutos (garantía legal GES). Son dos cosas distintas a propósito.
-  - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis y diagnóstico → salida a hemodinamia.
+  - Sin meta GES, solo informativos: inicio del dolor → llegada, puerta-aguja, inicio del dolor → trombólisis y diagnóstico → salida a pabellón de hemodinamia.
 
 **Pepe no inventa:** lo esencial que no se dictó aparece como "[falta registrar]", y Pepe lo dice en voz alta (por ejemplo "Falta registrar: alergias"). La enfermera revisa, completa y firma.
 
@@ -119,9 +119,11 @@ Por ahora el desarrollo se concentra en **una sola patología, SCA, desde la mir
 |---|---|
 | Primer contacto (0–10 min) | "dolor torácico", "sospecha SCA" |
 | IAM con supradesnivel | "el ECG muestra supradesnivel", "IAMCEST", "código IAM" |
+| **Pabellón de hemodinamia** (coronariografía / ACTP) | "hemodinamia", "pabellón", "ACTP", "angioplastía", "coronariografía" |
 | Fibrinólisis (antes, durante y después) | "va a fibrinólisis", "tenecteplasa" |
 | SCA sin supradesnivel | "sin supradesnivel", "troponina positiva" |
-| Traslado a hemodinamia | "traslado", "angioplastía" |
+
+**Hemodinamia primero.** En el IAMCEST, Pepe propone el pabellón de hemodinamia (angioplastía primaria) como primera opción y la fibrinólisis solo si hemodinamia no llega antes de 120 minutos (ESC 2023). Después de la fibrinólisis y en el SCASEST de alto riesgo, el camino también termina en hemodinamia (rescate, farmacoinvasiva, < 2 h o < 24 h). Si un centro no tiene hemodinamia de turno, debe decirlo en su archivo institucional: Pepe lo antepone como protocolo local.
 
 Además:
 - **"Fundamento"** o **"por qué"**: Pepe da el fundamento del paso actual, solo si se lo piden.

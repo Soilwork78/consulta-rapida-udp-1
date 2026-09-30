@@ -4,8 +4,9 @@
 // ESTADO: BORRADOR — requiere validación clínica. Uso en simulación y docencia.
 //
 // Fases (Pepe cambia de fase cuando la enfermera informa un hallazgo o decisión):
-//   primer-contacto → iamcest → fibrinolisis → traslado
-//                   ↘ scasest ↗
+//   primer-contacto → iamcest → hemodinamia (primera opción: coronariografía / ACTP)
+//                   │         ↘ fibrinolisis → hemodinamia (rescate o farmacoinvasiva)
+//                   ↘ scasest → hemodinamia (muy alto riesgo < 2 h; alto riesgo < 24 h)
 // Cada paso: `voz` (lo que Pepe dice), `detalle` (tarjeta) y `porque`
 // (fundamento, lo que responde a "Pepe, ¿por qué?").
 // El protocolo institucional se intercala después de los primeros
@@ -82,13 +83,16 @@
         pasos: [
           { voz: 'Código IAM; hora del diagnóstico',
             porque: 'La hora del diagnóstico por ECG es el tiempo cero para medir las metas de reperfusión.' },
-          { voz: 'Estrategia: angioplastía si es posible antes de 120 minutos; si no, fibrinólisis antes de 10. Prepara ambas',
-            porque: 'La angioplastía primaria es superior solo si se realiza a tiempo. Si el traslado supera los 120 minutos, la fibrinólisis precoz salva más miocardio.' },
+          { voz: 'Primera opción: pabellón de hemodinamia para angioplastía primaria. Avisa a hemodinamia ya',
+            detalle: 'ESC 2023: angioplastía primaria si el paso de la guía puede ocurrir antes de 120 minutos desde el diagnóstico. Meta: 60 minutos en un centro con hemodinamia; 90 si hay que trasladar. Se activa con el ECG, sin esperar la troponina.',
+            porque: 'La angioplastía primaria abre la arteria en más del 90% de los casos, con menos reinfarto y sin el riesgo de hemorragia intracraneal de la fibrinólisis. Cada minuto de demora es miocardio perdido.' },
+          { voz: 'Solo si hemodinamia no llega antes de 120 minutos: fibrinólisis antes de 10',
+            porque: 'Si el paso de la guía se demora más de 120 minutos, la fibrinólisis precoz salva más miocardio. Después igual va a hemodinamia: rescate si no reperfunde, coronariografía entre 2 y 24 horas si reperfunde.' },
           { voz: 'Aspirina 150 a 300 masticada, según indicación',
             detalle: 'Masticada y no entera: absorción más rápida.',
             porque: 'La aspirina reduce la mortalidad del infarto. Masticada, alcanza su efecto antiplaquetario en minutos.' },
           { voz: 'Segundo antiagregante y anticoagulante: ojo con el ajuste por edad y función renal',
-            detalle: 'Con fibrinólisis (ESC 2023): clopidogrel carga 300 mg si ≤ 75 años; 75 mg sin carga si > 75 años. Enoxaparina < 75 años: 30 mg EV en bolo + 1 mg/kg SC cada 12 h; ≥ 75 años: sin bolo, 0,75 mg/kg SC cada 12 h. Ajustar si hay insuficiencia renal.',
+            detalle: 'Con angioplastía primaria: prasugrel o ticagrelor y heparina no fraccionada, según indicación; el pretratamiento antes de pabellón es decisión médica. Con fibrinólisis (ESC 2023): clopidogrel carga 300 mg si ≤ 75 años; 75 mg sin carga si > 75 años. Enoxaparina < 75 años: 30 mg EV en bolo + 1 mg/kg SC cada 12 h; ≥ 75 años: sin bolo, 0,75 mg/kg SC cada 12 h. Ajustar si hay insuficiencia renal.',
             porque: 'Los adultos mayores y los pacientes con insuficiencia renal tienen más riesgo de sangrado con dosis estándar. Es un punto clásico de error de medicación.' },
           { voz: 'Si es inferior: V3R y V4R antes de nitratos',
             porque: 'El infarto de ventrículo derecho depende de la precarga: los nitratos y los diuréticos pueden producir hipotensión grave.' },
@@ -96,12 +100,12 @@
             porque: 'Los nitratos alivian el dolor pero no reducen la mortalidad. La morfina puede retrasar la absorción de los antiagregantes orales.' },
           { voz: 'Inferior: atropina y marcapaso transcutáneo listos por bradicardia o BAV',
             porque: 'La arteria coronaria derecha irriga el nodo AV en la mayoría de las personas: el infarto inferior se asocia a bradiarritmias.' },
-          { voz: 'Si va a hemodinamia, dime traslado. Si se fibrinoliza, dime fibrinólisis',
+          { voz: 'Si va a pabellón, dime hemodinamia. Si se fibrinoliza, dime fibrinólisis',
             porque: 'Pepe cambia a la fase que corresponda.' },
         ],
         hitos: [
-          { min: 10, texto: 'IAMCEST: ¿decisión de reperfusión tomada?' },
-          { min: 30, texto: '¿Fibrinolítico administrado o paciente en camino a hemodinamia?' },
+          { min: 10, texto: 'IAMCEST: ¿hemodinamia avisada?' },
+          { min: 30, texto: '¿Paciente en camino a pabellón de hemodinamia o fibrinolítico administrado?' },
         ],
       },
 
@@ -131,7 +135,7 @@
           { voz: 'ECG a los 60 a 90 minutos: reperfusión si el ST baja 50% o más y cede el dolor',
             detalle: 'Criterios de reperfusión: resolución del ST ≥ 50%, alivio del dolor, arritmias de reperfusión (ritmo idioventricular acelerado, que no se trata).',
             porque: 'Si no hay criterios de reperfusión, la fibrinólisis fracasó y el paciente necesita una angioplastía de rescate urgente.' },
-          { voz: 'Sin reperfusión: rescate, avisa ya. Con reperfusión: coronariografía antes de 24 horas',
+          { voz: 'Sin reperfusión: angioplastía de rescate, avisa ya a hemodinamia. Con reperfusión: coronariografía entre 2 y 24 horas',
             porque: 'Es la estrategia farmacoinvasiva: la fibrinólisis abre la arteria, pero después hay que estudiarla y tratarla.' },
           { voz: 'Sangrado: punciones, encías, orina, deposiciones',
             porque: 'El riesgo de sangrado dura mientras dure el efecto de los antitrombóticos.' },
@@ -139,7 +143,7 @@
         hitos: [
           { min: 15, texto: 'Fibrinólisis: presión y ritmo de control' },
           { min: 60, texto: 'ECG de control: ¿ya se tomó?', registra: { texto: 'ECG de control post fibrinólisis tomado', marca: 'ecg-control' } },
-          { min: 90, texto: 'Si no hay reperfusión: ¿angioplastía de rescate coordinada?' },
+          { min: 90, texto: 'Si no hay reperfusión: ¿hemodinamia avisada para angioplastía de rescate?' },
         ],
       },
 
@@ -157,8 +161,10 @@
             porque: 'Un SCA sin supradesnivel puede evolucionar a una oclusión: el ECG inicial normal no descarta el infarto.' },
           { voz: 'Troponina seriada con hora exacta',
             porque: 'El diagnóstico de infarto sin supradesnivel depende de la curva de troponina, no de un valor aislado.' },
-          { voz: 'Muy alto riesgo: dolor refractario, hipotensión, arritmia, insuficiencia cardíaca o cambios del ST. Si aparece uno, avisa',
+          { voz: 'Muy alto riesgo: dolor refractario, hipotensión, arritmia o insuficiencia cardíaca. Avisa: hemodinamia antes de 2 horas',
             porque: 'Estos criterios de muy alto riesgo indican coronariografía en menos de 2 horas, igual que un infarto con supradesnivel.' },
+          { voz: 'Troponina positiva o cambios del ST: coronariografía antes de 24 horas. Pregunta el cupo en hemodinamia',
+            porque: 'En el SCA sin supradesnivel de alto riesgo, la estrategia invasiva precoz (menos de 24 horas) reduce la isquemia recurrente y acorta la estadía (ESC 2023).' },
           { voz: 'Antitrombóticos según indicación. Heparina en BIC: doble chequeo de heparina',
             porque: 'La heparina en infusión es un medicamento de alto riesgo: requiere doble chequeo independiente.' },
           { voz: 'Reposo, analgesia y monitorización continua',
@@ -172,27 +178,34 @@
 
       // ════════════════════════════════════════════════════
       {
-        id: 'traslado',
-        evento: 'Traslado a hemodinamia', // cómo queda en la evolución
-        nombre: 'Traslado a hemodinamia',
-        intro: 'Traslado a hemodinamia.',
-        claveInstitucional: 'traslado',
-        activadores: ['traslado', 'trasladar', 'hemodinamia', 'angioplastia', 'coronariografia', 'cateterismo',
-          'angioplastia primaria', 'angioplastia de rescate', 'va a hemodinamia'],
+        id: 'hemodinamia',
+        evento: 'Se activa pabellón de hemodinamia para coronariografía / angioplastía', // cómo queda en la evolución
+        nombre: 'Pabellón de hemodinamia: coronariografía / ACTP',
+        intro: 'Pabellón de hemodinamia.',
+        claveInstitucional: 'hemodinamia',
+        activadores: ['hemodinamia', 'pabellon', 'pabellon de hemodinamia', 'va a pabellon', 'va a hemodinamia', 'angioplastia',
+          'angioplastia primaria', 'angioplastia de rescate', 'actp', 'icp', 'icp primaria', 'coronariografia', 'cateterismo',
+          'traslado', 'trasladar'],
         pasos: [
-          { voz: 'Monitor desfibrilador de transporte cargado',
-            porque: 'El traslado es un período de alto riesgo de arritmia y con menos recursos a mano.' },
-          { voz: 'Dos vías permeables; fármacos con su hora',
-            porque: 'El equipo receptor necesita saber qué antitrombóticos y en qué dosis recibió el paciente para decidir el procedimiento.' },
-          { voz: 'ECG, exámenes, consentimiento y ficha',
-            porque: 'El ECG inicial es la referencia para comparar después de la reperfusión.' },
-          { voz: 'Pulsos distales marcados; retirar prótesis y joyas',
+          { voz: 'Hora del aviso a hemodinamia; pregunta cuándo está listo el pabellón',
+            porque: 'La meta se mide hasta el paso de la guía. La hora del aviso muestra dónde se pierde el tiempo.' },
+          { voz: 'Vías en el brazo izquierdo; deja libre la muñeca derecha',
+            detalle: 'El acceso radial derecho es el habitual. Si será femoral, lo define el hemodinamista.',
+            porque: 'El acceso radial tiene menos sangrado y menos mortalidad que el femoral (ESC 2023). Puncionar esa muñeca puede impedirlo.' },
+          { voz: 'Alergia al contraste, creatinina, anticoagulante oral o metformina: si hay, avisa',
+            porque: 'Cambian el procedimiento: premedicación, protección renal, riesgo de sangrado del acceso y acidosis láctica con metformina y contraste.' },
+          { voz: 'Monitor desfibrilador de transporte, cargado',
+            porque: 'El traslado a pabellón es un período de alto riesgo de arritmia y con menos recursos a mano.' },
+          { voz: 'Fármacos con dosis y hora: aspirina, segundo antiagregante y anticoagulante',
+            porque: 'El hemodinamista necesita saber qué antitrombóticos recibió y cuándo, para decidir la heparina en pabellón y evitar la doble anticoagulación.' },
+          { voz: 'Pulsos radiales y pedios marcados; retirar prótesis y joyas; consentimiento',
+            detalle: 'No se espera ayuno ni otros exámenes: nada debe retrasar la salida a pabellón.',
             porque: 'Los pulsos basales permiten detectar complicaciones vasculares del acceso arterial.' },
-          { voz: 'Entrega ISBAR: inicio del dolor, hora del ECG, fármacos y estado actual',
-            porque: 'Una entrega estructurada reduce los errores de comunicación, una de las principales causas de eventos adversos.' },
+          { voz: 'ECG, exámenes y ficha. Entrega ISBAR: inicio del dolor, hora del ECG, fármacos y estado actual',
+            porque: 'El ECG inicial es la referencia después de la reperfusión. Una entrega estructurada reduce los errores de comunicación.' },
         ],
         hitos: [
-          { min: 20, texto: 'Traslado: ¿el paciente ya salió a hemodinamia?', registra: { texto: 'Sale a hemodinamia', marca: 'salida' } },
+          { min: 20, texto: 'Hemodinamia: ¿el paciente ya salió a pabellón?', registra: { texto: 'Sale a pabellón de hemodinamia', marca: 'salida' } },
         ],
       },
     ],

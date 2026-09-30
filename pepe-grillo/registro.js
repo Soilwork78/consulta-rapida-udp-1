@@ -59,7 +59,7 @@
   const ETIQUETAS = [
     ['ecg-control', /\becg\b.*\bcontrol\b|\bcontrol\b.*\becg\b/],
     ['ecg', /\becg\b|electrocardiograma/],
-    ['salida', /\bsal(e|io)\b.*hemodinamia|trasladad[oa]\b/],
+    ['salida', /\bsal(e|io)\b.*(hemodinamia|pabellon)|trasladad[oa]\b/],
     ['troponina-2', /(segunda|control).*troponina|troponina.*(segunda|control)/],
     ['fibrinolitico', /tenecteplasa|estreptoquinasa|alteplasa|fibrinolitico|trombolitico|fibrinolisis|trombolisis/],
     ['aas', /aspirina|\baas\b/],
@@ -226,7 +226,7 @@
       if (dx && fib) add('Confirmación diagnóstica → trombólisis', dx.hora, fib.hora, 30, fib.aprox);
       if (fib) add('Puerta-aguja', r.ingreso, fib.hora, null, fib.aprox);
       if (fib && r.inicioDolor != null) add('Inicio del dolor → trombólisis', r.inicioDolor, fib.hora, null);
-      if (dx && salida) add('Diagnóstico → salida a hemodinamia', dx.hora, salida.hora, null, salida.aprox);
+      if (dx && salida) add('Diagnóstico → salida a pabellón de hemodinamia', dx.hora, salida.hora, null, salida.aprox);
       return t;
     }
 
