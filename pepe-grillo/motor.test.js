@@ -355,7 +355,7 @@ test('el doble chequeo queda en la evolución como procedimiento', () => {
   assert.match(ev, /SCA sin supradesnivel ST/);
 });
 
-test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
+test('evolución en relato ordenado, sin SOAPIE ni diagnósticos de enfermería', () => {
   let t = Date.parse('2026-09-30T14:00:00');
   const s = crearSesion(kb, inst, { ahora: () => t });
   const di = (f, min) => { t += (min || 0) * 60000; return s.procesar(f).respuesta; };
@@ -368,16 +368,15 @@ test('evolución en formato SOAPIE, sin diagnósticos de enfermería', () => {
   di('EVA 3', 15);
   di('evaluación: sin arritmias');
   const ev = di('redacta la evolución').evolucion;
-  const orden = ['\nS:', '\nO:', '\nA:', '\nP:', '\nI:', '\nE:'].map((x) => ev.indexOf(x));
-  assert.ok(orden.every((x, k) => x > 0 && (k === 0 || x > orden[k - 1])), 'secciones S, O, A, P, I, E en orden');
-  assert.match(ev, /O:\n[\s\S]*Diaforético, sin crepitaciones\./);
-  assert.match(ev, /Contexto clínico:\n- 14:00 Sospecha médica de síndrome coronario agudo\.\n\nS:/);
-  assert.match(ev, /A:\nIAM con supradesnivel en ventana de reperfusión\.\n\nP:/, 'A solo con análisis de enfermería');
-  assert.match(ev, /S:\n[\s\S]*Dolor \(EVA\): 8\/10 \(14:01\), 3\/10 \(14:21\)\.\n\nO:/, 'EVA en S');
-  assert.ok(!/O:[\s\S]*Signos vitales[^\n]*EVA[\s\S]*A:/.test(ev), 'EVA fuera de O');
-  assert.match(ev, /P:\nECG de control a los 90 minutos y preparar traslado\./);
-  assert.match(ev, /I:\nFármacos:\n- 14:06 Nitroglicerina sublingual administrada\./);
-  assert.match(ev, /E:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);
+  const orden = ['\nContexto clínico:', '\nAnamnesis:', '\nValoración:', '\nIntervenciones de enfermería:',
+    '\nRespuesta y evolución:', '\nAnálisis y plan de enfermería:', '\nCierre:'].map((x) => ev.indexOf(x));
+  assert.ok(orden.every((x, k) => x > 0 && (k === 0 || x > orden[k - 1])), 'secciones en orden');
+  assert.ok(!/^[SOAPIE]:$/m.test(ev), 'sin etiquetas SOAPIE');
+  assert.match(ev, /Examen físico \(céfalo-caudal\): Diaforético, sin crepitaciones\./);
+  assert.match(ev, /Ventilatorio: \[falta registrar\]\nDolor: EVA 8\/10 \(14:01\), 3\/10 \(14:21\)\.\nAlimentación/, 'dolor después de ventilatorio');
+  assert.match(ev, /Intervenciones de enfermería:\nFármacos:\n- 14:06 Nitroglicerina sublingual administrada\./);
+  assert.match(ev, /Respuesta y evolución:\nSin arritmias\.\nEVA 8\/10 \(14:01\) → 3\/10 \(14:21\)\./);
+  assert.match(ev, /Análisis y plan de enfermería:\nIAM con supradesnivel en ventana de reperfusión\.\nECG de control a los 90 minutos y preparar traslado\./);
   assert.ok(!/diagn[oó]stico de enfermer|NANDA/i.test(ev));
 });
 

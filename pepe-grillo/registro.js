@@ -18,7 +18,7 @@
 //   "evaluación: dolor disminuye a EVA 3…"     → E
 //   "anota: …"                                 → nota libre
 //   "tiempos"                                  → Pepe dice los tiempos y si cumplen el GES
-//   "redacta la evolución"                     → borrador SOAPIE (sin diagnósticos de enfermería;
+//   "redacta la evolución"                     → borrador de la visita de enfermería (sin diagnósticos de enfermería;
 //                                                 EVA en S; A solo con análisis de enfermería)
 // ============================================================
 
@@ -398,13 +398,14 @@
         (x.ok ? 'dentro de' : 'fuera de') + (x.fuente === 'GES' ? 'l GES' : ' la meta')).join('. ') + '.';
     }
 
-    // Borrador de la evolución (visita de enfermería) en formato SOAPIE, sin diagnósticos de enfermería.
+    // Borrador de la evolución (visita de enfermería), sin diagnósticos de enfermería.
     // Criterios transversales (Potter-Perry; Kozier; guía Visita de Enfermería, Cuidados de Enfermería II 2026):
     // inicia con fecha, hora y turno; identifica al paciente y su diagnóstico médico actual; la valoración sigue
     // el orden neurológico → hemodinamia → ventilación → dolor → alimentación/metabólico → examen físico
-    // céfalo-caudal; los signos vitales van con su valor exacto y su interpretación; cierra con dispositivos
-    // invasivos, evaluación de riesgos y exámenes pendientes, y termina con firma y nombre del autor.
-    // No incluye indicaciones médicas. Pepe no inventa: lo que falta queda como [falta registrar].
+    // céfalo-caudal; los signos vitales van con su valor exacto y su interpretación; describe las intervenciones
+    // y la respuesta del paciente; cierra con dispositivos invasivos, evaluación de riesgos y pendientes, y
+    // termina con firma y nombre del autor. No incluye indicaciones médicas. Pepe no inventa: lo que falta
+    // queda como [falta registrar].
     function evolucion(cuando) {
       const p = r.paciente;
       const falta = '[falta registrar]';
@@ -420,23 +421,20 @@
       const quien = [p.sexo ? mayuscula(p.sexo) : 'Paciente', p.edad ? p.edad + ' años' : ''].filter(Boolean).join(', ');
       L.push(quien + '. Nombre y RUT: [completar en ficha]. Ingreso ' + hhmm(r.ingreso) + ' hrs.');
       L.push('Diagnóstico médico actual: ' + (r.diagnostico || falta) + '.');
-      // Hitos del equipo médico: contexto, fuera del SOAPIE de enfermería.
+      // Hitos del equipo médico, en orden: contexto de la atención.
       if (r.clinico.length) {
         L.push('', 'Contexto clínico:');
         r.clinico.forEach((e) => L.push('- ' + hhmm(e.hora) + ' ' + sinPunto(e.texto) + '.'));
       }
 
-      L.push('', 'S:');
+      L.push('', 'Anamnesis:');
       L.push('Anamnesis próxima: ' + (r.proxima.length ? frases(r.proxima) : falta));
-      L.push('Anamnesis remota: ' + (r.remota.length ? frases(r.remota) : falta));
+      L.push('Antecedentes: ' + (r.remota.length ? frases(r.remota) : falta));
       L.push('Fármacos habituales: ' + (r.farmacos.length ? frases(r.farmacos) : falta));
       L.push('Alergias: ' + (r.alergias.length ? frases(r.alergias) : falta));
-      // La EVA la reporta el paciente: va en S.
-      const evas = r.signos.filter((s) => s.sv.eva);
-      L.push('Dolor (EVA): ' + (evas.length ? evas.map((s) => s.sv.eva + ' (' + hhmm(s.hora) + ')').join(', ') + '.' : falta));
 
-      // O: valoración por sistemas, en el orden de la visita de enfermería.
-      L.push('', 'O:');
+      // Valoración en el orden de la visita de enfermería.
+      L.push('', 'Valoración:');
       const ultimo = (k) => [...r.signos].reverse().find((s) => s.sv[k]);
       const o = adjetivo(p.sexo);
       L.push('Neurológico: ' + (r.neuro.length ? frases(r.neuro) : falta));
@@ -446,20 +444,15 @@
       L.push('Hemodinámico: ' + (hemo.length ? mayuscula(hemo.join(', ')) + '.' : falta));
       const vent = ['fr', 'sat'].map((k) => ultimo(k) && interpretar1(k, ultimo(k), o)).filter(Boolean);
       L.push('Ventilatorio: ' + (vent.length ? mayuscula(vent.join(', ')) + '.' : falta));
+      const evas = r.signos.filter((s) => s.sv.eva);
+      L.push('Dolor: ' + (evas.length ? 'EVA ' + evas.map((s) => s.sv.eva + ' (' + hhmm(s.hora) + ')').join(', ') + '.' : falta));
       const hgt = ultimo('hgt');
       const meta = [...(hgt ? [interpretar1('hgt', hgt, o)] : []), ...r.metabolico.map(sinPunto)];
       L.push('Alimentación y metabólico: ' + (meta.length ? mayuscula(meta.join('. ')) + '.' : falta));
       L.push('Examen físico (céfalo-caudal): ' + (r.objetivo.length ? cefaloCaudal(r.objetivo) : falta));
       if (r.psicosocial.length) L.push('Respuesta emocional y familia: ' + frases(r.psicosocial));
 
-      // A: solo el análisis de enfermería dictado.
-      L.push('', 'A:');
-      L.push(r.analisis.length ? frases(r.analisis) : falta);
-
-      L.push('', 'P:');
-      L.push(r.plan.length ? frases(r.plan) : falta);
-
-      L.push('', 'I:');
+      L.push('', 'Intervenciones de enfermería:');
       if (r.procedimientos.length) {
         // Orden de lectura: de la evaluación inicial a la salida del paciente.
         const orden = ['Monitorización y ECG', 'Accesos venosos y exámenes', 'Fármacos',
@@ -476,10 +469,16 @@
       if (r.inicioDolor != null) L.push('Inicio del dolor: ' + hhmm(r.inicioDolor) + ' (según anamnesis).');
       if (t.length) { L.push('Tiempos de atención:'); t.forEach((x) => L.push('- ' + x + '.')); }
 
-      L.push('', 'E:');
+      // Respuesta del paciente: lo dictado y la evolución objetiva de lo medido más de una vez.
+      L.push('', 'Respuesta y evolución:');
       r.evaluacion.forEach((x) => L.push(mayuscula(sinPunto(x)) + '.'));
       tendencias().forEach((x) => L.push(x + '.'));
       if (!r.evaluacion.length && !tendencias().length) L.push(falta);
+
+      // Pensamiento crítico de enfermería: solo lo dictado.
+      L.push('', 'Análisis y plan de enfermería:');
+      L.push(r.analisis.length ? frases(r.analisis) : 'Análisis: ' + falta);
+      L.push(r.plan.length ? frases(r.plan) : 'Plan: ' + falta);
 
       // Cierre de la visita: dispositivos invasivos, riesgos y pendientes.
       L.push('', 'Cierre:');
