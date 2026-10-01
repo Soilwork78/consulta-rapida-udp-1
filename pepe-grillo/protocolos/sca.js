@@ -30,6 +30,7 @@
       {
         id: 'primer-contacto',
         evento: 'Sospecha médica de síndrome coronario agudo', // cómo queda en la evolución
+        diagnosticoMedico: 'Sospecha de síndrome coronario agudo',
         marcaTiempo: 'sospecha', // GES: el ECG se cuenta desde la sospecha
         nombre: 'Primer contacto (minutos 0 a 10)',
         intro: 'Sospecha de SCA.',
@@ -75,6 +76,7 @@
       {
         id: 'iamcest',
         evento: 'ECG con supradesnivel ST: IAM con supradesnivel, se activa código IAM', // cómo queda en la evolución
+        diagnosticoMedico: 'IAM con supradesnivel ST',
         marcaTiempo: 'diagnostico', // GES: la trombólisis se cuenta desde la confirmación diagnóstica
         nombre: 'IAM con supradesnivel ST confirmado',
         intro: 'IAM con supradesnivel. Corre el reloj de reperfusión.',
@@ -156,6 +158,7 @@
       {
         id: 'scasest',
         evento: 'SCA sin supradesnivel ST', // cómo queda en la evolución
+        diagnosticoMedico: 'SCA sin supradesnivel ST',
         nombre: 'SCA sin supradesnivel ST',
         intro: 'SCA sin supradesnivel.',
         claveInstitucional: 'scasest',

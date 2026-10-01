@@ -309,6 +309,7 @@
     return {
       clave: proto.id + ':' + fase.id,
       evento: fase.evento,
+      diagnosticoMedico: fase.diagnosticoMedico,
       marcaTiempo: fase.marcaTiempo,
       titulo: (quien ? quien + ' · ' : '') + 'SCA · ' + fase.nombre,
       intro: (quien ? quien + '. ' : '') + fase.intro,
@@ -450,7 +451,8 @@
             const ev = reg.evolucion(reloj());
             return { box, interpretacion: { intencion: 'registro' }, respuesta: { ...base, evolucion: ev.texto,
               hablar: 'Borrador de evolución en pantalla.' +
-                (ev.faltantes.length ? ' Falta registrar: ' + ev.faltantes.join(', ') + '.' : '') } };
+                (ev.faltantes.length ? ' Falta registrar: ' + ev.faltantes.join(', ') + '.' : '') +
+                (ev.avisos && ev.avisos.length ? ' ' + ev.avisos.join(' ') : '') } };
           }
           return { box, interpretacion: { intencion: 'registro' },
             respuesta: { ...base, hablar: reg.agregar(dictado, reloj()) } };
@@ -516,6 +518,7 @@
             Object.fromEntries(Object.entries(reg.datos.paciente).filter(([, v]) => v != null)));
           const texto2 = r.evento || r.titulo.split(' · ').slice(1).join(' · ') || r.titulo;
           reg.evento(texto2, reloj(), undefined, r.marcaTiempo);
+          if (r.diagnosticoMedico) reg.datos.diagnostico = r.diagnosticoMedico;
           // Recordatorios con meta desde el diagnóstico: se descuenta lo que ya pasó; sin diagnóstico no aplican.
           if (r.hitos.some((h) => h.desde === 'diagnostico')) {
             const dx = reg.datos.clinico.find((e) => e.marca === 'diagnostico');
