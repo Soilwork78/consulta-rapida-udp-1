@@ -33,6 +33,8 @@
       .replace(/^\s*pepe\b[\s,.:;]*/i, '')
       .trim();
   }
+  // Minúscula inicial salvo siglas (ECG, RHA).
+  const minuscula = (s) => (/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s);
   const mayuscula = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const sinPunto = (s) => s.replace(/[\s.;,]+$/, '');
 
@@ -78,6 +80,17 @@
     ['evolucion', /^((redacta|redactar|genera|arma|prepara|dame|hazme)\b.*\bevoluci[oó]n|evoluci[oó]n)\s*$/i, 'todo'],
     ['tiempos', /^((dime |dame |c[oó]mo (vamos|van|estamos) (con )?)?(los )?(tiempos|indicadores))\s*[?¿]*$/i, 'todo'],
     ['nota', /^(anota|anotar|registra|nota|observaci[oó]n)\b\s*[:,.]?\s*(que\s+)?/i, 'resto'],
+    ['riesgos', /^(braden|downton|norton|riesgo\s+de)\b/i, 'todo'],
+    ['riesgos', /^(evaluaci[oó]n\s+de\s+riesgos?|riesgos?)\s*[:,.]?\s*/i, 'resto'],
+    ['pendientes', /^(queda(n)?\s+pendientes?|pendientes?)\s*[:,.]?\s*/i, 'resto'],
+    ['dispositivos', /^dispositivos?(\s+invasivos?)?\s*[:,.]?\s*/i, 'resto'],
+    ['neuro', /^(neurol[oó]gico|estado\s+de\s+conciencia|nivel\s+de\s+conciencia|conciencia)\s*[:,.]?\s*/i, 'resto'],
+    ['neuro', /^(l[uú]cid|vigil|somnolient|soporos|desorientad|orientad|consciente|conciente|glasgow)/i, 'todo'],
+    ['metabolico', /^(alimentaci[oó]n|metab[oó]lico|nutrici[oó]n)\s*[:,.]?\s*/i, 'resto'],
+    ['metabolico', /^(r[eé]gimen|ayuno)\b/i, 'todo'],
+    ['objetivo', /^(diuresis|deposiciones|eliminaci[oó]n|piel\b)/i, 'todo'],
+    ['psicosocial', /^(psicosocial|estado\s+emocional)\s*[:,.]?\s*/i, 'resto'],
+    ['psicosocial', /^(an[ií]micamente|emocionalmente|ansios|angustiad|tranquil|familia\b)/i, 'todo'],
     ['objetivo', /^(examen\s+f[ií]sico|hallazgos?|al\s+examen)\s*[:,.]?\s*/i, 'resto'],
     ['analisis', /^(an[aá]lisis|apreciaci[oó]n)\s*[:,.]?\s*/i, 'resto'],
     ['plan', /^plan\b\s*[:,.]?\s*/i, 'resto'],
@@ -190,6 +203,63 @@
     return { hora, texto: i < 0 ? texto : (texto.slice(0, i) + texto.slice(i + largo)).trim() };
   }
 
+  // ── Interpretación de signos vitales (adulto) ──
+  // Valor exacto + interpretación, como pide la pauta: "taquicárdico (FC 102 lpm)".
+  const adjetivo = (sexo) => (sexo === 'mujer' ? 'a' : sexo === 'hombre' ? 'o' : 'o/a');
+  const num = (v) => parseFloat(String(v).replace(',', '.'));
+  function interpretar1(k, medicion, o) {
+    const v = medicion.sv[k];
+    const h = ', ' + hhmm(medicion.hora);
+    if (k === 'fc') {
+      const n = num(v);
+      return (n < 60 ? 'bradicárdic' + o : n > 100 ? 'taquicárdic' + o : 'normocárdic' + o) + ' (FC ' + v + h + ')';
+    }
+    if (k === 'pa') {
+      const [pas, pad] = v.split(/[/ ]/).map(Number);
+      return (pas < 90 ? 'hipotens' + o : pas >= 140 || pad >= 90 ? 'hipertens' + o : 'normotens' + o) + ' (PA ' + v + h + ')';
+    }
+    if (k === 'fr') {
+      const n = num(v);
+      return (n < 12 ? 'bradipneic' + o : n > 20 ? 'taquipneic' + o : 'eupneic' + o) + ' (FR ' + v + h + ')';
+    }
+    if (k === 'sat') {
+      const n = num(v);
+      return 'saturando ' + v + ' (' + hhmm(medicion.hora) + ')' + (n < 90 ? ', con hipoxemia' : '');
+    }
+    if (k === 't') {
+      const n = num(v);
+      return (n < 36 ? 'hipotérmic' + o : n >= 38 ? 'febril' : n >= 37.5 ? 'subfebril' : 'afebril') + ' (T° ' + v + h + ')';
+    }
+    if (k === 'hgt') {
+      const n = num(v);
+      return 'HGT ' + v + ' (' + hhmm(medicion.hora) + ')' + (n < 70 ? ', hipoglicemia' : n > 180 ? ', hiperglicemia' : '');
+    }
+    return '';
+  }
+
+  // ── Examen físico en orden céfalo-caudal ──
+  // Cada hallazgo dictado se ubica por segmento; los que no calzan van al final.
+  const SEGMENTOS = [
+    /piel|mucosa|diafor|palid|cianosi|sudor|hidratad|llene capilar|llenado capilar|perfusi|ictericia|marmore/,
+    /cabeza|pupil|isocor|craneo|ojo|conjuntiv|boca|labio|facie/,
+    /cuello|yugular|ingurgit|tiroide|traquea/,
+    /torax|murmullo|crepit|sibil|roncus|ruidos cardiacos|soplo|pulmon|mama|tiraje/,
+    /abdomen|rha|hidroaereo|blando|depresible|distendid|globo vesical/,
+    /diuresis|orina|sonda|genital|deposicion/,
+    /extremidad|edema|pulso|pedio|radial|eeii|eess|medias|\bmae\b/,
+    /dorso|sacro|\blpp\b|talon|lesion por presion/,
+  ];
+  function cefaloCaudal(entradas) {
+    const partes = [];
+    entradas.forEach((x) => x.split(/\s*[.;]\s+|\s*,\s+/).map(sinPunto).filter(Boolean).forEach((h) => partes.push(h)));
+    const seg = (h) => { const k = SEGMENTOS.findIndex((re) => re.test(sinTildes(h))); return k < 0 ? SEGMENTOS.length : k; };
+    return partes.map((h, i) => ({ h, i, s: seg(h) })).sort((a, b) => a.s - b.s || a.i - b.i)
+      .map((x, i) => (i === 0 ? mayuscula(x.h) : minuscula(x.h))).join(', ') + '.';
+  }
+
+  // Dispositivos invasivos que salen de los procedimientos dictados.
+  const DISPOSITIVO = /\bvia venosa|\bvvp\b|cateter|\bcvc\b|linea arterial|sonda|\bbic\b/;
+
   const hhmm = (ms) => new Date(ms).toTimeString().slice(0, 5);
   const minutos = (a, b) => Math.round((b - a) / 60000);
 
@@ -199,6 +269,7 @@
     const r = {
       ingreso: ahora, paciente: {}, clinico: [], proxima: [], remota: [], farmacos: [],
       alergias: [], signos: [], procedimientos: [], notas: [],
+      neuro: [], metabolico: [], psicosocial: [], riesgos: [], pendientes: [], dispositivos: [],
       objetivo: [], analisis: [], plan: [], evaluacion: [],
     };
 
@@ -226,11 +297,16 @@
         return 'Anotado en anamnesis próxima.';
       }
       const destino = { remota: 'remota', alergias: 'alergias', farmacos: 'farmacos', nota: 'notas',
-        objetivo: 'objetivo', analisis: 'analisis', plan: 'plan', evaluacion: 'evaluacion' }[tipo];
+        objetivo: 'objetivo', analisis: 'analisis', plan: 'plan', evaluacion: 'evaluacion', neuro: 'neuro',
+        metabolico: 'metabolico', psicosocial: 'psicosocial', riesgos: 'riesgos', pendientes: 'pendientes',
+        dispositivos: 'dispositivos' }[tipo];
       r[destino].push(texto);
       return { remota: 'Anotado en anamnesis remota.', alergias: 'Alergias anotadas.',
-        farmacos: 'Fármacos anotados.', notas: 'Nota anotada.', objetivo: 'Anotado en objetivo.',
-        analisis: 'Anotado en análisis.', plan: 'Anotado en plan.', evaluacion: 'Anotado en evaluación.' }[destino];
+        farmacos: 'Fármacos anotados.', notas: 'Nota anotada.', objetivo: 'Anotado en examen físico.',
+        analisis: 'Anotado en análisis.', plan: 'Anotado en plan.', evaluacion: 'Anotado en evaluación.',
+        neuro: 'Anotado en estado neurológico.', metabolico: 'Anotado en alimentación y metabólico.',
+        psicosocial: 'Anotado en respuesta emocional y familia.', riesgos: 'Riesgos anotados.',
+        pendientes: 'Pendiente anotado.', dispositivos: 'Dispositivo anotado.' }[destino];
     }
 
     // Eventos clínicos que Pepe ya conoce (sospecha, fases, doble chequeo…).
@@ -262,6 +338,8 @@
       if (!r.alergias.length) f.push('alergias');
       ['pa', 'fc', 'sat'].forEach((k) => { if (!ultimo[k]) f.push({ pa: 'PA', fc: 'FC', sat: 'SatO2' }[k]); });
       if (!r.procedimientos.some((p) => p.tags.includes('ecg'))) f.push('hora del ECG');
+      if (!r.neuro.length) f.push('estado neurológico');
+      if (!r.riesgos.length) f.push('evaluación de riesgos');
       if (!r.analisis.length) f.push('análisis');
       if (!r.plan.length) f.push('plan');
       if (!r.evaluacion.length && !tendencias().length) f.push('evaluación');
@@ -320,18 +398,28 @@
         (x.ok ? 'dentro de' : 'fuera de') + (x.fuente === 'GES' ? 'l GES' : ' la meta')).join('. ') + '.';
     }
 
-    // Borrador en formato SOAPIE, sin diagnósticos de enfermería.
-    // Contexto clínico (hitos del equipo médico) va antes de la S; la A es solo análisis de enfermería.
+    // Borrador de la evolución (visita de enfermería) en formato SOAPIE, sin diagnósticos de enfermería.
+    // Criterios transversales (Potter-Perry; Kozier; guía Visita de Enfermería, Cuidados de Enfermería II 2026):
+    // inicia con fecha, hora y turno; identifica al paciente y su diagnóstico médico actual; la valoración sigue
+    // el orden neurológico → hemodinamia → ventilación → dolor → alimentación/metabólico → examen físico
+    // céfalo-caudal; los signos vitales van con su valor exacto y su interpretación; cierra con dispositivos
+    // invasivos, evaluación de riesgos y exámenes pendientes, y termina con firma y nombre del autor.
+    // No incluye indicaciones médicas. Pepe no inventa: lo que falta queda como [falta registrar].
     function evolucion(cuando) {
       const p = r.paciente;
-      const quien = [p.sexo ? mayuscula(p.sexo) : 'Paciente', p.edad ? p.edad + ' años' : ''].filter(Boolean).join(', ');
-      const fecha = new Date(cuando).toLocaleDateString('es-CL');
       const falta = '[falta registrar]';
-      const frases = (xs) => xs.map(sinPunto).join('. ') + '.';
+      const frases = (xs) => xs.map(sinPunto).map(mayuscula).join('. ') + '.';
       const L = [];
+      const d = new Date(cuando);
+      const dia = d.toLocaleDateString('es-CL', { weekday: 'long' });
+      const fecha = [d.getDate(), d.getMonth() + 1].map((n) => String(n).padStart(2, '0')).join('/') + '/' + d.getFullYear();
+      const turno = d.getHours() >= 8 && d.getHours() < 20 ? 'diurno' : 'nocturno';
       L.push('EVOLUCIÓN DE ENFERMERÍA — URGENCIA');
-      L.push(fecha + ' · ' + hhmm(cuando) + (p.box ? ' · Box ' + p.box : ''));
-      L.push(quien + '. Ingreso ' + hhmm(r.ingreso) + '.');
+      L.push('Evolución de enfermería ' + dia + ' ' + fecha + ' a las ' + hhmm(cuando) + ' hrs, turno ' + turno +
+        (p.box ? ', box ' + p.box : '') + '.');
+      const quien = [p.sexo ? mayuscula(p.sexo) : 'Paciente', p.edad ? p.edad + ' años' : ''].filter(Boolean).join(', ');
+      L.push(quien + '. Nombre y RUT: [completar en ficha]. Ingreso ' + hhmm(r.ingreso) + ' hrs.');
+      L.push('Diagnóstico médico actual: ' + (r.diagnostico || falta) + '.');
       // Hitos del equipo médico: contexto, fuera del SOAPIE de enfermería.
       if (r.clinico.length) {
         L.push('', 'Contexto clínico:');
@@ -347,12 +435,22 @@
       const evas = r.signos.filter((s) => s.sv.eva);
       L.push('Dolor (EVA): ' + (evas.length ? evas.map((s) => s.sv.eva + ' (' + hhmm(s.hora) + ')').join(', ') + '.' : falta));
 
+      // O: valoración por sistemas, en el orden de la visita de enfermería.
       L.push('', 'O:');
-      const objetivos = r.signos.map((s) => ({ hora: s.hora, sv: Object.fromEntries(Object.entries(s.sv).filter(([k]) => k !== 'eva')) }))
-        .filter((s) => Object.keys(s.sv).length);
-      if (objetivos.length) objetivos.forEach((s) => L.push('Signos vitales ' + hhmm(s.hora) + ': ' + describirSignos(s.sv) + '.'));
-      else L.push('Signos vitales: ' + falta);
-      r.objetivo.forEach((x) => L.push(sinPunto(x) + '.'));
+      const ultimo = (k) => [...r.signos].reverse().find((s) => s.sv[k]);
+      const o = adjetivo(p.sexo);
+      L.push('Neurológico: ' + (r.neuro.length ? frases(r.neuro) : falta));
+      const hemo = ['pa', 'fc'].map((k) => ultimo(k) && interpretar1(k, ultimo(k), o)).filter(Boolean);
+      const temp = ultimo('t');
+      if (temp) hemo.push(interpretar1('t', temp, o));
+      L.push('Hemodinámico: ' + (hemo.length ? mayuscula(hemo.join(', ')) + '.' : falta));
+      const vent = ['fr', 'sat'].map((k) => ultimo(k) && interpretar1(k, ultimo(k), o)).filter(Boolean);
+      L.push('Ventilatorio: ' + (vent.length ? mayuscula(vent.join(', ')) + '.' : falta));
+      const hgt = ultimo('hgt');
+      const meta = [...(hgt ? [interpretar1('hgt', hgt, o)] : []), ...r.metabolico.map(sinPunto)];
+      L.push('Alimentación y metabólico: ' + (meta.length ? mayuscula(meta.join('. ')) + '.' : falta));
+      L.push('Examen físico (céfalo-caudal): ' + (r.objetivo.length ? cefaloCaudal(r.objetivo) : falta));
+      if (r.psicosocial.length) L.push('Respuesta emocional y familia: ' + frases(r.psicosocial));
 
       // A: solo el análisis de enfermería dictado.
       L.push('', 'A:');
@@ -379,13 +477,30 @@
       if (t.length) { L.push('Tiempos de atención:'); t.forEach((x) => L.push('- ' + x + '.')); }
 
       L.push('', 'E:');
-      r.evaluacion.forEach((x) => L.push(sinPunto(x) + '.'));
+      r.evaluacion.forEach((x) => L.push(mayuscula(sinPunto(x)) + '.'));
       tendencias().forEach((x) => L.push(x + '.'));
       if (!r.evaluacion.length && !tendencias().length) L.push(falta);
 
-      if (r.notas.length) { L.push('', 'Observaciones:'); r.notas.forEach((n) => L.push('- ' + sinPunto(n) + '.')); }
-      L.push('', 'Borrador generado a partir de lo dictado. Revisar, completar y firmar.');
-      return { texto: L.join('\n'), faltantes: faltantes() };
+      // Cierre de la visita: dispositivos invasivos, riesgos y pendientes.
+      L.push('', 'Cierre:');
+      const disp = [...r.dispositivos.map(sinPunto),
+        ...r.procedimientos.filter((x) => DISPOSITIVO.test(sinTildes(x.texto))).map((x) => sinPunto(x.texto) + ' (' + hhmm(x.hora) + ')')];
+      L.push('Dispositivos invasivos: ' + (disp.length ? disp.map(mayuscula).join('; ') + '.' : falta));
+      L.push('Evaluación de riesgos: ' + (r.riesgos.length ? frases(r.riesgos) : falta));
+      L.push('Exámenes y pendientes: ' + (r.pendientes.length ? frases(r.pendientes) : 'sin pendientes registrados.'));
+
+      if (r.notas.length) { L.push('', 'Observaciones:'); r.notas.forEach((n) => L.push('- ' + mayuscula(sinPunto(n)) + '.')); }
+      L.push('', 'Firma: ____________________   Nombre y título profesional: ____________________');
+      L.push('Borrador generado a partir de lo dictado. Revisar, completar y firmar.');
+      const avisos = vacias();
+      return { texto: L.join('\n'), faltantes: faltantes(), avisos };
+    }
+
+    // Frases generales y vacías que la guía pide evitar.
+    function vacias() {
+      const todo = [...r.neuro, ...r.objetivo, ...r.evaluacion, ...r.analisis, ...r.notas, ...r.psicosocial];
+      return todo.some((x) => /\b(sin cambios|sin novedad(es)?|buen dia|buena tarde|buena noche|igual que antes)\b/.test(sinTildes(x)))
+        ? ['Evita frases generales como "sin cambios": describe lo que valoraste.'] : [];
     }
 
     // Líneas para mostrar el registro en vivo.

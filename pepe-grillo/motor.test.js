@@ -325,10 +325,11 @@ test('caso SCA completo: la evolución solo contiene lo dictado, con horas y tie
   di('aspirina 300 masticada administrada', 2);
   di('tenecteplasa administrada', 20);
   const falta = di('Pepe, redacta la evolución', 5);
-  assert.match(falta.hablar, /Falta registrar: alergias, análisis, plan, evaluación\.$/);
+  assert.match(falta.hablar, /Falta registrar: alergias, estado neurológico, evaluación de riesgos, análisis, plan, evaluación\.$/);
   const ev = falta.evolucion;
-  assert.match(ev, /Box 3/);
-  assert.match(ev, /Hombre, 58 años\. Ingreso 14:00\./);
+  assert.match(ev, /Evolución de enfermería miércoles 30\/09\/2026 a las 14:34 hrs, turno diurno, box 3\./);
+  assert.match(ev, /Hombre, 58 años\. Nombre y RUT: \[completar en ficha\]\. Ingreso 14:00 hrs\./);
+  assert.match(ev, /Diagnóstico médico actual: IAM con supradesnivel ST\./);
   assert.match(ev, /14:00 Sospecha médica de síndrome coronario agudo\./);
   assert.match(ev, /14:07 ECG con supradesnivel ST/);
   assert.match(ev, /Anamnesis próxima: Refiere dolor opresivo desde las 12:30/);
@@ -527,4 +528,40 @@ test('hora dictada: "a las 10:05" y "hace 20 minutos" fijan la hora del registro
   assert.strictEqual(r2.agregar(RG.interpretar('ECG tomado a las 10'), noche), 'Anotado, 22:00.');
   // Una hora futura no se usa: queda la hora en que se dicta.
   assert.strictEqual(r2.agregar(RG.interpretar('tomé ECG a las 23:00'), noche), 'Anotado, 22:30.');
+});
+
+test('evolución con criterios transversales de la visita de enfermería', () => {
+  let t = Date.parse('2026-10-01T21:30:00');
+  const s = crearSesion(kb, inst, { ahora: () => t });
+  const di = (f) => s.procesar(f).respuesta;
+  di('Pepe, ingresa box 4, mujer de 72 años con dolor torácico, el médico sospecha SCA');
+  assert.strictEqual(RG.interpretar('lúcida, orientada en tiempo y espacio, Glasgow 15').tipo, 'neuro');
+  di('lúcida, orientada en tiempo y espacio, Glasgow 15');
+  di('signos vitales: presión 168 sobre 96, FC 54, FR 24, saturación 89, temperatura 36,6');
+  di('HGT 210');
+  di('régimen cero');
+  di('examen físico: edema de extremidades inferiores, crepitaciones bibasales, ingurgitación yugular, piel pálida y fría');
+  di('diuresis espontánea');
+  di('anímicamente ansiosa, familia informada');
+  di('riesgo de caída alto, Braden 16');
+  di('pendiente: troponina de control a las 3 horas');
+  di('vía venosa 18 instalada en antebrazo izquierdo');
+  di('evaluación: sin cambios');
+  const r = di('redacta la evolución');
+  const ev = r.evolucion;
+  assert.match(ev, /turno nocturno, box 4\./);
+  assert.match(ev, /Diagnóstico médico actual: Sospecha de síndrome coronario agudo\./);
+  assert.match(ev, /Neurológico: Lúcida, orientada en tiempo y espacio, Glasgow 15\./);
+  assert.match(ev, /Hemodinámico: Hipertensa \(PA 168\/96 mmHg, 21:30\), bradicárdica \(FC 54 lpm, 21:30\), afebril \(T° 36,6 °C, 21:30\)\./);
+  assert.match(ev, /Ventilatorio: Taquipneica \(FR 24 rpm, 21:30\), saturando 89% \(21:30\), con hipoxemia\./);
+  assert.match(ev, /Alimentación y metabólico: HGT 210 mg\/dL \(21:30\), hiperglicemia\. Régimen cero\./);
+  assert.match(ev, /Examen físico \(céfalo-caudal\): Piel pálida y fría, ingurgitación yugular, crepitaciones bibasales, diuresis espontánea, edema de extremidades inferiores\./);
+  assert.match(ev, /Respuesta emocional y familia: Anímicamente ansiosa, familia informada\./);
+  assert.match(ev, /Dispositivos invasivos: Vía venosa 18 instalada en antebrazo izquierdo \(21:30\)\./);
+  assert.match(ev, /Evaluación de riesgos: Riesgo de caída alto, Braden 16\./);
+  assert.match(ev, /Exámenes y pendientes: Troponina de control a las 3 horas\./);
+  assert.match(ev, /Firma: _+ {3}Nombre y título profesional: _+/);
+  const orden = ['Neurológico:', 'Hemodinámico:', 'Ventilatorio:', 'Alimentación', 'Examen físico'].map((x) => ev.indexOf(x));
+  assert.ok(orden.every((x, k) => x > 0 && (k === 0 || x > orden[k - 1])), 'orden de la visita');
+  assert.match(r.hablar, /Evita frases generales como "sin cambios"/);
 });
