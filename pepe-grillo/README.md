@@ -53,17 +53,16 @@ Durante la atención, la enfermera dicta y Pepe anota con la hora:
 | "evaluación: dolor disminuye…" | E |
 | "anota: …" | Observaciones |
 
-Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable en formato **SOAPIE, sin diagnósticos de enfermería**:
+Pepe agrega solo los hitos que ya conoce: la sospecha médica, los cambios de fase y el resultado del doble chequeo y del checklist de fibrinólisis. Con **"redacta la evolución"** entrega un borrador editable de la **visita de enfermería**, en relato ordenado (sin SOAPIE ni diagnósticos de enfermería):
 
 - **Encabezado:** fecha, hora y turno ("Evolución de enfermería jueves 01/10/2026 a las 21:30 hrs, turno nocturno, box 4"), identificación (sexo y edad; nombre y RUT se completan en la ficha) y **diagnóstico médico actual**.
-- **Contexto clínico** (antes de la S): los hitos del equipo médico que Pepe registró (sospecha, fases, decisiones).
-- **S:** anamnesis próxima y remota, fármacos habituales, alergias y **EVA** (la reporta el paciente).
-- **O:** valoración en el orden de la visita de enfermería: **neurológico** (conciencia, orientación, Glasgow) → **hemodinámico** → **ventilatorio** → **alimentación y metabólico** → **examen físico céfalo-caudal** (Pepe ordena los hallazgos dictados por segmento: piel, cabeza, cuello, tórax, abdomen, genitourinario, extremidades, dorso) → respuesta emocional y familia. Cada signo vital va con su **valor exacto, hora e interpretación** ("bradicárdica (FC 54 lpm, 21:30)", "taquipneica", "saturando 89%, con hipoxemia", "afebril"), en masculino o femenino según el paciente.
-- **A:** solo el análisis de enfermería dictado.
-- **P:** solo el plan dictado. Pepe no lo propone.
-- **I:** intervenciones agrupadas en el orden en que se leen, de la evaluación inicial a la salida del paciente: monitorización y ECG → accesos venosos y exámenes → fármacos → preparación, educación y confort → coordinación y traslado. Dentro de cada grupo van por hora. Al final, los tiempos de atención.
+- **Contexto clínico:** los hitos del equipo médico que Pepe registró (sospecha, fases, decisiones), con hora.
+- **Anamnesis:** próxima y remota, fármacos habituales y alergias.
+- **Valoración**, en el orden de la visita de enfermería: **neurológico** (conciencia, orientación, Glasgow) → **hemodinámico** → **ventilatorio** → **dolor (EVA)** → **alimentación y metabólico** → **examen físico céfalo-caudal** (Pepe ordena los hallazgos dictados por segmento: piel, cabeza, cuello, tórax, abdomen, genitourinario, extremidades, dorso) → respuesta emocional y familia. Cada signo vital va con su **valor exacto, hora e interpretación** ("bradicárdica (FC 54 lpm, 21:30)", "taquipneica", "saturando 89%, con hipoxemia", "afebril"), en masculino o femenino según el paciente.
+- **Intervenciones de enfermería** agrupadas en el orden en que se leen, de la evaluación inicial a la salida del paciente: monitorización y ECG → accesos venosos y exámenes → fármacos → preparación, educación y confort → coordinación y traslado. Dentro de cada grupo van por hora. Al final, los tiempos de atención.
 - Lo que la enfermera dice en primera persona queda **impersonal**: "avisé a hemodinamia" → "Se avisa a hemodinamia"; "le di aspirina" → "Se administra aspirina". Pepe reconoce acciones como tomé, instalé, administré, avisé, activé, coordiné, preparé, marqué, eduqué, entregué, trasladé o suspendí. Lo que no reconoce no lo guarda: pide empezar con "anota".
-- **E:** la evaluación dictada y, además, la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
+- **Respuesta y evolución:** la evaluación dictada y la evolución objetiva de los parámetros medidos más de una vez (por ejemplo, EVA 8/10 → 3/10), sin interpretar.
+- **Análisis y plan de enfermería:** solo lo dictado. Pepe no los propone.
 - **Cierre:** dispositivos invasivos (los dictados y los que salen de los procedimientos, como la VVP), **evaluación de riesgos** (caídas, LPP: "riesgo de caída alto, Braden 16") y exámenes pendientes ("pendiente: troponina de control").
 - **Firma** y nombre y título profesional al final.
 - Criterios tomados de la guía *Visita de Enfermería* (Cuidados de Enfermería II, 2026), Potter-Perry y Kozier: basada en hechos, precisa, completa, oportuna y organizada. Sin indicaciones médicas. Si se dicta una frase vacía ("sin cambios", "sin novedad"), Pepe avisa que se describa lo valorado.
