@@ -150,7 +150,7 @@
     <div class="col">
       <form class="dictado" id="form">
         <label for="frase" id="lblFrase">Dile a Pepe</label>
-        <textarea id="frase" placeholder="Pepe, ingresa box…"></textarea>
+        <textarea id="frase"></textarea>
         <div class="acciones">
           <button type="submit" class="primario">Enviar</button>
           <button type="button" class="mic" id="mic" aria-pressed="false" hidden>🎙 Hablar</button>
@@ -173,7 +173,7 @@
         </div>
         <div class="burbuja" aria-live="polite">
           <p class="dijo"><span id="dijo"></span> <span class="paso" id="paso"></span></p>
-          <p class="texto" id="hablar">Listo. Dime quién ingresa: «Pepe, ingresa box 3, hombre de 58 años, el médico sospecha SCA».</p>
+          <p class="texto" id="hablar">Listo. Dime quién ingresa.</p>
         </div>
       </div>
 
@@ -346,7 +346,7 @@
     const enDialogo = !!esperando;
     $('form').classList.toggle('dialogo', enDialogo);
     $('lblFrase').textContent = enDialogo ? 'Responde a Pepe (sin decir "Pepe")' : 'Dile a Pepe';
-    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : 'Pepe, ingresa box…';
+    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : '';
     cont.hidden = !enDialogo;
     if (!enDialogo) return;
     [...RAPIDAS[esperando], ['Cancelar', '']].forEach(([txt, cls]) => {
