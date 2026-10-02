@@ -1,0 +1,51 @@
+# Compila el APK de prueba de Pepe Grillo (Android, Capacitor).
+# El APK queda como artefacto descargable de cada ejecución.
+name: Pepe Grillo APK
+
+on:
+  push:
+    branches: [pepe-grillo-apk, main]
+    paths:
+      - 'pepe-grillo/**'
+      - 'pepe-grillo-app/**'
+      - '.github/workflows/pepe-grillo-apk.yml'
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pepe-grillo-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: pepe-grillo-app/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Instalar dependencias (aplica la preferencia de voz sin conexión)
+        run: npm ci
+
+      - name: Pruebas del motor de Pepe
+        run: npm test
+
+      - name: Copiar la web y sincronizar Android
+        run: npm run sync
+
+      - name: Compilar APK de prueba
+        working-directory: pepe-grillo-app/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pepe-grillo-apk-prueba
+          path: pepe-grillo-app/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
