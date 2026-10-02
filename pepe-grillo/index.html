@@ -63,8 +63,6 @@
   button.primario { background: var(--accent); border-color: var(--accent); color: var(--panel); }
   button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   button.mic[aria-pressed="true"] { background: var(--alert); border-color: var(--alert); color: var(--panel); }
-  .ejemplos { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ejemplos button { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); border-color: transparent; color: var(--ink); text-align: left; }
   .nota-mic { font-size: 12.5px; color: var(--muted); margin: 0; }
   .rapidas { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .rapidas button { min-width: 72px; font-weight: 600; }
@@ -152,7 +150,7 @@
     <div class="col">
       <form class="dictado" id="form">
         <label for="frase" id="lblFrase">Dile a Pepe</label>
-        <textarea id="frase">Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA</textarea>
+        <textarea id="frase" placeholder="Pepe, ingresa box…"></textarea>
         <div class="acciones">
           <button type="submit" class="primario">Enviar</button>
           <button type="button" class="mic" id="mic" aria-pressed="false" hidden>🎙 Hablar</button>
@@ -163,7 +161,6 @@
         </div>
         <div class="rapidas" id="rapidas" hidden></div>
         <p class="nota-mic" id="notaMic" hidden></p>
-        <div class="ejemplos" id="ejemplos"></div>
       </form>
 
       <div class="voz">
@@ -176,11 +173,11 @@
         </div>
         <div class="burbuja" aria-live="polite">
           <p class="dijo"><span id="dijo"></span> <span class="paso" id="paso"></span></p>
-          <p class="texto" id="hablar"></p>
+          <p class="texto" id="hablar">Listo. Dime quién ingresa: «Pepe, ingresa box 3, hombre de 58 años, el médico sospecha SCA».</p>
         </div>
       </div>
 
-      <article class="tarjeta">
+      <article class="tarjeta" id="tarjeta" hidden>
         <h2 id="titulo"></h2>
         <div class="secciones" id="secciones"></div>
       </article>
@@ -223,37 +220,6 @@
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
-  // Un caso de SCA de principio a fin, con el dictado para la evolución.
-  const EJEMPLOS = [
-    'Pepe, ingresa box 3, hombre de 58 años con dolor torácico, el médico sospecha SCA',
-    'refiere dolor opresivo desde las 12:30, irradiado a brazo izquierdo, con sudoración, EVA 8',
-    'ECG tomado',
-    'sigue',
-    'fundamento',
-    'antecedentes: hipertenso, diabético tipo 2, fumador',
-    'fármacos: losartán y metformina, niega anticoagulantes',
-    'signos vitales: presión 158 sobre 94, FC 102, FR 22, saturación 95',
-    'lúcido, orientado en tiempo y espacio, Glasgow 15',
-    'Pepe, el ECG muestra supradesnivel',
-    'avisé a hemodinamia',
-    'aspirina 300 masticada administrada',
-    'vía venosa 18 en antebrazo izquierdo instalada',
-    'Pepe, va a pabellón de hemodinamia',
-    'marqué pulsos radiales y pedios',
-    'eduqué al paciente y a su esposa sobre la angioplastía',
-    'examen físico: diaforético, sin crepitaciones, pulsos radiales y pedios presentes',
-    'riesgo de caída bajo, Braden 18',
-    'pendiente: troponina de control a las 3 horas',
-    'análisis: IAM con supradesnivel en ventana de angioplastía primaria, hemodinámicamente estable',
-    'plan: traslado monitorizado a pabellón de hemodinamia y entrega ISBAR al equipo de hemodinamia',
-    'EVA 3',
-    'evaluación: dolor disminuye, sin arritmias',
-    'sale a pabellón de hemodinamia',
-    'tiempos',
-    'Pepe, redacta la evolución',
-    'Pepe, box 5, mujer de 67 años, SCA sin supradesnivel',
-    'Pepe, doble chequeo de heparina en BIC, box 5',
-  ];
 
   let sesion;
   const boxes = {}; // box → { titulo, hitos: [{ texto, vence, hecho }] }
@@ -296,6 +262,7 @@
     $('hablar').textContent = r.hablar;
     $('paso').textContent = r.total > 1 ? 'paso ' + Math.min(r.paso, r.total) + ' de ' + r.total : '';
     if (r.secciones.length || !$('titulo').textContent) {
+      $('tarjeta').hidden = !r.titulo;
       $('titulo').textContent = r.titulo;
       const cont = $('secciones');
       cont.replaceChildren();
@@ -379,9 +346,8 @@
     const enDialogo = !!esperando;
     $('form').classList.toggle('dialogo', enDialogo);
     $('lblFrase').textContent = enDialogo ? 'Responde a Pepe (sin decir "Pepe")' : 'Dile a Pepe';
-    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : '';
+    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : 'Pepe, ingresa box…';
     cont.hidden = !enDialogo;
-    $('ejemplos').hidden = enDialogo; // durante el chequeo, solo lo necesario
     if (!enDialogo) return;
     [...RAPIDAS[esperando], ['Cancelar', '']].forEach(([txt, cls]) => {
       const b = el('button', cls, txt);
@@ -461,12 +427,6 @@
     base = { real: ahora, sim: base.sim + (ahora - base.real) * factorPrevio };
     factorPrevio = Number($('velocidad').value);
   });
-  EJEMPLOS.forEach((f) => {
-    const b = el('button', null, f.replace(/^Pepe,\s*/, ''));
-    b.type = 'button';
-    b.addEventListener('click', () => { $('frase').value = f; procesar(f, true); });
-    $('ejemplos').append(b);
-  });
 
   // Micrófono: funciona en Chrome/Edge con la página servida desde el propio sitio;
   // dentro de un visor embebido suele estar bloqueado.
@@ -513,9 +473,7 @@
     };
   }
 
-  // Estado inicial de ejemplo, sin hablar.
   nuevaSesion();
-  procesar(EJEMPLOS[0], false);
   setInterval(tic, 500);
 })();
 </script>
