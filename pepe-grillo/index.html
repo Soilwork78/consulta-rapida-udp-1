@@ -1,0 +1,479 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pepe Grillo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+  /* Layout: consola de turno. Izquierda = lo que dice Pepe y la tarjeta del paciente; derecha = boxes con sus relojes. */
+  :root {
+    --bg: #f3f6f5;
+    --panel: #ffffff;
+    --ink: #13201d;
+    --muted: #5b6b67;
+    --line: #d5dfdc;
+    --accent: #0f7a64;       /* verde quirófano */
+    --accent-soft: #e0f1ec;
+    --alert: #b3261e;
+    --alert-soft: #fbe9e7;
+    --local: #7a4b00;
+    --local-soft: #fdf1dc;
+    --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1514; --panel: #152020; --ink: #e3ecea; --muted: #93a6a1; --line: #2a3a38;
+      --accent: #4cc7a8; --accent-soft: #173b33; --alert: #ff8a80; --alert-soft: #3a1c1a;
+      --local: #f3c178; --local-soft: #3a2c14; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1514; --panel: #152020; --ink: #e3ecea; --muted: #93a6a1; --line: #2a3a38;
+    --accent: #4cc7a8; --accent-soft: #173b33; --alert: #ff8a80; --alert-soft: #3a1c1a;
+    --local: #f3c178; --local-soft: #3a2c14; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; } /* también al abrir el archivo fuera del visor */
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 15px/1.5 var(--font-body);
+    padding-inline: 16px; padding-block: 20px 40px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 20px; }
+  h1 { font: 700 30px/1.1 var(--font-display); margin: 0; letter-spacing: -0.01em; }
+  h1 small { font: 500 13px var(--font-body); color: var(--muted); margin-left: 8px; letter-spacing: 0; }
+  .aviso { font-size: 12.5px; color: var(--muted); margin: 0; }
+  .ajustes { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; font-size: 13px; color: var(--muted); }
+  .ajustes label { display: flex; gap: 6px; align-items: center; }
+  select, textarea, button { font: inherit; color: var(--ink); }
+  select { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; }
+
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  .col { display: grid; gap: 16px; min-width: 0; }
+
+  .dictado { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
+  .dictado label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+  button { cursor: pointer; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); padding: 8px 14px; font-weight: 500; }
+  button.primario { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+  button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.mic[aria-pressed="true"] { background: var(--alert); border-color: var(--alert); color: var(--panel); }
+  .nota-mic { font-size: 12.5px; color: var(--muted); margin: 0; }
+  .rapidas { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .rapidas button { min-width: 72px; font-weight: 600; }
+  .rapidas button.si { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+  .rapidas span { font-size: 13px; color: var(--muted); }
+  .dictado.dialogo { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .escuchando { font-size: 12.5px; color: var(--alert); font-weight: 600; }
+
+  .voz { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+  .avatar svg { width: 26px; height: 26px; }
+  .burbuja { background: var(--accent-soft); border-radius: 4px 14px 14px 14px; padding: 12px 14px; min-width: 0; }
+  .burbuja .dijo { font-size: 12px; color: var(--muted); margin: 0 0 4px; }
+  .burbuja p.texto { margin: 0; font-size: 16px; }
+  .burbuja .paso { font: 500 12px var(--font-mono); color: var(--accent); white-space: nowrap; }
+
+  .tarjeta { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 14px; min-width: 0; }
+  .tarjeta h2 { font: 600 20px/1.25 var(--font-display); margin: 0; text-wrap: balance; }
+  .secciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 22px; }
+  .sec h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
+  .sec ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+  .sec.alerta h3 { color: var(--alert); }
+  .sec.alerta { background: var(--alert-soft); border-radius: 8px; padding: 10px 12px; }
+  .sec.local { background: var(--local-soft); border-radius: 8px; padding: 10px 12px; grid-column: 1 / -1; }
+  .sec.local h3 { color: var(--local); }
+
+  .registro { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0; }
+  .reg-cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+  .reg-cab h2 { font: 600 17px var(--font-display); margin: 0; }
+  .registro ul { margin: 0; padding-left: 18px; display: grid; gap: 2px; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .registro label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  #evolucion { font: 14px/1.5 var(--font-body); min-height: 360px; }
+  .tiempos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tiempos:empty { display: none; }
+  .tiempo { font: 500 13px var(--font-body); font-variant-numeric: tabular-nums; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+  .tiempo.fuera { background: var(--alert-soft); color: var(--alert); }
+  .tiempo.sin-meta { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+  .faltan { font-size: 13.5px; color: var(--alert); margin: 0; }
+  .boxes { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 12px; }
+  .boxes h2 { font: 600 16px var(--font-display); margin: 0; }
+  .box { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 6px; }
+  .box:first-of-type { border-top: 0; padding-top: 0; }
+  .box-cab { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .box-cab strong { font-family: var(--font-mono); white-space: nowrap; }
+  .box-cab span { font-size: 12.5px; color: var(--muted); text-align: right; }
+  .hito { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 8px; font-size: 13px; align-items: baseline; }
+  .hito time { font: 500 13px var(--font-mono); font-variant-numeric: tabular-nums; color: var(--accent); }
+  .hito.hecho { color: var(--muted); }
+  .hito.hecho time { color: var(--muted); text-decoration: line-through; }
+  .hito.sonando time { color: var(--alert); }
+  .vacio { font-size: 13px; color: var(--muted); margin: 0; }
+  footer { font-size: 12px; color: var(--muted); }
+  @media (prefers-reduced-motion: no-preference) {
+    .burbuja { transition: background-color .3s; }
+    .hito.sonando { animation: pulso 1s ease-in-out 3; }
+    @keyframes pulso { 50% { opacity: .4; } }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Pepe Grillo <small>SCA · para enfermeras y enfermeros de urgencia · prototipo</small></h1>
+      <p class="aviso">Prototipo de herramienta para el turno. Contenido en borrador: no usar con pacientes reales hasta su validación.</p>
+    </div>
+    <div class="ajustes">
+      <label for="inst">Protocolo
+        <select id="inst">
+          <option value="">Solo base general</option>
+          <option value="ejemplo" selected>Hospital de ejemplo (ficticio)</option>
+        </select>
+      </label>
+      <label for="velocidad">Reloj
+        <select id="velocidad">
+          <option value="1" selected>Tiempo real</option>
+          <option value="60">Prueba rápida: 1 min = 1 s</option>
+        </select>
+      </label>
+      <label for="voz"><input type="checkbox" id="voz" checked> Voz</label>
+      <label for="manosLibres" id="lblManos" hidden><input type="checkbox" id="manosLibres"> Manos libres</label>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="col">
+      <form class="dictado" id="form">
+        <label for="frase" id="lblFrase">Dile a Pepe</label>
+        <textarea id="frase"></textarea>
+        <div class="acciones">
+          <button type="submit" class="primario">Enviar</button>
+          <button type="button" class="mic" id="mic" aria-pressed="false" hidden>🎙 Hablar</button>
+          <button type="button" id="mas">Sigue</button>
+          <button type="button" id="repite">Repite</button>
+          <button type="button" id="porque">Fundamento</button>
+          <button type="button" id="callar">Detente</button>
+        </div>
+        <div class="rapidas" id="rapidas" hidden></div>
+        <p class="nota-mic" id="notaMic" hidden></p>
+      </form>
+
+      <div class="voz">
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="var(--panel)" stroke-width="2" stroke-linecap="round">
+            <path d="M9 20a7 7 0 1 1 14 0" /><path d="M16 13V6" /><path d="M13 4l3 2 3-2" />
+            <circle cx="12.5" cy="17" r="1.2" fill="var(--panel)" /><circle cx="19.5" cy="17" r="1.2" fill="var(--panel)" />
+            <path d="M6 26h20" />
+          </svg>
+        </div>
+        <div class="burbuja" aria-live="polite">
+          <p class="dijo"><span id="dijo"></span> <span class="paso" id="paso"></span></p>
+          <p class="texto" id="hablar">Listo. Dime quién ingresa.</p>
+        </div>
+      </div>
+
+      <article class="tarjeta" id="tarjeta" hidden>
+        <h2 id="titulo"></h2>
+        <div class="secciones" id="secciones"></div>
+      </article>
+
+      <section class="registro" aria-labelledby="regTitulo">
+        <div class="reg-cab">
+          <h2 id="regTitulo">Registro</h2>
+          <button type="button" id="btnEvolucion">Redactar evolución</button>
+        </div>
+        <div class="tiempos" id="regTiempos" aria-label="Tiempos del SCA"></div>
+        <ul id="regLista"><li>Lo que dictes (anamnesis, signos vitales, procedimientos) aparece aquí con su hora.</li></ul>
+        <div id="evolucionCaja" hidden>
+          <label for="evolucion">Borrador de evolución de enfermería · editable · revisar y firmar</label>
+          <p class="faltan" id="faltan" hidden></p>
+          <textarea id="evolucion" rows="18"></textarea>
+          <div class="acciones">
+            <button type="button" id="copiar" class="primario">Copiar</button>
+            <span class="nota-mic" id="copiado" aria-live="polite"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="boxes" aria-label="Pacientes activos">
+      <h2>Boxes y recordatorios</h2>
+      <div id="listaBoxes"></div>
+    </aside>
+  </div>
+
+  <footer>Base: guías internacionales y MINSAL citadas en la base de conocimiento. El protocolo institucional complementa, sin ocultar, las banderas rojas. La evolución es un borrador con lo dictado: la revisa y firma la enfermera.</footer>
+</div>
+
+<script src="kb.js"></script>
+<script src="instituciones/ejemplo.js"></script>
+<script src="protocolos/sca.js"></script>
+<script src="checklist.js"></script>
+<script src="registro.js"></script>
+<script src="doble-chequeo.js"></script>
+<script src="motor.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+
+  let sesion;
+  const boxes = {}; // box → { titulo, hitos: [{ texto, vence, hecho }] }
+
+  function institucion() {
+    const id = $('inst').value;
+    return id ? (window.PEPE_INSTITUCIONES || {})[id] : null;
+  }
+  // Reloj de la sesión: en "prueba rápida" el registro avanza igual que los recordatorios.
+  let base = { real: Date.now(), sim: Date.now() };
+  const relojSesion = () => base.sim + (Date.now() - base.real) * Number($('velocidad').value);
+  function nuevaSesion() { sesion = PepeMotor.crearSesion(PEPE_GRILLO_KB, institucion(), { ahora: relojSesion }); }
+
+  // ── Voz ──
+  // Mientras Pepe habla, el micrófono sigue abierto solo para órdenes cortas
+  // ("detente", "sigue", "repite"), así la enfermera puede interrumpirlo.
+  let hablando = false;
+  function decir(texto) {
+    if (!$('voz').checked || !('speechSynthesis' in window) || !texto) return;
+    const u = new SpeechSynthesisUtterance(texto);
+    const voces = speechSynthesis.getVoices();
+    u.voice = voces.find((v) => v.lang === 'es-CL') || voces.find((v) => v.lang.startsWith('es')) || null;
+    u.lang = u.voice ? u.voice.lang : 'es-CL';
+    u.rate = 1.05;
+    u.onstart = () => { hablando = true; };
+    u.onend = u.onerror = () => { hablando = false; };
+    speechSynthesis.speak(u);
+  }
+
+  // ── Render ──
+  function el(tag, cls, texto) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (texto != null) e.textContent = texto;
+    return e;
+  }
+
+  function mostrar(frase, r) {
+    $('dijo').textContent = frase ? '« ' + frase + ' »' : '';
+    $('hablar').textContent = r.hablar;
+    $('paso').textContent = r.total > 1 ? 'paso ' + Math.min(r.paso, r.total) + ' de ' + r.total : '';
+    if (r.secciones.length || !$('titulo').textContent) {
+      $('tarjeta').hidden = !r.titulo;
+      $('titulo').textContent = r.titulo;
+      const cont = $('secciones');
+      cont.replaceChildren();
+      r.secciones.forEach((s) => {
+        if (!s.items || !s.items.length) return;
+        const sec = el('section', 'sec' + (s.alerta ? ' alerta' : '') + (s.destacar ? ' local' : ''));
+        sec.append(el('h3', null, s.titulo));
+        const ul = el('ul');
+        s.items.forEach((it) => ul.append(el('li', null, it)));
+        sec.append(ul);
+        cont.append(sec);
+      });
+    }
+  }
+
+  function fmt(ms) {
+    if (ms <= 0) return 'ahora';
+    const s = Math.ceil(ms / 1000);
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  function pintarBoxes() {
+    const cont = $('listaBoxes');
+    cont.replaceChildren();
+    const claves = Object.keys(boxes);
+    if (!claves.length) { cont.append(el('p', 'vacio', 'Sin pacientes. Dile a Pepe quién ingresa.')); return; }
+    const ahora = Date.now();
+    claves.forEach((k) => {
+      const b = boxes[k];
+      const d = el('div', 'box');
+      const cab = el('div', 'box-cab');
+      cab.append(el('strong', null, 'Box ' + k), el('span', null, b.titulo));
+      d.append(cab);
+      if (!b.hitos.length) d.append(el('p', 'vacio', 'Sin recordatorios pendientes'));
+      b.hitos.forEach((h) => {
+        const row = el('div', 'hito' + (h.hecho ? ' hecho' : '') + (h.sonando ? ' sonando' : ''));
+        const t = el('time', null, h.omitido ? h.omitido : h.hecho ? 'dicho' : fmt(h.vence - ahora));
+        row.append(t, el('span', null, h.texto));
+        d.append(row);
+      });
+      cont.append(d);
+    });
+  }
+
+  function programar(box, r, mantenerTitulo) {
+    const b = boxes[box] || (boxes[box] = { titulo: '', hitos: [] });
+    if (r.titulo && !(mantenerTitulo && b.titulo)) b.titulo = r.titulo.split(' · ').pop();
+    if (r.detenerHitos) b.hitos = b.hitos.filter((h) => h.hecho);
+    if (r.nuevoIngreso) b.hitos = []; // reingreso del box: recordatorios desde cero
+    const factor = Number($('velocidad').value);
+    const ahora = Date.now();
+    r.hitos.forEach((h) => b.hitos.push({ ...h, vence: ahora + (h.min * 60000) / factor }));
+    b.hitos.sort((a, c) => a.vence - c.vence);
+  }
+
+  function tic() {
+    const ahora = Date.now();
+    Object.entries(boxes).forEach(([k, b]) => b.hitos.forEach((h) => {
+      h.sonando = false;
+      if (!h.hecho && h.vence <= ahora) {
+        h.hecho = true;
+        // Si lo que pregunta ya está anotado, Pepe no pregunta.
+        const disparo = sesion.hitoDisparado(k, h);
+        if (disparo.omitir) { h.omitido = disparo.noAplica ? 'no aplica' : 'anotado'; return; }
+        h.sonando = true;
+        decir('Box ' + k + '. ' + PepeMotor.paraVoz(h.texto));
+        if (h.registra && !sesion.enDialogo) pintarRapidas('sino'); // "sí" lo anota con la hora
+      }
+    }));
+    pintarBoxes();
+  }
+
+  const RAPIDAS = {
+    confirmar: [['Listo', 'si']],
+    sino: [['Sí', 'si'], ['No', '']],
+    numero: [],
+  };
+  function pintarRapidas(esperando) {
+    const cont = $('rapidas');
+    cont.replaceChildren();
+    const enDialogo = !!esperando;
+    $('form').classList.toggle('dialogo', enDialogo);
+    $('lblFrase').textContent = enDialogo ? 'Responde a Pepe (sin decir "Pepe")' : 'Dile a Pepe';
+    $('frase').placeholder = esperando === 'numero' ? 'Escribe o di el número, por ejemplo 25,2' : '';
+    cont.hidden = !enDialogo;
+    if (!enDialogo) return;
+    [...RAPIDAS[esperando], ['Cancelar', '']].forEach(([txt, cls]) => {
+      const b = el('button', cls, txt);
+      b.type = 'button';
+      b.addEventListener('click', () => procesar(txt, true));
+      cont.append(b);
+    });
+    if (esperando === 'numero') cont.append(el('span', null, 'Esperando un número'));
+  }
+
+  function procesar(frase, conVoz) {
+    const { box, interpretacion, respuesta } = sesion.procesar(frase);
+    if (!respuesta) return;
+    if (respuesta.pausa) {
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      $('dijo').textContent = '« ' + frase + ' »';
+      $('hablar').textContent = 'En pausa. Di «sigue», «continúa», «dale» o «avanza» cuando quieras.';
+      $('frase').value = '';
+      return;
+    }
+    mostrar(frase, respuesta);
+    pintarRegistro(box, respuesta);
+    const dialogo = interpretacion.intencion === 'dialogo';
+    if (dialogo) { if (respuesta.hitos.length) programar(box, respuesta, true); }
+    else if (!['mas', 'repetir', 'anterior', 'porque', 'desconocido', 'registro'].includes(interpretacion.intencion)) programar(box, respuesta);
+    pintarRapidas(dialogo ? respuesta.esperando : null);
+    $('frase').value = '';
+    if (conVoz) { if ('speechSynthesis' in window) speechSynthesis.cancel(); decir(respuesta.hablar); }
+    pintarBoxes();
+  }
+
+  function pintarRegistro(box, r) {
+    if (r.registroBox) {
+      $('regTitulo').textContent = 'Registro' + (box && box !== '—' ? ' · Box ' + box : '');
+      $('regLista').replaceChildren(...r.registroBox.map((l) => el('li', null, l)));
+    }
+    if (r.tiempos) {
+      $('regTiempos').replaceChildren(...r.tiempos.map((x) => el('span',
+        'tiempo' + (x.meta == null ? ' sin-meta' : x.ok ? '' : ' fuera'),
+        x.nombre + ' ' + (x.aprox ? '≤ ' : '') + x.min + ' min' + (x.meta == null ? '' : (x.ok ? ' ✓' : ' ✗') + ' GES ≤ ' + x.meta))));
+    }
+    if (r.evolucion) {
+      $('evolucionCaja').hidden = false;
+      $('evolucion').value = r.evolucion;
+      const f = r.hablar.match(/Falta registrar: (.*)$/);
+      $('faltan').hidden = !f;
+      $('faltan').textContent = f ? 'Falta registrar: ' + f[1] : '';
+      $('copiado').textContent = '';
+    }
+  }
+
+  // ── Eventos ──
+  $('btnEvolucion').addEventListener('click', () => procesar('redacta la evolución', true));
+  $('copiar').addEventListener('click', () => {
+    const txt = $('evolucion').value;
+    const listo = () => { $('copiado').textContent = 'Copiado. Pégalo en el registro clínico y fírmalo.'; };
+    const manual = () => { $('evolucion').select(); $('copiado').textContent = 'Texto seleccionado: cópialo con Ctrl+C o Cmd+C.'; };
+    try { navigator.clipboard.writeText(txt).then(listo, manual); } catch (_) { manual(); }
+  });
+  $('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = $('frase').value.trim();
+    if (f) procesar(f, true);
+  });
+  // Enter envía; Shift+Enter hace salto de línea.
+  $('frase').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('form').requestSubmit(); }
+  });
+  $('mas').addEventListener('click', () => procesar('sigue', true));
+  $('repite').addEventListener('click', () => procesar('repite', true));
+  $('porque').addEventListener('click', () => procesar('por qué', true));
+  $('callar').addEventListener('click', () => procesar('detente', false));
+  $('inst').addEventListener('change', nuevaSesion);
+  let factorPrevio = Number($('velocidad').value);
+  $('velocidad').addEventListener('change', () => {
+    const ahora = Date.now();
+    base = { real: ahora, sim: base.sim + (ahora - base.real) * factorPrevio };
+    factorPrevio = Number($('velocidad').value);
+  });
+
+  // Micrófono: funciona en Chrome/Edge con la página servida desde el propio sitio;
+  // dentro de un visor embebido suele estar bloqueado.
+  // Manos libres: escucha continua; actúa si la frase dice "Pepe", si es "sigue"/"qué más"/"repite",
+  // o si hay un diálogo en curso.
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, escuchando = false;
+  function pausarEscucha() { if (rec && escuchando) { try { rec.abort(); } catch (_) {} } }
+  function reanudarEscucha() {
+    if (rec && $('manosLibres').checked) { try { rec.start(); } catch (_) {} }
+  }
+  if (SR) {
+    rec = new SR();
+    rec.lang = 'es-CL'; rec.interimResults = false; rec.continuous = true;
+    $('mic').hidden = false;
+    $('lblManos').hidden = false;
+    $('mic').addEventListener('click', () => { try { rec.start(); } catch (_) {} });
+    $('manosLibres').addEventListener('change', (e) => (e.target.checked ? reanudarEscucha() : pausarEscucha()));
+    rec.onstart = () => { escuchando = true; $('mic').setAttribute('aria-pressed', 'true'); };
+    rec.onresult = (e) => {
+      const f = e.results[e.results.length - 1][0].transcript.trim();
+      const manos = $('manosLibres').checked;
+      // "sigue", "detente", "repite"... valen sin decir "Pepe" y aunque Pepe esté hablando.
+      // Mientras habla, se ignora todo lo demás (podría ser su propia voz).
+      const nav = PepeMotor.esNavegacion(f);
+      if (hablando ? nav : (!manos || sesion.enDialogo || /\bpepe\b/i.test(f) || nav)) {
+        $('frase').value = f;
+        procesar(f, true);
+      }
+      if (!manos) pausarEscucha();
+    };
+    rec.onend = () => {
+      escuchando = false;
+      $('mic').setAttribute('aria-pressed', 'false');
+      if ($('manosLibres').checked) setTimeout(reanudarEscucha, 250);
+    };
+    rec.onerror = (e) => {
+      if (e.error === 'no-speech' || e.error === 'aborted') return;
+      $('manosLibres').checked = false;
+      $('notaMic').hidden = false;
+      $('notaMic').textContent = e.error === 'not-allowed' || e.error === 'service-not-allowed'
+        ? 'El micrófono está bloqueado en esta vista. Escribe la frase o abre la página desde el repositorio.'
+        : 'No se captó la voz (' + e.error + '). Intenta de nuevo o escribe la frase.';
+    };
+  }
+
+  nuevaSesion();
+  setInterval(tic, 500);
+})();
+</script>
