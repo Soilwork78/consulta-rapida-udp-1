@@ -1,4 +1,4 @@
-const CACHE_NAME = 'consulta-rapida-udp-v6.6';
+const CACHE_NAME = 'consulta-rapida-udp-v6.7';
 const ASSETS = [
   './',
   './index.html',
@@ -20,6 +20,7 @@ const ASSETS = [
   './icon-192.png',
   './icon-384.png',
   './icon-512.png',
+  './error-medicacion.html',
   './antibioticos-slides.html',
   './cuid2-u1-humanizado-slides.html',
   './cuid2-u2-proceso-slides.html',

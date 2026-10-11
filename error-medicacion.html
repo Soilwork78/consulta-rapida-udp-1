@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1729">
+<title>Medicación Segura — Consulta Rápida ENF</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-96.png">
+<style>
+:root{
+  --blue:#4f8ef7;--blue-l:#74aeff;--red:#f06060;--green:#14c98a;--orange:#f8a83c;--purple:#9d6ef5;
+  --bg:#0f1729;--bg2:#172039;--card:rgba(255,255,255,.07);--card-b:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.09);--text:#dde8f5;--muted:#7a9cbf;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;min-height:100vh}
+a{color:var(--blue-l)}
+header{position:sticky;top:0;z-index:10;background:rgba(15,23,41,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header .back{color:var(--muted);text-decoration:none;font-size:13px;border:1px solid var(--border);padding:5px 10px;border-radius:8px}
+header h1{font-size:17px;font-weight:700}
+header h1 span{color:var(--green)}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg2);scrollbar-width:thin}
+nav button{flex:0 0 auto;background:var(--card);border:1px solid var(--card-b);color:var(--text);padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+nav button.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+main{max-width:860px;margin:0 auto;padding:18px 16px 60px}
+section{display:none}
+section.active{display:block}
+h2{font-size:20px;margin-bottom:4px}
+.lead{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--card-b);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card h3{font-size:15px;margin-bottom:6px}
+.banner{border-radius:12px;padding:10px 14px;font-size:13.5px;margin-bottom:14px;border:1px solid}
+.banner.warn{background:rgba(248,168,60,.1);border-color:rgba(248,168,60,.4)}
+.banner.danger{background:rgba(240,96,96,.12);border-color:rgba(240,96,96,.45)}
+.banner.ok{background:rgba(20,201,138,.12);border-color:rgba(20,201,138,.45)}
+.banner.info{background:rgba(79,142,247,.1);border-color:rgba(79,142,247,.4)}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+input,select{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--card-b);color:var(--text);border-radius:9px;padding:9px 10px;font-size:15px}
+input:focus,select:focus{outline:2px solid var(--blue);border-color:transparent}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.btn.sec{background:var(--card);border:1px solid var(--card-b);color:var(--text)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+/* checklist */
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 12px;border:1px solid var(--border);border-radius:11px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,.03)}
+.chk input{width:22px;height:22px;flex:0 0 22px;margin-top:1px;accent-color:var(--green)}
+.chk b{display:block;font-size:14.5px}
+.chk small{color:var(--muted);font-size:12.5px}
+.chk.done{border-color:rgba(20,201,138,.5);background:rgba(20,201,138,.07)}
+.chk.extra{border-color:rgba(240,96,96,.5)}
+.progress{height:8px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin:6px 0 14px}
+.progress div{height:100%;background:var(--green);width:0;transition:width .25s}
+.switch{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;cursor:pointer}
+.switch input{width:20px;height:20px;accent-color:var(--red)}
+/* lists */
+.search{margin-bottom:12px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(240,96,96,.18);color:#ffb3b3;margin-left:6px;vertical-align:middle}
+.card ul{padding-left:18px;font-size:13.5px}
+.card li{margin-bottom:3px}
+.ant{font-size:12.5px;color:var(--muted);margin-top:6px}
+.lasa{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:17px;font-weight:500;letter-spacing:.3px}
+.lasa span{white-space:nowrap}
+.lasa .vs{color:var(--muted);font-size:13px;align-self:center}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+td.bad{color:#ffb3b3;font-weight:600;white-space:nowrap}
+td.good{color:#8ff0c8;font-weight:600}
+.tablewrap{overflow-x:auto}
+/* calc */
+.result{font-size:24px;font-weight:700;margin:4px 0}
+.hidden{display:none!important}
+.blind{filter:blur(6px);user-select:none}
+/* merp */
+.q{font-size:16px;font-weight:600;margin-bottom:12px}
+.cat{font-size:44px;font-weight:800;line-height:1;margin-bottom:6px}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding:8px 0 8px 38px;border-bottom:1px solid var(--border);font-size:14px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:24px 16px;border-top:1px solid var(--border)}
+@media (max-width:520px){header h1{font-size:15px}.result{font-size:20px}}
+@media print{nav,header .back,.btns{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="index.html">← Consulta Rápida</a>
+  <h1>🛡️ Medicación <span>Segura</span></h1>
+</header>
+
+<nav id="tabs">
+  <button data-tab="check" class="active">✅ Pausa de seguridad</button>
+  <button data-tab="calc">🧮 Doble chequeo de cálculo</button>
+  <button data-tab="alto">⚠️ Alto riesgo</button>
+  <button data-tab="lasa">👯 LASA</button>
+  <button data-tab="abrev">✍️ Abreviaturas</button>
+  <button data-tab="merp">📣 Si ocurre un error</button>
+</nav>
+
+<main>
+<div class="banner warn">Herramienta educativa de apoyo. No reemplaza la indicación médica, los protocolos de tu institución ni el juicio clínico.</div>
+
+<!-- ============ 1. PAUSA DE SEGURIDAD ============ -->
+<section id="check" class="active">
+  <h2>Pausa de seguridad pre-administración</h2>
+  <p class="lead">Recórrela junto al paciente, sin interrupciones. Cada ítem dice <em>cómo</em> verificar, no solo <em>qué</em>.</p>
+  <label class="switch"><input type="checkbox" id="highAlert"> El fármaco es de <b>alto riesgo</b> (insulina, heparina, KCl, opioides, vasoactivos…)</label>
+  <div class="progress"><div id="prog"></div></div>
+  <div id="chkList"></div>
+  <div id="chkOut"></div>
+  <div class="btns"><button class="btn sec" id="chkReset">Reiniciar para nuevo paciente</button></div>
+</section>
+
+<!-- ============ 2. DOBLE CHEQUEO ============ -->
+<section id="calc">
+  <h2>Doble verificación independiente del cálculo</h2>
+  <p class="lead">Dos profesionales calculan <b>por separado</b> y registran su resultado antes de ver el de referencia. Detecta errores de coma decimal (×10) y de unidades.</p>
+
+  <div class="row">
+    <div><label>Tipo de cálculo</label>
+      <select id="cMode"><option value="bolo">Dosis única → volumen a extraer (mL)</option><option value="inf">Infusión continua → velocidad (mL/h)</option></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>1 · Indicación</h3>
+    <div class="row">
+      <div><label>Dosis indicada</label><input id="cDose" type="number" inputmode="decimal" step="any" min="0"></div>
+      <div><label>Unidad</label><select id="cDoseU"></select></div>
+      <div id="wWrap"><label>Peso (kg)</label><input id="cWeight" type="number" inputmode="decimal" step="any" min="0"></div>
+    </div>
+    <h3>2 · Presentación / preparación</h3>
+    <div class="row">
+      <div><label id="cAmtL">Cantidad de fármaco</label><input id="cAmt" type="number" inputmode="decimal" step="any" min="0"></div>
+      <div><label>Unidad</label><select id="cAmtU"><option>mg</option><option>mcg</option><option>g</option><option>UI</option><option>mEq</option></select></div>
+      <div><label id="cVolL">en volumen (mL)</label><input id="cVol" type="number" inputmode="decimal" step="any" min="0"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>3 · Resultados independientes <span id="resUnit" style="color:var(--muted);font-weight:400"></span></h3>
+    <div class="row">
+      <div><label>Profesional A</label><input id="cA" type="password" inputmode="decimal" placeholder="oculto hasta comparar" autocomplete="off"></div>
+      <div><label>Profesional B</label><input id="cB" type="password" inputmode="decimal" placeholder="oculto hasta comparar" autocomplete="off"></div>
+    </div>
+    <div class="btns"><button class="btn" id="cRun">Comparar</button><button class="btn sec" id="cClear">Limpiar</button></div>
+  </div>
+  <div id="cOut"></div>
+</section>
+
+<!-- ============ 3. ALTO RIESGO ============ -->
+<section id="alto">
+  <h2>Medicamentos de alto riesgo</h2>
+  <p class="lead">Basado en la lista ISMP de medicamentos de alto alerta. Un error con ellos no es más frecuente, pero sí más grave.</p>
+  <input class="search" id="altoQ" placeholder="Buscar fármaco o grupo…">
+  <div id="altoList"></div>
+</section>
+
+<!-- ============ 4. LASA ============ -->
+<section id="lasa">
+  <h2>LASA — Look-Alike, Sound-Alike</h2>
+  <p class="lead">Nombres o envases parecidos. Las <b>MAYÚSCULAS parciales</b> (tall-man) resaltan la diferencia: úsalas en rotulación y registro.</p>
+  <input class="search" id="lasaQ" placeholder="Buscar fármaco…">
+  <div id="lasaList"></div>
+  <div class="card"><h3>Barreras recomendadas</h3><ul>
+    <li>Almacenar separados, nunca en casilleros contiguos ni en orden alfabético estricto.</li>
+    <li>Leer la etiqueta 3 veces: al sacar, al preparar y antes de administrar.</li>
+    <li>En indicación verbal: repetir en voz alta (read-back) y deletrear si hay duda.</li>
+    <li>Incluir indicación clínica en la receta (ej. "hidrALAZINA para PA").</li>
+  </ul></div>
+</section>
+
+<!-- ============ 5. ABREVIATURAS ============ -->
+<section id="abrev">
+  <h2>Abreviaturas y notación peligrosas</h2>
+  <p class="lead">Errores de transcripción y lectura. Si ves una de estas en una indicación, <b>aclara antes de administrar</b>.</p>
+  <div class="card tablewrap"><table>
+    <thead><tr><th>No usar</th><th>Riesgo</th><th>Usar</th></tr></thead>
+    <tbody id="abrevBody"></tbody>
+  </table></div>
+  <div class="banner info"><b>Ojo con la notación chilena:</b> la coma es decimal y el punto separa miles. "1.000 UI" puede leerse como "1 UI" por alguien habituado a la notación anglosajona (y en bombas y software importados). Para miles, escribe <b>"1 000 UI"</b> o <b>"mil UI"</b>.</div>
+</section>
+
+<!-- ============ 6. MERP ============ -->
+<section id="merp">
+  <h2>Si ocurre un error de medicación</h2>
+  <p class="lead">Primero el paciente, luego el registro. La notificación busca corregir el sistema, no castigar a la persona.</p>
+  <div class="card"><h3>Qué hacer</h3><ol class="steps">
+    <li><b>Evaluar al paciente</b>: signos vitales, conciencia, efectos esperables del fármaco/dosis recibida.</li>
+    <li><b>Informar de inmediato</b> al médico tratante y a la enfermera/o supervisor(a).</li>
+    <li><b>Ejecutar las medidas indicadas</b> (antídoto, monitorización, suspensión).</li>
+    <li><b>Registrar objetivamente</b> en la ficha: hechos, hora, acciones y respuesta. Sin juicios ni culpas.</li>
+    <li><b>Notificar</b> en el sistema de eventos adversos/incidentes de tu institución.</li>
+    <li><b>Informar al paciente/familia</b> según política institucional de comunicación de eventos adversos.</li>
+    <li><b>Participar en el análisis</b> (causa raíz / protocolo de Londres) para cambiar el sistema.</li>
+  </ol></div>
+
+  <div class="card">
+    <h3>Clasificador de gravedad (NCC MERP)</h3>
+    <p class="ant" style="margin-bottom:12px">Responde para obtener la categoría A–I que se usa al notificar.</p>
+    <div id="merpBox"></div>
+  </div>
+</section>
+</main>
+
+<footer>Consulta Rápida ENF · UDP — Referencias: ISMP (lista de medicamentos de alto alerta, tall-man lettering y abreviaturas propensas a error), NCC MERP Index for Categorizing Medication Errors, OMS "Medication Without Harm".</footer>
+
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('#tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('active', x === b));
+  document.querySelectorAll('main section').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+
+/* ---------- 1. checklist ---------- */
+const CHECKS = [
+  ['Indicación vigente y legible', 'Médica, escrita, firmada y sin abreviaturas peligrosas. Si hay duda, aclara antes: no interpretes.'],
+  ['Paciente correcto', 'Dos identificadores (nombre completo + RUT o fecha de nacimiento) contra brazalete. Nunca por número de cama.'],
+  ['Alergias consultadas', 'Pregunta al paciente y revisa ficha/brazalete, aunque ya esté registrado.'],
+  ['Medicamento correcto', 'Lee la etiqueta 3 veces (al sacar, al preparar, antes de administrar). Atención a nombres LASA.'],
+  ['Dosis correcta', 'Recalcula; verifica concentración del envase y unidades (mg ≠ mcg; UI ≠ mL).'],
+  ['Vía correcta', 'Coincide con la indicación y la forma farmacéutica. Conexiones rotuladas (EV, enteral, epidural).'],
+  ['Hora / frecuencia correcta', 'Respeta horario e intervalo; verifica que no se haya administrado ya (registro previo).'],
+  ['Medicamento en buen estado', 'Fecha de vencimiento, aspecto, integridad del envase, estabilidad tras dilución.'],
+  ['Paciente informado', 'Explica qué recibe y para qué. Respeta su derecho a rechazar y regístralo.'],
+  ['Preparado y administrado por quien registra', 'No administres lo que preparó otro sin rotulación completa y verificable.'],
+];
+const HIGH = ['Doble verificación independiente', 'Un segundo profesional verifica fármaco, dosis, cálculo, vía y programación de BIC por separado (no "mira lo que hice").'];
+function renderChecks(){
+  const items = $('#highAlert').checked ? [...CHECKS.slice(0,5), HIGH, ...CHECKS.slice(5)] : CHECKS;
+  const prev = new Set([...document.querySelectorAll('#chkList input:checked')].map(i => i.dataset.k));
+  $('#chkList').innerHTML = items.map(([t,d]) =>
+    `<label class="chk${t===HIGH[0]?' extra':''}"><input type="checkbox" data-k="${esc(t)}"${prev.has(t)?' checked':''}><span><b>${esc(t)}</b><small>${esc(d)}</small></span></label>`).join('');
+  updateChecks();
+}
+function updateChecks(){
+  const all = [...document.querySelectorAll('#chkList input')];
+  const done = all.filter(i => i.checked).length;
+  all.forEach(i => i.closest('.chk').classList.toggle('done', i.checked));
+  $('#prog').style.width = (done/all.length*100) + '%';
+  $('#chkOut').innerHTML = done === all.length
+    ? `<div class="banner ok"><b>Listo para administrar.</b> Permanece con el paciente, observa la respuesta y registra de inmediato (no antes). ${$('#highAlert').checked ? 'Programa controles según el fármaco (glicemia, TTPa, FR/sedación, PA…).' : ''}</div>`
+    : `<div class="banner info">${done}/${all.length} verificados. Si algún ítem no se cumple: <b>detente y aclara</b>.</div>`;
+}
+$('#chkList').addEventListener('change', updateChecks);
+$('#highAlert').addEventListener('change', renderChecks);
+$('#chkReset').addEventListener('click', () => { $('#highAlert').checked = false; $('#chkList').innerHTML=''; renderChecks(); window.scrollTo({top:0}); });
+renderChecks();
+
+/* ---------- 2. calculadora ---------- */
+const MASS = {g:1e6, mg:1e3, mcg:1};          // a mcg
+const TIME = {min:60, h:1};                    // a "por hora"
+const BOLO_U = ['mg','mcg','g','UI','mEq','mg/kg','mcg/kg','UI/kg','mEq/kg'];
+const INF_U  = ['mcg/kg/min','mcg/min','mg/h','mg/kg/h','mcg/kg/h','UI/h','UI/kg/h','mEq/h'];
+function setUnits(){
+  const inf = $('#cMode').value === 'inf';
+  $('#cDoseU').innerHTML = (inf ? INF_U : BOLO_U).map(u => `<option>${u}</option>`).join('');
+  $('#cAmtL').textContent = inf ? 'Fármaco en la mezcla' : 'Cantidad de fármaco';
+  $('#cVolL').textContent = inf ? 'Volumen total de la mezcla (mL)' : 'en volumen (mL)';
+  $('#resUnit').textContent = inf ? '(mL/h)' : '(mL)';
+  toggleWeight(); $('#cOut').innerHTML='';
+}
+function toggleWeight(){ $('#wWrap').classList.toggle('hidden', !$('#cDoseU').value.includes('/kg')); }
+$('#cMode').addEventListener('change', setUnits);
+$('#cDoseU').addEventListener('change', toggleWeight);
+setUnits();
+
+function parseNum(v){ const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : NaN; }
+function fmt(n){ return (n >= 100 ? n.toFixed(0) : n >= 10 ? n.toFixed(1) : n >= 1 ? n.toFixed(2) : n.toPrecision(2)).replace('.', ','); }
+function fmtConc(c, base){ return base === 'mcg' && c >= 1000 ? `${fmt(c/1000)} mg/mL` : `${fmt(c)} ${base}/mL`; }
+
+function compute(){
+  const dose = parseNum($('#cDose').value), amt = parseNum($('#cAmt').value), vol = parseNum($('#cVol').value);
+  const unit = $('#cDoseU').value, amtU = $('#cAmtU').value, inf = $('#cMode').value === 'inf';
+  if(!(dose>0 && amt>0 && vol>0)) throw 'Completa dosis, cantidad y volumen con valores mayores que 0.';
+  const parts = unit.split('/'); const base = parts[0];
+  const perKg = parts.includes('kg');
+  const w = parseNum($('#cWeight').value);
+  if(perKg && !(w>0)) throw 'Esta dosis es por kg: ingresa el peso.';
+  if(perKg && w > 250) throw 'Peso > 250 kg: verifica que esté en kg y no en gramos.';
+  // convertir dosis y presentación a unidad común
+  let doseBase, amtBase;
+  if(MASS[base] && MASS[amtU]){ doseBase = dose*MASS[base]; amtBase = amt*MASS[amtU]; }
+  else if(base === amtU){ doseBase = dose; amtBase = amt; }
+  else throw `Unidades incompatibles: la dosis está en ${base} y la presentación en ${amtU}. No se puede convertir ${base} ↔ ${amtU}.`;
+  if(perKg) doseBase *= w;
+  let rate = doseBase;
+  if(inf){ const t = parts[parts.length-1]; rate = doseBase * TIME[t]; } // por hora
+  const conc = amtBase / vol;            // unidad base por mL
+  return { value: rate / conc, inf, conc, total: doseBase, base: MASS[base] ? 'mcg' : base };
+}
+
+$('#cRun').addEventListener('click', () => {
+  let r; try { r = compute(); } catch(e){ $('#cOut').innerHTML = `<div class="banner danger">${esc(e)}</div>`; return; }
+  const a = parseNum($('#cA').value), b = parseNum($('#cB').value);
+  if(!(a>0 && b>0)){ $('#cOut').innerHTML = '<div class="banner warn">Ambos profesionales deben ingresar su resultado antes de comparar. Es la única forma de que la verificación sea realmente independiente.</div>'; return; }
+  $('#cA').type = $('#cB').type = 'text';
+  const ref = r.value, u = r.inf ? 'mL/h' : 'mL';
+  const judge = x => {
+    const ratio = x/ref;
+    if(Math.abs(ratio-1) <= .05) return ['ok','✔ coincide'];
+    for(const f of [10,100,1000]) if(Math.abs(ratio-f)/f < .05 || Math.abs(ratio-1/f)*f < .05) return ['danger',`✖ difiere ×${f} — típico error de coma decimal o mg/mcg`];
+    return ['danger', `✖ difiere ${Math.round(Math.abs(ratio-1)*100)} %`];
+  };
+  const [ka,ta] = judge(a), [kb,tb] = judge(b);
+  const ok = ka==='ok' && kb==='ok';
+  const warns = [];
+  if(!r.inf && ref < .1) warns.push('Volumen < 0,1 mL: difícil de medir con exactitud. Considera diluir y recalcular.');
+  if(!r.inf && ref > 20) warns.push('Volumen > 20 mL para una dosis única: revisa la concentración seleccionada.');
+  if(r.inf && ref < .5) warns.push('Velocidad < 0,5 mL/h: verifica que la BIC permita ese rango o concentra la mezcla.');
+  if(r.inf && ref > 250) warns.push('Velocidad > 250 mL/h para una infusión de fármaco: revisa unidades de tiempo (min vs h).');
+  $('#cOut').innerHTML = `
+    <div class="banner ${ok?'ok':'danger'}">
+      <div>Resultado de referencia</div>
+      <div class="result">${fmt(ref)} ${u}</div>
+      ${r.inf ? `<div class="ant">Equivale a ${fmt(ref)} microgotas/min (60 gt/mL) · ${fmt(ref/3)} gotas/min (macro 20 gt/mL)</div>` : ''}
+      <div class="ant">Concentración: ${fmtConc(r.conc, r.base)}</div>
+    </div>
+    <div class="card"><table>
+      <tr><td>Profesional A</td><td><b>${fmt(a)} ${u}</b></td><td class="${ka==='ok'?'good':'bad'}" style="white-space:normal">${ta}</td></tr>
+      <tr><td>Profesional B</td><td><b>${fmt(b)} ${u}</b></td><td class="${kb==='ok'?'good':'bad'}" style="white-space:normal">${tb}</td></tr>
+    </table></div>
+    ${ok ? '' : '<div class="banner danger"><b>No administrar.</b> Rehagan el cálculo desde la indicación original, por separado, y aclaren la discrepancia antes de continuar.</div>'}
+    ${warns.map(w => `<div class="banner warn">${esc(w)}</div>`).join('')}`;
+});
+$('#cClear').addEventListener('click', () => {
+  ['#cDose','#cWeight','#cAmt','#cVol','#cA','#cB'].forEach(s => $(s).value='');
+  $('#cA').type = $('#cB').type = 'password'; $('#cOut').innerHTML='';
+});
+['#cDose','#cWeight','#cAmt','#cVol'].forEach(s => $(s).addEventListener('input', () => { $('#cA').type = $('#cB').type = 'password'; }));
+
+/* ---------- 3. alto riesgo ---------- */
+const ALTO = [
+  {n:'Insulinas', k:'insulina cristalina regular nph rapida glargina', p:['Escribir "unidades", nunca "U" (se lee como 0 o 4).','Usar siempre jeringa de insulina; nunca jeringa de tuberculina ni de 1 mL genérica.','Vía EV solo insulina cristalina/análogos rápidos, en BIC.','Glicemia capilar antes de administrar; coordinar con alimentación.','Doble verificación de tipo de insulina y dosis.'], a:'Hipoglicemia → glucosa EV / glucagón'},
+  {n:'Heparina no fraccionada y HBPM', k:'heparina enoxaparina anticoagulante hbpm', p:['Existen varias concentraciones (ej. 5 000 UI/mL y 25 000 UI/5 mL): verificar el frasco.','Infusión en BIC con control de TTPa según protocolo.','Vigilar sangrado, plaquetas (TIH).','Enoxaparina SC: no purgar la burbuja de la jeringa prellenada.'], a:'Protamina'},
+  {n:'Anticoagulantes orales', k:'acenocumarol warfarina neosintrom rivaroxaban apixaban dabigatran', p:['Acenocumarol: dosis variable según INR, verificar esquema vigente.','Revisar interacciones (antibióticos, AINE, amiodarona).','Educar en signos de sangrado y en no duplicar dosis olvidadas.'], a:'Vitamina K (AVK) · idarucizumab (dabigatrán)'},
+  {n:'Cloruro de potasio concentrado', k:'kcl potasio cloruro', p:['NUNCA en bolo ni EV directo: puede causar paro cardíaco.','Ampolla KCl 10 % (10 mL) = 1 g ≈ 13,4 mEq. Siempre diluido.','Velocidad habitual periférica ≤ 10 mEq/h; mayores solo por CVC, monitorizado y según protocolo.','Almacenar separado y rotulado; idealmente retirado de las unidades.'], a:'Sin antídoto: suspender y tratar hiperkalemia'},
+  {n:'Cloruro de sodio hipertónico (> 0,9 %)', k:'nacl sodio hipertonico 10% 3% suero', p:['Ampollas de NaCl 10 % se confunden con agua destilada y KCl: separar y rotular.','Nunca sin diluir; usar BIC.','Control seriado de natremia: corrección rápida → mielinólisis pontina.'], a:'—'},
+  {n:'Sulfato de magnesio EV', k:'magnesio sulfato mgso4 preeclampsia eclampsia', p:['Escribir "sulfato de magnesio" completo (MgSO₄ se confunde con MSO₄ = morfina).','Controlar reflejos osteotendíneos, FR y diuresis.','Administrar en BIC; doble verificación de dosis de carga.'], a:'Gluconato de calcio'},
+  {n:'Opioides', k:'morfina fentanilo metadona tramadol oxicodona hidromorfona analgesia', p:['Valorar dolor, sedación y FR antes y después.','Atención a LASA: HYDROmorfona vs morfina (la primera es ~5-7 veces más potente).','Precaución en adulto mayor, ERC, SAHOS y asociación con BZD.','Tener naloxona disponible.'], a:'Naloxona'},
+  {n:'Sedantes EV', k:'midazolam propofol dexmedetomidina benzodiazepina sedacion', p:['Solo con monitorización (SpO₂, FR) y equipo de vía aérea disponible.','Aplicar escala de sedación (RASS).','Midazolam: concentraciones 5 mg/mL y 1 mg/mL — verificar.'], a:'Flumazenil (BZD)'},
+  {n:'Bloqueadores neuromusculares', k:'rocuronio vecuronio succinilcolina atracurio cisatracurio paralizante', p:['Causan paro respiratorio: solo con paciente en VM o intubación inmediata.','Rotular "PARALIZANTE — causa paro respiratorio"; almacenar separado.','No bloquean dolor ni conciencia: asegurar sedoanalgesia.'], a:'Sugammadex (rocuronio/vecuronio) · neostigmina'},
+  {n:'Drogas vasoactivas e inótropos', k:'noradrenalina norepinefrina adrenalina epinefrina dopamina dobutamina vasopresina milrinona', p:['BIC exclusiva; idealmente CVC. Vigilar extravasación si es periférica.','No pasar bolos por esa vía (arrastra fármaco).','Rotular concentración en la matraz y la línea; conocer la dilución estándar de tu unidad.','Cambiar matraz sin interrumpir infusión (técnica de relevo).'], a:'Extravasación de vasopresores: fentolamina'},
+  {n:'Antiarrítmicos EV', k:'amiodarona lidocaina adenosina digoxina antiarritmico', p:['Monitorización ECG continua.','Amiodarona: diluir en SG 5 %, flebitis frecuente, preferir CVC en infusión prolongada.','Digoxina: controlar FC, K⁺ y niveles plasmáticos.'], a:'Digoxina → anticuerpos antidigoxina'},
+  {n:'Quimioterapia y metotrexato oral', k:'quimioterapia citostatico metotrexato vincristina', p:['Metotrexato oral en artritis/psoriasis es SEMANAL: administración diaria ha causado muertes.','Citostáticos: doble verificación, protocolo y EPP; vincristina nunca intratecal.'], a:'Metotrexato → ácido folínico (leucovorina)'},
+  {n:'Glucosa hipertónica (≥ 20 %)', k:'glucosa suero glucosado 30% 50% hipertonica', p:['Flebitis y extravasación; concentraciones altas por CVC.','Verificar concentración del envase (5 % vs 30 % vs 50 %).'], a:'—'},
+  {n:'Oxitocina EV', k:'oxitocina parto induccion', p:['Siempre en BIC y diluida.','Vigilar dinámica uterina y LCF (taquisistolia).'], a:'Suspender infusión'},
+  {n:'Fármacos por vía epidural o intratecal', k:'epidural intratecal anestesia raquidea', p:['Línea y bomba rotuladas, de color distinto, sin puertos en Y.','Nunca conectar a una vía EV (y viceversa).'], a:'—'},
+];
+function renderAlto(){
+  const q = norm($('#altoQ').value);
+  const list = ALTO.filter(x => !q || norm(x.n+' '+x.k).includes(q));
+  $('#altoList').innerHTML = list.length ? list.map(x => `<div class="card"><h3>${esc(x.n)}</h3><ul>${x.p.map(p=>`<li>${esc(p)}</li>`).join('')}</ul><div class="ant">Antídoto / manejo: ${esc(x.a)}</div></div>`).join('')
+    : '<div class="banner info">Sin coincidencias. Si dudas si un fármaco es de alto riesgo, trátalo como tal.</div>';
+}
+$('#altoQ').addEventListener('input', renderAlto); renderAlto();
+
+/* ---------- 4. LASA ---------- */
+const LASA = [
+  [['DOPamina','DOBUTamina'], 'Ambos vasoactivos en BIC; efecto hemodinámico distinto.'],
+  [['norEPINEFrina','EPINEFrina'], 'Noradrenalina vs adrenalina: ampollas similares, dosis y usos distintos.'],
+  [['hidrALAZINA','hidrOXIzina'], 'Antihipertensivo vs antihistamínico.'],
+  [['clonazePAM','cloNIDINA','LORazepam'], 'BZD vs antihipertensivo α2.'],
+  [['HYDROmorfona','morfina'], 'Hidromorfona es mucho más potente: riesgo de depresión respiratoria.'],
+  [['predniSONA','prednisoLONA'], 'Corticoides con equivalencias distintas según presentación.'],
+  [['ceFAZolina','cefTRIAXona','cefTAZidima','cefOTAXima'], 'Espectros y dosis distintos.'],
+  [['NIFEdipino','niCARdipino'], 'Formulaciones y vías diferentes.'],
+  [['carBAMazepina','OXcarbazepina'], 'Antiepilépticos con dosis no equivalentes.'],
+  [['lamoTRIgina','lamiVUDina'], 'Antiepiléptico vs antirretroviral.'],
+  [['traMADol','traZODona'], 'Opioide vs antidepresivo.'],
+  [['risperiDONA','rOPINIRol'], 'Antipsicótico vs antiparkinsoniano.'],
+  [['vinCRIStina','vinBLAStina'], 'Citostáticos; vincristina intratecal es mortal.'],
+  [['INSULINA','HEPARINA'], 'Ambas se dosifican en "unidades" y vienen en frascos parecidos.'],
+  [['Ampolla KCl','Ampolla NaCl 10 %','Agua destilada'], 'Ampollas plásticas casi idénticas: confusión por envase (look-alike).'],
+  [['MORFINA','MIDAZOLAM'], 'Ampollas similares en muchas unidades; ambos deprimen la respiración.'],
+];
+function renderLasa(){
+  const q = norm($('#lasaQ').value);
+  const list = LASA.filter(([n,d]) => !q || norm(n.join(' ')+' '+d).includes(q));
+  $('#lasaList').innerHTML = list.map(([n,d]) => `<div class="card"><div class="lasa">${n.map(esc).map(x=>`<span>${x}</span>`).join('<span class="vs">vs</span>')}</div><div class="ant">${esc(d)}</div></div>`).join('')
+    || '<div class="banner info">Sin coincidencias.</div>';
+}
+$('#lasaQ').addEventListener('input', renderLasa); renderLasa();
+
+/* ---------- 5. abreviaturas ---------- */
+const ABREV = [
+  ['U / u','Se lee como 0 o 4 ("10U" → 100)','unidades'],
+  ['UI','Se lee como IV o 10','unidades internacionales'],
+  ['µg','La µ se lee como m (mg): error ×1000','mcg'],
+  ['Cero final: 5,0 mg','Si no se ve la coma: 50 mg','5 mg'],
+  ['Sin cero inicial: ,5 mg','Si no se ve la coma: 5 mg','0,5 mg'],
+  ['cc','Se lee como "u" o "00"','mL'],
+  ['SC / SQ','SQ se lee como "5 Q" (cada 5)','subcutáneo / vía SC escrita completa'],
+  ['MSO₄ / MgSO₄','Morfina vs magnesio','sulfato de morfina / sulfato de magnesio'],
+  ['Nombres abreviados (MTX, AZT, ASA…)','Ambiguos según servicio','nombre genérico completo'],
+  ['c/24 h escrito "QD" u "OD"','OD = ojo derecho; QD = QID','"cada 24 horas" / "diario"'],
+  ['D/C','Discontinuar vs dar de alta','"suspender" / "alta"'],
+  ['IN','Intranasal se confunde con IM o IV','intranasal'],
+  ['> / <','Se invierten al leer','"mayor que" / "menor que"'],
+  ['Barra "/" en dosis (1/2 amp)','Se lee como 1: "1/2" → 1 2','"media ampolla" o la dosis en mg'],
+];
+$('#abrevBody').innerHTML = ABREV.map(([a,b,c]) => `<tr><td class="bad">${esc(a)}</td><td>${esc(b)}</td><td class="good">${esc(c)}</td></tr>`).join('');
+
+/* ---------- 6. NCC MERP ---------- */
+const CATS = {
+  A:['Circunstancia con capacidad de causar error','Sin error. Situación de riesgo (ej. envases LASA juntos). Notificar igual: es el momento más barato para prevenir.','#7a9cbf'],
+  B:['Error que no alcanzó al paciente','Near miss / casi error. Se detectó antes de administrar.','#4f8ef7'],
+  C:['Alcanzó al paciente sin causar daño','Sin necesidad de monitorización adicional.','#22d3ee'],
+  D:['Alcanzó al paciente, requirió monitorización','Monitorización y/o intervención para confirmar o evitar daño.','#14c98a'],
+  E:['Daño temporal que requirió intervención','','#f8a83c'],
+  F:['Daño temporal con hospitalización inicial o prolongada','','#f8a83c'],
+  G:['Daño permanente','','#f06060'],
+  H:['Requirió intervención para mantener la vida','Ej. reanimación, intubación, traslado a UCI por soporte vital.','#f06060'],
+  I:['Contribuyó o resultó en la muerte del paciente','','#9d6ef5'],
+};
+const TREE = {
+  q1:['¿Ocurrió un error?', [['Sí','q2'],['No, pero había riesgo de que ocurriera','A']]],
+  q2:['¿El error alcanzó al paciente?', [['Sí','q3'],['No (se detectó antes)','B']]],
+  q3:['¿El paciente murió y el error contribuyó?', [['Sí','I'],['No','q4']]],
+  q4:['¿Causó daño al paciente?', [['Sí','q5'],['No','q8']]],
+  q5:['¿Requirió intervención para mantener la vida?', [['Sí','H'],['No','q6']]],
+  q6:['¿El daño es permanente?', [['Sí','G'],['No, es temporal','q7']]],
+  q7:['¿Requirió hospitalización o la prolongó?', [['Sí','F'],['No, solo intervención','E']]],
+  q8:['¿Requirió monitorización o intervención para confirmar/evitar daño?', [['Sí','D'],['No','C']]],
+};
+function merp(node, path=[]){
+  const box = $('#merpBox');
+  if(CATS[node]){
+    const [t,d,c] = CATS[node];
+    box.innerHTML = `<div class="cat" style="color:${c}">${node}</div><b>${esc(t)}</b>${d?`<p class="ant">${esc(d)}</p>`:''}
+      <p class="ant">${node<='B' ? 'Sin daño: notificar como incidente/casi error.' : node<='D' ? 'Error sin daño: notificar y registrar monitorización.' : 'Evento adverso con daño: notificar a la brevedad; corresponde análisis formal (causa raíz).'}</p>
+      <div class="btns"><button class="btn sec" id="merpRe">Volver a clasificar</button></div>`;
+    $('#merpRe').onclick = () => merp('q1');
+    return;
+  }
+  const [q, opts] = TREE[node];
+  box.innerHTML = `<div class="q">${esc(q)}</div><div class="btns">${opts.map(([l,n],i)=>`<button class="btn${i?' sec':''}" data-n="${n}">${esc(l)}</button>`).join('')}
+    ${path.length?'<button class="btn sec" data-back="1">← Atrás</button>':''}</div>`;
+  box.querySelectorAll('button').forEach(b => b.onclick = () => b.dataset.back ? merp(path[path.length-1], path.slice(0,-1)) : merp(b.dataset.n, [...path, node]));
+}
+merp('q1');
+</script>
+</body>
+</html>
