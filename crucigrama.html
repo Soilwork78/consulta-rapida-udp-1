@@ -28,12 +28,12 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
-    --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#2c2a25;--block:#0c0b0a;color-scheme:dark;
+    --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#3b382f;--block:#0a0908;color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
-  --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#2c2a25;--block:#0c0b0a;color-scheme:dark;
+  --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#3b382f;--block:#0a0908;color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -101,6 +101,15 @@ button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
 .cell.rev::before{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 calc(var(--c) * .26) calc(var(--c) * .26) 0;border-color:transparent var(--mark) transparent transparent;pointer-events:none}
 .grid.solved .cell input{color:var(--ink)}
 
+.pic{width:100%;margin:0;border:1px solid var(--ink);background:var(--paper-2)}
+.pic-frame{height:190px;display:flex;align-items:center;justify-content:center;padding:8px}
+.pic-frame img{max-width:100%;max-height:100%;object-fit:contain;filter:sepia(.25) contrast(1.05);border:1px solid var(--rule)}
+.pic-msg{font-style:italic;color:var(--ink-soft);font-size:14px;text-align:center;padding:0 12px}
+.pic figcaption{border-top:1px solid var(--rule);padding:4px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;gap:8px}
+.pic figcaption a{color:var(--ink-soft)}
+@media (max-width:560px){.pic-frame{height:150px}}
+button[aria-pressed="false"]{color:var(--ink-soft);border-color:var(--rule)}
+
 .legend{font-size:12px;color:var(--ink-soft);text-align:center;max-width:46ch}
 
 /* Definiciones */
@@ -148,6 +157,8 @@ button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
     <div class="grp">
       <button id="clearAll" type="button">Borrar</button>
       <button id="newPuz" type="button">Nuevo crucigrama</button>
+      <button id="picToggle" type="button" aria-pressed="true">Imagen: sí</button>
+      <button id="themeBtn" type="button" title="Cambiar entre automático, claro y oscuro">Tema: automático</button>
       <span class="timer" id="timer" title="Tiempo de juego">00:00</span>
     </div>
   </div>
@@ -165,6 +176,10 @@ button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
         <span class="txt" id="curTxt"></span>
         <button id="nextClue" type="button" aria-label="Definición siguiente">›</button>
       </div>
+      <figure class="pic" id="pic" hidden>
+        <div class="pic-frame"><img id="picImg" alt="Imagen de pista para la palabra activa" hidden><span class="pic-msg" id="picMsg"></span></div>
+        <figcaption><span>Pista visual</span><a id="picSrc" href="https://es.wikipedia.org" target="_blank" rel="noopener">Fuente: Wikipedia</a></figcaption>
+      </figure>
       <div class="grid" id="grid" role="grid" aria-label="Grilla del crucigrama"></div>
       <div class="stamp" id="stamp">Resuelto</div>
       <p class="legend">Clic en una casilla para escribir. Clic de nuevo, Espacio o Enter cambian entre horizontal y vertical. Las tildes se ignoran; la Ñ cuenta como letra.</p>
@@ -810,6 +825,105 @@ function generate(seed){
   return best;
 }
 
+/* ---------- Pistas con imagen (Wikipedia) ----------
+   Búsqueda específica para palabras ambiguas o que conviene mostrar por su nombre científico. */
+const IMG = {
+  LLAMA:"Lama glama",BANCO:"Banco entidad financiera",RADIO:"Radio geometría circunferencia",DELTA:"Delta río geografía",
+  ATLAS:"Atlas cartografía libro de mapas",JULIO:"Julio unidad de energía",CURIE:"Marie Curie",PARRA:"Violeta Parra",
+  COLON:"Cristóbal Colón",CESAR:"Julio César",MAYA:"Cultura maya",INCA:"Imperio incaico",AZTECA:"Mexicas",
+  DANTE:"Dante Alighieri",GOYA:"Francisco de Goya",DALI:"Salvador Dalí",MONET:"Claude Monet",NEWTON:"Isaac Newton",
+  DARWIN:"Charles Darwin",GALILEO:"Galileo Galilei",EINSTEIN:"Albert Einstein",PASTEUR:"Louis Pasteur",
+  NERUDA:"Pablo Neruda",MISTRAL:"Gabriela Mistral",HUIDOBRO:"Vicente Huidobro",BORGES:"Jorge Luis Borges",
+  CERVANTES:"Miguel de Cervantes",MOZART:"Wolfgang Amadeus Mozart",BEETHOVEN:"Ludwig van Beethoven",
+  PICASSO:"Pablo Picasso",OHIGGINS:"Bernardo O'Higgins",VALDIVIA:"Pedro de Valdivia",LAUTARO:"Lautaro toqui mapuche",
+  NAPOLEON:"Napoleón Bonaparte",QUIJOTE:"Don Quijote de la Mancha",SANCHO:"Sancho Panza",DULCINEA:"Dulcinea del Toboso",
+  MACONDO:"Cien años de soledad",ARAUCANA:"La Araucana Ercilla",TORRE:"Torre ajedrez",ALFIL:"Alfil ajedrez",
+  JAQUE:"Jaque ajedrez",ENROQUE:"Enroque ajedrez",PENAL:"Tiro penal fútbol",CORNER:"Saque de esquina",RODEO:"Rodeo chileno",
+  REMO:"Remo deporte",VENUS:"Venus planeta",MARTE:"Marte planeta",SATURNO:"Saturno planeta",JUPITER:"Júpiter planeta",
+  NEPTUNO:"Neptuno mitología",MEDUSA:"Medusa mitología gorgona",FENIX:"Fénix mitología",SIRENA:"Sirena mitología",
+  LEON:"Panthera leo",TIGRE:"Panthera tigris",PUMA:"Puma concolor",ZORRO:"Vulpes vulpes",CONDOR:"Vultur gryphus",
+  HUEMUL:"Hippocamelus bisulcus",PUDU:"Pudu puda",VICUÑA:"Vicugna vicugna",ALPACA:"Vicugna pacos",COPIHUE:"Lapageria rosea",
+  ALERCE:"Fitzroya cupressoides",ARAUCARIA:"Araucaria araucana",PEHUEN:"Araucaria araucana",QUILLAY:"Quillaja saponaria",
+  BOLDO:"Peumus boldus",BUHO:"Bubo bubo",COLIBRI:"Trochilidae",PINGUINO:"Spheniscidae",CEDRO:"Cedrus libani",
+  SAUCE:"Salix babylonica",ROBLE:"Quercus robur",OLMO:"Ulmus minor",CISNE:"Cygnus olor",GALLO:"Gallus gallus domesticus",
+  OVEJA:"Ovis orientalis aries",ASNO:"Equus africanus asinus",CAMELLO:"Camelus bactrianus",ELEFANTE:"Loxodonta africana",
+  PULPO:"Octopus vulgaris",TIBURON:"Selachimorpha",DELFIN:"Tursiops truncatus",BALLENA:"Balaenoptera musculus",
+  ABEJA:"Apis mellifera",HORMIGA:"Formicidae",OSO:"Ursus arctos",TORO:"Toro bovino",ONCE:"Once comida chilena",
+  MOTE:"Mote con huesillo",CEPA:"Vitis vinifera",CHOCLO:"Maíz mazorca",RED:"Red de pesca",ARCO:"Arco arma",
+  NAVE:"Barco",PESO:"Peso chileno",LIRA:"Lira instrumento",ARCA:"Arca de Noé",ARO:"Pendiente joyería",
+  ALA:"Ala anatomía aves",ASA:"Asa taza",SOL:"Sol estrella",SAL:"Sal común",OCA:"Juego de la oca",NUDO:"Nudo marinero",
+  IRIS:"Iris anatomía ojo",ECO:"Eco acústica",ADN:"Ácido desoxirribonucleico",PRISMA:"Prisma óptica",
+  CUBO:"Cubo geometría hexaedro",CORONA:"Corona real",ESCUDO:"Escudo arma defensiva",BANDERA:"Bandera de Chile",
+  TITULAR:"Titular periodismo",PLUMA:"Pluma estilográfica",CHIP:"Circuito integrado",CORREO:"Correo postal",
+  TECLADO:"Teclado computadora",SATELITE:"Satélite artificial",BOLSA:"Bolsa de valores",GUION:"Guion cinematográfico",
+  MIMO:"Mimo pantomima",TROPICO:"Trópico de Capricornio",MERIDIANO:"Meridiano de Greenwich",ECUADOR:"Ecuador línea terrestre",
+  ESTRECHO:"Estrecho de Magallanes",SAHARA:"Desierto del Sahara",NILO:"Río Nilo",DANUBIO:"Río Danubio",
+  TITICACA:"Lago Titicaca",BIOBIO:"Río Biobío",ANDES:"Cordillera de los Andes",ATACAMA:"Desierto de Atacama",
+  URAL:"Montes Urales",EVEREST:"Monte Everest",IGUAZU:"Cataratas del Iguazú",AMAZONAS:"Río Amazonas",
+  OSORNO:"Volcán Osorno",MAULE:"Región del Maule",CHILOE:"Isla Grande de Chiloé",RAPANUI:"Isla de Pascua",
+  MURALLA:"Gran Muralla China",PIRAMIDE:"Gran Pirámide de Guiza",CABILDO:"Cabildo colonial",FENICIO:"Fenicia",
+  OZONO:"Capa de ozono",NUCLEO:"Núcleo celular",SISMO:"Terremoto",ASPIRINA:"Ácido acetilsalicílico",
+  SUTURA:"Sutura quirúrgica",TIMPANO:"Membrana timpánica",ARBITRO:"Árbitro deporte",OLIMPIADA:"Juegos Olímpicos",
+  ENANO:"Blancanieves y los siete enanitos",REINA:"Reina monarquía",PRINCIPE:"Príncipe",ODIN:"Odín",THOR:"Thor"
+};
+const picCache = {};
+let picShown = null, picToken = 0;
+
+function showPic(wd){
+  const fig = $("pic");
+  if(!prefs.img || !wd){ fig.hidden = true; picShown = null; return; }
+  fig.hidden = false;
+  if(picShown === wd.ans) return;
+  picShown = wd.ans;
+  const img = $("picImg"), msg = $("picMsg"), src = $("picSrc");
+  const draw = (r)=>{
+    if(r && r.thumb){
+      img.onerror = ()=>{ img.hidden = true; msg.hidden = false; msg.textContent = "No se pudo cargar la imagen."; };
+      img.src = r.thumb; img.hidden = false; msg.hidden = true; src.href = r.url;
+    }else{
+      img.hidden = true; img.removeAttribute("src"); msg.hidden = false; src.href = "https://es.wikipedia.org";
+      msg.textContent = r && r.error ? "Las imágenes necesitan conexión a Wikipedia y aquí no están disponibles." : "Esta palabra no tiene imagen. Confía en la definición.";
+    }
+  };
+  if(picCache[wd.ans]){ draw(picCache[wd.ans]); return; }
+  const tk = ++picToken;
+  img.hidden = true; msg.hidden = false; msg.textContent = "Buscando imagen…";
+  const q = IMG[wd.ans] || (wd.ans.charAt(0) + wd.ans.slice(1).toLowerCase());
+  const url = "https://es.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=1"
+    + "&prop=pageimages%7Cinfo&inprop=url&piprop=thumbnail&pithumbsize=480&gsrsearch=" + encodeURIComponent(q);
+  fetch(url).then(r=>r.json()).then(d=>{
+    const pages = d && d.query && d.query.pages ? Object.values(d.query.pages) : [];
+    const p = pages[0];
+    const res = p && p.thumbnail ? {thumb:p.thumbnail.source, url:p.fullurl} : {};
+    picCache[wd.ans] = res;
+    if(tk === picToken) draw(res);
+  }).catch(()=>{ if(tk === picToken) draw({error:true}); });
+}
+
+/* ---------- Preferencias: tema e imágenes ---------- */
+const PKEY = "crucigrama.tarde.prefs";
+let prefs = {theme:"system", img:true};
+try{ Object.assign(prefs, JSON.parse(localStorage.getItem(PKEY)||"{}")); }catch(e){}
+function savePrefs(){ try{ localStorage.setItem(PKEY, JSON.stringify(prefs)); }catch(e){} }
+const THEME_LABEL = {system:"automático", light:"claro", dark:"oscuro"};
+function applyPrefs(){
+  const root = document.documentElement;
+  if(prefs.theme === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", prefs.theme);
+  $("themeBtn").textContent = "Tema: " + THEME_LABEL[prefs.theme];
+  $("picToggle").textContent = "Imagen: " + (prefs.img ? "sí" : "no");
+  $("picToggle").setAttribute("aria-pressed", prefs.img ? "true" : "false");
+}
+$("themeBtn").onclick = ()=>{
+  const order = ["system","light","dark"];
+  prefs.theme = order[(order.indexOf(prefs.theme)+1) % order.length];
+  applyPrefs(); savePrefs();
+};
+$("picToggle").onclick = ()=>{
+  prefs.img = !prefs.img; picShown = null;
+  applyPrefs(); savePrefs(); if(P) paint();
+};
+applyPrefs();
+
 /* ---------- Estado ---------- */
 let P, entries, revealed, bad, elapsed, done, stats;
 let cur = {k:-1, dir:"A"};
@@ -908,6 +1022,7 @@ function paint(){
     $("curNum").textContent = wd.num + (wd.dir==="A"?" H":" V");
     $("curTxt").textContent = wd.clue + ".";
   }
+  showPic(wd);
   $("grid").classList.toggle("solved", done);
   $("stamp").classList.toggle("show", done);
   if(done) $("stamp").textContent = "Resuelto en " + fmtTime(elapsed);
