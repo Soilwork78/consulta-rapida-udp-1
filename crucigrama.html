@@ -68,7 +68,7 @@ body{
   font-size:12px;letter-spacing:.14em;text-transform:uppercase;
 }
 .strip .sec{font-weight:700}
-.strip .prefs{display:flex;gap:6px}
+.strip .prefs{display:flex;gap:6px;flex-wrap:wrap}
 .strip button{border-color:color-mix(in srgb, var(--band-ink) 45%, transparent);color:var(--band-ink);font-size:12px;padding:3px 9px;letter-spacing:.06em}
 .strip button:hover{background:var(--band-ink);color:var(--band)}
 .strip button[aria-pressed="false"]{opacity:.6}
@@ -205,6 +205,8 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
   <div class="strip">
     <span class="sec">Pasatiempos · Edición de la tarde</span>
     <span class="prefs">
+      <button id="levelBtn" type="button" title="Cambiar el nivel de las definiciones">Nivel: medio</button>
+      <button id="liveToggle" type="button" aria-pressed="true" title="Marcar errores y aciertos mientras escribes">Corrección: al instante</button>
       <button id="picToggle" type="button" aria-pressed="true">Imagen: sí</button>
       <button id="themeBtn" type="button" title="Cambiar entre automático, claro y oscuro">Tema: automático</button>
     </span>
@@ -214,7 +216,7 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
     <div class="mast-sub">
       <span id="today"></span>
       <b id="puzNo">Crucigrama Nº —</b>
-      <span class="chip">Dificultad media</span>
+      <span class="chip" id="levelChip">Nivel medio</span>
       <span class="saved" id="saveState">Guardado</span>
     </div>
   </header>
@@ -236,6 +238,7 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
       <div class="grid" id="grid" role="grid" aria-label="Grilla del crucigrama"></div>
       <div class="stamp" id="stamp" hidden>Resuelto</div>
       <div class="actions">
+        <button id="chkAll" type="button" hidden>Comprobar</button>
         <span class="lbl">Revelar</span>
         <button id="revCell" type="button">Letra</button>
         <button id="revWord" type="button">Palabra</button>
@@ -244,7 +247,7 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
         <button id="clearAll" type="button">Borrar todo</button>
         <button id="newPuz" type="button" class="primary">Nuevo crucigrama</button>
       </div>
-      <p class="legend">Toca una casilla para escribir; tócala de nuevo, o usa Espacio, para cambiar de dirección. Las letras erradas se marcan en rojo y cada palabra correcta se ilumina.</p>
+      <p class="legend">Toca una casilla para escribir; tócala de nuevo, o usa Espacio, para cambiar de dirección. Con la corrección al instante, las letras erradas se marcan en rojo y cada palabra correcta se ilumina.</p>
     </div>
 
     <div class="side">
@@ -281,504 +284,1148 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
 
 /* ---------- Banco de palabras: RESPUESTA|Definición ---------- */
 const BANK = `
-ANDES|Cordillera que recorre Sudamérica de norte a sur
-ATACAMA|Desierto más árido del planeta
-BIOBIO|Río que desemboca junto a Concepción
-TITICACA|Lago navegable más alto del mundo
-NILO|Río que atraviesa Egipto
-DANUBIO|Río que pasa por Viena y Budapest
-SAHARA|Mayor desierto cálido del mundo
-ISTMO|Franja de tierra que une dos continentes
-BAHIA|Entrada del mar en la costa, menor que un golfo
-ESTRECHO|El de Magallanes une dos océanos
-PENINSULA|Tierra rodeada de agua por todas partes menos por una
-VOLCAN|Montaña que expulsa lava
-GEISER|Fuente termal que lanza agua a intervalos
-DELTA|Desembocadura triangular de un río; también letra griega
-OASIS|Lugar con agua y vegetación en medio del desierto
-TUNDRA|Bioma frío y sin árboles del Ártico
-ESTEPA|Llanura extensa de hierbas y arbustos
-FIORDO|Golfo estrecho entre montañas, típico de Noruega
-MONZON|Viento estacional del sur de Asia
-ECUADOR|Línea imaginaria que divide la Tierra en dos hemisferios
-TROPICO|El de Capricornio cruza el norte de Chile
-MERIDIANO|El de Greenwich marca la longitud cero
-ATLAS|Libro de mapas; también titán que sostenía el cielo
-OSLO|Capital de Noruega
-LIMA|Capital del Perú
-QUITO|Capital de Ecuador
-ROMA|Ciudad de las siete colinas
-PARIS|Ciudad del Sena
-LONDRES|Ciudad del Támesis
-MADRID|Capital de España
-TOKIO|Capital de Japón
-EGIPTO|País de las pirámides de Giza
-GRECIA|Cuna de la democracia
-INDIA|País del Taj Mahal
-CUBA|Isla mayor de las Antillas
-CHILOE|Isla de los palafitos y las iglesias de madera
-RAPANUI|Pueblo y lengua de Isla de Pascua
-VALPARAISO|Puerto de ascensores y cerros
-ARICA|Ciudad de la eterna primavera
-OSORNO|Volcán y ciudad del sur de Chile
-MAULE|Región y río del centro de Chile
-AMAZONAS|Río más caudaloso del mundo
-URAL|Montes que separan Europa de Asia
-ALPES|Cordillera del Mont Blanc
-EVEREST|Cumbre más alta del mundo
-IGUAZU|Cataratas entre Argentina y Brasil
-INCA|Imperio cuya capital fue Cusco
-AZTECA|Pueblo fundador de Tenochtitlan
-MAYA|Civilización del Yucatán de célebre calendario
-FARAON|Rey del antiguo Egipto
-CESAR|Título de los emperadores romanos
-NAPOLEON|Emperador derrotado en Waterloo
-COLON|Navegante que llegó a América en 1492
-OHIGGINS|Padre de la Patria chileno
-LAUTARO|Toqui mapuche que venció a Valdivia
-VALDIVIA|Fundador de Santiago del Nuevo Extremo
-CAUPOLICAN|Toqui cantado por Ercilla
-FEUDO|Tierra que un señor concedía a su vasallo
-VIKINGO|Navegante escandinavo de la Edad Media
-CRUZADA|Expedición militar medieval a Tierra Santa
-IMPERIO|Conjunto de territorios bajo un emperador
-REPUBLICA|Forma de gobierno sin monarca
-TRATADO|Acuerdo formal entre Estados
-ARMISTICIO|Suspensión de hostilidades entre ejércitos
-COLONIA|Período entre la Conquista y la Independencia
-CABILDO|Ayuntamiento de la época colonial
-TROYA|Ciudad del famoso caballo de madera
-ESPARTA|Ciudad griega de guerreros
-FENICIO|Pueblo navegante al que se atribuye el alfabeto
-MURALLA|La china supera los veinte mil kilómetros
-PIRAMIDE|Monumento funerario de Keops
-ATOMO|Unidad básica de la materia
-PROTON|Partícula de carga positiva del núcleo
-NEUTRON|Partícula sin carga del núcleo
-ELECTRON|Partícula negativa que rodea al núcleo
-ISOTOPO|Átomo con distinto número de neutrones
-OXIGENO|Elemento de símbolo O
-HIERRO|Metal de símbolo Fe
-COBRE|Metal rojizo, principal exportación chilena
-LITIO|Metal de las baterías, abundante en los salares
-ORO|Metal precioso de símbolo Au
-PLATA|Metal de símbolo Ag
-NEON|Gas noble de los letreros luminosos
-HELIO|Gas noble que hace flotar los globos
-OZONO|Capa que filtra la radiación ultravioleta
-ENZIMA|Proteína que acelera reacciones químicas
-GEN|Unidad de la herencia
-ADN|Molécula de la doble hélice (sigla)
-CELULA|Unidad básica de los seres vivos
-NUCLEO|Centro del átomo o de la célula
-MITOSIS|División celular que da dos células idénticas
-OSMOSIS|Paso de agua a través de una membrana semipermeable
-FOTON|Partícula de luz
-GRAVEDAD|Fuerza que nos mantiene en el suelo
-INERCIA|Tendencia de un cuerpo a conservar su estado de movimiento
-ENERGIA|Capacidad de realizar trabajo
-VOLTIO|Unidad de tensión eléctrica
-VATIO|Unidad de potencia
-JULIO|Unidad de energía, o séptimo mes
-PRISMA|Cuerpo que descompone la luz blanca
-LENTE|Cristal que desvía la luz, como el de las gafas
-IMAN|Cuerpo que atrae el hierro
-ORBITA|Trayectoria de un planeta alrededor del Sol
-COMETA|Astro con cola luminosa
-ECLIPSE|Ocultación de un astro por otro
-GALAXIA|La Vía Láctea es una
-MARTE|Planeta rojo
-VENUS|Lucero del alba
-SATURNO|Planeta de los anillos más vistosos
-JUPITER|Planeta más grande del sistema solar
-LUNA|Satélite natural de la Tierra
-NEBULOSA|Nube de gas y polvo interestelar
-FOSIL|Resto petrificado de un ser vivo antiguo
-MAGMA|Roca fundida bajo la corteza terrestre
-SISMO|Movimiento de la corteza terrestre
-TSUNAMI|Ola gigante causada por un terremoto submarino
-CLIMA|Conjunto de condiciones atmosféricas de una zona
-NEURONA|Célula del sistema nervioso
-ARTERIA|Vaso que lleva sangre desde el corazón
-VENA|Vaso que devuelve sangre al corazón
-PULMON|Órgano donde ocurre la hematosis
-RIÑON|Órgano que filtra la sangre y produce orina
-HIGADO|Órgano que produce la bilis
-CORAZON|Bomba del sistema circulatorio
-INSULINA|Hormona que baja la glicemia
-ASPIRINA|Ácido acetilsalicílico, por su nombre comercial
-VACUNA|Preparado que genera inmunidad
-VIRUS|Agente infeccioso que solo se replica dentro de células
-BACTERIA|Microorganismo procariota
-FIEBRE|Elevación de la temperatura corporal
-PULSO|Latido que se palpa en la muñeca
-SUTURA|Costura de una herida
-ALERGIA|Reacción exagerada del sistema inmune
-ANEMIA|Disminución de la hemoglobina
-PLAQUETA|Célula sanguínea clave en la coagulación
-HUESO|Pieza dura del esqueleto
-FEMUR|Hueso más largo del cuerpo
-CRANEO|Caja ósea que protege el encéfalo
-RETINA|Capa del ojo sensible a la luz
-TIMPANO|Membrana del oído medio
-DARWIN|Autor de El origen de las especies
-NEWTON|Físico de la manzana y la gravitación
-EINSTEIN|Físico de la relatividad
-CURIE|Marie, doble premio Nobel
-PASTEUR|Científico que da nombre a la pasteurización
-GALILEO|Astrónomo que defendió el heliocentrismo
-EUCLIDES|Padre de la geometría
-PITAGORAS|Matemático del teorema del triángulo rectángulo
-ALGEBRA|Rama de las matemáticas que usa letras como incógnitas
-PRIMO|Número divisible solo por sí mismo y por uno
-CERO|Elemento neutro de la suma
-CIRCULO|Figura cuyos puntos equidistan del centro
-RADIO|Mitad del diámetro; también elemento químico
-VECTOR|Magnitud con módulo, dirección y sentido
-ANGULO|Abertura entre dos rectas que se cortan
-ROMBO|Cuadrilátero de lados iguales y ángulos oblicuos
-CUBO|Hexaedro regular
-ESFERA|Cuerpo redondo de superficie equidistante del centro
-DOCENA|Conjunto de doce
-MILLON|Mil veces mil
-NERUDA|Autor de Veinte poemas de amor
-MISTRAL|Primera latinoamericana premio Nobel de Literatura
-HUIDOBRO|Poeta chileno creador del creacionismo
-PARRA|Apellido de Nicanor y Violeta
-QUIJOTE|Hidalgo de La Mancha
-SANCHO|Escudero del caballero de la triste figura
-DULCINEA|Amada de don Quijote
-CERVANTES|El manco de Lepanto
-HAMLET|Príncipe de Dinamarca de Shakespeare
-ODISEA|Poema homérico del regreso de Ulises
-ILIADA|Poema homérico sobre la guerra de Troya
-ULISES|Rey de Ítaca
-SONETO|Poema de catorce versos
-ESTROFA|Grupo de versos
-RIMA|Coincidencia de sonidos al final de los versos
-FABULA|Relato breve con moraleja
-NOVELA|Obra narrativa extensa en prosa
-PROSA|Forma natural del lenguaje, opuesta al verso
-METAFORA|Figura retórica que identifica dos términos
-ARAUCANA|La ___, poema épico de Ercilla
-MACONDO|Pueblo de Cien años de soledad
-BORGES|Autor de El Aleph
-DANTE|Autor de la Divina comedia
-GOYA|Pintor de Los fusilamientos del 3 de mayo
-PICASSO|Pintor del Guernica
-DALI|Pintor surrealista de los relojes blandos
-MONET|Pintor de los nenúfares
-FRESCO|Pintura sobre muro húmedo
-OLEO|Pintura a base de aceite
-MOSAICO|Obra hecha con pequeñas piezas de colores
-MURAL|Pintura sobre una pared
-ESCULTURA|Arte de modelar o tallar
-LIENZO|Tela sobre la que se pinta
-PALETA|Tabla donde el pintor mezcla colores
-GOTICO|Estilo de catedrales con arcos ojivales
-BARROCO|Estilo artístico recargado del siglo XVII
-OPERA|Obra teatral cantada
-SINFONIA|Composición para orquesta en varios movimientos
-ORQUESTA|Conjunto de músicos con director
-SOLFEO|Lectura y entonación de las notas musicales
-TENOR|Voz masculina más aguda
-SOPRANO|Voz femenina más aguda
-PIANO|Instrumento de teclas y martillos
-VIOLIN|Instrumento de cuatro cuerdas y arco
-ARPA|Instrumento de cuerdas que se pulsa con los dedos
-CUECA|Danza nacional de Chile
-TANGO|Baile rioplatense
-VALS|Baile en compás de tres por cuatro
-CHARANGO|Pequeña guitarra andina
-QUENA|Flauta andina
-RITMO|Orden acompasado de sonidos
-MELODIA|Sucesión de sonidos con sentido musical
-BEETHOVEN|Compositor de la Novena Sinfonía
-MOZART|Compositor de La flauta mágica
-CINE|Séptimo arte
-GUION|Texto de una película
-TELON|Cortina del escenario
-ACTOR|Intérprete de un personaje
-MIMO|Actor que se expresa sin palabras
-POEMA|Obra en verso
-FUTBOL|El deporte rey
-TENIS|Deporte de raqueta y red
-GOLF|Deporte de hoyos y palos
-AJEDREZ|Juego de reyes, damas y peones
-ENROQUE|Movimiento conjunto de rey y torre
-JAQUE|Amenaza al rey
-TORRE|Pieza de ajedrez que avanza en línea recta
-ALFIL|Pieza de ajedrez que se mueve en diagonal
-MARATON|Carrera de 42 kilómetros
-PODIO|Plataforma de los ganadores
-ARBITRO|Juez de un partido
-PENAL|Tiro desde los once metros
-CORNER|Saque desde la esquina
-RODEO|Deporte nacional de Chile
-ESGRIMA|Deporte de florete, espada y sable
-REMO|Deporte de botes y palas
-JUDO|Arte marcial japonés de proyecciones
-OLIMPIADA|Período de cuatro años entre juegos olímpicos
-RECORD|Mejor marca registrada
-EMPATE|Igualdad de puntos en una competencia
-RAQUETA|Pala del tenista
-ESTADIO|Recinto deportivo con graderías
-CONDOR|Ave del escudo nacional
-HUEMUL|Ciervo del escudo nacional
-PUDU|Ciervo más pequeño del mundo
-COPIHUE|Flor nacional de Chile
-ARAUCARIA|Árbol que da el piñón
-ALERCE|Árbol milenario del sur de Chile
-PEHUEN|Nombre mapuche de la araucaria
-QUILLAY|Árbol cuya corteza hace espuma
-BOLDO|Arbusto de hojas para infusión digestiva
-LLAMA|Camélido andino de carga; también fuego
-VICUÑA|Camélido de lana finísima
-ALPACA|Camélido criado por su fibra
-PUMA|León americano
-ZORRO|Cánido astuto de las fábulas
-BUHO|Ave rapaz nocturna
-COLIBRI|Picaflor
-PINGUINO|Ave que no vuela, de Humboldt o de Magallanes
-BALLENA|Mayor mamífero marino
-DELFIN|Cetáceo inteligente y juguetón
-PULPO|Molusco de ocho brazos
-TIBURON|Pez cartilaginoso de mala fama
-ABEJA|Insecto productor de miel
-HORMIGA|Insecto social que trabaja en colonia
-MARIPOSA|Insecto que antes fue oruga
-ORUGA|Larva de la mariposa
-CAMALEON|Reptil que cambia de color
-TORTUGA|Reptil de caparazón
-LEON|Rey de la selva
-TIGRE|Felino de rayas
-JIRAFA|Mamífero de cuello más largo
-CEBRA|Équido de rayas blancas y negras
-ELEFANTE|Paquidermo de trompa
-CAMELLO|Rumiante de dos jorobas
-ROBLE|Árbol de madera dura
-CEDRO|Árbol emblema del Líbano
-SAUCE|Árbol llorón de las riberas
-HELECHO|Planta sin flores que se reproduce por esporas
-CACTUS|Planta del desierto con espinas
-MUSGO|Planta pequeña de lugares húmedos
-SEMILLA|Origen de una nueva planta
-POLEN|Polvo fecundante de las flores
-RAIZ|Parte de la planta bajo tierra
-SAVIA|Líquido que circula por las plantas
-CLOROFILA|Pigmento verde de las plantas
-NIDO|Casa del pájaro
-CARDUMEN|Banco de peces
-MANADA|Grupo de animales de una especie
-COLMENA|Casa de las abejas
-NIEVE|Precipitación blanca y fría
-NIEBLA|Nube a ras de suelo
-ROCIO|Gotas de la madrugada sobre las plantas
-ARCOIRIS|Fenómeno de siete colores tras la lluvia
-TRUENO|Ruido del rayo
-BRISA|Viento suave
-ALBA|Primera luz del día
-OCASO|Puesta del sol
-ECO|Sonido que vuelve reflejado
-ENIGMA|Misterio de difícil solución
-ACERTIJO|Adivinanza
-REFRAN|Dicho popular sentencioso
-SINONIMO|Palabra de igual significado
-ANTONIMO|Palabra de significado opuesto
-PALINDROMO|Palabra que se lee igual al revés
-VERBO|Palabra que expresa acción
-ADJETIVO|Palabra que califica al sustantivo
-ACENTO|Mayor intensidad de una sílaba
-ALFABETO|Abecedario
-IDIOMA|Lengua de un pueblo
-DIALOGO|Conversación entre dos o más personas
-NOSTALGIA|Pena por la lejanía de la patria o del pasado
-PACIENCIA|Virtud de saber esperar
-TERNURA|Afecto suave y delicado
-ORGULLO|Exceso de estima propia
-AVARO|Que acumula dinero y no lo gasta
-TACAÑO|Mezquino, que escatima en todo
-ENVIDIA|Pecado capital del que desea lo ajeno
-PEREZA|Pecado capital del ocioso
-IRA|Pecado capital del enojo
-GULA|Pecado capital del glotón
-LEAL|Fiel a sus compromisos
-AUDAZ|Osado, atrevido
-SAGAZ|Astuto y perspicaz
-TENAZ|Firme, que no desiste
-NOBLE|De ilustre linaje, o de buenos sentimientos
-ETERNO|Que no tiene fin
-EFIMERO|Que dura muy poco
-ARDUO|Muy difícil, trabajoso
-SUTIL|Delicado, tenue
-OCIO|Tiempo libre
-SIESTA|Descanso después de almorzar
-ALMUERZO|Comida del mediodía
-EMPANADA|Masa rellena típica de las Fiestas Patrias
-HUMITA|Pasta de choclo envuelta en sus hojas
-CAZUELA|Sopa chilena con presa y papa
-MOTE|Trigo cocido que acompaña al huesillo
-CHOCLO|Mazorca de maíz tierno
-PEBRE|Salsa chilena de tomate, cebolla y cilantro
-ASADO|Carne a la parrilla
-PAN|Alimento de harina horneada
-QUESO|Producto lácteo cuajado
-VINO|Bebida de uva fermentada
-CEPA|Variedad de vid, como la carménère
-ONCE|Merienda chilena de la tarde
-TETERA|Recipiente para hervir el agua del té
-CUCHARA|Cubierto para la sopa
-MANTEL|Tela que cubre la mesa
-ESPEJO|Superficie que refleja la imagen
-RELOJ|Instrumento para medir el tiempo
-BRUJULA|Instrumento que señala el norte
-FARO|Torre con luz que guía a los navegantes
-ANCLA|Pieza que fija el barco al fondo
-VELERO|Barco impulsado por el viento
-TIMON|Pieza para gobernar la nave
-PUERTO|Lugar de atraque de barcos
-TREN|Convoy sobre rieles
-AVION|Aeronave con alas
-TRANVIA|Vehículo eléctrico urbano sobre rieles
-CARRETA|Carro tirado por bueyes
-BICICLETA|Vehículo de dos ruedas a pedales
-TELEGRAFO|Aparato que transmitía mensajes en código Morse
-PERIODICO|Diario impreso
-TITULAR|Encabezado de una noticia
-EDITOR|Responsable de una publicación
-IMPRENTA|Invento de Gutenberg
-TINTA|Líquido para escribir o imprimir
-PLUMA|Antiguo instrumento de escritura
-LAPIZ|Barra de grafito para escribir
-CUADERNO|Conjunto de hojas para apuntes
-PIZARRA|Superficie donde escribe el profesor
-TIZA|Barra blanca para escribir en la pizarra
-AULA|Sala de clases
-RECREO|Pausa entre clases
-EXAMEN|Prueba de conocimientos
-RUBRICA|Pauta de evaluación con criterios y niveles
-DIPLOMA|Título que acredita estudios
-TESIS|Trabajo de investigación para obtener un grado
-CATEDRA|Asignatura a cargo de un profesor titular
-DECANO|Autoridad máxima de una facultad
-RECTOR|Autoridad máxima de una universidad
-MAESTRO|Profesor, o experto en su oficio
-ALUMNO|Estudiante
-BIBLIOTECA|Lugar donde se guardan y prestan libros
-LIBRO|Conjunto de hojas impresas y encuadernadas
-INDICE|Lista ordenada del contenido de un libro
-PROLOGO|Texto introductorio de un libro
-EPILOGO|Parte final que cierra una obra
-CAPITULO|División de un libro
-MONEDA|Pieza de metal acuñada como dinero
-BANCO|Entidad financiera, o asiento largo
-CREDITO|Préstamo de dinero
-DEUDA|Obligación de pagar
-INTERES|Rédito de un capital prestado
-BOLSA|Mercado de valores
-ACCION|Parte del capital de una sociedad anónima
-DIVISA|Moneda extranjera
-INFLACION|Alza sostenida de los precios
-IMPUESTO|Tributo que se paga al Estado
-TRUEQUE|Intercambio sin dinero
-SALARIO|Pago por el trabajo
-ROBOT|Máquina automática programable
-PIXEL|Punto mínimo de una imagen digital
-CODIGO|Conjunto de instrucciones de un programa
-TECLADO|Periférico para escribir
-PANTALLA|Superficie donde se ve la imagen
-ANTENA|Dispositivo que capta ondas
-SATELITE|Cuerpo que orbita un planeta
-CHIP|Circuito integrado de pequeño tamaño
-INTERNET|Red mundial de computadores
-CORREO|Servicio de cartas
-MAPA|Representación de un territorio
-ZEUS|Padre de los dioses del Olimpo
-HERMES|Mensajero de los dioses griegos
-ATENEA|Diosa griega de la sabiduría
-APOLO|Dios griego del sol y la música
-NEPTUNO|Dios romano del mar, y planeta
-ODIN|Dios supremo nórdico
-THOR|Dios nórdico del martillo
-MEDUSA|Gorgona de cabellos de serpiente
-CENTAURO|Mitad hombre y mitad caballo
-MINOTAURO|Monstruo del laberinto de Creta
-FENIX|Ave que renace de sus cenizas
-SIRENA|Mitad mujer y mitad pez
-TRAUCO|Ser mitológico del bosque chilote
-CALEUCHE|Barco fantasma de Chiloé
-PINCOYA|Sirena chilota que trae abundancia de mariscos
-OSO|Plantígrado amante de la miel
-ASA|Agarradera de una taza
-ERA|Período histórico
-ALA|Extremidad para volar
-ARO|Anillo; en Chile, pendiente
-RIO|Corriente de agua que va al mar
-MAR|Gran masa de agua salada
-SOL|Estrella del sistema solar
-SAL|Cloruro de sodio
-OLA|Onda del mar
-UVA|Fruto de la vid
-EJE|Línea alrededor de la cual gira algo
-OCA|Juego de mesa con dados y casillas
-NUDO|Lazo apretado; unidad de velocidad náutica
-LAGO|Masa de agua rodeada de tierra
-ISLA|Tierra rodeada de agua
-OLMO|Árbol de sombra de hojas aserradas
-AMOR|Sentimiento de afecto profundo
-RED|Malla para pescar
-ARCO|Arma que lanza flechas
-NAVE|Barco o embarcación
-PESO|Moneda chilena
-ROSA|Flor con espinas
-LIRA|Instrumento de Orfeo
-ODA|Poema lírico de alabanza
-EDEN|Paraíso terrenal
-ARCA|La de Noé
-ALOE|Planta medicinal de hojas carnosas
-TORO|Macho de la vaca
-ASNO|Burro
-CISNE|Ave acuática de cuello largo
-GALLO|Ave que canta al amanecer
-OVEJA|Animal que da lana
-IRIS|Parte coloreada del ojo
-OIDO|Sentido de la audición
-OLFATO|Sentido que percibe los olores
-TACTO|Sentido de la piel
-NARIZ|Órgano del olfato
-LABIO|Borde de la boca
-CODO|Articulación del brazo
-RODILLA|Articulación de la rótula
-TOBILLO|Articulación entre pie y pierna
-OMBLIGO|Cicatriz del cordón umbilical
-ENERO|Primer mes del año
-ABRIL|Mes de aguas mil
-OTOÑO|Estación en que caen las hojas
-INVIERNO|Estación más fría
-VERANO|Estación de las vacaciones de enero, en Chile
-LUNES|Primer día de la semana laboral
-SABADO|Día anterior al domingo
-SIGLO|Cien años
-LUSTRO|Cinco años
-DECADA|Diez años
-MILENIO|Mil años
-ALBUM|Libro de fotos, o colección de canciones
-ENANO|Cada uno de los siete de Blancanieves
-HADA|Ser fantástico con varita mágica
-DUENDE|Ser travieso de los cuentos
-GIGANTE|De estatura descomunal
-DRAGON|Monstruo alado que echa fuego
-CASTILLO|Fortaleza con torres y foso
-REINA|Esposa del rey
-PRINCIPE|Hijo del rey
-TRONO|Asiento del monarca
-CORONA|Símbolo del poder real
-ESPADA|Arma blanca de hoja larga
-ESCUDO|Arma defensiva; emblema de un país
-BANDERA|Símbolo patrio de tela
-HIMNO|Canción patria
-CENSO|Recuento de la población
-`.trim().split("\n").map(l=>{const i=l.indexOf("|");return{a:l.slice(0,i).trim(),c:l.slice(i+1).trim()}})
+ANDES|Gran cordillera de Sudamérica|Cordillera que recorre Sudamérica de norte a sur|Espinazo de un continente con el Aconcagua por vértebra mayor
+ATACAMA|Desierto del norte de Chile|Desierto más árido del planeta|Donde florece el desierto cuando llueve de más
+BIOBIO|Río de Concepción|Río que desemboca junto a Concepción|Antigua frontera fluvial entre españoles y mapuches
+TITICACA|Lago entre Perú y Bolivia|Lago navegable más alto del mundo|Cuna mítica de Manco Cápac
+NILO|Río de Egipto|Río que atraviesa Egipto|Sus crecidas marcaban el calendario de los faraones
+DANUBIO|Río de Viena|Río que pasa por Viena y Budapest|Strauss lo pintó de azul
+SAHARA|Gran desierto de África|Mayor desierto cálido del mundo|Mar de arena entre el Atlas y el Sahel
+ISTMO|Tierra angosta entre dos mares|Franja de tierra que une dos continentes|El de Panamá fue cortado por un canal
+BAHIA|Entrada del mar en la costa|Entrada del mar menor que un golfo|La de Concepción abriga a Talcahuano
+ESTRECHO|Paso angosto de mar|El de Magallanes une dos océanos|El de Gibraltar separa dos continentes por catorce kilómetros
+PENINSULA|Tierra casi rodeada de agua|Tierra rodeada de agua por todas partes menos por una|Ibérica o itálica, casi isla
+VOLCAN|Montaña que echa lava|Montaña que expulsa lava|El Villarrica lo es, y bien activo
+GEISER|Chorro de agua caliente que sale de la tierra|Fuente termal que lanza agua a intervalos|El Tatio tiene un campo de ellos
+DELTA|Desembocadura de río en forma de triángulo|Desembocadura triangular de un río; también letra griega|Cuarta letra griega y final de muchos ríos
+OASIS|Agua en el desierto|Lugar con agua y vegetación en medio del desierto|Respiro verde de las caravanas
+TUNDRA|Llanura helada sin árboles|Bioma frío y sin árboles del Ártico|Reino del permafrost y el reno
+ESTEPA|Llanura de pastos|Llanura extensa de hierbas y arbustos|La patagónica es su versión austral
+FIORDO|Entrada de mar entre montañas|Golfo estrecho entre montañas, típico de Noruega|Valle glaciar que el mar invadió
+MONZON|Viento de lluvias en Asia|Viento estacional del sur de Asia|Trae el agua que esperan los arrozales de la India
+ECUADOR|País de Quito, o línea que divide la Tierra|Línea imaginaria que divide la Tierra en dos hemisferios|Paralelo cero
+TROPICO|Línea paralela al ecuador|El de Capricornio cruza el norte de Chile|Paralelo de Cáncer o de Capricornio
+MERIDIANO|Línea de norte a sur en el mapa|El de Greenwich marca la longitud cero|Mediodía de un lugar, trazado de polo a polo
+ATLAS|Libro de mapas|Libro de mapas; también titán que sostenía el cielo|Titán condenado a cargar la bóveda celeste
+OSLO|Capital de Noruega|Capital noruega|Allí se entrega el Nobel de la Paz
+LIMA|Capital del Perú|Capital peruana|Ciudad de los Reyes, según Pizarro
+QUITO|Capital de Ecuador|Capital ecuatoriana|Capital andina a casi tres mil metros, junto al Pichincha
+ROMA|Capital de Italia|Ciudad de las siete colinas|Todos los caminos llevan a ella
+PARIS|Capital de Francia|Ciudad del Sena|Bien vale una misa, según Enrique IV
+LONDRES|Capital de Inglaterra|Ciudad del Támesis|Ciudad del Big Ben y la niebla victoriana
+MADRID|Capital de España|Capital española|Villa y corte junto al Manzanares
+TOKIO|Capital de Japón|Capital japonesa|Antigua Edo
+EGIPTO|País de las pirámides|País de las pirámides de Guiza|Don del Nilo, según Heródoto
+GRECIA|País de Atenas|Cuna de la democracia|Hélade de los antiguos
+INDIA|País de Gandhi|País del Taj Mahal|Subcontinente del Ganges
+CUBA|Isla de La Habana|Isla mayor de las Antillas|Perla de las Antillas
+CHILOE|Isla grande del sur de Chile|Isla de los palafitos y las iglesias de madera|Tierra del Caleuche y de los curantos
+RAPANUI|Pueblo de Isla de Pascua|Pueblo y lengua de Isla de Pascua|Cultura de los moái
+VALPARAISO|Puerto chileno con ascensores|Puerto de ascensores y cerros|La Joya del Pacífico
+ARICA|Ciudad más al norte de Chile|Ciudad de la eterna primavera|Su morro fue tomado en 1880
+OSORNO|Ciudad y volcán del sur|Volcán y ciudad del sur de Chile|Cono nevado que se refleja en el Llanquihue
+MAULE|Región de Talca|Región y río del centro de Chile|Su río marcó el límite sur del imperio inca
+AMAZONAS|Gran río de Brasil|Río más caudaloso del mundo|Orellana lo bajó buscando El Dorado
+URAL|Montes de Rusia|Montes que separan Europa de Asia|Frontera montañosa entre dos continentes
+ALPES|Montañas de Suiza|Cordillera del Mont Blanc|Aníbal los cruzó con elefantes
+EVEREST|Montaña más alta del mundo|Cumbre más alta del mundo|Hillary y Tenzing la coronaron en 1953
+IGUAZU|Cataratas famosas|Cataratas entre Argentina y Brasil|Garganta del Diablo en la triple frontera
+GOLFO|Gran entrada del mar en la tierra|Entrada del mar mayor que una bahía|El de Penas, en Aysén
+CABO|Punta de tierra que entra en el mar|Punta de tierra que se adentra en el mar|El de Hornos es temido por los navegantes
+ISLOTE|Isla muy pequeña|Isla pequeña y despoblada|Peñasco con aspiraciones de isla
+LAGUNA|Lago pequeño|Depósito natural de agua menor que un lago|Olvido o vacío en la memoria
+CASCADA|Caída de agua|Caída de agua desde cierta altura|Salto que no termina en suelo firme
+GLACIAR|Río de hielo|Masa de hielo que avanza lentamente|El Grey se desprende en témpanos
+VALLE|Tierra baja entre montes|Llanura entre montañas|El Central de Chile es uno
+MESETA|Llanura elevada|Llanura extensa en altura|La castellana es la más famosa de España
+COLINA|Monte pequeño|Elevación de terreno menor que un monte|Hay siete en Roma
+DUNA|Montículo de arena|Colina de arena formada por el viento|Médano costero
+SELVA|Bosque tropical|Bosque tropical espeso|Ley de la ___: la del más fuerte
+PANTANO|Terreno con agua estancada|Terreno cubierto de aguas poco profundas|Ciénaga de los cocodrilos
+ARRECIFE|Banco de coral|Banco de rocas o corales cerca de la superficie|La gran barrera australiana lo es
+COSTA|Orilla del mar|Tierra junto al mar|A ___ de: a expensas de
+PLAYA|Arena junto al mar|Ribera de arena junto al mar|Destino de verano con quitasol
+ACANTILADO|Costa de roca muy alta|Costa cortada a pique|Despeñadero junto al mar
+SALAR|Desierto de sal|Depósito de sal en zonas áridas|El de Uyuni es un espejo gigante
+ALTIPLANO|Meseta alta de los Andes|Meseta andina de gran altura|Tierra del ichu y de la vicuña
+PAMPA|Llanura argentina|Llanura extensa sin árboles del Cono Sur|Tierra del gaucho
+CHACO|Región seca entre Bolivia y Paraguay|Región de llanuras entre Bolivia, Paraguay y Argentina|Escenario de una guerra de los años treinta
+CANAL|Paso de agua hecho por el hombre|Cauce artificial para navegar o regar|El de Suez une el Mediterráneo y el Rojo
+CONTINENTE|Gran extensión de tierra|Cada una de las grandes masas de tierra|Recipiente, en el lenguaje de los filósofos
+HEMISFERIO|Mitad de la Tierra|Cada mitad de la esfera terrestre|Mitad de una esfera, norte o sur
+LATITUD|Distancia al ecuador|Distancia angular al ecuador|Se mide en grados, al norte o al sur
+LONGITUD|Medida de largo|Distancia angular al meridiano de Greenwich|Coordenada que un buen reloj ayudó a calcular en el mar
+BRUSELAS|Capital de Bélgica|Sede de la Unión Europea|Ciudad del Manneken Pis
+BERLIN|Capital de Alemania|Capital alemana que tuvo un muro|Ciudad dividida hasta 1989
+VIENA|Capital de Austria|Capital austríaca|Ciudad del vals y de Freud
+ATENAS|Capital de Grecia|Ciudad del Partenón|Ciudad de Pericles
+MOSCU|Capital de Rusia|Ciudad del Kremlin|Capital de la Plaza Roja
+PEKIN|Capital de China|En ella está la Ciudad Prohibida|Beijing, en castellano
+CAIRO|Capital de Egipto|El ___, capital egipcia|Ciudad de mil minaretes junto al Nilo
+BOGOTA|Capital de Colombia|Capital colombiana|Santa Fe andina de Jiménez de Quesada
+CARACAS|Capital de Venezuela|Capital venezolana|Cuna de Bolívar
+MONTEVIDEO|Capital de Uruguay|Capital uruguaya|Ciudad del Cerro, a orillas del Río de la Plata
+ASUNCION|Capital de Paraguay|Capital paraguaya|Madre de ciudades, a orillas del río Paraguay
+SUCRE|Capital de Bolivia|Capital constitucional boliviana|Ciudad blanca con apellido de mariscal
+BRASILIA|Capital de Brasil|Capital brasileña|Ciudad planificada por Niemeyer y Costa
+MEXICO|País de los mariachis|País azteca|Antigua Nueva España
+PERU|País vecino del norte|País de Machu Picchu|Tierra de los incas, al norte de la Concordia
+BOLIVIA|País sin mar|País del salar de Uyuni|Lleva el nombre del Libertador
+ARGENTINA|País del tango|País vecino del otro lado de los Andes|Tierra de plata, por su nombre latino
+URUGUAY|País de Montevideo|País de la Banda Oriental|Primer campeón mundial de fútbol
+CANADA|País de la hoja de arce|País de Ottawa|Segundo país más extenso del mundo
+SUIZA|País de los relojes|País de los Alpes y el chocolate|Confederación helvética
+NORUEGA|País de los fiordos|País de Oslo|Reino del sol de medianoche
+ESCOCIA|País de las faldas a cuadros|País del monstruo del lago Ness|Tierra del kilt y la gaita
+IRLANDA|Isla verde de Europa|Isla esmeralda|Tierra de San Patricio
+ITALIA|País con forma de bota|País de Roma|Península de la bota
+FRANCIA|País de París|País de la Torre Eiffel|Antigua Galia
+JAPON|País del sol naciente|País de Tokio|Imperio del crisantemo
+CHINA|País de la Gran Muralla|País de la Ciudad Prohibida|Imperio del Medio
+RUSIA|País más grande del mundo|País de Moscú|Tierra de los zares
+AUSTRALIA|País de los canguros|País continente de Oceanía|Tierra de los aborígenes y el ornitorrinco
+SANTIAGO|Capital de Chile|Ciudad fundada en 1541|Apóstol patrono de España y nombre de nuestra capital
+TEMUCO|Ciudad de la Araucanía|Capital de la Región de La Araucanía|Ciudad donde estudió Neruda
+TALCA|Ciudad del Maule|Capital de la Región del Maule|Allí se firmó el acta de independencia en 1818
+CHILLAN|Ciudad de Ñuble|Capital de la Región de Ñuble|Cuna de O'Higgins
+IQUIQUE|Puerto del norte con zona franca|Puerto de Tarapacá|Rada del combate naval de 1879
+ANTOFAGASTA|Ciudad de La Portada|Capital minera del norte|La Perla del Norte
+COQUIMBO|Puerto vecino de La Serena|Puerto de la Cruz del Tercer Milenio|Puerto pirata de la leyenda de Drake
+CALAMA|Ciudad cerca de Chuquicamata|Ciudad minera de El Loa|Oasis minero junto al río Loa
+ÑUBLE|Región de Chillán|Región creada en 2018|Río y región separados del Biobío
+AYSEN|Región de Coyhaique|Región de los glaciares y del río Baker|Tierra de la Carretera Austral
+MAGALLANES|Región más austral de Chile|Región de Punta Arenas|Navegante portugués que dio nombre a un estrecho
+HUASCO|Valle y río de Atacama|Valle del norte famoso por sus aceitunas|Valle del desierto florido
+LLANQUIHUE|Gran lago del sur de Chile|Lago junto a Puerto Varas|Lago de los colonos alemanes
+VILLARRICA|Volcán y lago de Pucón|Volcán activo junto a Pucón|Rucapillán de los mapuches
+ACONCAGUA|Cerro más alto de América|Cumbre más alta de América|Centinela de piedra de casi siete mil metros
+PAINE|Parque de las Torres|Parque nacional de Magallanes|Macizo de cuernos y torres
+PASCUA|Fiesta de primavera, o isla chilena|Isla chilena de los moái|Domingo de Resurrección en que Roggeveen la avistó
+INCA|Pueblo de Machu Picchu|Imperio cuya capital fue Cusco|Hijo del Sol que gobernaba el Tahuantinsuyo
+AZTECA|Pueblo antiguo de México|Pueblo fundador de Tenochtitlan|Pueblo de Moctezuma
+MAYA|Pueblo antiguo de Yucatán|Civilización del Yucatán de célebre calendario|Pueblo del Popol Vuh
+FARAON|Rey de Egipto antiguo|Rey del antiguo Egipto|Tutankamón lo fue de niño
+CESAR|Gran general romano|Título de los emperadores romanos|Cruzó el Rubicón
+NAPOLEON|Emperador francés|Emperador derrotado en Waterloo|Corso que murió en Santa Elena
+COLON|Llegó a América en 1492|Navegante que llegó a América en 1492|Almirante de la Niña, la Pinta y la Santa María
+OHIGGINS|Padre de la Patria|Padre de la Patria chileno|Director Supremo que abdicó en 1823
+LAUTARO|Joven líder mapuche|Toqui mapuche que venció a Valdivia|Caballerizo que aprendió del enemigo y lo derrotó en Tucapel
+VALDIVIA|Fundador de Santiago|Fundador de Santiago del Nuevo Extremo|Conquistador muerto en Tucapel
+CAUPOLICAN|Gran toqui mapuche|Toqui cantado por Ercilla|Cargó un tronco tres días para ganar el mando
+FEUDO|Tierra de un señor medieval|Tierra que un señor concedía a su vasallo|Base del régimen medieval de vasallaje
+VIKINGO|Guerrero del norte con casco|Navegante escandinavo de la Edad Media|Llegó a Terranova antes que Colón
+CRUZADA|Guerra medieval por Jerusalén|Expedición militar medieval a Tierra Santa|Campaña con la cruz por divisa
+IMPERIO|Reino de un emperador|Conjunto de territorios bajo un emperador|En el de Felipe II no se ponía el sol
+REPUBLICA|Gobierno sin rey|Forma de gobierno sin monarca|Diálogo de Platón sobre el Estado ideal
+TRATADO|Acuerdo entre países|Acuerdo formal entre Estados|El de Tordesillas partió el mundo en dos
+ARMISTICIO|Pausa en una guerra|Suspensión de hostilidades entre ejércitos|El de 1918 se firmó en un vagón de tren
+COLONIA|Período español en Chile|Período entre la Conquista y la Independencia|Agua de ___, perfume ligero
+CABILDO|Gobierno de la ciudad colonial|Ayuntamiento de la época colonial|El abierto de 1810 inició nuestra emancipación
+TROYA|Ciudad del caballo de madera|Ciudad del famoso caballo de madera|Ilión, según Homero
+ESPARTA|Ciudad griega guerrera|Ciudad griega de guerreros|Patria de Leónidas
+FENICIO|Pueblo antiguo de navegantes|Pueblo navegante al que se atribuye el alfabeto|Mercader de la púrpura de Tiro
+MURALLA|Pared alta de defensa|La china supera los veinte mil kilómetros|La de Ávila rodea toda la ciudad
+PIRAMIDE|Tumba de los faraones|Monumento funerario de Keops|La de Maslow ordena necesidades
+PREHISTORIA|Tiempo antes de la escritura|Período anterior a la escritura|Época de cavernas y menhires
+ROMANO|Habitante de Roma|Ciudadano del imperio de los césares|Así es la numeración de I, V y X
+GLADIADOR|Luchador del circo romano|Luchador del anfiteatro romano|Espartaco lo fue antes de rebelarse
+LEGION|Tropa romana|Unidad del ejército romano|La Extranjera es francesa
+SENADO|Cámara alta|Asamblea de los ancianos en Roma|Cámara de Valparaíso
+CONSUL|Magistrado romano|Magistrado supremo de la república romana|Representante diplomático en otro país
+PATRICIO|Noble romano|Ciudadano romano de clase noble|Santo patrono de Irlanda
+ESCLAVO|Persona sin libertad|Persona sometida a otra como propiedad|Siervo de sus pasiones
+MOMIA|Cadáver envuelto en vendas|Cadáver embalsamado|Las de Chinchorro son las más antiguas del mundo
+JEROGLIFICO|Escritura egipcia|Escritura con figuras de los egipcios|Signo que Champollion descifró
+PAPIRO|Papel egipcio|Lámina de escribir hecha de una planta del Nilo|Soporte de los escribas
+ESFINGE|Estatua con cuerpo de león|Figura con cuerpo de león y cabeza humana|Planteó un enigma a Edipo
+ROSETA|Piedra para leer jeroglíficos|Piedra que permitió descifrar los jeroglíficos|Adorno circular en forma de rosa
+CABALLERO|Guerrero medieval a caballo|Noble armado de la Edad Media|Andante, como don Quijote
+ARMADURA|Traje de metal del caballero|Piezas de metal que protegían al guerrero|Esqueleto de acero de un edificio
+VASALLO|Siervo de un señor|Súbdito que juraba fidelidad a un señor|Del Cid se dijo que era buen ___ sin buen señor
+MONJE|Religioso de un monasterio|Religioso que vive en comunidad|Copista de la Edad Media
+ABADIA|Iglesia y casa de monjes|Monasterio regido por un abad|El nombre de la rosa ocurre en una
+GUTENBERG|Inventor de la imprenta|Orfebre de Maguncia que imprimió la Biblia|Su Biblia de 42 líneas cambió el mundo
+LUTERO|Fraile de la Reforma|Clavó noventa y cinco tesis en Wittenberg|Monje agustino que tradujo la Biblia al alemán
+INQUISICION|Tribunal religioso antiguo|Tribunal eclesiástico contra la herejía|Santo Oficio
+CONQUISTA|Llegada de los españoles|Período de la llegada española a América|Toma por las armas
+CARABELA|Barco de Colón|Embarcación ligera de los descubridores|La Pinta lo era
+GALEON|Barco grande de velas|Gran nave de guerra y comercio de los siglos XVI y XVII|El de Manila cruzaba el Pacífico cargado de seda
+PIRATA|Ladrón del mar|Ladrón que roba en el mar|Copia ilegal de un disco
+CORSARIO|Pirata con permiso del rey|Pirata con patente de su gobierno|Pirata legal, con patente de corso
+VIRREY|Representante del rey en América|Gobernante de un virreinato|Amat lo fue del Perú y amó a la Perricholi
+PATRIOTA|Amante de su patria|Partidario de la independencia en 1810|Opuesto al realista en la Patria Vieja
+REALISTA|Partidario del rey|Defensor de la corona en las guerras de independencia|Que ve las cosas tal como son
+MAIPU|Batalla decisiva de 1818|Batalla que selló la independencia chilena|Allí se abrazaron O'Higgins y San Martín
+RANCAGUA|Ciudad del desastre de 1814|Ciudad del desastre de la Patria Vieja|Capital de la región de O'Higgins
+CHACABUCO|Batalla de 1817|Batalla tras el cruce de los Andes|Cuesta y batalla de febrero de 1817
+CARRERA|Competencia de velocidad|Apellido de José Miguel, prócer|Estudios universitarios de una profesión
+PRAT|Héroe de Iquique|Capitán de la Esmeralda|Saltó al abordaje del Huáscar
+HUASCAR|Barco que es museo en Talcahuano|Monitor peruano de Grau|Último inca antes de Atahualpa
+ESMERALDA|Piedra verde|Corbeta hundida en Iquique|Nombre del buque escuela de la Armada
+BALMACEDA|Presidente de 1891|Presidente chileno de la guerra civil de 1891|Se quitó la vida en la legación argentina
+PORTALES|Ministro de la Constitución de 1833|Ministro asesinado en 1837|Diego, organizador del Estado conservador
+SALITRE|Oro blanco del norte|Riqueza del norte en el siglo XIX|Nitrato de sodio
+OFICINA|Lugar de trabajo|Lugar de trabajo; en el norte, planta salitrera|Humberstone lo fue
+PAMPINO|Trabajador del salitre|Obrero de la pampa salitrera|Protagonista de la tragedia de Santa María de Iquique
+REVOLUCION|Cambio violento de gobierno|La francesa empezó en 1789|Vuelta completa de un motor
+GUILLOTINA|Máquina para cortar cabezas|Instrumento del Terror en Francia|Cortapapeles de imprenta
+BASTILLA|Prisión de París|Prisión tomada el 14 de julio|Su toma es fiesta nacional francesa
+ZAR|Rey de Rusia|Emperador de Rusia|Nicolás II fue el último
+KAISER|Emperador alemán|Emperador del imperio alemán|Guillermo II lo fue
+TRINCHERA|Zanja de soldados|Zanja defensiva de la Primera Guerra|Abrigo largo de gabardina
+TANQUE|Carro blindado|Vehículo de guerra blindado|Depósito grande para líquidos
+GUERRA|Lucha entre países|Enfrentamiento armado entre naciones|La del Pacífico estalló en 1879
+PAZ|Fin de la guerra|Estado sin guerra|Tranquilidad pública; también nombre de mujer
+DEMOCRACIA|Gobierno del pueblo|Gobierno en que el pueblo elige|Nació en Atenas con Clístenes
+DICTADOR|Gobernante con poder absoluto|Gobernante que concentra todo el poder|En Roma, magistrado de emergencia por seis meses
+MONARQUIA|Gobierno de un rey|Forma de gobierno con un rey|España lo es, y parlamentaria
+PLEBISCITO|Votación del pueblo|Consulta directa a la ciudadanía|El de 1988 dijo No
+HERALDO|Mensajero antiguo|Mensajero de un rey|Nombre de muchos diarios antiguos
+CRONICA|Relato de hechos por orden|Relato histórico en orden cronológico|Género periodístico entre la noticia y la literatura
+ARCHIVO|Lugar donde se guardan documentos|Conjunto ordenado de documentos|En el computador, un documento con nombre
+MAPUCHE|Pueblo originario del sur|Gente de la tierra|Pueblo del mapudungún
+AYMARA|Pueblo del altiplano|Pueblo originario del altiplano|Lengua de los alrededores del Titicaca
+DIAGUITA|Pueblo del Norte Chico|Pueblo alfarero del Norte Chico|Cultura de la cerámica con greca
+SELKNAM|Pueblo de Tierra del Fuego|Pueblo fueguino de cazadores|Onas, como los llamaban los colonos
+TOQUI|Jefe de guerra mapuche|Jefe militar mapuche|Hacha de piedra, símbolo de mando
+MALON|Ataque sorpresa|Ataque sorpresivo de indígenas|Mala jugada, en el Cono Sur
+QUIPU|Cuerdas con nudos de los incas|Sistema de cuerdas anudadas de los incas|Contabilidad inca sin papel
+CUSCO|Capital de los incas|Ombligo del mundo inca|Ciudad de Sacsayhuamán
+ATOMO|Parte muy pequeña de la materia|Unidad básica de la materia|Indivisible según Demócrito, aunque se dividió
+PROTON|Partícula positiva|Partícula de carga positiva del núcleo|Su número define el elemento
+NEUTRON|Partícula sin carga|Partícula sin carga del núcleo|Chadwick lo descubrió en 1932
+ELECTRON|Partícula negativa|Partícula negativa que rodea al núcleo|Thomson lo halló en sus tubos de rayos catódicos
+ISOTOPO|Variante de un átomo|Átomo con distinto número de neutrones|El carbono 14 lo es y sirve para datar
+OXIGENO|Gas que respiramos|Elemento de símbolo O|Comburente sin el cual no hay fuego
+HIERRO|Metal de los clavos|Metal de símbolo Fe|Su falta se nota en la hemoglobina
+COBRE|Metal rojizo chileno|Metal rojizo, principal exportación chilena|El sueldo de Chile, según Allende
+LITIO|Metal de las baterías|Metal de las baterías, abundante en los salares|Metal más liviano de la tabla periódica
+ORO|Metal precioso amarillo|Metal precioso de símbolo Au|No es todo lo que reluce
+PLATA|Metal blanco brillante|Metal de símbolo Ag|Dinero, en el habla cotidiana
+NEON|Gas de letreros luminosos|Gas noble de los letreros luminosos|Pez pequeño de acuario que brilla
+HELIO|Gas de los globos|Gas noble que hace flotar los globos|Se descubrió primero en el Sol
+OZONO|Capa que protege del sol|Capa que filtra la radiación ultravioleta|Molécula de tres oxígenos
+ENZIMA|Proteína que acelera reacciones|Proteína que acelera reacciones químicas|Catalizador biológico, como la amilasa
+GEN|Unidad de la herencia|Segmento de ADN que se hereda|Unidad que Mendel intuyó sin nombrarla
+ADN|Material genético (sigla)|Molécula de la doble hélice (sigla)|Watson y Crick describieron su estructura (sigla)
+CELULA|Unidad de los seres vivos|Unidad básica de los seres vivos|Hooke la vio en el corcho
+NUCLEO|Centro de algo|Centro del átomo o de la célula|Corazón de un átomo
+MITOSIS|División de la célula|División celular que da dos células idénticas|Profase, metafase, anafase y telofase
+OSMOSIS|Paso de agua por una membrana|Paso de agua a través de una membrana semipermeable|Aprender por contacto, en sentido figurado
+FOTON|Partícula de luz|Partícula de luz|Cuanto de energía electromagnética
+GRAVEDAD|Fuerza que hace caer las cosas|Fuerza que nos mantiene en el suelo|Seriedad de un asunto, o de un paciente
+INERCIA|Resistencia a cambiar el movimiento|Tendencia de un cuerpo a conservar su movimiento|Primera ley de Newton
+ENERGIA|Fuerza para hacer algo|Capacidad de realizar trabajo|Ni se crea ni se destruye
+VOLTIO|Unidad de electricidad|Unidad de tensión eléctrica|Homenaje a Volta en el sistema internacional
+VATIO|Unidad de potencia|Unidad de potencia|Homenaje a Watt que se lee en las ampolletas
+JULIO|Mes de invierno en Chile|Unidad de energía, o séptimo mes|Mes dedicado a César
+PRISMA|Cristal que separa colores|Cuerpo que descompone la luz blanca|Punto de vista, en sentido figurado
+LENTE|Vidrio de los anteojos|Cristal que desvía la luz|Pieza de la cámara que enfoca
+IMAN|Atrae metales|Cuerpo que atrae el hierro|Magnetita, por su efecto
+ORBITA|Camino de un planeta|Trayectoria de un planeta alrededor del Sol|Cavidad del ojo en el cráneo
+COMETA|Astro con cola|Astro con cola luminosa|Juguete de papel que vuela atado a un hilo
+ECLIPSE|Cuando la Luna tapa el Sol|Ocultación de un astro por otro|Desaparición de alguien de la escena pública
+GALAXIA|Conjunto enorme de estrellas|La Vía Láctea es una|Andrómeda es la vecina de la nuestra
+MARTE|Planeta rojo|Planeta rojo|Dios romano de la guerra
+VENUS|Planeta brillante del amanecer|Lucero del alba|La de Milo no tiene brazos
+SATURNO|Planeta con anillos|Planeta de los anillos más vistosos|Devoró a sus hijos en el cuadro de Goya
+JUPITER|Planeta más grande|Planeta más grande del sistema solar|Zeus, para los romanos
+LUNA|Satélite de la Tierra|Satélite natural de la Tierra|Armstrong la pisó en 1969
+NEBULOSA|Nube del espacio|Nube de gas y polvo interestelar|Confusa, poco clara
+FOSIL|Resto antiguo en piedra|Resto petrificado de un ser vivo antiguo|Persona anticuada, en tono burlón
+MAGMA|Roca fundida|Roca fundida bajo la corteza terrestre|Masa confusa y espesa
+SISMO|Temblor de tierra|Movimiento de la corteza terrestre|Se mide en la escala de Richter
+TSUNAMI|Ola gigante|Ola gigante causada por un terremoto submarino|Maremoto, en japonés
+CLIMA|Tiempo de una región|Condiciones atmosféricas propias de una zona|Ambiente que se respira en una reunión
+MOLECULA|Unión de átomos|Grupo de átomos unidos|La del agua tiene tres átomos
+ACIDO|Sabor agrio|Sustancia con pH menor que siete|Mordaz, como cierta crítica
+BASE|Parte de abajo|Sustancia con pH mayor que siete|Apoyo de un edificio o de una teoría
+SODIO|Metal de la sal|Elemento de símbolo Na|Ion principal del líquido extracelular
+POTASIO|Mineral del plátano|Elemento de símbolo K|Ion principal del interior celular
+CALCIO|Mineral de los huesos|Elemento de símbolo Ca|Lo que pide el hueso y la leche ofrece
+CARBONO|Elemento del carbón|Elemento de símbolo C|Base de la química de la vida
+AZUFRE|Elemento amarillo que huele mal|Elemento de símbolo S|Olor de los volcanes y del infierno
+MERCURIO|Metal líquido|Planeta más cercano al Sol|Metal de los antiguos termómetros
+URANIO|Metal radiactivo|Combustible de las centrales nucleares|Lleva el nombre de un planeta lejano
+PLOMO|Metal pesado gris|Metal de símbolo Pb|Persona muy pesada, en el habla coloquial
+ESTAÑO|Metal de las soldaduras|Metal de símbolo Sn|Bolivia lo exportó en abundancia
+ALUMINIO|Metal liviano de las latas|Metal ligero de símbolo Al|Papel de cocina plateado
+HIDROGENO|Elemento más liviano|Elemento de símbolo H|Primero de la tabla periódica
+NITROGENO|Gas principal del aire|Gas que forma casi el 80 % del aire|Elemento de símbolo N
+CARBON|Combustible negro|Combustible fósil de las minas de Lota|Sub terra, según Baldomero Lillo
+PETROLEO|Oro negro|Combustible fósil líquido|Lo que buscaban en el Chaco, según dicen
+VAPOR|Agua en forma de gas|Agua en estado gaseoso|Movía las locomotoras antiguas
+HIELO|Agua congelada|Agua en estado sólido|Romperlo es iniciar una conversación
+PLASMA|Parte líquida de la sangre|Cuarto estado de la materia|Componente amarillento de la sangre
+CRISTAL|Vidrio fino|Vidrio transparente de calidad|Sólido de estructura ordenada
+ESPECTRO|Fantasma|Banda de colores de la luz descompuesta|Gama de posibilidades
+RAYO|Luz de la tormenta|Chispa eléctrica de la tormenta|Línea de luz que sale de un foco
+ONDA|Movimiento del agua|Perturbación que se propaga|Buena ___: buen ánimo, en Chile
+SONIDO|Lo que se oye|Vibración que percibe el oído|Viaja a unos 340 metros por segundo
+ECO|Repetición de un sonido|Sonido que vuelve reflejado|Ninfa que se consumió de amor por Narciso
+VELOCIDAD|Rapidez|Distancia recorrida por unidad de tiempo|La de la luz no se supera
+MASA|Mezcla de harina y agua|Cantidad de materia de un cuerpo|Muchedumbre
+DENSIDAD|Masa por volumen|Masa por unidad de volumen|Arquímedes la usó con la corona del rey
+PRESION|Fuerza sobre una superficie|Fuerza por unidad de superficie|La arterial se mide en milímetros de mercurio
+PALANCA|Barra para mover peso|Máquina simple con punto de apoyo|Dadme un punto de apoyo y moveré el mundo
+POLEA|Rueda con cuerda|Rueda acanalada para levantar pesos|Máquina simple del pozo
+MOTOR|Máquina que mueve un auto|Máquina que transforma energía en movimiento|Fuerza que impulsa un proyecto
+BATERIA|Pila grande|Acumulador de energía eléctrica|Conjunto de tambores y platillos
+TELESCOPIO|Aparato para ver estrellas|Instrumento para observar astros lejanos|Galileo apuntó uno a Júpiter
+MICROSCOPIO|Aparato para ver lo diminuto|Instrumento para ver lo muy pequeño|Leeuwenhoek vio animálculos con él
+TERMOMETRO|Mide la fiebre|Instrumento que mide la temperatura|Celsius y Fahrenheit graduaron el suyo
+BAROMETRO|Mide la presión del aire|Instrumento que mide la presión atmosférica|Torricelli inventó el primero con mercurio
+ASTRONAUTA|Viaja al espacio|Tripulante de una nave espacial|Gagarin fue el primero
+COHETE|Nave que despega hacia el espacio|Vehículo propulsado hacia el espacio|Fuego artificial que sube silbando
+ESTRELLA|Brilla de noche|Astro con luz propia|Hay una solitaria en nuestra bandera
+PLANETA|La Tierra es uno|Astro que gira alrededor de una estrella|Plutón dejó de serlo en 2006
+ASTEROIDE|Roca del espacio|Cuerpo rocoso menor que orbita el Sol|Uno acabó con los dinosaurios
+METEORITO|Roca que cae del cielo|Fragmento de roca espacial que llega al suelo|Atacama es buena para buscarlos
+ORION|Constelación del cazador|Constelación con las Tres Marías|Cazador gigante de la mitología griega
+COSMOS|Universo|El universo ordenado|Serie de Carl Sagan
+DINOSAURIO|Reptil gigante extinto|Reptil prehistórico extinguido|El tiranosaurio fue su rey
+EVOLUCION|Cambio de las especies|Cambio de las especies a lo largo del tiempo|Teoría de Darwin y Wallace
+ESPECIE|Tipo de ser vivo|Grupo de seres que pueden reproducirse entre sí|Homo sapiens es una
+HABITAT|Lugar donde vive un animal|Medio natural donde vive una especie|Casa natural de una especie
+ECOSISTEMA|Seres vivos y su ambiente|Comunidad de seres vivos y su medio|Un humedal lo es
+GENETICA|Ciencia de la herencia|Ciencia que estudia la herencia|Mendel la fundó con arvejas
+MENDEL|Padre de la genética|Monje de las arvejas|Abad de Brno que cruzaba plantas
+CLON|Copia idéntica de un ser vivo|Copia genética idéntica|La oveja Dolly lo fue
+EMBRION|Ser en sus primeras semanas|Primera etapa del desarrollo de un ser|Germen de un proyecto
+HORMONA|Mensajero químico del cuerpo|Sustancia que regula funciones del cuerpo|La insulina y la adrenalina lo son
+PROTEINA|Nutriente de la carne|Molécula formada por aminoácidos|La hemoglobina lo es
+VITAMINA|Nutriente de las frutas|Sustancia esencial en pequeñas cantidades|La C previene el escorbuto
+GLUCOSA|Azúcar de la sangre|Azúcar principal de la sangre|Combustible preferido del cerebro
+NEURONA|Célula del cerebro|Célula del sistema nervioso|Cajal la dibujó como nadie
+ARTERIA|Vaso que sale del corazón|Vaso que lleva sangre desde el corazón|Avenida principal de una ciudad
+VENA|Vaso de sangre de vuelta|Vaso que devuelve sangre al corazón|Inspiración poética
+PULMON|Órgano de la respiración|Órgano donde ocurre la hematosis|Área verde de una ciudad
+RIÑON|Órgano que produce orina|Órgano que filtra la sangre y produce orina|Su nefrona es la unidad funcional
+HIGADO|Órgano que produce bilis|Órgano que produce la bilis|Prometeo lo perdía cada día ante un águila
+CORAZON|Órgano que late|Bomba del sistema circulatorio|Tiene razones que la razón no entiende
+INSULINA|Hormona de los diabéticos|Hormona que baja la glicemia|Banting y Best la aislaron en 1921
+ASPIRINA|Remedio para el dolor de cabeza|Ácido acetilsalicílico, por su nombre comercial|Antiagregante derivado del sauce
+VACUNA|Pinchazo que previene enfermedades|Preparado que genera inmunidad|Jenner la ensayó con viruela de vaca
+VIRUS|Causa la gripe|Agente infeccioso que solo se replica dentro de células|Programa que infecta computadores
+BACTERIA|Microbio de una sola célula|Microorganismo procariota|Gram positiva o negativa
+FIEBRE|Temperatura alta|Elevación de la temperatura corporal|Entusiasmo desmedido, como la del oro
+PULSO|Latido en la muñeca|Latido que se palpa en la muñeca|Firmeza de la mano para dibujar
+SUTURA|Puntos de una herida|Costura de una herida|Unión fija entre huesos del cráneo
+ALERGIA|Reacción al polen o a alimentos|Reacción exagerada del sistema inmune|Rechazo, en sentido figurado
+ANEMIA|Falta de glóbulos rojos|Disminución de la hemoglobina|Debilidad, en sentido figurado
+PLAQUETA|Célula de la coagulación|Célula sanguínea clave en la coagulación|Trombocito
+HUESO|Parte del esqueleto|Pieza dura del esqueleto|Ramo difícil de aprobar, en jerga estudiantil
+FEMUR|Hueso del muslo|Hueso más largo del cuerpo|Su cuello se fractura en caídas de adultos mayores
+CRANEO|Hueso de la cabeza|Caja ósea que protege el encéfalo|Calavera
+RETINA|Fondo del ojo|Capa del ojo sensible a la luz|Tiene conos y bastones
+TIMPANO|Membrana del oído|Membrana del oído medio|Instrumento de percusión de la orquesta
+ESTOMAGO|Órgano de la digestión|Órgano donde se digiere el alimento|Valor para aguantar algo desagradable
+INTESTINO|Tubo largo de la digestión|Conducto que sigue al estómago|Delgado o grueso
+PANCREAS|Órgano de la insulina|Glándula que produce insulina|Sus islotes llevan el nombre de Langerhans
+BAZO|Órgano junto al estómago|Órgano linfático del lado izquierdo|Se rompe en traumas abdominales
+TIROIDES|Glándula del cuello|Glándula que produce tiroxina|Glándula con forma de mariposa
+CEREBRO|Órgano de la mente|Órgano principal del sistema nervioso|Cabeza pensante de un plan
+COLUMNA|Pilar de un edificio|Eje óseo del tronco|Sección fija de opinión en un diario
+VERTEBRA|Hueso de la columna|Cada hueso de la columna|Hay siete cervicales
+COSTILLA|Hueso del tórax|Hueso curvo del tórax|Esposa, en broma, por Eva
+MUSCULO|Carne que mueve el cuerpo|Tejido que se contrae|Fuerza, poder
+TENDON|Une músculo y hueso|Cordón que une músculo con hueso|El de Aquiles es el más famoso
+SANGRE|Líquido rojo del cuerpo|Líquido que circula por los vasos|Linaje
+GLOBULO|Célula de la sangre|Célula sanguínea, roja o blanca|Pequeño cuerpo esférico
+OXIMETRO|Aparato que mide el oxígeno en el dedo|Mide la saturación de oxígeno|Pinza de luz roja en el dedo
+JERINGA|Instrumento para inyectar|Instrumento con émbolo para inyectar|Bomba de mano con émbolo
+AGUJA|Para coser o inyectar|Objeto delgado y puntiagudo para coser|Indicador de la brújula
+CATETER|Tubo delgado que entra al cuerpo|Tubo que se introduce en un vaso o cavidad|Venoso central, en la UCI
+SUERO|Líquido para hidratar por la vena|Solución que se administra por vía venosa|Parte líquida de la sangre coagulada
+VENDA|Tira de tela para heridas|Tira para cubrir una herida|Tenerla en los ojos es no querer ver
+YESO|Material para inmovilizar|Material para inmovilizar fracturas|Tiza de los pizarrones antiguos
+CAMILLA|Cama para trasladar enfermos|Cama portátil para pacientes|Va de la ambulancia a urgencias
+HOSPITAL|Lugar para enfermos|Establecimiento para atender enfermos|El de Concepción lleva el nombre de Grant Benavente
+URGENCIA|Atención inmediata|Servicio de atención inmediata|Prisa apremiante
+ENFERMERA|Cuida pacientes|Profesional del cuidado de los enfermos|Nightingale fue la pionera
+MEDICO|Doctor|Profesional que diagnostica y trata|Galeno
+NIGHTINGALE|Pionera de la enfermería|La dama de la lámpara|Enfermera de Crimea que usó estadística
+TRIAJE|Clasificación de pacientes|Selección de pacientes según gravedad|Palabra de origen francés de la sala de urgencias
+DOSIS|Cantidad de remedio|Cantidad de medicamento que se administra|Porción de algo, como de paciencia
+JARABE|Remedio dulce líquido|Medicamento líquido y azucarado|El tapatío es un baile mexicano
+PASTILLA|Remedio para tragar|Comprimido medicinal|Caramelo pequeño
+ANTIBIOTICO|Remedio contra bacterias|Fármaco contra infecciones bacterianas|Fleming descubrió el primero
+PENICILINA|Primer antibiótico|Antibiótico descubierto por Fleming|Salió de un hongo en una placa olvidada
+MORFINA|Calmante muy potente|Opioide para el dolor intenso|Lleva el nombre del dios del sueño
+ANESTESIA|Quita el dolor en cirugía|Pérdida de sensibilidad inducida|Éter y cloroformo fueron las primeras
+CIRUGIA|Operación|Rama de la medicina que opera|El pabellón es su escenario
+DIAGNOSTICO|Lo que tiene el paciente|Identificación de una enfermedad|Juicio clínico antes del tratamiento
+SINTOMA|Molestia de una enfermedad|Lo que siente el paciente|Señal de que algo anda mal
+INFARTO|Ataque al corazón|Muerte de tejido por falta de riego|Del miocardio, el más temido
+ARRITMIA|Latido irregular|Alteración del ritmo cardíaco|La fibrilación auricular es una
+DIABETES|Azúcar alta en la sangre|Enfermedad por exceso de glucosa|Mellitus o insípida
+ASMA|Enfermedad que cierra los bronquios|Enfermedad con crisis de broncoespasmo|Se trata con inhalador
+GRIPE|Resfrío fuerte|Infección por virus influenza|Influenza, en el habla común
+EDEMA|Hinchazón|Acumulación de líquido en los tejidos|Signo de la fóvea
+SEPSIS|Infección grave generalizada|Respuesta grave del cuerpo a una infección|Exige antibióticos en la primera hora
+APNEA|Pausa al respirar|Detención de la respiración|La del sueño causa ronquidos y cansancio
+HIPOXIA|Falta de oxígeno|Déficit de oxígeno en los tejidos|La sufren los andinistas sin aclimatarse
+REPOSO|Descanso|Quietud indicada por el médico|Absoluto, en cama
+DIETA|Plan de comidas|Régimen de alimentación|Asamblea legislativa de algunos países
+CALORIA|Unidad de energía de los alimentos|Unidad de energía de los alimentos|Las vacías vienen del azúcar
+DARWIN|Científico de la evolución|Autor de El origen de las especies|Viajó en el Beagle y pasó por Chile
+NEWTON|Científico de la manzana|Físico de la manzana y la gravitación|Unidad de fuerza del sistema internacional
+EINSTEIN|Científico de la relatividad|Físico de la relatividad|E igual a m por c al cuadrado
+CURIE|Científica del radio|Marie, doble premio Nobel|Unidad de radiactividad con apellido de mujer
+PASTEUR|Científico de las vacunas|Científico que da nombre a la pasteurización|Vacunó contra la rabia en 1885
+GALILEO|Astrónomo del telescopio|Astrónomo que defendió el heliocentrismo|Y sin embargo se mueve
+EUCLIDES|Matemático griego|Padre de la geometría|Autor de los Elementos
+PITAGORAS|Matemático del teorema|Matemático del teorema del triángulo rectángulo|Filósofo de Samos que veía números en todo
+COPERNICO|Astrónomo del Sol al centro|Puso el Sol en el centro del universo|Canónigo polaco del heliocentrismo
+KEPLER|Astrónomo de las órbitas|Astrónomo de las órbitas elípticas|Sus tres leyes ordenaron los planetas
+TESLA|Inventor de la electricidad|Inventor de la corriente alterna|Rival de Edison y marca de autos eléctricos
+EDISON|Inventor de la ampolleta|Inventor del fonógrafo|El mago de Menlo Park
+FLEMING|Descubrió la penicilina|Médico escocés de la penicilina|Halló el moho que mataba bacterias
+HIPOCRATES|Padre de la medicina|Médico griego del famoso juramento|Médico de Cos
+ARQUIMEDES|Sabio del eureka|Matemático de Siracusa|Gritó eureka en la tina
+ALGEBRA|Matemática con letras|Rama de las matemáticas que usa letras como incógnitas|Al-Juarismi le dio nombre
+PRIMO|Hijo de tu tío|Número divisible solo por sí mismo y por uno|Ingenuo, en lenguaje coloquial
+CERO|Número que indica nada|Elemento neutro de la suma|A la izquierda no vale nada
+CIRCULO|Figura redonda|Figura cuyos puntos equidistan del centro|Grupo cerrado de amigos
+RADIO|Aparato para oír noticias|Mitad del diámetro; también elemento químico|Hueso del antebrazo
+VECTOR|Flecha en física|Magnitud con módulo, dirección y sentido|El mosquito lo es del dengue
+ANGULO|Esquina|Abertura entre dos rectas que se cortan|Punto de vista
+ROMBO|Figura como diamante|Cuadrilátero de lados iguales y ángulos oblicuos|Figura del naipe de diamantes
+CUBO|Figura de seis caras iguales|Hexaedro regular|Balde
+ESFERA|Bola|Cuerpo redondo de superficie equidistante del centro|Ámbito de influencia
+DOCENA|Doce unidades|Conjunto de doce|Así se compran los huevos
+MILLON|Mil veces mil|Unidad seguida de seis ceros|Mil millares
+SUMA|Operación de agregar|Resultado de agregar números|Teológica, la de Santo Tomás
+RESTA|Operación de quitar|Operación de sustraer|Lo que queda
+DIVISION|Repartir en partes|Operación de repartir|Gran unidad del ejército
+FRACCION|Parte de un entero|Número expresado como quebrado|Grupo dentro de un partido
+DECIMAL|Con coma|Número con parte después de la coma|Sistema de base diez
+ECUACION|Igualdad con incógnita|Igualdad con incógnitas|La de segundo grado tiene dos soluciones
+TRIANGULO|Figura de tres lados|Polígono de tres lados|Instrumento de percusión de la orquesta
+CUADRADO|Figura de cuatro lados iguales|Rectángulo de lados iguales|Número multiplicado por sí mismo
+OCTAGONO|Figura de ocho lados|Polígono de ocho lados|Forma de la señal Pare
+HEXAGONO|Figura de seis lados|Polígono de seis lados|Celda de la colmena
+DIAMETRO|Línea que cruza el círculo|Recta que pasa por el centro|Dos radios en línea
+PERIMETRO|Borde de una figura|Medida del contorno|Zona vigilada alrededor de algo
+AREA|Superficie|Medida de una superficie|Zona grande frente al arco
+VOLUMEN|Espacio que ocupa algo|Espacio que ocupa un cuerpo|Tomo de una obra
+PROMEDIO|Nota media|Media aritmética|Nota de presentación a examen
+PORCENTAJE|Tanto por ciento|Proporción por cada cien|Lo que cobra un agente
+ESTADISTICA|Ciencia de los datos|Ciencia que analiza datos numéricos|Hay mentiras, malditas mentiras y ella
+INFINITO|Sin fin|Que no tiene fin|Ocho acostado
+PARABOLA|Curva de un tiro|Curva del lanzamiento de un proyectil|Narración con enseñanza moral
+GRAFICO|Dibujo con datos|Representación visual de datos|Muy expresivo
+NERUDA|Poeta chileno Nobel 1971|Autor de Veinte poemas de amor|Ricardo Neftalí, de Parral
+MISTRAL|Poeta chilena premio Nobel|Primera latinoamericana premio Nobel de Literatura|Lucila del valle de Elqui
+HUIDOBRO|Poeta de Altazor|Poeta chileno creador del creacionismo|El poeta es un pequeño dios, escribió
+PARRA|Apellido de Violeta|Apellido de Nicanor y Violeta|Planta trepadora de la uva
+QUIJOTE|Caballero de La Mancha|Hidalgo de La Mancha|Alonso Quijano en su locura
+SANCHO|Escudero de don Quijote|Escudero del caballero de la triste figura|Gobernador de la ínsula Barataria
+DULCINEA|Amada de don Quijote|Dama de los sueños de don Quijote|Aldonza Lorenzo, idealizada
+CERVANTES|Autor del Quijote|El manco de Lepanto|Premio literario mayor de la lengua
+HAMLET|Príncipe de Shakespeare|Príncipe de Dinamarca de Shakespeare|Ser o no ser
+ODISEA|Viaje de Ulises|Poema homérico del regreso de Ulises|Viaje largo y lleno de aventuras
+ILIADA|Poema de la guerra de Troya|Poema homérico sobre la guerra de Troya|Canta la cólera de Aquiles
+ULISES|Héroe del caballo de Troya|Rey de Ítaca|Odiseo, para los griegos
+SONETO|Poema de catorce versos|Poema de dos cuartetos y dos tercetos|Un ___ me manda hacer Violante
+ESTROFA|Grupo de versos|Conjunto de versos con estructura fija|El cuarteto lo es
+RIMA|Sonido igual al final de versos|Coincidencia de sonidos al final de los versos|Las de Bécquer son famosas
+FABULA|Cuento con moraleja|Relato breve con moraleja|Esopo y Samaniego las escribieron
+NOVELA|Libro de ficción largo|Obra narrativa extensa en prosa|Telenovela, en su versión corta
+PROSA|Lenguaje no en verso|Forma natural del lenguaje, opuesta al verso|Monsieur Jourdain la hablaba sin saberlo
+METAFORA|Figura literaria|Figura retórica que identifica dos términos|Decir perlas por dientes
+ARAUCANA|Poema de Ercilla|La ___, poema épico de Ercilla|Gallina chilena de huevos azules
+MACONDO|Pueblo de García Márquez|Pueblo de Cien años de soledad|Fundado por José Arcadio Buendía
+BORGES|Escritor argentino del Aleph|Autor de El Aleph|Ciego bibliotecario de Buenos Aires
+DANTE|Poeta del Infierno|Autor de la Divina comedia|Guiado por Virgilio y Beatriz
+GOYA|Pintor español|Pintor de Los fusilamientos del 3 de mayo|Pintor de la maja vestida y desnuda
+PICASSO|Pintor del Guernica|Pintor malagueño del cubismo|Su período azul precedió al rosa
+DALI|Pintor de bigotes largos|Pintor surrealista de los relojes blandos|Autor de La persistencia de la memoria
+MONET|Pintor impresionista|Pintor de los nenúfares|Impresión, sol naciente dio nombre a su movimiento
+FRESCO|Algo frío|Pintura sobre muro húmedo|Descarado, en el habla coloquial
+OLEO|Pintura al aceite|Pintura a base de aceite|Santo ___, en la extremaunción
+MOSAICO|Dibujo con piezas pequeñas|Obra hecha con pequeñas piezas de colores|Piso de baldosas con dibujo
+MURAL|Pintura en la pared|Pintura sobre una pared|Diario ___ de la escuela
+ESCULTURA|Estatua|Arte de modelar o tallar|El Pensador lo es
+LIENZO|Tela para pintar|Tela sobre la que se pinta|Cuadro, por extensión
+PALETA|Tabla del pintor|Tabla donde el pintor mezcla colores|Helado con palito
+GOTICO|Estilo de catedrales antiguas|Estilo de catedrales con arcos ojivales|Tipo de letra de la cabecera de este diario
+BARROCO|Estilo artístico recargado|Estilo artístico recargado del siglo XVII|Bach y Bernini lo representan
+OPERA|Teatro cantado|Obra teatral cantada|Primera obra de un autor, en latín
+SINFONIA|Obra de orquesta|Composición para orquesta en varios movimientos|Armonía de elementos variados
+ORQUESTA|Grupo grande de músicos|Conjunto de músicos con director|Dirigir algo con maestría
+SOLFEO|Lectura de música|Lectura y entonación de las notas musicales|Do, re, mi, fa
+TENOR|Cantante de voz aguda masculina|Voz masculina más aguda|Pavarotti lo fue
+SOPRANO|Cantante de voz aguda femenina|Voz femenina más aguda|María Callas lo fue
+PIANO|Instrumento de teclas|Instrumento de teclas y martillos|Suave, en una partitura
+VIOLIN|Instrumento con arco|Instrumento de cuatro cuerdas y arco|Stradivarius los fabricó
+ARPA|Instrumento de cuerdas grande|Instrumento de cuerdas que se pulsa con los dedos|Instrumento del rey David y emblema de Irlanda
+CUECA|Baile nacional|Danza nacional de Chile|Se baila con pañuelo en septiembre
+TANGO|Baile argentino|Baile rioplatense|Gardel lo cantó
+VALS|Baile de quinceañeras|Baile en compás de tres por cuatro|El Danubio azul lo es
+CHARANGO|Guitarra pequeña andina|Pequeña guitarra andina|Su caja era de quirquincho
+QUENA|Flauta andina|Flauta andina de caña|Flauta con escotadura de los Andes
+RITMO|Compás de la música|Orden acompasado de sonidos|Velocidad con que avanza algo
+MELODIA|Canción|Sucesión de sonidos con sentido musical|Lo que se silba de una canción
+BEETHOVEN|Compositor sordo|Compositor de la Novena Sinfonía|Compuso el Himno de la Alegría ya sordo
+MOZART|Compositor niño prodigio|Compositor de La flauta mágica|Amadeus
+CINE|Lugar para ver películas|Séptimo arte|Los Lumière lo presentaron en 1895
+GUION|Texto de una película|Libreto de una película|Signo ortográfico corto
+TELON|Cortina del teatro|Cortina del escenario|Cae al final de la obra
+ACTOR|Hace teatro|Intérprete de un personaje|Persona que finge
+MIMO|Actúa sin hablar|Actor que se expresa sin palabras|Caricia, regaloneo
+POEMA|Obra en verso|Composición en verso|Ser un ___: cara de asombro
+POETA|Escribe versos|Persona que escribe poesía|Vate
+VERSO|Línea de un poema|Cada línea de un poema|Libre, el que no rima
+CUENTO|Historia corta|Narración breve|Mentira o excusa
+LEYENDA|Historia tradicional|Narración tradicional con elementos fantásticos|Texto que explica un mapa
+MITO|Relato de dioses|Relato fabuloso de dioses y héroes|Creencia falsa muy difundida
+EPICA|Poesía de héroes|Género de hazañas heroicas|Muy grande, en el habla juvenil
+DRAMA|Obra de teatro seria|Género teatral serio|Escándalo o exageración
+COMEDIA|Obra divertida|Obra de teatro de final feliz|La divina, de Dante
+TRAGEDIA|Obra triste|Obra de final desdichado|Género de Sófocles
+AUTOR|Quien escribe un libro|Creador de una obra|Responsable de un crimen
+LECTOR|Quien lee|Persona que lee|Aparato que lee tarjetas
+ROMEO|Enamorado de Julieta|Amante de Verona|Montesco enamorado
+JULIETA|Enamorada de Romeo|Amante de Verona|Capuleto del balcón
+OTELO|Moro celoso|Moro de Venecia de Shakespeare|Juego de fichas blancas y negras
+MACBETH|Rey escocés de Shakespeare|Tragedia escocesa de Shakespeare|Obra que los actores evitan nombrar
+FAUSTO|Vendió su alma|Doctor que pactó con Mefistófeles|Obra de Goethe
+DRACULA|Vampiro famoso|Conde vampiro de Stoker|Conde de Transilvania
+ALICIA|Niña del país de las maravillas|Siguió al conejo blanco|Personaje de Lewis Carroll
+PINOCHO|Muñeco que miente|Muñeco al que le crece la nariz|Hijo de Geppetto
+PRINCIPITO|Niño del asteroide|Personaje de Saint-Exupéry|Tenía una rosa en el B 612
+QUIMERA|Ilusión imposible|Sueño imposible|Monstruo con cabeza de león y cola de dragón
+HOMERO|Poeta griego ciego|Autor de la Ilíada|Bardo ciego de la tradición griega
+VIRGILIO|Autor de la Eneida|Poeta romano de la Eneida|Guía de Dante en el Infierno
+SHAKESPEARE|Autor de Hamlet|Dramaturgo de Stratford|El cisne de Avon
+LORCA|Poeta de Granada|Autor de Bodas de sangre|Poeta del Romancero gitano
+DARIO|Poeta nicaragüense|Rubén, padre del modernismo|Autor de Azul, publicado en Valparaíso
+VALLEJO|Poeta peruano|Autor de Los heraldos negros|César, de Santiago de Chuco
+CORTAZAR|Escritor de Rayuela|Autor de Rayuela|Cronopio mayor
+ALLENDE|Isabel, escritora|Autora de La casa de los espíritus|Apellido de presidente y de escritora
+DONOSO|Novelista chileno|Autor de El obsceno pájaro de la noche|José, autor de Coronación
+BOMBAL|Escritora de La amortajada|María Luisa, de La última niebla|Escritora chilena de la niebla
+RETRATO|Pintura de una persona|Pintura o foto de alguien|El de Dorian Gray envejecía
+PAISAJE|Pintura del campo|Vista de un lugar|Género de Constable y Turner
+ACUARELA|Pintura con agua|Pintura con colores diluidos en agua|Técnica transparente sobre papel
+PINCEL|Para pintar|Instrumento para aplicar pintura|Pelo de marta para el artista
+CABALLETE|Soporte del cuadro|Soporte del pintor|Cumbrera de un tejado
+MUSEO|Lugar de obras de arte|Lugar donde se exhiben obras|El Louvre lo es
+ESTATUA|Escultura de una persona|Escultura de bulto redondo|Quedarse quieto como una
+MARMOL|Piedra de estatuas|Piedra de las esculturas clásicas|Frío como él
+BRONCE|Metal de estatuas|Aleación de cobre y estaño|Tercer lugar olímpico
+CATEDRAL|Iglesia principal|Iglesia principal de una diócesis|La de Chartres tiene vitrales famosos
+VITRAL|Ventana de colores|Vidriera de colores|Arte de la luz gótica
+CUPULA|Techo redondo|Bóveda semiesférica|La de San Pedro la diseñó Miguel Ángel
+FOTOGRAFIA|Imagen de cámara|Imagen obtenida con cámara|Daguerre la popularizó
+GUITARRA|Instrumento de seis cuerdas|Instrumento de cuerdas y caja|Violeta la tocó al dar gracias a la vida
+FLAUTA|Instrumento de soplar|Instrumento de viento|La mágica de Mozart
+TROMPETA|Instrumento de metal|Instrumento de viento metal|Toca diana al amanecer
+TAMBOR|Instrumento de golpe|Instrumento de percusión|Pieza cilíndrica de una lavadora
+ACORDEON|Instrumento de fuelle|Instrumento de fuelle y botones|Falda con pliegues
+BATUTA|Varita del director|Vara del director de orquesta|Llevarla es mandar
+PARTITURA|Música escrita|Texto escrito de una obra musical|Plan que se sigue al pie de la letra
+CORO|Grupo que canta|Conjunto de cantantes|Hacerle ___ a alguien es apoyarlo
+BALADA|Canción romántica|Canción lenta y romántica|Poema narrativo medieval
+CUMBIA|Baile colombiano|Baile tropical de origen colombiano|Ritmo de la Sonora Palacios
+BOLERO|Canción romántica lenta|Canción romántica de origen cubano|Obra de Ravel con un redoble insistente
+JAZZ|Música de Nueva Orleans|Música nacida en Nueva Orleans|Género de Armstrong y la improvisación
+ROCK|Música con guitarra eléctrica|Género de Elvis|And roll, completa
+ZARZUELA|Teatro musical español|Género lírico español|Plato de mariscos catalán
+VIOLETA|Flor morada|Nombre de la autora de Gracias a la vida|Color entre el azul y el rojo
+GARDEL|Cantor de tangos|El Zorzal criollo|Cada día canta mejor
+JARA|Víctor, cantautor|Apellido del autor de Te recuerdo Amanda|Arbusto mediterráneo
+FUTBOL|Deporte con pelota y arcos|El deporte rey|Juego de once contra once
+TENIS|Deporte con raqueta|Deporte de raqueta y red|Zapatillas, en algunos países
+GOLF|Deporte de hoyos|Deporte de hoyos y palos|Su meta es el hoyo en uno
+AJEDREZ|Juego de tablero blanco y negro|Juego de reyes, damas y peones|Juego ciencia de Kasparov
+ENROQUE|Jugada de rey y torre|Movimiento conjunto de rey y torre|Atrincherarse, en sentido figurado
+JAQUE|Amenaza al rey|Amenaza al rey en el ajedrez|Poner en aprietos
+TORRE|Edificio alto|Pieza de ajedrez que avanza en línea recta|La de Pisa está inclinada
+ALFIL|Pieza que va en diagonal|Pieza de ajedrez que se mueve en diagonal|Antiguo elefante del ajedrez persa
+MARATON|Carrera larga|Carrera de 42 kilómetros|Llanura griega de una famosa carrera
+PODIO|Lugar de los ganadores|Plataforma de los ganadores|Tarima de tres alturas
+ARBITRO|Juez del partido|Juez de un partido|Lleva silbato y tarjetas
+PENAL|Tiro de once metros|Tiro desde los once metros|Relativo a las penas, o cárcel
+CORNER|Tiro de esquina|Saque desde la esquina|Anglicismo de la bandera de esquina
+RODEO|Deporte de huasos|Deporte nacional de Chile|Atajada de novillo en medialuna
+ESGRIMA|Deporte de espadas|Deporte de florete, espada y sable|Arte de defenderse con argumentos
+REMO|Pala para mover un bote|Deporte de botes y palas|Castigo del galeote
+JUDO|Arte marcial japonés|Arte marcial japonés de proyecciones|Camino de la suavidad
+OLIMPIADA|Juegos Olímpicos|Período de cuatro años entre juegos olímpicos|Competencia escolar de matemática
+RECORD|Mejor marca|Mejor marca registrada|En tiempo ___: muy rápido
+EMPATE|Igualdad en el marcador|Igualdad de puntos en una competencia|Tablas, en el ajedrez
+RAQUETA|Pala de tenis|Pala del tenista|Calzado para caminar en la nieve
+ESTADIO|Cancha con graderías|Recinto deportivo con graderías|El Nacional de Ñuñoa
+GOL|Punto en el fútbol|Tanto en el fútbol|Grito máximo de la tribuna
+ARQUERO|Cuida el arco|Portero de fútbol|Tirador con arco
+DELANTERO|Jugador que ataca|Jugador de ataque|El que va adelante
+DEFENSA|Jugador que protege|Jugador que protege el arco|Abogado del acusado
+CAMISETA|Polera del equipo|Prenda con los colores del club|Ponerse la ___: comprometerse
+CANCHA|Lugar de juego|Terreno de juego|Experiencia, en Chile
+BALON|Pelota|Pelota de fútbol|De oxígeno, en el hospital
+TROFEO|Premio de copa|Copa del campeón|Botín de guerra
+MEDALLA|Premio olímpico|Distinción que se cuelga al cuello|Dorada, plateada o de bronce
+BOXEO|Pelea con guantes|Deporte de puños|El noble arte
+KARATE|Arte marcial de golpes|Arte marcial de mano vacía|De Okinawa a todo el mundo
+NATACION|Deporte en piscina|Deporte en el agua|Crol, espalda y mariposa
+CICLISMO|Deporte en bicicleta|Deporte de bicicleta|Tour de Francia
+ATLETISMO|Deporte de correr y saltar|Deporte de pista y campo|Disciplina reina de los Juegos
+VOLEIBOL|Deporte de red y mano|Deporte de seis jugadores con red|Tiene versión playera
+BEISBOL|Deporte de bate|Deporte de bate y guante|Rey de Cuba y Venezuela
+HOCKEY|Deporte con palo curvo|Deporte con stick|Sobre hielo o césped
+RUGBY|Deporte con pelota ovalada|Deporte de pelota ovalada|Los Cóndores lo juegan
+SURF|Deporte con tabla y olas|Deporte de tabla sobre olas|Pichilemu es su capital chilena
+ESQUI|Deporte en la nieve|Deporte de deslizarse en la nieve|Farellones es su escenario cercano
+PATINAJE|Deporte con patines|Deporte de deslizarse sobre ruedas o cuchillas|Artístico, sobre hielo
+ESCALADA|Subir rocas|Deporte de subir paredes|Aumento rápido, como el de precios
+SALTO|Brinco|Acción de elevarse del suelo|Agua que cae desde lo alto
+JABALINA|Lanza del atletismo|Lanza del atletismo|Hembra del jabalí
+PESAS|Barra con discos|Halterofilia|Usadas en el gimnasio
+GIMNASIO|Lugar para hacer ejercicio|Lugar para entrenar|Liceo, en Alemania
+ENTRENADOR|Dirige al equipo|Director técnico de un equipo|Coach, en inglés
+HINCHA|Fanático de un equipo|Seguidor apasionado de un club|Molestar, como verbo
+CAMPEON|Ganador del torneo|Ganador de una competencia|Defensor de una causa
+TORNEO|Campeonato|Competencia deportiva|Justa medieval de caballeros
+COPA|Vaso de vino; trofeo|Trofeo de un campeonato|La América se juega cada cuatro años
+PELOTA|Bola de juego|Objeto redondo para jugar|Hacer ___: hacer caso
+SILBATO|Pito del árbitro|Pito del árbitro|Da el pitazo final
+DOMINO|Juego de fichas con puntos|Juego de 28 fichas|Disfraz con capucha
+NAIPE|Carta de juego|Carta de la baraja|Castillo de ___: cosa frágil
+DADO|Cubo con puntos|Cubo con caras numeradas|Alea jacta est, lo echó César
+BINGO|Juego de cartones y números|Lotería de cartones|Exclamación de acierto
+TROMPO|Juguete que gira|Juguete que baila con una cuerda|Peonza
+VOLANTIN|Cometa chilena|Cometa de papel que se encumbra en septiembre|Se corta con hilo curado
+RAYUELA|Juego de tirar tejos|Juego de tejo a la línea|Novela de Cortázar
+EMBOQUE|Juguete de madera con bola|Juguete de mango y bola agujereada|Boliche chileno
+CONDOR|Ave grande de los Andes|Ave del escudo nacional|Vultur gryphus
+HUEMUL|Ciervo chileno|Ciervo del escudo nacional|Hippocamelus bisulcus
+PUDU|Ciervo muy pequeño|Ciervo más pequeño del mundo|Venadito de los bosques del sur
+COPIHUE|Flor roja chilena|Flor nacional de Chile|Lapageria rosea
+ARAUCARIA|Árbol del piñón|Árbol que da el piñón|Fósil viviente de la Araucanía
+ALERCE|Árbol muy viejo del sur|Árbol milenario del sur de Chile|Fitzroya, por el capitán del Beagle
+PEHUEN|Árbol sagrado mapuche|Nombre mapuche de la araucaria|Árbol de los pehuenches
+QUILLAY|Árbol de corteza jabonosa|Árbol cuya corteza hace espuma|Su saponina se usa en vacunas
+BOLDO|Hojas para agua de hierbas|Arbusto de hojas para infusión digestiva|Peumus de la sobremesa
+LLAMA|Animal andino, o fuego|Camélido andino de carga|Escupe cuando se enoja
+VICUÑA|Animal de lana fina|Camélido de lana finísima|Su lana fue reservada al inca
+ALPACA|Animal de lana andino|Camélido criado por su fibra|Metal plateado de cubiertos baratos
+PUMA|León de montaña|León americano|Felino que ronda Farellones
+ZORRO|Animal astuto|Cánido astuto de las fábulas|Justiciero enmascarado de California
+BUHO|Ave nocturna|Ave rapaz nocturna|Emblema de la sabiduría
+COLIBRI|Ave muy pequeña|Picaflor|Puede volar hacia atrás
+PINGUINO|Ave del frío que no vuela|Ave que no vuela, de Humboldt o de Magallanes|Emperador en la Antártica
+BALLENA|Gran animal del mar|Mayor mamífero marino|Moby Dick lo era
+DELFIN|Mamífero marino juguetón|Cetáceo inteligente y juguetón|Heredero del trono de Francia
+PULPO|Animal de ocho brazos|Molusco de ocho brazos|Paul adivinaba resultados de fútbol
+TIBURON|Pez de dientes filosos|Pez cartilaginoso de mala fama|Especulador voraz
+ABEJA|Insecto de la miel|Insecto productor de miel|Reina, obrera o zángano
+HORMIGA|Insecto trabajador|Insecto social que trabaja en colonia|Ahorrativa en la fábula de la cigarra
+MARIPOSA|Insecto de alas de colores|Insecto que antes fue oruga|Estilo de natación
+ORUGA|Gusano que será mariposa|Larva de la mariposa|Cadena de un tanque
+CAMALEON|Reptil que cambia de color|Reptil que cambia de color|Persona que cambia de opinión según convenga
+TORTUGA|Animal con caparazón|Reptil de caparazón|Las de Galápagos inspiraron a Darwin
+LEON|Rey de la selva|Gran felino de melena|Signo zodiacal de julio y agosto
+TIGRE|Felino de rayas|Felino de rayas|Bengala es su versión más famosa
+JIRAFA|Animal de cuello largo|Mamífero de cuello más largo|Micrófono con brazo largo en el cine
+CEBRA|Caballo de rayas|Équido de rayas blancas y negras|Paso peatonal con franjas
+ELEFANTE|Animal de trompa|Paquidermo de trompa|Nunca olvida, según el dicho
+CAMELLO|Animal con jorobas|Rumiante de dos jorobas|Vendedor de drogas al menudeo
+ROBLE|Árbol fuerte|Árbol de madera dura|Persona muy fuerte
+CEDRO|Árbol del Líbano|Árbol emblema del Líbano|Madera de los cajones de puros
+SAUCE|Árbol llorón|Árbol llorón de las riberas|De su corteza se obtuvo la aspirina
+HELECHO|Planta de hojas verdes sin flor|Planta sin flores que se reproduce por esporas|Planta del Carbonífero que aún decora jardines
+CACTUS|Planta con espinas|Planta del desierto con espinas|El quisco lo es
+MUSGO|Planta verde suave de lugares húmedos|Planta pequeña de lugares húmedos|Alfombra verde del pesebre
+SEMILLA|Origen de una planta|Origen de una nueva planta|Germen de una idea
+POLEN|Polvo de las flores|Polvo fecundante de las flores|Causa alergias en primavera
+RAIZ|Parte de la planta bajo tierra|Parte de la planta que la fija al suelo|Origen de algo
+SAVIA|Líquido de las plantas|Líquido que circula por las plantas|Energía vital, como la de la juventud
+CLOROFILA|Pigmento verde|Pigmento verde de las plantas|Capta la luz en la fotosíntesis
+NIDO|Casa del pájaro|Casa del pájaro|Hogar familiar
+CARDUMEN|Grupo de peces|Banco de peces|Multitud que se mueve al unísono
+MANADA|Grupo de animales|Grupo de animales de una especie|La de lobos tiene un macho alfa
+COLMENA|Casa de abejas|Casa de las abejas|Edificio lleno de gente
+NIEVE|Agua helada que cae del cielo|Precipitación blanca y fría|Cubre Farellones en invierno
+NIEBLA|Neblina|Nube a ras de suelo|La camanchaca lo es
+ROCIO|Gotitas de la mañana|Gotas de la madrugada sobre las plantas|Nombre de mujer y de una Virgen andaluza
+ARCOIRIS|Colores en el cielo|Fenómeno de siete colores tras la lluvia|Al final, dicen, hay oro
+TRUENO|Ruido de la tormenta|Ruido del rayo|Estampido
+BRISA|Viento suave|Viento suave|Viento marino de la tarde
+LOBO|Animal que aúlla|Cánido salvaje que aúlla|El hombre lo es del hombre, según Hobbes
+CABALLO|Animal para montar|Equino de montar|Pieza de ajedrez que salta
+VACA|Da leche|Hembra del toro|Hacer una ___: juntar dinero entre varios
+CERDO|Animal del tocino|Animal de granja que da tocino|Chancho
+CONEJO|Animal de orejas largas|Roedor de orejas largas|El de Alicia llegaba tarde
+RATON|Roedor pequeño|Roedor pequeño|Periférico del computador
+GATO|Mascota que maúlla|Felino doméstico|Herramienta para levantar el auto
+PERRO|Mejor amigo del hombre|Cánido doméstico|Persona malvada, como insulto
+PALOMA|Ave de la paz|Ave de la paz|Picasso la dibujó
+LORO|Ave que habla|Ave que repite palabras|Persona que habla demasiado
+TUCAN|Ave de pico grande|Ave tropical de pico enorme|Pico de colores del Amazonas
+FLAMENCO|Ave rosada|Ave rosada de una pata|Baile andaluz
+GAVIOTA|Ave del mar|Ave marina de la costa|Juan Salvador, en la novela
+PELICANO|Ave con bolsa en el pico|Ave de pico con bolsa|Vuela en fila sobre las caletas
+AGUILA|Ave rapaz grande|Ave rapaz diurna|Persona muy lista
+HALCON|Ave rapaz veloz|Ave rapaz muy veloz|Partidario de la línea dura
+LOICA|Pájaro de pecho rojo|Pájaro chileno de pecho rojo|Según la leyenda, se tiñó el pecho con sangre
+TRARO|Ave rapaz del campo chileno|Carancho chileno|Caracara plancus del sur
+CHUCAO|Pájaro del bosque sureño|Ave del bosque que da agüeros|Su canto a la derecha anuncia suerte
+TENCA|Pájaro cantor chileno|Pájaro imitador chileno|Ave del matorral central que remeda otros cantos
+QUELTEHUE|Ave que grita en los campos|Ave chilena que anuncia lluvia|Treile, centinela de los potreros
+DIUCA|Pájaro chileno común|Pájaro chileno de canto matinal|Su canto anuncia el alba en el campo chileno
+ZORZAL|Pájaro cantor del jardín|Pájaro de jardín que come lombrices|Ave que da apodo a Gardel
+CHINCOL|Pájaro con copete|Pájaro chileno de copete|Gorrión nativo
+PICAFLOR|Colibrí|Ave que liba flores|Don Juan, en sentido figurado
+LAGARTIJA|Reptil pequeño|Reptil pequeño de los muros|Ejercicio de brazos en el suelo
+SERPIENTE|Reptil sin patas|Reptil sin patas|Tentó a Eva
+COCODRILO|Reptil del Nilo|Reptil de los ríos tropicales|Sus lágrimas son falsas
+RANA|Anfibio que salta|Anfibio que croa|Animal del cuento del príncipe encantado
+SAPO|Anfibio verrugoso|Anfibio de piel rugosa|Soplón, en Chile
+CARACOL|Animal con casa en la espalda|Molusco de concha espiral|Parte del oído interno
+ARAÑA|Teje telas|Arácnido que teje|Lámpara de cristales colgantes
+ESCORPION|Animal con aguijón en la cola|Arácnido con aguijón|Signo zodiacal de noviembre
+MOSCA|Insecto molesto|Insecto díptero común|Peso de boxeo liviano
+MOSQUITO|Insecto que pica|Insecto que pica y zumba|Transmite el dengue
+GRILLO|Insecto que canta de noche|Insecto que chirría|Pepe, conciencia de Pinocho
+CIGARRA|Insecto cantor del verano|Insecto que canta en verano|Cantó mientras la hormiga trabajaba
+LUCIERNAGA|Insecto que brilla|Insecto luminoso|Bichito de luz
+ERIZO|Animal con púas|Animal cubierto de púas|De mar, se come en Chile con limón
+CENTOLLA|Cangrejo grande del sur|Cangrejo gigante austral|Lithodes de Magallanes
+LOCO|Marisco chileno|Molusco chileno muy apreciado|Que perdió el juicio
+CHORO|Marisco negro|Mejillón chileno|Valiente o buena onda, en Chile
+JAIBA|Cangrejo|Crustáceo de pinzas|Chupe de ___
+MERLUZA|Pescado blanco|Pez de la costa chilena muy consumido|Borrachera, en lenguaje coloquial
+CONGRIO|Pez del caldillo|Pez del caldillo chileno|Neruda le dedicó una oda
+SALMON|Pez rosado|Pez que remonta ríos|Color rosado anaranjado
+ATUN|Pez de lata|Pez grande del sushi|Bonito, su pariente
+SARDINA|Pez de lata pequeño|Pez pequeño enlatado|Apretados como ellas
+ANCHOA|Pez salado pequeño|Pez pequeño en salazón|Boquerón en salmuera
+FOCA|Mamífero marino con bigotes|Mamífero marino de aletas|Aplaude en el circo
+NUTRIA|Animal de agua dulce|Mamífero acuático de pelaje fino|Su pariente marino es el chungungo
+GUANACO|Camélido salvaje|Camélido silvestre de la Patagonia|Carro lanzaagua, en Chile
+CHINCHILLA|Roedor de piel suave|Roedor andino de piel fina|Su piel casi la extinguió
+DEGU|Roedor chileno|Roedor endémico de Chile|Octodon degus
+QUIRQUINCHO|Armadillo|Armadillo andino|Su caparazón fue caja de charango
+PALMA|Árbol del coco|Árbol de hojas en abanico|Parte interna de la mano
+QUINOA|Grano andino|Grano andino muy nutritivo|Chenopodium de los incas
+LAVANDA|Flor morada perfumada|Planta aromática morada|Colonia de flores azuladas
+GIRASOL|Flor que sigue al sol|Flor que mira al sol|Van Gogh pintó varios
+CLAVEL|Flor del ojal|Flor de pétalos dentados|Los portugueses hicieron con ellos una revolución
+TULIPAN|Flor holandesa|Flor emblema de Holanda|Su manía provocó una burbuja en el siglo XVII
+MARGARITA|Flor blanca de centro amarillo|Flor de pétalos blancos|Me quiere, no me quiere
+ORQUIDEA|Flor exótica|Flor de la familia más numerosa|La vainilla es su pariente comestible
+LIRIO|Flor blanca|Flor del lis|Flor de los campos del Evangelio
+AMAPOLA|Flor roja silvestre|Flor roja del trigal|De ella se obtiene el opio
+JAZMIN|Flor blanca perfumada|Flor blanca muy olorosa|Revolución tunecina
+HIEDRA|Planta trepadora|Planta trepadora de muros|Venenosa, en los bosques de Norteamérica
+ESPINO|Árbol con espinas del campo|Árbol de la zona central con espinas|Acacia caven
+CANELO|Árbol sagrado mapuche|Árbol sagrado del rewe|Drimys winteri
+MAITEN|Árbol de hojas colgantes|Árbol chileno de ramas colgantes|Árbol que el ganado busca en invierno
+PEUMO|Árbol de frutos rojos|Árbol chileno de frutos rojos|Cryptocarya alba
+EUCALIPTO|Árbol de Australia|Árbol australiano aromático|Sus hojas alivian el resfrío en vahos
+PINO|Árbol de las piñas|Conífera de hoja en aguja|Hacer el ___: apoyarse en las manos
+BOSQUE|Muchos árboles juntos|Terreno poblado de árboles|No ver el ___ por los árboles
+TORMENTA|Tempestad|Perturbación con lluvia y viento|En un vaso de agua, exageración
+HURACAN|Tormenta muy fuerte|Ciclón tropical|Dios maya del viento
+TORNADO|Remolino de viento|Columna de aire giratoria|Mago de Oz llegó en uno
+GRANIZO|Lluvia de hielo|Precipitación de bolitas de hielo|Pedrisco
+RELAMPAGO|Luz de la tormenta|Destello de una descarga eléctrica|Muy rápido
+CAMANCHACA|Niebla del norte|Neblina costera del norte chileno|La atrapan los atrapanieblas
+TERREMOTO|Temblor muy fuerte|Sismo de gran intensidad|Trago chileno con helado de piña
+MAREMOTO|Ola gigante por un sismo|Terremoto bajo el mar|Tsunami, en castellano
+ZEUS|Rey de los dioses griegos|Padre de los dioses del Olimpo|Se transformó en cisne para seducir a Leda
+HERMES|Mensajero griego|Mensajero de los dioses griegos|Marca de pañuelos de seda
+ATENEA|Diosa de la sabiduría|Diosa griega de la sabiduría|Nació armada de la cabeza de su padre
+APOLO|Dios del sol|Dios griego del sol y la música|Programa espacial que llegó a la Luna
+NEPTUNO|Dios del mar|Dios romano del mar, y planeta|Último planeta del sistema solar
+ODIN|Dios nórdico principal|Dios supremo nórdico|Tuerto del Valhalla
+THOR|Dios del martillo|Dios nórdico del martillo|Da nombre al jueves en inglés
+MEDUSA|Animal marino gelatinoso|Gorgona de cabellos de serpiente|Perseo la decapitó
+CENTAURO|Mitad hombre mitad caballo|Mitad hombre y mitad caballo|Quirón, maestro de Aquiles
+MINOTAURO|Monstruo toro|Monstruo del laberinto de Creta|Teseo lo venció con el hilo de Ariadna
+FENIX|Ave que renace|Ave que renace de sus cenizas|Cápsula que rescató a los 33
+SIRENA|Mitad pez|Mitad mujer y mitad pez|Alarma de ambulancia
+TRAUCO|Duende de Chiloé|Ser mitológico del bosque chilote|Culpable de embarazos inexplicables en la leyenda
+CALEUCHE|Barco fantasma|Barco fantasma de Chiloé|Buque de brujos que navega iluminado
+PINCOYA|Sirena de Chiloé|Sirena chilota que trae abundancia de mariscos|Si baila mirando al mar, habrá abundancia
+HERCULES|Héroe muy fuerte|Héroe de los doce trabajos|Heracles, para los griegos
+AQUILES|Héroe del talón|Héroe de la Ilíada|Su talón era su punto débil
+NARCISO|Se enamoró de su reflejo|Joven enamorado de su imagen|Flor amarilla de primavera
+PROMETEO|Robó el fuego|Titán que dio el fuego a los hombres|Subtítulo de Frankenstein
+PANDORA|Abrió una caja|Primera mujer de la mitología griega|Su caja liberó los males
+ICARO|Voló muy cerca del sol|Hijo de Dédalo que voló|Alas de cera derretidas
+CUPIDO|Dios del amor con flechas|Dios romano del amor|Eros, para los griegos
+AFRODITA|Diosa del amor|Diosa griega del amor|Venus, para los romanos
+POSEIDON|Dios del mar|Dios griego del mar|Su tridente agita los océanos
+HADES|Dios del inframundo|Dios griego de los muertos|Raptó a Perséfone
+OLIMPO|Monte de los dioses|Monte de los dioses griegos|Cumbre más alta de Grecia
+TITAN|Gigante|Cada gigante que precedió a los dioses|Luna mayor de Saturno
+ALBUM|Libro de fotos|Libro de fotos, o colección de canciones|El de láminas del Mundial
+ENANO|Personaje bajito|Cada uno de los siete de Blancanieves|Gimli, en El señor de los anillos
+HADA|Tiene varita mágica|Ser fantástico con varita mágica|Madrina de Cenicienta
+DUENDE|Ser travieso|Ser travieso de los cuentos|Encanto flamenco difícil de explicar
+GIGANTE|Muy grande|De estatura descomunal|Molinos de viento para don Quijote
+DRAGON|Monstruo que echa fuego|Monstruo alado que echa fuego|San Jorge lo mató
+CASTILLO|Casa de reyes|Fortaleza con torres y foso|Hacerlos en el aire es fantasear
+REINA|Esposa del rey|Soberana de un reino|Pieza más poderosa del ajedrez
+PRINCIPE|Hijo del rey|Heredero del trono|Libro de Maquiavelo
+TRONO|Silla del rey|Asiento del monarca|Juego de tronos
+CORONA|Va en la cabeza del rey|Símbolo del poder real|Virus que la lleva en el nombre
+ESPADA|Arma larga|Arma blanca de hoja larga|Entre la ___ y la pared
+ESCUDO|Protege al guerrero|Arma defensiva; emblema de un país|Antigua moneda portuguesa
+BANDERA|Símbolo patrio|Símbolo patrio de tela|La chilena tiene una estrella
+HIMNO|Canción patria|Canción solemne de un país|Puro, Chile, es tu cielo azulado
+CENSO|Conteo de la población|Recuento de la población|Lo ordenó Augusto cuando nació Jesús
+BRUJA|Vuela en escoba|Hechicera de los cuentos|La de Blancanieves ofreció una manzana
+MAGO|Hace trucos|Ilusionista|Merlín lo fue
+ESCOBA|Para barrer|Utensilio para barrer|Juego de naipes de quince
+VAMPIRO|Chupa sangre|Ser que bebe sangre|Murciélago tropical
+FANTASMA|Espíritu que asusta|Aparición de un muerto|El de la ópera
+TESORO|Cofre de oro|Riqueza escondida|La isla de Stevenson
+ALBA|Amanecer|Primera luz del día|Vestidura blanca del sacerdote
+OCASO|Cuando se pone el sol|Puesta del sol|Decadencia de un imperio
+ENIGMA|Misterio|Misterio de difícil solución|Máquina alemana de cifrado
+ACERTIJO|Adivinanza|Juego de ingenio para adivinar|Lo que resuelves ahora mismo
+REFRAN|Dicho popular|Dicho popular sentencioso|Más vale pájaro en mano lo es
+SINONIMO|Palabra que significa lo mismo|Palabra de igual significado|Dicha lo es de alegría
+ANTONIMO|Palabra contraria|Palabra de significado opuesto|Frío lo es de calor
+PALINDROMO|Se lee igual al revés|Palabra que se lee igual al revés|Anilina, oso o reconocer lo son
+VERBO|Palabra de acción|Palabra que expresa acción|En el principio era él, según Juan
+ADJETIVO|Palabra que describe|Palabra que califica al sustantivo|Calificativo o determinativo
+ACENTO|Tilde|Mayor intensidad de una sílaba|Tonada de una región
+ALFABETO|Abecedario|Conjunto ordenado de letras|Persona que sabe leer
+IDIOMA|Lengua|Lengua de un pueblo|Babel los multiplicó
+DIALOGO|Conversación|Conversación entre dos o más personas|Género de Platón
+NOSTALGIA|Pena por el pasado|Pena por la lejanía de la patria o del pasado|Saudade, en portugués
+PACIENCIA|Saber esperar|Virtud de saber esperar|La de Job es proverbial
+TERNURA|Cariño suave|Afecto suave y delicado|Lo que inspira un recién nacido
+ORGULLO|Sentirse superior|Exceso de estima propia|Y prejuicio, en Austen
+AVARO|Tacaño|Que acumula dinero y no lo gasta|Comedia de Molière
+TACAÑO|Que no gasta|Mezquino, que escatima en todo|Codo, en Chile
+ENVIDIA|Querer lo de otro|Pecado capital del que desea lo ajeno|Sana, si existiera
+PEREZA|Flojera|Pecado capital del ocioso|Madre de todos los vicios
+IRA|Enojo|Pecado capital del enojo|Día de la ___: Dies irae
+GULA|Comer de más|Pecado capital del glotón|La sufre quien no se levanta del buffet
+LEAL|Fiel|Fiel a sus compromisos|Perro, por excelencia
+AUDAZ|Valiente|Osado, atrevido|A él ayuda la fortuna, según el dicho
+SAGAZ|Astuto|Astuto y perspicaz|Lince, en sentido figurado
+TENAZ|Que no se rinde|Firme, que no desiste|Persistente como gota sobre piedra
+NOBLE|De buen corazón|De ilustre linaje, o de buenos sentimientos|Gas que no reacciona
+ETERNO|Para siempre|Que no tiene fin|Retorno de Nietzsche
+EFIMERO|Que dura poco|Que dura muy poco|Como la flor de un día
+ARDUO|Difícil|Muy difícil, trabajoso|Cuesta arriba
+SUTIL|Delicado|Delicado, tenue|Ingenioso y agudo
+OCIO|Tiempo libre|Tiempo sin trabajo|Lo contrario del negocio, por etimología
+SIESTA|Dormir después de almorzar|Descanso después de almorzar|Costumbre española de la sobremesa
+ALMUERZO|Comida del mediodía|Comida principal del día|Colación, en la oficina
+EMPANADA|Comida del 18|Masa rellena típica de las Fiestas Patrias|Confusión mental
+HUMITA|Comida de choclo|Pasta de choclo envuelta en sus hojas|Corbata de lazo, en Chile
+CAZUELA|Sopa chilena|Sopa chilena con presa y papa|Olla de greda
+MOTE|Trigo cocido|Trigo cocido que acompaña al huesillo|Apodo
+CHOCLO|Maíz tierno|Mazorca de maíz tierno|Pastel de ___
+PEBRE|Salsa picante chilena|Salsa chilena de tomate, cebolla y cilantro|Acompaña la sopaipilla en invierno
+ASADO|Carne a la parrilla|Carne a la parrilla|Enojado, en Chile
+PAN|Se compra en la panadería|Alimento de harina horneada|Dios griego de los pastores
+QUESO|Se hace con leche|Producto lácteo cuajado|Gruyère o chanco
+VINO|Bebida de uva|Bebida de uva fermentada|Pasado de venir
+CEPA|Tipo de uva|Variedad de vid, como la carménère|Raíz u origen de una familia
+ONCE|Número; merienda|Merienda chilena de la tarde|Número de jugadores de un equipo de fútbol
+TETERA|Para hervir agua|Recipiente para hervir el agua del té|Hervidor antiguo
+CUCHARA|Para tomar sopa|Cubierto para la sopa|Meterla es opinar sin ser llamado
+MANTEL|Tela de la mesa|Tela que cubre la mesa|Se tiende para la once
+ESPEJO|Refleja tu imagen|Superficie que refleja la imagen|Espejito, espejito, de la madrastra
+RELOJ|Da la hora|Instrumento para medir el tiempo|El de arena mide minutos
+BRUJULA|Señala el norte|Instrumento que señala el norte|Perderla es desorientarse
+FARO|Torre con luz junto al mar|Torre con luz que guía a los navegantes|Luz delantera de un auto
+ANCLA|Fija el barco|Pieza que fija el barco al fondo|Símbolo de la esperanza
+VELERO|Barco con velas|Barco impulsado por el viento|Buque escuela de la Armada, por ejemplo
+TIMON|Volante del barco|Pieza para gobernar la nave|Mando, dirección
+PUERTO|Lugar de barcos|Lugar de atraque de barcos|Conexión de un computador
+TREN|Va sobre rieles|Convoy sobre rieles|Ritmo, como el de vida
+AVION|Vuela con pasajeros|Aeronave con alas|Los Wright volaron el primero
+TRANVIA|Tren de la ciudad|Vehículo eléctrico urbano sobre rieles|Un ___ llamado deseo
+CARRETA|Carro de bueyes|Carro tirado por bueyes|Lenta como ella
+BICICLETA|Dos ruedas y pedales|Vehículo de dos ruedas a pedales|Deuda que se paga con otra, en jerga
+TELEGRAFO|Mensajes por cable|Aparato que transmitía mensajes en código Morse|Antecesor del correo electrónico
+PERIODICO|Diario|Diario impreso|Que se repite cada cierto tiempo
+TITULAR|Encabezado de noticia|Encabezado de una noticia|Jugador que no está en la banca
+EDITOR|Quien edita|Responsable de una publicación|Programa para modificar textos
+IMPRENTA|Máquina de imprimir|Invento de Gutenberg|Taller de tipos y tinta
+TINTA|Líquido para escribir|Líquido para escribir o imprimir|Lo que suelta el calamar
+PLUMA|Parte del ave|Antiguo instrumento de escritura|Peso de boxeo
+LAPIZ|Para escribir y borrar|Barra de grafito para escribir|Labial, en el estuche
+CUADERNO|Para tomar apuntes|Conjunto de hojas para apuntes|De bitácora, en el barco
+PIZARRA|Donde escribe el profesor|Superficie donde escribe el profesor|Roca para techos
+TIZA|Para escribir en el pizarrón|Barra blanca para escribir en la pizarra|Polvo azul del taco de pool
+AULA|Sala de clases|Sala de clases|Magna, en la universidad
+RECREO|Pausa entre clases|Pausa entre clases|Barrio de Viña del Mar
+EXAMEN|Prueba|Prueba de conocimientos|Revisión médica
+RUBRICA|Pauta de evaluación|Pauta de evaluación con criterios y niveles|Firma con rasgos propios
+DIPLOMA|Título en papel|Título que acredita estudios|Origen de la palabra diplomacia
+TESIS|Trabajo final de estudios|Trabajo de investigación para obtener un grado|Proposición que se defiende
+CATEDRA|Asignatura|Asignatura a cargo de un profesor titular|Hablar ex ___: con autoridad
+DECANO|Jefe de facultad|Autoridad máxima de una facultad|El más antiguo de un grupo
+RECTOR|Jefe de universidad|Autoridad máxima de una universidad|Que rige o gobierna
+MAESTRO|Profesor|Profesor, o experto en su oficio|Título de Yoda
+ALUMNO|Estudiante|Persona que aprende de un maestro|Pupilo
+BIBLIOTECA|Lugar de libros|Lugar donde se guardan y prestan libros|La de Alejandría ardió
+LIBRO|Se lee|Conjunto de hojas impresas y encuadernadas|Tercer estómago de los rumiantes
+INDICE|Lista de contenidos|Lista ordenada del contenido de un libro|Dedo que señala
+PROLOGO|Introducción|Texto introductorio de un libro|Preámbulo
+EPILOGO|Final de un libro|Parte final que cierra una obra|Desenlace
+CAPITULO|Parte de un libro|División de un libro|Episodio de una serie
+MONEDA|Dinero de metal|Pieza de metal acuñada como dinero|Pagar con la misma: devolver el trato
+BANCO|Asiento; lugar del dinero|Entidad financiera, o asiento largo|De peces, cardumen
+CREDITO|Préstamo|Préstamo de dinero|Reconocimiento al final de una película
+DEUDA|Lo que se debe|Obligación de pagar|La externa preocupa a los países
+INTERES|Ganas de saber|Rédito de un capital prestado|Compuesto, si se suma al capital
+BOLSA|Saco para llevar cosas|Mercado de valores|De agua caliente, en invierno
+ACCION|Lo que se hace|Parte del capital de una sociedad anónima|Grito del director de cine
+DIVISA|Moneda extranjera|Dinero de otro país|Lema de un escudo
+INFLACION|Suben los precios|Alza sostenida de los precios|Hinchazón
+IMPUESTO|Pago al Estado|Tributo que se paga al Estado|Obligado, forzado
+TRUEQUE|Cambio sin dinero|Intercambio sin dinero|Economía antes de la moneda
+SALARIO|Sueldo|Pago por el trabajo|Viene de la sal que se pagaba a los soldados
+ROBOT|Máquina que trabaja sola|Máquina automática programable|Palabra de Čapek
+PIXEL|Punto de una imagen digital|Punto mínimo de una imagen digital|Cuadradito de pantalla
+CODIGO|Clave|Conjunto de instrucciones de un programa|El Civil chileno lo redactó Bello
+TECLADO|Para escribir en el computador|Periférico para escribir|Teclas del piano
+PANTALLA|Donde se ve la imagen|Superficie donde se ve la imagen|Apariencia para disimular
+ANTENA|Capta la señal|Dispositivo que capta ondas|Órgano sensorial de un insecto
+SATELITE|Gira alrededor de un planeta|Cuerpo que orbita un planeta|Ciudad dependiente de otra mayor
+CHIP|Pieza pequeña del computador|Circuito integrado de pequeño tamaño|Tarjeta del celular
+INTERNET|Red de computadores|Red mundial de computadores|La web se montó sobre ella
+CORREO|Cartas|Servicio de cartas|Electrónico, en la bandeja
+MAPA|Dibujo de un territorio|Representación de un territorio|Desaparecer del ___
+CEBOLLA|Hace llorar al picarla|Hortaliza de capas|Abrigarse así: con muchas capas
+TOMATE|Fruto rojo de ensalada|Fruto de la ensalada chilena|Agujero en el calcetín
+PALTA|Fruto verde cremoso|Aguacate, en Chile|Hass, la variedad más vendida
+LECHUGA|Verdura de ensalada|Hoja de ensalada|Fresco como una
+ZANAHORIA|Verdura naranja|Raíz anaranjada|Premio que se pone delante del burro
+POROTO|Legumbre|Frijol, en Chile|Granados, plato de verano
+LENTEJA|Legumbre pequeña|Legumbre plana y redonda|Esaú vendió su primogenitura por un plato
+GARBANZO|Legumbre amarilla|Legumbre del hummus|Negro, la oveja negra
+ARROZ|Grano blanco|Cereal de grano blanco|Se lanza a los novios
+TRIGO|Cereal del pan|Cereal del pan|Ser ___ limpio: ser honrado
+HARINA|Polvo para hacer pan|Polvo de cereal molido|Ser ___ de otro costal
+AZUCAR|Endulza|Sustancia dulce de caña o remolacha|Grito de Celia Cruz
+MIEL|Dulce de las abejas|Producto dulce de las abejas|Luna de ___
+LECHE|Bebida blanca|Líquido blanco de la vaca|Suerte, en Chile
+MANZANA|Fruta de Newton|Fruta de la discordia|Cuadra de una ciudad
+NARANJA|Fruta cítrica|Fruta cítrica|Media ___: pareja
+LIMON|Fruta ácida amarilla|Cítrico ácido|Ingrediente del pisco sour
+PLATANO|Fruta amarilla larga|Banana|Árbol de sombra en las calles
+DURAZNO|Fruta de verano aterciopelada|Melocotón, en Chile|Huesillo cuando se seca
+CIRUELA|Fruta morada|Fruta de carozo morada|Pasa, si se seca
+FRUTILLA|Fresa chilena|Fresa, en Chile|La Fragaria chiloensis partió de aquí al mundo
+SANDIA|Fruta grande verde con pulpa roja|Fruta de verano de pulpa roja|Se cultiva en Paine, famosa en enero
+MELON|Fruta de verano|Fruta de pulpa dulce|Cabeza, en jerga
+CHIRIMOYA|Fruta blanca de pepas negras|Fruta del valle con pepas negras|Mark Twain la llamó la fruta más deliciosa
+LUCUMA|Fruta para helados|Fruto andino para helados|Fruto de pulpa harinosa que ya cultivaban los incas
+SOPAIPILLA|Masa frita de zapallo|Masa frita chilena de días de lluvia|Pasada, con chancaca
+CURANTO|Comida en hoyo de Chiloé|Cocción chilota con piedras calientes|Se tapa con hojas de nalca
+CHARQUI|Carne seca|Carne seca salada|Conserva andina de carne al sol
+PISCO|Licor de uva|Aguardiente de uva del Norte Chico|Sour, en el aperitivo
+CHICHA|Bebida de septiembre|Bebida fermentada de uva o manzana|Ni ___ ni limonada
+HUESILLO|Durazno seco|Durazno deshidratado|Acompaña al mote en verano
+MERMELADA|Dulce de fruta|Dulce de fruta para el pan|Sobornos políticos, en jerga
+CHOCOLATE|Dulce de cacao|Dulce de cacao|Para el desayuno con churros
+GALLETA|Dulce crujiente|Masa horneada pequeña|Bofetada, en España
+QUEQUE|Torta sencilla|Bizcocho chileno|Se acompaña con té en la once
+TORTA|Pastel de cumpleaños|Pastel de celebración|Bofetada, en lenguaje coloquial
+HELADO|Postre frío|Postre congelado|Quedarse así: atónito
+CAFE|Bebida negra|Bebida del grano tostado|Color marrón
+TAZA|Para el café|Recipiente con asa|Del baño, también
+VASO|Para tomar agua|Recipiente para beber|Sanguíneo, en el cuerpo
+PLATO|Para comer|Recipiente para servir comida|Volador, para los ovnis
+SARTEN|Para freír|Utensilio para freír|Tener el ___ por el mango
+OLLA|Para cocinar|Recipiente para cocinar|Común, en las poblaciones
+HORNO|Para hornear|Aparato para asar|No está para bollos
+CUCHILLO|Para cortar|Utensilio para cortar|En casa del herrero, de palo
+TENEDOR|Para pinchar comida|Cubierto de dientes|Poseedor de un documento
+VELA|Da luz cuando se corta la corriente|Cilindro de cera con mecha|Lona del barco
+LAMPARA|Da luz|Aparato para alumbrar|La de Aladino
+SILLA|Para sentarse|Asiento con respaldo|De ruedas, para el paciente
+MESA|Para comer|Mueble con cubierta y patas|De diálogo, para negociar
+SOFA|Sillón largo|Asiento para varios|Lugar del cafecito y la siesta
+CAMA|Para dormir|Mueble para dormir|Hacer la ___: perjudicar a alguien
+ALMOHADA|Para la cabeza al dormir|Cojín de la cama|Consultar con ella: pensar antes de decidir
+FRAZADA|Abrigo de cama|Manta de la cama|Cobija
+PARAGUAS|Para la lluvia|Protección contra la lluvia|Mary Poppins volaba con uno
+ABRIGO|Ropa de invierno|Prenda de invierno|Refugio
+BUFANDA|Para el cuello|Prenda para el cuello|Echarpe
+SOMBRERO|Va en la cabeza|Prenda para la cabeza|El de copa del mago
+ZAPATO|Calzado|Calzado|Estar en los de otro
+CORBATA|Va con camisa|Prenda del cuello|La de humita es de lazo
+LLAVE|Abre puertas|Instrumento que abre cerraduras|Del agua, en la cocina
+VENTANA|Abertura en la pared|Abertura para luz y aire|Programa del computador
+PUERTA|Para entrar|Abertura para entrar y salir|Del Sol, en Madrid
+ESCALERA|Para subir|Serie de peldaños|Póker de cartas seguidas
+TECHO|Cubre la casa|Parte superior de una casa|Límite máximo
+JARDIN|Lugar con plantas|Terreno con plantas|De infantes, para niños
+BALCON|Saliente de una ventana|Terraza con baranda|El de Julieta
+CHIMENEA|Por donde sale el humo|Conducto para el humo|Por donde baja el Viejito Pascuero
+ENERO|Primer mes|Primer mes del año|Mes de Jano
+ABRIL|Cuarto mes|Mes de aguas mil|Mes del libro
+OTOÑO|Estación de hojas que caen|Estación en que caen las hojas|Ocaso de la vida
+INVIERNO|Estación fría|Estación más fría|De nuestro descontento, en Shakespeare
+VERANO|Estación de calor|Estación de las vacaciones de enero, en Chile|De San Juan, en el hemisferio norte
+PRIMAVERA|Estación de flores|Estación que empieza en septiembre en Chile|Fiesta estudiantil de octubre
+LUNES|Primer día de la semana|Primer día de la semana laboral|Día de la Luna
+SABADO|Día antes del domingo|Día anterior al domingo|Sabbat de los judíos
+DOMINGO|Día de descanso|Último día de la semana|Día del Señor
+SIGLO|Cien años|Período de cien años|Por los siglos de los siglos
+LUSTRO|Cinco años|Período de cinco años|Brillo
+DECADA|Diez años|Período de diez años|Los locos años veinte lo fueron
+MILENIO|Mil años|Período de mil años|El tercero empezó en 2001
+HORA|Sesenta minutos|Sesenta minutos|La ___ de la verdad
+MINUTO|Sesenta segundos|Sesenta segundos|Uno de silencio
+SEGUNDO|Después del primero|Sexagésima parte del minuto|Lugar de plata
+CALENDARIO|Muestra los días|Sistema de división del tiempo|El gregoriano reemplazó al juliano
+AGENDA|Cuaderno de citas|Libreta de compromisos|Oculta, la de un intrigante
+OSO|Animal grande peludo|Plantígrado amante de la miel|Mayor y menor, en el cielo
+ASA|Mango de taza|Agarradera de una taza|Parte para tomar una cartera
+ERA|Período|Período histórico|Pasado del verbo ser
+ALA|Para volar|Extremidad para volar|Sector de un partido o de un edificio
+ARO|Anillo|Anillo; en Chile, pendiente|Grito triple para el brindis en la cueca
+RIO|Corriente de agua|Corriente de agua que va al mar|Ciudad brasileña de la samba
+MAR|Agua salada|Gran masa de agua salada|Muerto, el más salado
+SOL|Estrella del día|Estrella del sistema solar|Moneda del Perú
+SAL|Condimento blanco|Cloruro de sodio|Gracia, chispa
+OLA|Onda del mar|Onda del mar|Saludo de la galería en el estadio
+UVA|Fruta del vino|Fruto de la vid|Se comen doce en Año Nuevo
+EJE|Barra sobre la que gira algo|Línea alrededor de la cual gira algo|Alianza de Berlín, Roma y Tokio
+OCA|Ave como ganso|Juego de mesa con dados y casillas|De ___ a ___ y tiro porque me toca
+NUDO|Lazo apretado|Lazo apretado; unidad de velocidad náutica|En la garganta, de emoción
+LAGO|Agua rodeada de tierra|Masa de agua rodeada de tierra|El de los cisnes, de Chaikovski
+ISLA|Tierra rodeada de agua|Tierra rodeada de agua|Del tesoro, en la novela
+OLMO|Árbol de hojas dentadas|Árbol de sombra de hojas aserradas|Pedirle peras a él
+AMOR|Cariño|Sentimiento de afecto profundo|Todo lo puede, según Pablo
+RED|Malla|Malla para pescar|Social, en internet
+ARCO|Para lanzar flechas|Arma que lanza flechas|Portería de fútbol
+NAVE|Barco|Barco o embarcación|Espacio central de una iglesia
+PESO|Moneda chilena|Unidad monetaria de Chile|Fuerza de gravedad sobre un cuerpo
+ROSA|Flor con espinas|Flor con espinas|De los vientos, en la brújula
+LIRA|Instrumento griego|Instrumento de Orfeo|Antigua moneda italiana
+ODA|Poema de alabanza|Poema lírico de alabanza|Neruda las hizo elementales
+EDEN|Paraíso|Paraíso terrenal|Jardín de Adán y Eva
+ARCA|La de Noé|Embarcación de Noé|Cofre de la Alianza
+ALOE|Planta para quemaduras|Planta medicinal de hojas carnosas|Sábila
+TORO|Macho de la vaca|Macho de la vaca|Signo zodiacal de mayo
+ASNO|Burro|Burro|Persona torpe
+CISNE|Ave blanca de cuello largo|Ave acuática de cuello largo|Su canto es la última obra de un artista
+GALLO|Canta al amanecer|Ave que canta al amanecer|Tipo, sujeto, en Chile
+OVEJA|Da lana|Animal que da lana|Negra, la de la familia
+IRIS|Parte de color del ojo|Parte coloreada del ojo|Diosa del arcoíris
+OIDO|Sentido para oír|Sentido de la audición|Tenerlo bueno es tener talento musical
+OLFATO|Sentido para oler|Sentido que percibe los olores|Instinto para los negocios
+TACTO|Sentido del toque|Sentido de la piel|Delicadeza en el trato
+NARIZ|Para oler|Órgano del olfato|La de Cleopatra cambió la historia, según Pascal
+LABIO|Borde de la boca|Borde de la boca|Leporino, malformación
+CODO|Mitad del brazo|Articulación del brazo|Tacaño, en Chile
+RODILLA|Mitad de la pierna|Articulación de la rótula|Ponerse de ellas
+TOBILLO|Unión del pie y la pierna|Articulación entre pie y pierna|Se tuerce en un mal paso
+OMBLIGO|Centro de la barriga|Cicatriz del cordón umbilical|Centro del mundo, para un egocéntrico
+AJO|Condimento de olor fuerte|Bulbo de olor fuerte|Espanta vampiros
+OJO|Para ver|Órgano de la vista|Cuidado, como advertencia
+OLE|Grito de la plaza de toros|Grito de aliento flamenco|Exclamación andaluza
+ASO|Cocino a la parrilla|Cocino al fuego|Muero de calor
+AVE|Animal con plumas|Animal con plumas|___ María
+CAL|Polvo blanco|Óxido de calcio|Una de ___ y otra de arena
+COL|Repollo|Repollo|De Bruselas, pequeña
+DIA|Lo contrario de noche|Período de veinticuatro horas|Estar al ___: al corriente
+FIN|Final|Término|Objetivo
+GAS|Estado de la materia|Estado sin forma ni volumen propios|Licuado, en el balón
+HIJO|Descendiente|Descendiente directo|Pródigo, el que vuelve
+HILO|Para coser|Hebra para coser|Perderlo en la conversación
+HOJA|Parte verde del árbol|Órgano verde de la planta|De vida, el currículum
+HUEVO|Lo pone la gallina|Cuerpo ovalado que pone la gallina|De Colón, solución obvia
+LUZ|Lo contrario de oscuridad|Claridad|Dar a ___: parir
+MANO|Tiene cinco dedos|Extremidad con dedos|Echar una ___
+NUEZ|Fruto seco|Fruto del nogal|Prominencia del cuello masculino
+OCHO|Número después del siete|Número que acostado es infinito|Tantos brazos tiene el pulpo
+ORCA|Ballena asesina|Cetáceo blanco y negro|Willy, en la película
+OSA|Hembra del oso|Hembra del oso|Mayor, constelación del Carro
+PAPA|Tubérculo|Tubérculo andino|Pontífice
+PIE|Parte final de la pierna|Extremidad que pisa|Al ___ de la letra
+PIEL|Cubre el cuerpo|Órgano que cubre el cuerpo|Dejarla es esforzarse al máximo
+PUENTE|Cruza el río|Construcción sobre un río|Feriado largo
+REY|Monarca|Soberano de un reino|Pieza que no puede caer en jaque mate
+SED|Ganas de beber|Necesidad de beber|De venganza
+SIETE|Número de días de la semana|Número de los pecados capitales|Número de las maravillas del mundo antiguo
+TIO|Hermano del padre|Hermano de uno de los padres|Sujeto, en España
+UÑA|Crece en los dedos|Lámina de la punta del dedo|Ser ___ y mugre: inseparables
+VOZ|Sonido al hablar|Sonido que sale al hablar|Sin ___ ni voto
+YUGO|Une a los bueyes|Instrumento que une a los bueyes|Opresión
+ZAPALLO|Calabaza|Calabaza chilena|Ingrediente de la sopaipilla sureña
+ACTA|Documento de una reunión|Documento de lo tratado|De independencia, la de 1818
+AGUA|Líquido para beber|Líquido de fórmula H2O|Hacerse ___ la boca
+AIRE|Lo que respiras|Mezcla de gases que respiramos|Darse aires: presumir
+ALMA|Espíritu|Parte espiritual del ser|Mater, la universidad
+ARENA|Hay en la playa|Granos de la playa|Plaza de toros o circo
+ASTRO|Cuerpo del cielo|Cuerpo celeste|Estrella de cine
+AURORA|Amanecer|Luz antes de salir el sol|Boreal, en el polo
+AVENA|Cereal del desayuno|Cereal de las caballerizas|Quaker la popularizó
+BARCO|Va por el agua|Embarcación grande|Ramo fácil, en jerga estudiantil
+BESO|Muestra de cariño con los labios|Toque de labios|El de Judas
+BOCA|Para comer y hablar|Abertura para comer|De lobo, en el teatro: suerte
+BOTA|Calzado alto|Calzado que cubre la pierna|Italia tiene su forma
+CALLE|Por donde pasan autos|Vía urbana|Hacer ___: abrir paso
+CAMINO|Senda|Vía de tránsito|Se hace al andar, según Machado
+CARTA|Mensaje en papel|Mensaje escrito en sobre|Menú del restaurante
+CASA|Hogar|Edificio para vivir|Blanca, la del presidente de EE. UU.
+CIELO|Arriba, azul|Espacio sobre nosotros|Mi ___: apelativo cariñoso
+CIUDAD|Muchas casas y calles|Población grande|Eterna, Roma
+CLAVO|Se martilla|Pieza de metal puntiaguda|Especia de olor
+CUERDA|Soga|Cordel|Dar ___ al reloj
+DEDO|Parte de la mano|Cada extremidad de la mano|No moverlo es no hacer nada
+DIENTE|Para morder|Pieza de la boca|De león, flor amarilla
+FAMILIA|Padres e hijos|Grupo de parientes|Sagrada, la de Nazaret
+FUEGO|Quema|Combustión con llamas|Tierra del ___
+HIERBA|Pasto|Planta pequeña|Mala, que nunca muere
+HUMO|Sale del fuego|Gas de la combustión|Vender ___: engañar
+JUEGO|Diversión|Actividad para divertirse|De palabras
+LAZO|Nudo|Atadura|Vínculo
+LENGUA|Está en la boca|Órgano del gusto; idioma|Se muerde para no hablar
+LLUVIA|Agua del cielo|Precipitación de agua|De estrellas, en agosto
+LUCERO|Estrella brillante|Venus al amanecer|Caballo de frente blanca
+MADERA|Material de los árboles|Material del tronco|Tener ___ de líder
+MONTE|Montaña|Elevación natural|Echarse al ___: huir
+MUNDO|La Tierra|Planeta y su gente|Medio ___: mucha gente
+NOCHE|Sin sol|Tiempo sin luz solar|Buena, la de Navidad
+NUBE|Algodón del cielo|Masa de vapor en el cielo|Almacén de datos en internet
+PALABRA|Unidad del idioma|Conjunto de letras con significado|Darla es prometer
+PIEDRA|Roca|Trozo de roca|Filosofal, de los alquimistas
+PUEBLO|Ciudad pequeña|Población pequeña|Conjunto de ciudadanos
+SUEÑO|Ganas de dormir|Lo que se vive al dormir|La vida es ___, de Calderón
+TIERRA|Nuestro planeta|Planeta azul|Suelo
+VIENTO|Aire en movimiento|Aire que corre|Lo que se lleva las palabras
+VIDA|Lo contrario de muerte|Existencia|Gracias a ella, cantó Violeta
+BOMBERO|Apaga incendios|Voluntario de la bomba|En Chile no recibe sueldo
+CARTERO|Trae cartas|Repartidor de correo|Siempre llama dos veces
+PANADERO|Hace pan|Oficio de la harina|Se levanta antes del alba
+PESCADOR|Pesca|Persona que pesca|San Pedro lo fue
+MINERO|Trabaja en la mina|Trabajador de una mina|Los 33 de San José
+ABOGADO|Defiende en juicio|Profesional del derecho|Del diablo, quien contradice
+JUEZ|Dicta sentencia|Magistrado|Árbitro, en deportes
+CARPINTERO|Trabaja la madera|Oficio de la madera|Pájaro que golpea los troncos
+HERRERO|Trabaja el hierro|Forjador de metales|En su casa, cuchillo de palo
+PINTOR|Pinta|Artista de cuadros|De brocha gorda
+ESCRITOR|Escribe libros|Autor de obras literarias|Literato
+PERIODISTA|Escribe noticias|Profesional de la noticia|Reportero
+QUIMICO|Científico de las sustancias|Experto en química|Farmacéutico, en el Chile de antes
+PILOTO|Maneja un avión|Conductor de una aeronave|Programa de prueba de televisión
+MARINERO|Trabaja en el barco|Tripulante de un barco|Nudo resistente
+SOLDADO|Militar|Miembro del ejército|Unido con soldadura
+GENERAL|Jefe militar|Alto mando militar|Común, universal
+CAPITAN|Jefe del barco|Mando de una nave|Líder de un equipo
+PAYASO|Hace reír en el circo|Artista cómico del circo|Persona poco seria
+CIRCO|Espectáculo con payasos|Espectáculo de carpa|Pan y ___
+TITERE|Muñeco movido con hilos|Marioneta|Persona manejada por otra
+DETECTIVE|Investigador|Investigador de crímenes|Sherlock Holmes lo fue
+`.trim().split("\n").map(l=>{const p=l.split("|").map(s=>s.trim());return{a:p[0],cs:p.slice(1,4)}})
  .filter((w,i,arr)=>w.a.length>=3 && w.a.length<=11 && arr.findIndex(x=>x.a===w.a)===i);
 
 /* ---------- Utilidades ---------- */
@@ -831,7 +1478,7 @@ function tryBuild(r){
   function put(w,L,y,x,dir){
     const dy = dir==="D"?1:0, dx = dir==="A"?1:0;
     for(let i=0;i<L.length;i++){const k=(y+dy*i)*N+(x+dx*i);g[k]=L[i];(dir==="A"?useA:useD)[k]=true;}
-    placed.push({a:w.a,c:w.c,y,x,dir,len:L.length});
+    placed.push({a:w.a,cs:w.cs,y,x,dir,len:L.length});
     used.add(w.a);
   }
 
@@ -878,7 +1525,7 @@ function tryBuild(r){
   for(let k=0;k<N*N;k++) if(g[k]){filled++;const y=Math.floor(k/N),x=k%N;y0=Math.min(y0,y);y1=Math.max(y1,y);x0=Math.min(x0,x);x1=Math.max(x1,x);}
   const h=y1-y0+1, w=x1-x0+1;
   const sol=[]; for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++) sol.push(g[y*N+x]||"");
-  const words = placed.map(p=>({ans:p.a,clue:p.c,y:p.y-y0,x:p.x-x0,dir:p.dir,len:p.len}));
+  const words = placed.map(p=>({ans:p.a,clues:p.cs,y:p.y-y0,x:p.x-x0,dir:p.dir,len:p.len}));
   return {w,h,sol,words,filled};
 }
 
@@ -981,7 +1628,7 @@ function showPic(wd){
 
 /* ---------- Preferencias: tema e imágenes ---------- */
 const PKEY = "crucigrama.tarde.prefs";
-let prefs = {theme:"system", img:true};
+let prefs = {theme:"system", img:true, level:1, live:true};
 try{ Object.assign(prefs, JSON.parse(localStorage.getItem(PKEY)||"{}")); }catch(e){}
 function savePrefs(){ try{ localStorage.setItem(PKEY, JSON.stringify(prefs)); }catch(e){} }
 const THEME_LABEL = {system:"automático", light:"claro", dark:"oscuro"};
@@ -991,7 +1638,22 @@ function applyPrefs(){
   $("themeBtn").textContent = "Tema: " + THEME_LABEL[prefs.theme];
   $("picToggle").textContent = "Imagen: " + (prefs.img ? "sí" : "no");
   $("picToggle").setAttribute("aria-pressed", prefs.img ? "true" : "false");
+  $("levelBtn").textContent = "Nivel: " + LEVELS[prefs.level];
+  $("levelChip").textContent = "Nivel " + LEVELS[prefs.level];
+  $("liveToggle").textContent = "Corrección: " + (prefs.live ? "al instante" : "al final");
+  $("liveToggle").setAttribute("aria-pressed", prefs.live ? "true" : "false");
+  $("chkAll").hidden = prefs.live;
 }
+const LEVELS = ["fácil","medio","difícil"];
+function clueOf(wd){ return wd.clues ? wd.clues[prefs.level] : wd.clue; }
+$("levelBtn").onclick = ()=>{
+  prefs.level = (prefs.level+1) % 3;
+  applyPrefs(); savePrefs(); if(P) render();
+};
+$("liveToggle").onclick = ()=>{
+  prefs.live = !prefs.live; checked.clear();
+  applyPrefs(); savePrefs(); if(P) paint();
+};
 $("themeBtn").onclick = ()=>{
   const order = ["system","light","dark"];
   prefs.theme = order[(order.indexOf(prefs.theme)+1) % order.length];
@@ -1005,6 +1667,7 @@ applyPrefs();
 
 /* ---------- Estado ---------- */
 let P, entries, revealed, bad, elapsed, done, stats;
+const checked = new Set();
 let cur = {k:-1, dir:"A"};
 let inputs = [];
 
@@ -1067,7 +1730,7 @@ function render(){
       const li=document.createElement("li");
       li.dataset.key = wd.dir+wd.num;
       const b=document.createElement("b");b.textContent=wd.num+".";
-      const s=document.createElement("span");s.textContent=wd.clue+".";
+      const s=document.createElement("span");s.textContent=clueOf(wd)+".";
       li.append(b,s);
       li.addEventListener("click",()=>gotoWord(wd));
       el.appendChild(li);
@@ -1090,25 +1753,26 @@ function paint(){
     const c = inputs[k].parentNode;
     c.classList.toggle("word", on.has(k));
     c.classList.toggle("cur", k===cur.k);
-    c.classList.toggle("bad", !!entries[k] && entries[k]!==ch);
-    c.classList.toggle("okw", okCells.has(k));
+    c.classList.toggle("bad", !!entries[k] && entries[k]!==ch && (prefs.live || checked.has(k)));
+    c.classList.toggle("okw", prefs.live && okCells.has(k));
     c.classList.toggle("rev", !!revealed[k]);
     if(inputs[k].value!==entries[k]) inputs[k].value = entries[k];
   });
   document.querySelectorAll(".clues li").forEach(li=>{
     const w = P.words.find(x=>x.dir+x.num===li.dataset.key);
     li.classList.toggle("on", !!wd && li.dataset.key===wd.dir+wd.num);
-    li.classList.toggle("ok", isCorrect(w));
+    li.classList.toggle("ok", prefs.live && isCorrect(w));
   });
   if(wd){
     $("curNum").textContent = wd.num + (wd.dir==="A"?" H":" V");
-    $("curTxt").textContent = wd.clue + ".";
+    $("curTxt").textContent = clueOf(wd) + ".";
   }
   showPic(wd);
   $("grid").classList.toggle("solved", done);
   $("stamp").hidden = !done;
-  $("progTxt").innerHTML = okWords.length + " <small>de " + P.words.length + " palabras</small>";
-  $("progBar").style.width = Math.round(100*okWords.length/P.words.length) + "%";
+  const nDone = prefs.live ? okWords.length : P.words.filter(w=>cellsOf(w).every(c=>entries[c])).length;
+  $("progTxt").innerHTML = nDone + " <small>de " + P.words.length + (prefs.live ? " palabras" : " completas") + "</small>";
+  $("progBar").style.width = Math.round(100*nDone/P.words.length) + "%";
   if(done) $("stamp").textContent = "Resuelto en " + fmtTime(elapsed);
   $("stats").innerHTML = "<span>Resueltos: " + (stats.solved||0) + "</span>" + (stats.best ? "<span>Mejor tiempo: "+fmtTime(stats.best)+"</span>" : "");
 }
@@ -1151,10 +1815,10 @@ function setEntry(k,ch,fromReveal){
   if(revealed[k] && !fromReveal) return;
   const touching = ["A","D"].map(d=>wordAt(k,d)).filter(Boolean);
   const before = touching.map(isCorrect);
-  entries[k]=ch;
+  entries[k]=ch; checked.delete(k);
   if(fromReveal) revealed[k]=true;
-  if(ch){ animate([k], ch===P.sol[k] ? "pop" : "shake", 350); }
-  touching.forEach((w,i)=>{ if(!before[i] && isCorrect(w)) animate(cellsOf(w), "flash", 1300); });
+  if(ch){ animate([k], (ch===P.sol[k] || !prefs.live) ? "pop" : "shake", 350); }
+  if(prefs.live) touching.forEach((w,i)=>{ if(!before[i] && isCorrect(w)) animate(cellsOf(w), "flash", 1300); });
   checkSolved(); save();
 }
 function isCorrect(w){ return cellsOf(w).every(c=>entries[c]===P.sol[c]); }
@@ -1210,6 +1874,12 @@ function ask(msg,fn){ pending=fn; $("confirmMsg").innerHTML=msg; $("confirm").hi
 $("confirmYes").onclick=()=>{ $("confirm").hidden=true; const f=pending; pending=null; if(f) f(); };
 $("confirmNo").onclick=()=>{ $("confirm").hidden=true; pending=null; };
 
+$("chkAll").onclick=()=>{
+  checked.clear();
+  P.sol.forEach((ch,k)=>{ if(ch && entries[k] && entries[k]!==ch) checked.add(k); });
+  paint();
+  if(!checked.size) P.words.filter(isCorrect).forEach(w=>animate(cellsOf(w),"flash",1300));
+};
 $("revCell").onclick=()=>revealCells([cur.k]);
 $("revWord").onclick=()=>revealCells(curWordCells());
 $("revAll").onclick=()=>ask("<b>¿Ver la solución completa?</b> El crucigrama no contará como resuelto.",()=>revealCells(P.sol.map((c,k)=>c?k:-1).filter(k=>k>=0)));
