@@ -1,0 +1,106 @@
+/* La Tarde · Gimnasio mental — estilos compartidos.
+   Concepto: papel cálido de día y cielo nocturno en la barra; cada juego trae su color (--juego). */
+:root{
+  --bg:#f4efe6;        /* papel */
+  --bg2:#ebe3d3;
+  --card:#fffdf8;
+  --ink:#1c1a2e;       /* tinta azul noche */
+  --muted:#5f5a72;
+  --line:#ddd3c0;
+  --night:#15122c;     /* barra y portada */
+  --night-ink:#f7f3ff;
+  --juego:#e4572e;
+  --ok:#0e9f6e;
+  --bad:#d64545;
+  --gold:#e0a91b;
+  --shadow:0 1px 0 rgba(28,26,46,.05),0 18px 40px -18px rgba(28,26,46,.35);
+  --f-disp:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#110f20;--bg2:#181530;--card:#1e1b35;--ink:#efeaff;--muted:#aaa3c6;--line:#342f58;
+    --night:#0a0817;--night-ink:#f7f3ff;--ok:#3ddc97;--bad:#ff6b6b;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 18px 40px -16px rgba(0,0,0,.75);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#110f20;--bg2:#181530;--card:#1e1b35;--ink:#efeaff;--muted:#aaa3c6;--line:#342f58;
+  --night:#0a0817;--night-ink:#f7f3ff;--ok:#3ddc97;--bad:#ff6b6b;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 18px 40px -16px rgba(0,0,0,.75);color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:
+    radial-gradient(900px 500px at 85% -10%, color-mix(in srgb, var(--juego) 16%, transparent), transparent 70%),
+    radial-gradient(700px 420px at -10% 110%, color-mix(in srgb, var(--juego) 10%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;min-height:100vh;
+}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:3px solid color-mix(in srgb, var(--juego) 70%, white);outline-offset:2px}
+
+/* Barra superior */
+.mbar{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;
+  background:var(--night);color:var(--night-ink);
+  padding-block:calc(10px + env(safe-area-inset-top,0px)) 10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  box-shadow:0 2px 0 var(--juego),0 10px 30px -12px color-mix(in srgb, var(--juego) 60%, transparent);
+}
+.mbar svg{width:18px;height:18px;flex:none}
+.mbar-inicio{display:flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
+.mbar-inicio:hover{background:rgba(255,255,255,.1)}
+.mbar-titulo{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.15}
+.mbar-titulo b{font-family:var(--f-disp);font-size:19px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbar-titulo small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb, var(--juego) 55%, white)}
+.mbar-chips{display:flex;gap:6px;align-items:center}
+.mbar-chips span,.mbar-chips button{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:inherit;font-size:14px;font-variant-numeric:tabular-nums}
+.mbar-chips button{cursor:pointer}
+.mbar-chips button span{padding:0;background:none;border:0;border-radius:0}
+.chip-racha svg{color:#ff8a3d}
+.chip-pts svg{color:var(--gold)}
+@media (max-width:560px){.mbar-inicio span,.mbar-chips button span{display:none}.mbar-titulo b{font-size:16px}}
+
+/* Página de juego */
+.mjuego{max-width:1000px;margin:0 auto;padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mjuego-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin-bottom:18px}
+.mjuego-head h1{font-family:var(--f-disp);font-size:clamp(30px,6vw,46px);line-height:1;margin:0;text-wrap:balance;font-variation-settings:"SOFT" 100}
+.mjuego-head p{margin:6px 0 0;color:var(--muted);max-width:52ch}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+
+.mbtn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:12px;
+  border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+}
+.mbtn:hover{transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(0,0,0,.35)}
+.mbtn:active{transform:translateY(1px)}
+.mbtn-pri{background:var(--juego);border-color:var(--juego);color:#fff}
+.mbtn[aria-pressed="true"]{background:color-mix(in srgb, var(--juego) 18%, var(--card));border-color:var(--juego)}
+.mbtn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.mfila{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mstat{display:flex;flex-direction:column;align-items:center;min-width:72px}
+.mstat b{font-size:24px;font-variant-numeric:tabular-nums;line-height:1.1}
+.mstat small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mseg{display:inline-flex;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.mseg button{border:0;background:transparent;color:var(--ink);padding:8px 12px;min-height:40px;font-size:15px;cursor:pointer}
+.mseg button[aria-pressed="true"]{background:var(--juego);color:#fff;font-weight:700}
+
+/* Celebración */
+.confeti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+.mfin{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(10,8,23,.55);backdrop-filter:blur(3px);animation:mfade .25s ease}
+.mfin-caja{background:var(--card);color:var(--ink);border-radius:24px;padding:28px 26px;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);border-top:6px solid var(--juego);animation:mpop .4s cubic-bezier(.2,1.4,.4,1)}
+.mfin-eyebrow{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--juego);font-weight:700}
+.mfin h2{font-family:var(--f-disp);font-size:34px;margin:4px 0}
+.mfin-pts{font-size:28px;font-weight:700;margin:4px 0;color:var(--gold)}
+.mfin-det{color:var(--muted);margin:0 0 18px}
+.mfin-acc{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+@keyframes mfade{from{opacity:0}}
+@keyframes mpop{from{transform:scale(.85) translateY(20px);opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+[hidden]{display:none!important}

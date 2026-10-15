@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gimnasio Mental de la Tarde</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Crucigramas, sudoku, cartas y juegos de memoria y atención para mantener la mente en forma.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/comun.css">
+<script src="assets/comun.js"></script>
+<style>
+/* Portada: cielo nocturno vivo arriba (shader GLSL), papel cálido abajo con tarjetas de juego */
+.hero{position:relative;overflow:hidden;background:var(--night);color:var(--night-ink);isolation:isolate}
+#cielo{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:90px;background:linear-gradient(to bottom,transparent,var(--bg));z-index:-1}
+.hero-in{max-width:1120px;margin:0 auto;padding-block:calc(18px + env(safe-area-inset-top,0px)) 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.marca{font-family:var(--f-disp);font-size:20px;font-weight:800;letter-spacing:.01em;display:flex;align-items:center;gap:10px}
+.marca i{width:30px;height:30px;border-radius:9px;background:conic-gradient(from 200deg,#e4572e,#f5a524,#12a594,#7c5cff,#e4572e);display:block;box-shadow:0 0 22px rgba(245,165,36,.6)}
+.top button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:inherit;border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:34px}
+@media (max-width:860px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
+.saludo{font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#ffcf7a;margin:0;font-weight:700}
+.hero h1{font-family:var(--f-disp);font-weight:900;font-size:clamp(46px,9vw,96px);line-height:.92;margin:10px 0 14px;letter-spacing:-.02em;text-wrap:balance;font-variation-settings:"SOFT" 100,"opsz" 144}
+.hero h1 em{font-style:italic;font-weight:600;background:linear-gradient(90deg,#ffb347,#ff6f61 45%,#c77dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .bajada{font-size:clamp(17px,2.2vw,20px);max-width:44ch;color:#d9d3f2;margin:0 0 22px}
+.cifras{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.cifra{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px)}
+.cifra svg{width:26px;height:26px}
+.cifra b{font-size:26px;line-height:1;font-variant-numeric:tabular-nums;display:block}
+.cifra small{font-size:12px;color:#c9c2e8;letter-spacing:.06em}
+.cifra.racha svg{color:#ff8a3d;filter:drop-shadow(0 0 8px rgba(255,138,61,.7))}
+.cifra.pts svg{color:#ffd166}
+.cifra.hoy svg{color:#5eead4}
+.acciones{display:flex;gap:12px;flex-wrap:wrap}
+.reto{display:inline-flex;align-items:center;gap:14px;padding:14px 22px 14px 16px;border-radius:18px;text-decoration:none;color:#1b1430;font-weight:700;font-size:18px;
+  background:linear-gradient(135deg,#ffd166,#ff9f68);box-shadow:0 14px 40px -12px rgba(255,159,104,.8);transition:transform .15s ease}
+.reto:hover{transform:translateY(-2px) scale(1.01)}
+.reto .dot{width:42px;height:42px;border-radius:12px;background:#1b1430;color:#ffd166;display:grid;place-items:center;font-family:var(--f-disp);font-size:22px}
+.reto small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.ver{display:inline-flex;align-items:center;padding:14px 20px;border-radius:18px;border:1.5px solid rgba(255,255,255,.3);color:inherit;text-decoration:none;font-weight:700}
+.ver:hover{background:rgba(255,255,255,.08)}
+
+/* Radar de habilidades */
+.radar{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:16px 16px 10px;backdrop-filter:blur(8px)}
+.radar h2{margin:0 0 2px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#c9c2e8}
+.radar p{margin:0;font-size:14px;color:#c9c2e8}
+.radar svg{width:100%;height:auto;display:block;max-width:420px;margin:0 auto}
+.radar .eje{stroke:rgba(255,255,255,.18)}
+.radar .anillo{fill:none;stroke:rgba(255,255,255,.12)}
+.radar .area{fill:rgba(255,179,71,.35);stroke:#ffb347;stroke-width:2.5}
+.radar .pt{fill:#ffd166}
+.radar text{fill:#efeaff;font-size:13px;font-weight:700;font-family:var(--f-body)}
+
+/* Juegos */
+.seccion{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.seccion h2{font-family:var(--f-disp);font-size:clamp(28px,4.5vw,40px);margin:8px 0 4px;font-variation-settings:"SOFT" 100}
+.seccion > p{color:var(--muted);margin:0 0 18px}
+.juegos{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-bottom:40px}
+@media (min-width:640px){.juegos{grid-template-columns:repeat(2,minmax(0,1fr))}.jcard.ancha{grid-column:span 2}}
+@media (min-width:1000px){.juegos{grid-template-columns:repeat(3,minmax(0,1fr))}.jcard.ancha3{grid-column:span 2}}
+.jcard{--c:#e4572e;position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;text-decoration:none;color:inherit;
+  box-shadow:var(--shadow);transition:transform .2s cubic-bezier(.2,.9,.3,1.2),box-shadow .2s ease}
+.jcard:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:0 26px 50px -20px color-mix(in srgb, var(--c) 70%, black)}
+.escena{height:150px;display:grid;place-items:center;position:relative;overflow:hidden;
+  background:radial-gradient(120% 120% at 20% 0%, color-mix(in srgb, var(--c) 85%, white), var(--c) 55%, color-mix(in srgb, var(--c) 70%, black))}
+.escena::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,rgba(255,255,255,.18) 1px,transparent 0);background-size:10px 10px;opacity:.5}
+.jcuerpo{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.jcuerpo h3{font-family:var(--f-disp);font-size:24px;margin:0;line-height:1.1}
+.jcuerpo p{margin:0;color:var(--muted);font-size:15px}
+.jpie{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:6px;gap:8px}
+.pill{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:color-mix(in srgb, var(--c) 15%, var(--card));color:color-mix(in srgb, var(--c) 75%, var(--ink))}
+.jrec{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.jugar{font-weight:700;color:var(--c);display:flex;align-items:center;gap:4px}
+.jcard.hoy::before{content:"Reto de hoy";position:absolute;top:12px;right:12px;z-index:2;background:#1b1430;color:#ffd166;font-size:12px;font-weight:700;letter-spacing:.08em;padding:5px 10px;border-radius:999px}
+
+/* Escenas animadas */
+.mini{position:relative;z-index:1;filter:drop-shadow(0 10px 18px rgba(0,0,0,.25))}
+.m-cruci{display:grid;grid-template-columns:repeat(5,22px);gap:2px;background:#1b1430;padding:2px;border-radius:4px}
+.m-cruci span{width:22px;height:22px;background:#fffdf8;display:grid;place-items:center;font:700 13px var(--f-body);color:#1b1430}
+.m-cruci span.n{background:#1b1430}
+.m-cruci span.l{animation:escribe 3s infinite}
+.m-sudo{display:grid;grid-template-columns:repeat(3,30px);gap:3px}
+.m-sudo span{width:30px;height:30px;border-radius:7px;background:rgba(255,255,255,.92);display:grid;place-items:center;font:700 17px var(--f-body);color:#1d3f8f}
+.m-sudo span.v{background:rgba(255,255,255,.35);color:#fff;animation:late 2.4s infinite}
+.m-memo{display:flex;gap:10px;perspective:400px}
+.m-memo span{width:48px;height:66px;border-radius:9px;background:linear-gradient(135deg,#2b1856,#4b2a9a);border:3px solid #fff;display:grid;place-items:center;color:#fff;font-size:22px;animation:voltea 3.2s infinite;transform-style:preserve-3d}
+.m-memo span:nth-child(2){animation-delay:.6s}
+.m-memo span:nth-child(3){animation-delay:1.2s}
+.m-pira{position:relative;width:150px;height:110px}
+.m-pira span{position:absolute;width:30px;height:42px;border-radius:5px;background:#fffdf8;border:1px solid #c9c1b1;font:700 12px/1.05 var(--f-body);padding:3px 0 0 4px;color:#1b1430;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.m-pira span.r{color:#d23}
+.m-color{font:900 40px var(--f-disp);letter-spacing:.04em;animation:tinta 2.4s steps(1) infinite;-webkit-text-stroke:1px rgba(0,0,0,.15)}
+.m-eco{width:100px;height:100px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;background:#1b1430}
+.m-eco span{border-radius:4px;opacity:.45;animation:luz 2.8s infinite}
+.m-eco span:nth-child(1){background:#2ec4b6;border-top-left-radius:100%;animation-delay:0s}
+.m-eco span:nth-child(2){background:#ff5d8f;border-top-right-radius:100%;animation-delay:.7s}
+.m-eco span:nth-child(3){background:#ffd166;border-bottom-left-radius:100%;animation-delay:1.4s}
+.m-eco span:nth-child(4){background:#5e60ce;border-bottom-right-radius:100%;animation-delay:2.1s}
+.m-pal{display:flex;gap:5px}
+.m-pal span{width:34px;height:34px;border-radius:7px;display:grid;place-items:center;font:700 18px var(--f-body);color:#fff;background:#6b7280;animation:gira 3s infinite}
+.m-pal span.v{background:#16a34a}.m-pal span.a{background:#eab308}
+.m-pal span:nth-child(2){animation-delay:.15s}.m-pal span:nth-child(3){animation-delay:.3s}.m-pal span:nth-child(4){animation-delay:.45s}.m-pal span:nth-child(5){animation-delay:.6s}
+@keyframes escribe{0%,30%{color:transparent}40%,100%{color:#1b1430}}
+@keyframes late{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@keyframes voltea{0%,35%,100%{transform:rotateY(0)}45%,80%{transform:rotateY(180deg)}}
+@keyframes tinta{0%{color:#3b82f6}25%{color:#facc15}50%{color:#22c55e}75%{color:#f43f5e}}
+@keyframes luz{0%,20%,100%{opacity:.45;box-shadow:none}8%{opacity:1;box-shadow:0 0 18px #fff}}
+@keyframes gira{0%,70%,100%{transform:rotateX(0)}80%{transform:rotateX(90deg)}}
+
+/* Semana */
+.semana{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px;margin-bottom:28px}
+@media (max-width:760px){.semana{grid-template-columns:minmax(0,1fr)}}
+.sem-card{padding:18px 20px}
+.sem-card h3{margin:0 0 12px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.barras{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:140px}
+.barra{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.barra i{display:block;width:100%;max-width:38px;border-radius:8px 8px 4px 4px;background:linear-gradient(to top,#e4572e,#f5a524);min-height:4px;transition:height .6s cubic-bezier(.2,.9,.3,1)}
+.barra.vacia i{background:var(--bg2)}
+.barra small{font-size:12px;color:var(--muted)}
+.barra b{font-size:12px;font-variant-numeric:tabular-nums}
+.datos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dato{padding:12px;border-radius:14px;background:var(--bg2)}
+.dato b{display:block;font-family:var(--f-disp);font-size:30px;line-height:1.1}
+.dato small{color:var(--muted);font-size:13px}
+.nota{max-width:1120px;margin:0 auto 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));color:var(--muted);font-size:14px}
+.nota p{max-width:75ch;margin:0;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <canvas id="cielo" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <div class="top">
+      <div class="marca"><i></i>La Tarde</div>
+      <button type="button" id="tema">Tema: Auto</button>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <p class="saludo" id="saludo">Buenas tardes</p>
+        <h1>Tu mente, <em>en forma.</em></h1>
+        <p class="bajada">Siete juegos para ejercitar memoria, atención, cálculo, lenguaje y lógica. Diez minutos al día bastan para sostener la racha.</p>
+        <div class="cifras">
+          <div class="cifra racha"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2.4 1.2-4 2.6-5.2.2 1.7.9 2.9 2.1 3.4C11 8.6 11.4 5 12 2z"/></svg><div><b id="racha">0</b><small>días de racha</small></div></div>
+          <div class="cifra pts"><svg viewBox="0 0 24 24"><path fill="currentColor" d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg><div><b id="puntos">0</b><small>puntos totales</small></div></div>
+          <div class="cifra hoy"><svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M4 13l5 5L20 7"/></svg><div><b id="hoyPts">0</b><small>puntos hoy</small></div></div>
+        </div>
+        <div class="acciones">
+          <a class="reto" id="reto" href="sudoku.html"><span class="dot">!</span><span><small>Reto del día</small><span id="retoNombre">Sudoku</span></span></a>
+          <a class="ver" href="#juegos">Ver los siete juegos</a>
+        </div>
+      </div>
+      <div class="radar">
+        <h2>Tu mapa mental</h2>
+        <p id="radarTxt">Crece a medida que juegas cada tipo de desafío.</p>
+        <svg viewBox="0 0 360 330" id="radarSvg" role="img" aria-label="Nivel de cada habilidad"></svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="seccion" id="juegos">
+    <h2>Elige tu desafío</h2>
+    <p>Cada juego entrena una habilidad distinta. Variar es lo que más ayuda.</p>
+    <div class="juegos" id="lista"></div>
+  </section>
+
+  <section class="seccion">
+    <h2>Tu semana</h2>
+    <p>Puntos de los últimos siete días.</p>
+    <div class="semana">
+      <div class="mcard sem-card"><h3>Actividad</h3><div class="barras" id="barras"></div></div>
+      <div class="mcard sem-card"><h3>Marcas</h3>
+        <div class="datos">
+          <div class="dato"><b id="mejorRacha">0</b><small>mejor racha</small></div>
+          <div class="dato"><b id="partidas">0</b><small>partidas jugadas</small></div>
+          <div class="dato"><b id="ganadas">0</b><small>desafíos superados</small></div>
+          <div class="dato"><b id="favorito">—</b><small>juego favorito</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="nota"><p>Tu avance se guarda solo en este navegador. Jugar a diario ayuda a mantener la mente activa, pero no reemplaza el ejercicio físico, el buen dormir ni la conversación con otros: las tres cosas también protegen la memoria.</p></footer>
+
+<!-- Shader del cielo (GLSL): ruido fractal deformado que fluye lento -->
+<script type="x-shader/x-fragment" id="frag">
+precision mediump float;
+uniform vec2 uRes;
+uniform float uT;
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float noise(vec2 p){
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+}
+float fbm(vec2 p){
+  float v = 0.0, a = 0.5;
+  for (int i = 0; i < 5; i++) { v += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; }
+  return v;
+}
+void main(){
+  vec2 uv = gl_FragCoord.xy / uRes.xy;
+  vec2 p = uv * vec2(uRes.x / uRes.y, 1.0) * 2.2;
+  float t = uT * 0.045;
+  vec2 q = vec2(fbm(p + t), fbm(p + vec2(5.2, 1.3) - t));
+  vec2 r = vec2(fbm(p + 3.0 * q + vec2(1.7, 9.2) + t * 1.3), fbm(p + 3.0 * q + vec2(8.3, 2.8) - t));
+  float f = fbm(p + 3.5 * r);
+  vec3 noche  = vec3(0.075, 0.062, 0.17);
+  vec3 violeta = vec3(0.46, 0.30, 0.95);
+  vec3 coral  = vec3(0.95, 0.38, 0.30);
+  vec3 azafran = vec3(1.0, 0.70, 0.25);
+  vec3 col = mix(noche, violeta, clamp(f * f * 1.6, 0.0, 1.0));
+  col = mix(col, coral, clamp(length(q) * 0.55 - 0.2, 0.0, 1.0) * 0.75);
+  col = mix(col, azafran, clamp(r.x * r.x * 0.9 - 0.25, 0.0, 1.0) * 0.6);
+  col *= 0.55 + 0.45 * smoothstep(0.0, 0.9, uv.y);
+  float estrella = step(0.9975, hash(floor(gl_FragCoord.xy / 2.0))) * (0.5 + 0.5 * sin(uT * 2.0 + hash(floor(gl_FragCoord.xy)) * 40.0));
+  col += estrella * 0.7 * smoothstep(0.35, 1.0, uv.y);
+  gl_FragColor = vec4(col, 1.0);
+}
+</script>
+<script>
+(function(){
+"use strict";
+var M = window.Mente;
+var $ = function(id){ return document.getElementById(id); };
+
+/* ---- Cielo animado con WebGL ---- */
+(function cielo(){
+  var c = $("cielo"), gl = c.getContext("webgl", {antialias:false, premultipliedAlpha:false});
+  if(!gl){ c.style.background = "radial-gradient(80% 90% at 70% 20%,#7c5cff55,transparent),radial-gradient(60% 70% at 20% 80%,#e4572e55,transparent),#15122c"; return; }
+  function sh(tipo, src){ var s = gl.createShader(tipo); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+  var pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, "attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}"));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, $("frag").textContent));
+  gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+  var a = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+  var uRes = gl.getUniformLocation(pr, "uRes"), uT = gl.getUniformLocation(pr, "uT");
+  var quieto = matchMedia("(prefers-reduced-motion: reduce)").matches, t0 = performance.now();
+  function tam(){
+    var esc = Math.min(1.5, window.devicePixelRatio || 1) * 0.6;   // media resolución: suave y liviano
+    c.width = Math.max(1, Math.floor(c.clientWidth * esc)); c.height = Math.max(1, Math.floor(c.clientHeight * esc));
+    gl.viewport(0, 0, c.width, c.height);
+  }
+  function cuadro(ahora){
+    gl.uniform2f(uRes, c.width, c.height); gl.uniform1f(uT, (ahora - t0) / 1000 + 20);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if(!quieto && !document.hidden) requestAnimationFrame(cuadro);
+  }
+  tam(); addEventListener("resize", tam);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden && !quieto) requestAnimationFrame(cuadro); });
+  requestAnimationFrame(cuadro);
+})();
+
+/* ---- Saludo y tema ---- */
+var h = new Date().getHours();
+$("saludo").textContent = h < 12 ? "Buenos días" : h < 20 ? "Buenas tardes" : "Buenas noches";
+function rotuloTema(){ $("tema").textContent = "Tema: " + M.NOMBRE_TEMA[M.temaActual()]; }
+$("tema").onclick = function(){ M.rotarTema(); rotuloTema(); };
+rotuloTema();
+
+/* ---- Cifras ---- */
+var e = M.leer();
+$("racha").textContent = M.rachaVigente(e);
+$("puntos").textContent = e.puntos.toLocaleString("es-CL");
+$("hoyPts").textContent = (e.dias[M.hoy()] || 0).toLocaleString("es-CL");
+var reto = M.retoDelDia();
+$("reto").href = reto.href;
+$("retoNombre").textContent = reto.nombre;
+
+/* ---- Radar ---- */
+(function radar(){
+  var svg = $("radarSvg"), claves = ["memoria","atencion","calculo","lenguaje","logica"];
+  var cx = 180, cy = 172, R = 112, ns = "http://www.w3.org/2000/svg";
+  function el(t, at){ var n = document.createElementNS(ns, t); for(var k in at) n.setAttribute(k, at[k]); svg.appendChild(n); return n; }
+  function pto(i, f){ var a = -Math.PI/2 + i * 2*Math.PI/5; return [cx + Math.cos(a)*R*f, cy + Math.sin(a)*R*f]; }
+  [0.25,0.5,0.75,1].forEach(function(f){ el("polygon", {class:"anillo", points: claves.map(function(_,i){ return pto(i,f).join(","); }).join(" ")}); });
+  claves.forEach(function(k,i){
+    var p = pto(i,1); el("line", {class:"eje", x1:cx, y1:cy, x2:p[0], y2:p[1]});
+    var q = pto(i,1.2), t = el("text", {x:q[0], y:q[1]+4, "text-anchor": Math.abs(q[0]-cx) < 8 ? "middle" : (q[0] > cx ? "start" : "end")});
+    t.textContent = M.HABILIDADES[k];
+  });
+  var niveles = claves.map(function(k){ return Math.max(0.06, M.nivel(e.habilidades[k])); });
+  el("polygon", {class:"area", points: niveles.map(function(f,i){ return pto(i,f).join(","); }).join(" ")});
+  niveles.forEach(function(f,i){ var p = pto(i,f); el("circle", {class:"pt", cx:p[0], cy:p[1], r:4}); });
+  var total = claves.reduce(function(s,k){ return s + e.habilidades[k]; }, 0);
+  if(total > 0){
+    var debil = claves.slice().sort(function(a,b){ return e.habilidades[a] - e.habilidades[b]; })[0];
+    $("radarTxt").textContent = "Tu área más tranquila es " + M.HABILIDADES[debil].toLowerCase() + ". El reto de hoy apunta ahí.";
+  }
+})();
+
+/* ---- Tarjetas de juego ---- */
+var ESCENAS = {
+  crucigrama: '<div class="mini m-cruci">' + "T,A,R,D,E,n,l,n,n,M,n,n,n,n,E,n,n,n,n,N,n,n,n,n,T".split(",").map(function(x,i){ return x==="n" ? '<span class="n"></span>' : '<span class="'+(i>4?'l':'')+'" style="animation-delay:'+(i*.08)+'s">'+x+'</span>'; }).join("") + '</div>',
+  sudoku: '<div class="mini m-sudo">' + [5,3,"",6,"",9,"",8,1].map(function(x,i){ return x==="" ? '<span class="v" style="animation-delay:'+(i*.3)+'s">?</span>' : '<span>'+x+'</span>'; }).join("") + '</div>',
+  memorice: '<div class="mini m-memo"><span>★</span><span>◆</span><span>★</span></div>',
+  piramide: '<div class="mini m-pira">' + ["K","6","7","9","4","Q","A","8","5","J"].map(function(v,i){ var r = i<1?0:i<3?1:i<6?2:3, c = i - r*(r+1)/2; return '<span class="'+(i%2?"r":"")+'" style="left:'+(60 - r*17 + c*34)+'px;top:'+(r*22)+'px">'+v+'<br>'+(i%2?"♥":"♠")+'</span>'; }).join("") + '</div>',
+  colores: '<div class="mini m-color">ROJO</div>',
+  eco: '<div class="mini m-eco"><span></span><span></span><span></span><span></span></div>',
+  palabra: '<div class="mini m-pal"><span class="v">C</span><span class="a">E</span><span>R</span><span class="v">E</span><span class="v">B</span></div>'
+};
+var lista = $("lista");
+M.JUEGOS.forEach(function(j){
+  var g = e.juegos[j.id];
+  var a = document.createElement("a");
+  a.className = "jcard" + (j.id === reto.id ? " hoy" : "") + (j.id === "crucigrama" ? " ancha ancha3" : "") + (j.id === "palabra" ? " ancha3" : "");
+  a.href = j.href;
+  a.style.setProperty("--c", j.color);
+  a.innerHTML = '<div class="escena">' + ESCENAS[j.id] + '</div>' +
+    '<div class="jcuerpo"><h3></h3><p></p><div class="jpie"><span class="pill"></span><span class="jrec"></span><span class="jugar">Jugar →</span></div></div>';
+  a.querySelector("h3").textContent = j.nombre;
+  a.querySelector("p").textContent = j.lema;
+  a.querySelector(".pill").textContent = M.HABILIDADES[j.habilidad];
+  a.querySelector(".jrec").textContent = g ? "Mejor: " + g.mejor.toLocaleString("es-CL") + " pts" : "Sin jugar";
+  lista.appendChild(a);
+});
+
+/* ---- Semana ---- */
+var barras = $("barras"), dias = [], d = M.hoy();
+for(var i = 0; i < 7; i++){ dias.unshift(d); d = M.diaAnterior(d); }
+var max = Math.max.apply(null, dias.map(function(k){ return e.dias[k] || 0; }).concat([1]));
+var nombres = ["Do","Lu","Ma","Mi","Ju","Vi","Sá"];
+dias.forEach(function(k){
+  var v = e.dias[k] || 0, p = k.split("-").map(Number), dd = new Date(p[0], p[1]-1, p[2]);
+  var b = document.createElement("div");
+  b.className = "barra" + (v ? "" : " vacia");
+  b.innerHTML = '<b>' + (v ? v.toLocaleString("es-CL") : "") + '</b><i style="height:' + Math.max(4, Math.round(100 * v / max)) + '%"></i><small>' + (k === M.hoy() ? "Hoy" : nombres[dd.getDay()]) + '</small>';
+  barras.appendChild(b);
+});
+var partidas = 0, ganadas = 0, fav = null, favN = 0;
+Object.keys(e.juegos).forEach(function(k){ var g = e.juegos[k]; partidas += g.partidas; ganadas += g.ganadas; if(g.partidas > favN){ favN = g.partidas; fav = k; } });
+$("mejorRacha").textContent = e.mejorRacha;
+$("partidas").textContent = partidas;
+$("ganadas").textContent = ganadas;
+var fj = M.JUEGOS.find(function(j){ return j.id === fav; });
+$("favorito").textContent = fj ? fj.nombre.split(" ")[0] : "—";
+})();
+</script>
+</body>
+</html>

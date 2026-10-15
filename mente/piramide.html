@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pirámide 13</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/comun.css">
+<script src="assets/comun.js"></script>
+<style>
+.pano{position:relative;border-radius:24px;padding:18px;background:
+  radial-gradient(120% 90% at 50% 0%,#1f8a5b,#0e5a3a 60%,#08402a);box-shadow:inset 0 0 0 6px #7a4a1d,inset 0 0 0 9px #a86a2c,var(--shadow);overflow:hidden}
+.pano::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,rgba(255,255,255,.07) 1px,transparent 0);background-size:6px 6px;pointer-events:none}
+.pira{position:relative;margin:0 auto;width:100%;max-width:600px}
+.naipe{position:absolute;border-radius:9px;background:#fffdf7;border:1px solid #c9c1b1;box-shadow:0 3px 8px -3px rgba(0,0,0,.5);cursor:pointer;padding:0;color:#1b1430;transition:transform .15s ease,box-shadow .15s ease,opacity .25s ease;font-family:var(--f-body)}
+.naipe .v{position:absolute;top:4px;left:6px;font-weight:700;font-size:var(--fv);line-height:1}
+.naipe .p{position:absolute;left:0;right:0;bottom:6%;height:46%;display:grid;place-items:center;font-size:var(--fp)}
+.naipe .v small{font-size:.8em;margin-left:1px}
+.naipe.rojo{color:#c81e3a}
+.naipe.tapada{cursor:default;filter:brightness(.82) saturate(.7)}
+.naipe.libre:hover{transform:translateY(-4px)}
+.naipe.sel{transform:translateY(-8px);box-shadow:0 0 0 3px #ffd166,0 12px 22px -6px rgba(0,0,0,.6)}
+.naipe.pista{animation:pista 1s ease 2}
+.naipe.fuera{opacity:0;transform:scale(.6) translateY(-30px);pointer-events:none}
+@keyframes pista{50%{box-shadow:0 0 0 4px #5eead4,0 0 24px #5eead4}}
+.base{position:relative;display:flex;justify-content:center;align-items:center;gap:22px;margin-top:20px;flex-wrap:wrap}
+.hueco{position:relative;width:var(--cw);height:var(--ch);border-radius:9px;border:2px dashed rgba(255,255,255,.35)}
+.hueco .naipe{left:0;top:0}
+.dorso{background:repeating-linear-gradient(45deg,#b8322b 0 6px,#992620 6px 12px)!important;border:3px solid #fffdf7!important;color:#fff!important;display:grid;place-items:center;font-weight:700}
+.rotulo{color:#d7f5e5;font-size:13px;text-align:center;margin-top:6px}
+.lado{display:flex;flex-direction:column;align-items:center}
+.barra-juego{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;margin-bottom:18px}
+.ayuda{margin:14px 0 0;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+<div id="mente-bar"></div>
+<main class="mjuego">
+  <div class="mjuego-head">
+    <div><h1>Pirámide 13</h1><p>Retira parejas de cartas libres que sumen 13. El rey vale 13 y sale solo. Una carta está libre cuando no tiene nada encima.</p></div>
+  </div>
+  <div class="mcard barra-juego">
+    <div class="mfila">
+      <div class="mstat"><b id="quedan">28</b><small>En la pirámide</small></div>
+      <div class="mstat"><b id="mazoN">24</b><small>En el mazo</small></div>
+      <div class="mstat"><b id="vueltas">2</b><small>Vueltas extra</small></div>
+    </div>
+    <div class="mfila">
+      <button type="button" class="mbtn" id="pistaBtn">Pista</button>
+      <button type="button" class="mbtn" id="terminar">Terminar</button>
+      <button type="button" class="mbtn mbtn-pri" id="nuevo">Repartir</button>
+    </div>
+  </div>
+  <div class="pano">
+    <div class="pira" id="pira"></div>
+    <div class="base">
+      <div class="lado"><div class="hueco" id="mazo"></div><div class="rotulo">Mazo</div></div>
+      <div class="lado"><div class="hueco" id="descarte"></div><div class="rotulo">Descarte</div></div>
+    </div>
+  </div>
+  <p class="ayuda">Valores: A = 1, J = 11, Q = 12, K = 13. Toca el mazo para sacar una carta al descarte; la carta del descarte también se puede usar.</p>
+</main>
+<script>
+(function(){
+"use strict";
+var M = window.Mente; M.barra("piramide");
+var $ = function(id){ return document.getElementById(id); };
+var PALOS = ["♠","♥","♦","♣"], RANGOS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+var S, sel = null, cw = 60, ch = 84;
+
+function repartir(){
+  var mazo = [];
+  for(var p=0;p<4;p++) for(var r=1;r<=13;r++) mazo.push({v:r,p:p});
+  M.barajar(mazo);
+  S = { pira: mazo.slice(0,28).map(function(c){ return Object.assign({fuera:false}, c); }), mazo: mazo.slice(28), descarte: [], vueltas: 2, pistas:0, fin:false };
+  sel = null; dibujar();
+}
+function idx(r,c){ return r*(r+1)/2 + c; }
+function libre(r,c){
+  if(r === 6) return true;
+  return S.pira[idx(r+1,c)].fuera && S.pira[idx(r+1,c+1)].fuera;
+}
+function naipe(c){
+  var d = document.createElement("button"); d.type = "button";
+  d.className = "naipe" + (c.p===1||c.p===2 ? " rojo" : "");
+  d.innerHTML = '<span class="v">' + RANGOS[c.v-1] + '<small>' + PALOS[c.p] + '</small></span><span class="p">' + PALOS[c.p] + '</span>';
+  d.setAttribute("aria-label", RANGOS[c.v-1] + " de " + ["picas","corazones","diamantes","tréboles"][c.p]);
+  d.style.width = cw + "px"; d.style.height = ch + "px";
+  return d;
+}
+function medir(){
+  var W = Math.min($("pira").clientWidth, 600);
+  cw = Math.floor(Math.min(72, (W - 6*6) / 7)); ch = Math.round(cw * 1.4);
+  var raiz = document.documentElement.style;
+  raiz.setProperty("--cw", cw + "px"); raiz.setProperty("--ch", ch + "px");
+  raiz.setProperty("--fv", Math.round(cw*0.28) + "px"); raiz.setProperty("--fp", Math.round(cw*0.5) + "px");
+  return W;
+}
+function dibujar(){
+  var W = medir(), pira = $("pira"); pira.innerHTML = "";
+  var paso = ch * 0.48, gap = 6;
+  pira.style.height = (6*paso + ch) + "px";
+  for(var r=0;r<7;r++) for(var c=0;c<=r;c++){
+    var k = idx(r,c), carta = S.pira[k];
+    var d = naipe(carta);
+    var anchoFila = (r+1)*cw + r*gap;
+    d.style.left = ((W - anchoFila)/2 + c*(cw+gap)) + "px";
+    d.style.top = (r*paso) + "px";
+    d.style.zIndex = r;
+    var l = libre(r,c);
+    if(carta.fuera) d.classList.add("fuera");
+    else if(!l) d.classList.add("tapada");
+    else d.classList.add("libre");
+    if(sel && sel.t === "p" && sel.k === k) d.classList.add("sel");
+    d.dataset.k = k;
+    d.onclick = (function(k,l){ return function(){ if(l && !S.pira[k].fuera) elegir({t:"p",k:k}); }; })(k,l);
+    pira.appendChild(d);
+  }
+  var mz = $("mazo"); mz.innerHTML = "";
+  if(S.mazo.length){
+    var dm = naipe({v:1,p:0}); dm.className = "naipe dorso"; dm.innerHTML = S.mazo.length; dm.setAttribute("aria-label","Sacar carta del mazo");
+    dm.onclick = sacar; mz.appendChild(dm);
+  } else if(S.vueltas > 0 && S.descarte.length){
+    var rv = document.createElement("button"); rv.type="button"; rv.className="naipe dorso"; rv.style.width=cw+"px"; rv.style.height=ch+"px";
+    rv.textContent = "↻"; rv.setAttribute("aria-label","Dar vuelta el descarte"); rv.onclick = vuelta; mz.appendChild(rv);
+  }
+  var ds = $("descarte"); ds.innerHTML = "";
+  if(S.descarte.length){
+    var top = S.descarte[S.descarte.length-1], dd = naipe(top);
+    dd.classList.add("libre");
+    if(sel && sel.t === "d") dd.classList.add("sel");
+    dd.onclick = function(){ elegir({t:"d"}); };
+    ds.appendChild(dd);
+  }
+  $("quedan").textContent = S.pira.filter(function(c){ return !c.fuera; }).length;
+  $("mazoN").textContent = S.mazo.length;
+  $("vueltas").textContent = S.vueltas;
+}
+function carta(s){ return s.t === "p" ? S.pira[s.k] : S.descarte[S.descarte.length-1]; }
+function quitar(s){ if(s.t === "p") S.pira[s.k].fuera = true; else S.descarte.pop(); }
+function elegir(s){
+  if(S.fin) return;
+  var c = carta(s);
+  if(c.v === 13){ quitar(s); sel = null; M.tono(784,140); despues(); return; }
+  if(!sel){ sel = s; M.tono(440,60,"triangle",0.04); dibujar(); return; }
+  if(sel.t === s.t && sel.k === s.k){ sel = null; dibujar(); return; }
+  if(carta(sel).v + c.v === 13){
+    var a = sel; sel = null;
+    if(a.t === "d"){ quitar(s); quitar(a); } else { quitar(a); quitar(s); }
+    M.tono(660,100); setTimeout(function(){ M.tono(880,140); },90);
+    despues();
+  } else { sel = s; M.tono(180,120,"square",0.04); dibujar(); }
+}
+function sacar(){ if(S.fin || !S.mazo.length) return; S.descarte.push(S.mazo.pop()); sel = null; M.tono(330,50,"triangle",0.03); despues(); }
+function vuelta(){ if(S.vueltas <= 0) return; S.vueltas--; S.mazo = S.descarte.reverse(); S.descarte = []; sel = null; despues(); }
+
+function jugadas(){
+  var libres = [];
+  for(var r=0;r<7;r++) for(var c=0;c<=r;c++){ var k = idx(r,c); if(!S.pira[k].fuera && libre(r,c)) libres.push({t:"p",k:k}); }
+  if(S.descarte.length) libres.push({t:"d"});
+  for(var i=0;i<libres.length;i++){
+    if(carta(libres[i]).v === 13) return [libres[i]];
+    for(var j=i+1;j<libres.length;j++) if(carta(libres[i]).v + carta(libres[j]).v === 13) return [libres[i], libres[j]];
+  }
+  return null;
+}
+function despues(){
+  dibujar();
+  if(S.pira.every(function(c){ return c.fuera; })) return terminar(true);
+  if(!jugadas() && !S.mazo.length && !(S.vueltas > 0 && S.descarte.length)) terminar(false);
+}
+function terminar(gano){
+  if(S.fin) return; S.fin = true;
+  var fuera = S.pira.filter(function(c){ return c.fuera; }).length;
+  var pts = fuera * 8 + (gano ? 200 + S.mazo.length * 5 : 0) - S.pistas * 10;
+  M.celebrar("piramide", {puntos: Math.max(0, pts), gano: gano, detalle: gano ? "Pirámide despejada" : "Retiraste " + fuera + " de 28 cartas"}, repartir);
+}
+$("pistaBtn").onclick = function(){
+  if(S.fin) return;
+  var j = jugadas();
+  if(!j){ $("mazoN").parentNode.animate([{transform:"scale(1.15)"},{transform:"scale(1)"}],{duration:400}); return; }
+  S.pistas++;
+  j.forEach(function(s){
+    var el = s.t === "p" ? $("pira").querySelector('[data-k="'+s.k+'"]') : $("descarte").firstChild;
+    if(el){ el.classList.remove("pista"); void el.offsetWidth; el.classList.add("pista"); }
+  });
+};
+$("terminar").onclick = function(){ if(!S.fin) terminar(false); };
+$("nuevo").onclick = repartir;
+addEventListener("resize", function(){ if(S) dibujar(); });
+repartir();
+})();
+</script>
+</body>
+</html>

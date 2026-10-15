@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sudoku de la Tarde</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/comun.css">
+<script src="assets/comun.js"></script>
+<script src="assets/sudoku.js"></script>
+<style>
+.zona{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:820px){.zona{grid-template-columns:minmax(0,1fr)}}
+.tablero{--t:min(calc(100vw - 32px),540px);width:var(--t);height:var(--t);display:grid;grid-template-columns:repeat(9,1fr);background:var(--ink);gap:1px;border:3px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin:0 auto}
+.c{position:relative;border:0;background:var(--card);color:var(--juego);font:700 calc(var(--t) / 16) var(--f-body);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .12s ease}
+.c.dada{color:var(--ink)}
+.c.bc{box-shadow:inset -2px 0 0 var(--ink)}
+.c.bf{box-shadow:inset 0 -2px 0 var(--ink)}
+.c.bc.bf{box-shadow:inset -2px 0 0 var(--ink),inset 0 -2px 0 var(--ink)}
+.c.zona-sel{background:color-mix(in srgb, var(--juego) 9%, var(--card))}
+.c.igual{background:color-mix(in srgb, var(--juego) 22%, var(--card))}
+.c.sel{background:color-mix(in srgb, var(--juego) 34%, var(--card))}
+.c.mal{animation:mal .5s ease}
+.c.bien{animation:bien .5s ease}
+@keyframes mal{0%,40%{background:var(--bad);color:#fff}100%{}}
+@keyframes bien{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+.notas{position:absolute;inset:2px;display:grid;grid-template-columns:repeat(3,1fr);font:400 calc(var(--t) / 40) var(--f-body);color:var(--muted);line-height:1}
+.notas span{display:grid;place-items:center}
+.panel{display:flex;flex-direction:column;gap:16px}
+.cifras{display:flex;justify-content:space-around;padding:14px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px}
+.num{position:relative;min-height:62px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:700 28px var(--f-body);cursor:pointer;transition:transform .1s ease}
+.num:hover{transform:translateY(-1px);border-color:var(--juego)}
+.num small{position:absolute;right:8px;bottom:5px;font-size:11px;color:var(--muted);font-weight:400}
+.num:disabled{opacity:.3}
+.herr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px 14px}
+.motor{font-size:12px;color:var(--muted);text-align:center;margin:0}
+</style>
+</head>
+<body>
+<div id="mente-bar"></div>
+<main class="mjuego">
+  <div class="mjuego-head">
+    <div><h1>Sudoku</h1><p>Completa la grilla para que cada fila, columna y bloque de 3×3 tenga los números del 1 al 9. Un número equivocado no entra y cuenta como error.</p></div>
+    <div class="mseg" id="niveles" role="group" aria-label="Nivel"></div>
+  </div>
+  <div class="zona">
+    <div class="tablero" id="tablero" role="grid" aria-label="Tablero de sudoku"></div>
+    <div class="panel">
+      <div class="mcard cifras">
+        <div class="mstat"><b id="tiempo">00:00</b><small>Tiempo</small></div>
+        <div class="mstat"><b id="errores">0</b><small>Errores</small></div>
+        <div class="mstat"><b id="faltan">0</b><small>Faltan</small></div>
+      </div>
+      <div class="mcard">
+        <div class="pad" id="pad"></div>
+        <div class="herr">
+          <button type="button" class="mbtn" id="notasBtn" aria-pressed="false">Notas</button>
+          <button type="button" class="mbtn" id="borrar">Borrar</button>
+          <button type="button" class="mbtn" id="pista">Pista</button>
+        </div>
+      </div>
+      <button type="button" class="mbtn mbtn-pri" id="nuevo">Sudoku nuevo</button>
+      <p class="motor" id="motor">Preparando el generador…</p>
+    </div>
+  </div>
+</main>
+<script>
+(function(){
+"use strict";
+var M = window.Mente; M.barra("sudoku");
+var $ = function(id){ return document.getElementById(id); };
+var NIVELES = [{n:"Fácil",p:40,pts:100},{n:"Media",p:32,pts:200},{n:"Difícil",p:27,pts:350},{n:"Experto",p:24,pts:500}];
+var CLAVE = "mente.sudoku";
+var S = null, sel = -1, notas = false, generar = null;
+
+function fila(i){ return Math.floor(i/9); } function col(i){ return i%9; }
+function bloque(i){ return Math.floor(i/27)*3 + Math.floor(col(i)/3); }
+function vecinos(i,j){ return fila(i)===fila(j) || col(i)===col(j) || bloque(i)===bloque(j); }
+
+/* Tablero */
+var celdas = [];
+for(var i=0;i<81;i++){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "c" + (col(i)%3===2 && col(i)<8 ? " bc" : "") + (fila(i)%3===2 && fila(i)<8 ? " bf" : "");
+  b.dataset.i = i;
+  b.addEventListener("click", function(){ elegir(+this.dataset.i); });
+  $("tablero").appendChild(b); celdas.push(b);
+}
+for(var d=1; d<=9; d++){
+  var n = document.createElement("button"); n.type="button"; n.className="num"; n.dataset.d=d;
+  n.innerHTML = d + '<small></small>';
+  n.addEventListener("click", function(){ poner(+this.dataset.d); });
+  $("pad").appendChild(n);
+}
+NIVELES.forEach(function(nv,k){
+  var b = document.createElement("button"); b.type="button"; b.textContent=nv.n; b.dataset.k=k;
+  b.addEventListener("click", function(){ nuevo(+this.dataset.k); });
+  $("niveles").appendChild(b);
+});
+
+function nuevo(k){
+  if(!generar) return;
+  var semilla = (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0;
+  var r = generar(semilla, NIVELES[k].p);
+  S = { nivel:k, puzzle:r.puzzle, sol:r.solucion, val:r.puzzle.slice(), notas:r.puzzle.map(function(){ return 0; }), errores:0, pistas:0, t:0, fin:false };
+  sel = -1; guardar(); pintar();
+}
+function guardar(){ M.guardarLocal(CLAVE, S); }
+
+function elegir(i){ sel = i; pintar(); }
+function poner(d){
+  if(!S || S.fin || sel<0 || S.puzzle[sel]) return;
+  if(notas){
+    if(S.val[sel]) return;
+    S.notas[sel] ^= 1 << (d-1); guardar(); pintar(); return;
+  }
+  if(S.val[sel] === d) return;
+  if(S.sol[sel] !== d){
+    S.errores++; M.tono(160, 220, "square", 0.06);
+    animar(sel, "mal"); guardar(); pintar(); return;
+  }
+  S.val[sel] = d; S.notas[sel] = 0;
+  for(var j=0;j<81;j++) if(vecinos(sel,j)) S.notas[j] &= ~(1 << (d-1));
+  M.tono(520 + d*30, 120, "sine", 0.05);
+  animar(sel, "bien"); guardar(); pintar(); revisar();
+}
+function borrar(){
+  if(!S || S.fin || sel<0 || S.puzzle[sel]) return;
+  S.notas[sel] = 0; guardar(); pintar();
+}
+function pista(){
+  if(!S || S.fin) return;
+  var vacias = []; for(var i=0;i<81;i++) if(!S.val[i]) vacias.push(i);
+  if(!vacias.length) return;
+  var i = sel >= 0 && !S.val[sel] ? sel : vacias[Math.floor(Math.random()*vacias.length)];
+  S.pistas++; sel = i; poner(S.sol[i]);
+}
+function animar(i, cls){ var c = celdas[i]; c.classList.remove(cls); void c.offsetWidth; c.classList.add(cls); }
+function revisar(){
+  if(S.val.every(function(v,i){ return v === S.sol[i]; })){
+    S.fin = true; guardar(); pintar();
+    var nv = NIVELES[S.nivel];
+    var pts = Math.max(20, nv.pts - 15*S.errores - 40*S.pistas);
+    M.celebrar("sudoku", {puntos:pts, gano:true, detalle: nv.n + " en " + M.reloj(S.t) + " con " + S.errores + (S.errores===1?" error":" errores")}, function(){ nuevo(S.nivel); });
+  }
+}
+
+function pintar(){
+  if(!S) return;
+  var vs = sel >= 0 ? S.val[sel] : 0;
+  for(var i=0;i<81;i++){
+    var c = celdas[i], v = S.val[i];
+    c.classList.toggle("dada", !!S.puzzle[i]);
+    c.classList.toggle("sel", i===sel);
+    c.classList.toggle("zona-sel", sel>=0 && i!==sel && vecinos(i,sel));
+    c.classList.toggle("igual", !!vs && v===vs && i!==sel);
+    if(v){ c.textContent = v; }
+    else if(S.notas[i]){
+      var h = '<span class="notas">'; for(var d=1; d<=9; d++) h += '<span>' + (S.notas[i] & (1<<(d-1)) ? d : "") + '</span>'; c.innerHTML = h + '</span>';
+    } else c.textContent = "";
+    c.setAttribute("aria-label", "Fila " + (fila(i)+1) + ", columna " + (col(i)+1) + (v ? ": " + v : ": vacía"));
+  }
+  var cuenta = [0,0,0,0,0,0,0,0,0,0]; S.val.forEach(function(v){ cuenta[v]++; });
+  document.querySelectorAll(".num").forEach(function(b){ var d = +b.dataset.d; b.querySelector("small").textContent = 9 - cuenta[d]; b.disabled = cuenta[d] >= 9; });
+  document.querySelectorAll("#niveles button").forEach(function(b){ b.setAttribute("aria-pressed", +b.dataset.k === S.nivel ? "true" : "false"); });
+  $("errores").textContent = S.errores;
+  $("faltan").textContent = S.val.filter(function(v){ return !v; }).length;
+  $("tiempo").textContent = M.reloj(S.t);
+  $("notasBtn").setAttribute("aria-pressed", notas ? "true" : "false");
+}
+
+$("notasBtn").onclick = function(){ notas = !notas; pintar(); };
+$("borrar").onclick = borrar;
+$("pista").onclick = pista;
+$("nuevo").onclick = function(){ nuevo(S ? S.nivel : 1); };
+document.addEventListener("keydown", function(e){
+  if(e.target.tagName === "INPUT") return;
+  if(/^[1-9]$/.test(e.key)){ poner(+e.key); e.preventDefault(); }
+  else if(e.key === "Backspace" || e.key === "Delete"){ borrar(); e.preventDefault(); }
+  else if(e.key === "n" || e.key === "N"){ notas = !notas; pintar(); }
+  else if(e.key.indexOf("Arrow") === 0 && sel >= 0){
+    var dx = e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0, dy = e.key==="ArrowDown"?1:e.key==="ArrowUp"?-1:0;
+    sel = Math.min(8,Math.max(0,fila(sel)+dy))*9 + Math.min(8,Math.max(0,col(sel)+dx)); pintar(); e.preventDefault();
+  }
+});
+setInterval(function(){ if(S && !S.fin && !document.hidden){ S.t++; $("tiempo").textContent = M.reloj(S.t); if(S.t%10===0) guardar(); } }, 1000);
+addEventListener("pagehide", function(){ if(S) guardar(); });
+
+window.SudokuMotor.listo.then(function(g){
+  generar = g;
+  $("motor").textContent = "Puzzles generados con " + g(1, 81).motor + ", siempre con una sola solución.";
+  var guardado = M.leerLocal(CLAVE);
+  if(guardado && guardado.sol && !guardado.fin){ S = guardado; pintar(); } else nuevo(guardado ? guardado.nivel : 1);
+});
+})();
+</script>
+</body>
+</html>

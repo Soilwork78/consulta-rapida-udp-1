@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Palabra Oculta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,500..900,100&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/comun.css">
+<script src="assets/comun.js"></script>
+<script src="assets/palabras.js"></script>
+<style>
+:root{--verde:#16a34a;--amar:#d39e00;--gris:#6b7280}
+.juego{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px;align-items:center}
+.grilla{display:grid;grid-template-rows:repeat(6,1fr);gap:7px;width:min(100%,340px)}
+.fila{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.fila.sacude{animation:sacude .4s ease}
+@keyframes sacude{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.ca{aspect-ratio:1;border:2px solid var(--line);border-radius:10px;display:grid;place-items:center;font:700 clamp(24px,7vw,32px) var(--f-body);text-transform:uppercase;background:var(--card);transition:border-color .1s ease}
+.ca.llena{border-color:var(--muted);animation:late .12s ease}
+.ca.v,.ca.a,.ca.g{color:#fff;animation:volt .5s ease both}
+.ca.v{background:var(--verde);border-color:var(--verde)}
+.ca.a{background:var(--amar);border-color:var(--amar)}
+.ca.g{background:var(--gris);border-color:var(--gris)}
+@keyframes late{50%{transform:scale(1.08)}}
+@keyframes volt{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}100%{transform:rotateX(0)}}
+.teclado{display:flex;flex-direction:column;gap:7px;width:100%}
+.tf{display:flex;gap:5px;justify-content:center}
+.tk{flex:1;max-width:46px;min-height:54px;border:0;border-radius:9px;background:var(--bg2);color:var(--ink);font:700 18px var(--f-body);cursor:pointer;text-transform:uppercase}
+.tk.ancha{max-width:76px;flex:1.6;font-size:13px}
+.tk.v{background:var(--verde);color:#fff}.tk.a{background:var(--amar);color:#fff}.tk.g{background:var(--gris);color:#fff;opacity:.6}
+.cab{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;flex-wrap:wrap}
+.pista{width:100%;padding:12px 16px;font-size:16px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.pista span{color:var(--muted)}
+.aviso{min-height:24px;font-weight:700;color:var(--juego);text-align:center}
+.nota{font-size:13px;color:var(--muted);text-align:center;margin:0}
+</style>
+</head>
+<body>
+<div id="mente-bar"></div>
+<main class="mjuego">
+  <div class="mjuego-head">
+    <div><h1>Palabra Oculta</h1><p>Adivina la palabra de cinco letras en seis intentos. Verde: letra en su lugar. Amarillo: está, pero en otra posición. Gris: no está.</p></div>
+    <div class="mseg" id="modos" role="group" aria-label="Modo">
+      <button type="button" data-m="dia" aria-pressed="true">Palabra del día</button>
+      <button type="button" data-m="libre" aria-pressed="false">Práctica</button>
+    </div>
+  </div>
+  <div class="juego">
+    <div class="mcard pista"><span id="pistaTxt">¿Necesitas ayuda? La pista cuesta 20 puntos.</span><button type="button" class="mbtn" id="pistaBtn">Ver pista</button></div>
+    <div class="grilla" id="grilla"></div>
+    <div class="aviso" id="aviso" role="status"></div>
+    <div class="teclado" id="teclado"></div>
+    <p class="nota">Vale cualquier combinación de cinco letras: úsala para descartar. Las tildes no cuentan.</p>
+  </div>
+</main>
+<script>
+(function(){
+"use strict";
+var M = window.Mente; M.barra("palabra");
+var $ = function(id){ return document.getElementById(id); };
+var P = window.PALABRAS, modo = "dia", S = null, RANGO = {g:1,a:2,v:3};
+
+/* Grilla y teclado */
+for(var f=0; f<6; f++){
+  var fila = document.createElement("div"); fila.className = "fila";
+  for(var c=0; c<5; c++){ var x = document.createElement("div"); x.className = "ca"; fila.appendChild(x); }
+  $("grilla").appendChild(fila);
+}
+["QWERTYUIOP","ASDFGHJKLÑ","+ZXCVBNM-"].forEach(function(linea){
+  var tf = document.createElement("div"); tf.className = "tf";
+  Array.from(linea).forEach(function(ch){
+    var b = document.createElement("button"); b.type = "button"; b.className = "tk";
+    if(ch === "+"){ b.textContent = "Enviar"; b.classList.add("ancha"); b.dataset.k = "ENTER"; }
+    else if(ch === "-"){ b.textContent = "Borrar"; b.classList.add("ancha"); b.dataset.k = "BACK"; }
+    else { b.textContent = ch; b.dataset.k = ch; }
+    b.onclick = function(){ tecla(this.dataset.k); };
+    tf.appendChild(b);
+  });
+  $("teclado").appendChild(tf);
+});
+
+function norm(s){ return s.toUpperCase().replace(/Ñ/g,"\u0001").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\u0001/g,"Ñ"); }
+function indiceDia(){ var s = M.hoy().split("-").reduce(function(a,b){ return a*37 + Number(b); }, 11); return M.azar(s)() * P.length | 0; }
+function clave(){ return modo === "dia" ? "mente.palabra.dia." + M.hoy() : "mente.palabra.libre"; }
+
+function cargar(){
+  var g = M.leerLocal(clave());
+  if(g && g.idx != null && (modo === "dia" || !g.fin)) S = g;
+  else S = { idx: modo === "dia" ? indiceDia() : Math.floor(Math.random()*P.length), intentos: [], actual: "", pistas: 0, fin: false, gano: false };
+  pintar();
+  if(S.fin) $("aviso").textContent = S.gano ? "Ya resolviste la palabra de hoy. Vuelve mañana o prueba la práctica." : "La palabra de hoy era " + P[S.idx].p + ". Vuelve mañana.";
+  else $("aviso").textContent = "";
+}
+function guardar(){ M.guardarLocal(clave(), S); }
+function evaluar(intento, sol){
+  var r = ["g","g","g","g","g"], resto = {};
+  for(var i=0;i<5;i++){ if(intento[i] === sol[i]) r[i] = "v"; else resto[sol[i]] = (resto[sol[i]]||0) + 1; }
+  for(i=0;i<5;i++){ if(r[i] !== "v" && resto[intento[i]]){ r[i] = "a"; resto[intento[i]]--; } }
+  return r;
+}
+function pintar(){
+  var sol = P[S.idx].p, filas = $("grilla").children, teclas = {};
+  for(var f=0; f<6; f++){
+    var palabra = f < S.intentos.length ? S.intentos[f] : (f === S.intentos.length ? S.actual : "");
+    var ev = f < S.intentos.length ? evaluar(S.intentos[f], sol) : null;
+    for(var c=0; c<5; c++){
+      var ca = filas[f].children[c];
+      ca.textContent = palabra[c] || "";
+      ca.className = "ca" + (palabra[c] ? " llena" : "") + (ev ? " " + ev[c] : "");
+      if(ev){ ca.style.animationDelay = (c*0.12) + "s"; var k = palabra[c], v = ev[c]; if(!teclas[k] || RANGO[v] > RANGO[teclas[k]]) teclas[k] = v; }
+    }
+  }
+  document.querySelectorAll(".tk").forEach(function(b){ var k = b.dataset.k; b.classList.remove("v","a","g"); if(teclas[k]) b.classList.add(teclas[k]); });
+  $("pistaTxt").textContent = S.pistas ? "Pista: " + P[S.idx].f + "." : "¿Necesitas ayuda? La pista cuesta 20 puntos.";
+  $("pistaBtn").hidden = !!S.pistas || S.fin;
+  document.querySelectorAll("#modos button").forEach(function(b){ b.setAttribute("aria-pressed", b.dataset.m === modo ? "true" : "false"); });
+}
+function tecla(k){
+  if(!S || S.fin) return;
+  if(k === "BACK"){ S.actual = S.actual.slice(0,-1); pintar(); return; }
+  if(k === "ENTER"){ enviar(); return; }
+  if(S.actual.length < 5 && /^[A-ZÑ]$/.test(k)){ S.actual += k; pintar(); }
+}
+function enviar(){
+  var fila = $("grilla").children[S.intentos.length];
+  if(S.actual.length < 5){ fila.classList.remove("sacude"); void fila.offsetWidth; fila.classList.add("sacude"); $("aviso").textContent = "Faltan letras"; return; }
+  var sol = P[S.idx].p;
+  S.intentos.push(S.actual); S.actual = ""; $("aviso").textContent = "";
+  var gano = S.intentos[S.intentos.length-1] === sol;
+  if(gano || S.intentos.length === 6){ S.fin = true; S.gano = gano; }
+  guardar(); pintar(); M.tono(gano ? 880 : 420, 120);
+  if(S.fin){
+    setTimeout(function(){
+      var pts = gano ? Math.max(10, (7 - S.intentos.length) * 30 - S.pistas * 20) : 0;
+      $("aviso").textContent = gano ? "¡Correcto!" : "Era " + sol + ": " + P[S.idx].m.toLowerCase() + ".";
+      M.celebrar("palabra", {puntos: pts, gano: gano, detalle: gano ? "En " + S.intentos.length + (S.intentos.length === 1 ? " intento" : " intentos") : "La palabra era " + sol}, function(){ modo = "libre"; S = null; M.guardarLocal("mente.palabra.libre", null); cargar(); });
+    }, 700);
+  }
+}
+$("pistaBtn").onclick = function(){ if(!S.fin){ S.pistas = 1; guardar(); pintar(); } };
+document.querySelectorAll("#modos button").forEach(function(b){ b.onclick = function(){ modo = b.dataset.m; cargar(); }; });
+document.addEventListener("keydown", function(e){
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  if(e.key === "Enter") tecla("ENTER");
+  else if(e.key === "Backspace") tecla("BACK");
+  else { var k = norm(e.key); if(/^[A-ZÑ]$/.test(k)) tecla(k); }
+});
+cargar();
+})();
+</script>
+</body>
+</html>
