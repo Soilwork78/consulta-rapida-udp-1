@@ -9,190 +9,269 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaincook:wght@700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
-/* Layout: página de diario — cabecera gótica, grilla a la izquierda, definiciones en columnas a la derecha */
+/* Layout: diario vivo — franja de sección arriba, cabecera gótica, tablero en tarjeta a la izquierda; progreso, imagen y definiciones a la derecha */
 :root{
-  --paper:#f2ecdc;      /* papel de diario */
-  --paper-2:#e8e0ca;    /* sombra del papel */
-  --ink:#1d1b17;        /* tinta */
-  --ink-soft:#5a5446;   /* tinta gastada */
-  --rule:#8b8370;       /* filetes */
-  --mark:#b3261e;       /* lápiz rojo del corrector */
-  --hi:#efd98a;         /* palabra activa */
-  --hi-cur:#e2b93b;     /* casilla activa */
-  --cell:#fbf8ef;       /* casilla en blanco */
-  --block:#1d1b17;      /* casilla negra */
+  --paper:#f1ebdb;      /* papel de diario */
+  --paper-2:#e6ddc6;    /* papel sombreado */
+  --card:#faf6ec;       /* tarjetas */
+  --ink:#1b1a17;        /* tinta */
+  --ink-soft:#615a49;   /* tinta gastada */
+  --rule:#b9ae93;       /* filetes */
+  --accent:#b8291f;     /* rojo de portada */
+  --accent-ink:#fff7ee; /* texto sobre rojo */
+  --hi:#ffe48a;         /* palabra activa: destacador */
+  --hi-cur:#ffc21a;     /* casilla activa */
+  --cell:#fffdf6;       /* casilla en blanco */
+  --block:#1b1a17;      /* casilla negra */
+  --bad:#d32f2f;        /* letra incorrecta */
+  --bad-bg:#ffd9d4;
+  --ok:#0f6b45;         /* palabra correcta */
+  --neon:#16e08a;       /* destello */
+  --band:#1b1a17;       /* franjas de tinta */
+  --band-ink:#f1ebdb;
+  --shadow:0 1px 0 rgba(27,26,23,.06),0 10px 28px -12px rgba(60,45,20,.35);
   --f-mast:"UnifrakturMaincook","Old English Text MT",Georgia,serif;
   --f-body:"Old Standard TT",Georgia,"Times New Roman",serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
-    --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#3b382f;--block:#0a0908;color-scheme:dark;
+    --paper:#15140f;--paper-2:#1f1d17;--card:#25231c;--ink:#efe8d6;--ink-soft:#ada591;--rule:#4b4638;
+    --accent:#ff6a55;--accent-ink:#1a0e0b;--hi:#5a4d1c;--hi-cur:#9a7a12;--cell:#3a372e;--block:#0a0907;
+    --bad:#ff6b6b;--bad-bg:#5a2420;--ok:#5ff0a8;--neon:#39ff9c;--band:#060504;--band-ink:#efe8d6;
+    --shadow:0 1px 0 rgba(0,0,0,.4),0 14px 30px -12px rgba(0,0,0,.7);color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
-  --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#3b382f;--block:#0a0908;color-scheme:dark;
+  --paper:#15140f;--paper-2:#1f1d17;--card:#25231c;--ink:#efe8d6;--ink-soft:#ada591;--rule:#4b4638;
+  --accent:#ff6a55;--accent-ink:#1a0e0b;--hi:#5a4d1c;--hi-cur:#9a7a12;--cell:#3a372e;--block:#0a0907;
+  --bad:#ff6b6b;--bad-bg:#5a2420;--ok:#5ff0a8;--neon:#39ff9c;--band:#060504;--band-ink:#efe8d6;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 14px 30px -12px rgba(0,0,0,.7);color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{
-  background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.4;
+  background-color:var(--paper);
+  background-image:radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 0);
+  background-size:4px 4px;
+  color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.4;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  padding-block:20px 40px;
+  padding-block:0 40px;
 }
-.page{max-width:1080px;margin:0 auto}
-
-/* Cabecera */
-.mast{text-align:center;border-bottom:3px double var(--ink);padding-bottom:8px}
-.mast-top{display:flex;justify-content:space-between;gap:12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--rule);padding-bottom:4px;flex-wrap:wrap}
-.mast h1{font-family:var(--f-mast);font-weight:700;font-size:clamp(34px,7vw,64px);line-height:1.05;margin:10px 0 4px;text-wrap:balance}
-.mast-sub{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-top:1px solid var(--ink);padding-top:5px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
-.mast-sub b{letter-spacing:.06em;text-transform:uppercase}
-
-/* Barra de herramientas */
-.tools{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--rule)}
-.tools .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.tools .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px}
-button{
-  font-family:var(--f-body);font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--ink);
-  padding:4px 10px;cursor:pointer;border-radius:0;
-}
-button:hover{background:var(--ink);color:var(--paper)}
-button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
-.timer{font-variant-numeric:tabular-nums;font-size:15px;min-width:5.5ch;text-align:right}
-.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 10px;margin-top:8px;border:1px solid var(--mark);color:var(--ink);font-size:14px}
-.confirm b{color:var(--mark)}
+.page{max-width:1120px;margin:0 auto}
 [hidden]{display:none!important}
 
-/* Cuerpo */
-.body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;padding-top:16px;align-items:start}
-@media (max-width:860px){.body{grid-template-columns:minmax(0,1fr)}}
-
-.board{display:flex;flex-direction:column;gap:10px;align-items:center;min-width:0}
-.current{
-  width:100%;display:flex;align-items:stretch;gap:0;border:1px solid var(--ink);background:var(--paper-2);min-height:44px
+/* Franja de sección */
+.strip{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--band);color:var(--band-ink);padding:8px 14px;margin-top:14px;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
 }
-.current .num{font-weight:700;padding:10px 12px;border-right:1px solid var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
-.current .txt{padding:10px 12px;flex:1;min-width:0;font-style:italic}
-.current button{border:0;border-left:1px solid var(--ink);padding:0 12px;font-size:18px}
+.strip .sec{font-weight:700}
+.strip .prefs{display:flex;gap:6px}
+.strip button{border-color:color-mix(in srgb, var(--band-ink) 45%, transparent);color:var(--band-ink);font-size:12px;padding:3px 9px;letter-spacing:.06em}
+.strip button:hover{background:var(--band-ink);color:var(--band)}
+.strip button[aria-pressed="false"]{opacity:.6}
+
+/* Cabecera */
+.mast{text-align:center;padding:10px 0 0}
+.mast h1{font-family:var(--f-mast);font-weight:700;font-size:clamp(38px,7.5vw,72px);line-height:1;margin:8px 0 6px;text-wrap:balance}
+.mast h1 span{color:var(--accent)}
+.mast-sub{
+  display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap;
+  border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);padding:6px 2px;font-size:13px;font-variant-numeric:tabular-nums;
+}
+.mast-sub b{letter-spacing:.08em;text-transform:uppercase}
+.chip{display:inline-block;background:var(--accent);color:var(--accent-ink);padding:2px 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+.saved{color:var(--ink-soft);font-style:italic}
+
+button{
+  font-family:var(--f-body);font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--ink);
+  padding:6px 12px;cursor:pointer;border-radius:2px;transition:transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease;
+}
+button:hover{background:var(--ink);color:var(--paper);transform:translateY(-1px);box-shadow:0 4px 10px -4px rgba(0,0,0,.4)}
+button:active{transform:translateY(0);box-shadow:none}
+button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+.confirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;margin-top:14px;background:var(--card);border-left:5px solid var(--accent);box-shadow:var(--shadow);font-size:15px}
+.confirm b{color:var(--accent)}
+
+/* Cuerpo */
+.body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;padding-top:20px;align-items:start}
+@media (max-width:900px){.body{grid-template-columns:minmax(0,1fr)}}
+
+.card{background:var(--card);box-shadow:var(--shadow);border:1px solid color-mix(in srgb, var(--ink) 12%, transparent)}
+
+.board{display:flex;flex-direction:column;gap:12px;align-items:center;min-width:0;padding:14px}
+.current{
+  width:100%;display:flex;align-items:stretch;background:var(--band);color:var(--band-ink);min-height:52px;
+}
+@media (max-width:900px){.current{position:sticky;top:env(safe-area-inset-top,0px);z-index:5}}
+.current .num{font-weight:700;padding:12px 12px;background:var(--accent);color:var(--accent-ink);white-space:nowrap;font-variant-numeric:tabular-nums;display:flex;align-items:center;letter-spacing:.04em}
+.current .txt{padding:12px 14px;flex:1;min-width:0;font-style:italic;font-size:17px;display:flex;align-items:center}
+.current button{border:0;color:var(--band-ink);padding:0 14px;font-size:22px;border-radius:0}
+.current button:hover{background:color-mix(in srgb, var(--band-ink) 15%, transparent);color:var(--band-ink);box-shadow:none;transform:none}
 
 .grid{
-  --c:min(38px,calc((100vw - 40px) / var(--cols)));
+  --c:min(38px,calc((100vw - 64px) / var(--cols)));
   display:grid;grid-template-columns:repeat(var(--cols),var(--c));grid-auto-rows:var(--c);
-  border:2px solid var(--ink);background:var(--block);gap:1px;padding:0;
-  box-shadow:3px 3px 0 var(--paper-2);
+  border:3px solid var(--ink);background:var(--block);gap:1px;
+  box-shadow:6px 6px 0 color-mix(in srgb, var(--ink) 18%, transparent);
 }
-.cell{position:relative;background:var(--cell)}
+.cell{position:relative;background:var(--cell);transition:background .15s ease}
 .cell.block{background:var(--block)}
 .cell input{
   position:absolute;inset:0;width:100%;height:100%;border:0;margin:0;padding:0;padding-top:calc(var(--c) * .18);
   background:transparent;color:var(--ink);text-align:center;font-family:var(--f-body);font-weight:700;
   font-size:calc(var(--c) * .56);text-transform:uppercase;caret-color:transparent;border-radius:0;outline:none;cursor:pointer;
 }
-.cell .n{position:absolute;top:1px;left:2px;font-size:calc(var(--c) * .27);line-height:1;color:var(--ink);pointer-events:none;font-variant-numeric:tabular-nums}
+.cell .n{position:absolute;top:1px;left:2px;font-size:calc(var(--c) * .27);line-height:1;color:var(--ink-soft);pointer-events:none;font-variant-numeric:tabular-nums;z-index:1}
 .cell.word{background:var(--hi)}
-.cell.cur{background:var(--hi-cur)}
-.cell.bad::after{
-  content:"";position:absolute;inset:12%;pointer-events:none;
-  background:linear-gradient(to top right,transparent calc(50% - 1.5px),var(--mark) calc(50% - 1.5px),var(--mark) calc(50% + 1.5px),transparent calc(50% + 1.5px));
+.cell.cur{background:var(--hi-cur);box-shadow:inset 0 0 0 2px var(--ink)}
+.cell.okw input{color:var(--ok)}
+.cell.bad{background:var(--bad-bg)}
+.cell.bad input{color:var(--bad)}
+.cell.bad.cur{background:color-mix(in srgb, var(--bad-bg) 60%, var(--hi-cur))}
+.cell.rev::before{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 calc(var(--c) * .26) calc(var(--c) * .26) 0;border-color:transparent var(--accent) transparent transparent;pointer-events:none}
+
+.cell.pop input{animation:pop .18s ease-out}
+.cell.shake input{animation:shake .32s ease-in-out}
+.cell.flash{z-index:3;animation:neon 1.2s ease-out}
+.cell.flash input{color:var(--ink)}
+@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@keyframes neon{
+  0%{background:var(--neon);box-shadow:0 0 0 2px var(--neon),0 0 18px 6px var(--neon)}
+  35%{background:color-mix(in srgb, var(--neon) 55%, var(--cell));box-shadow:0 0 0 2px var(--neon),0 0 26px 8px color-mix(in srgb, var(--neon) 70%, transparent)}
+  100%{background:var(--cell);box-shadow:0 0 0 0 transparent}
 }
-.cell.rev::before{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 calc(var(--c) * .26) calc(var(--c) * .26) 0;border-color:transparent var(--mark) transparent transparent;pointer-events:none}
-.grid.solved .cell input{color:var(--ink)}
 
-.pic{width:100%;margin:0;border:1px solid var(--ink);background:var(--paper-2)}
-.pic-frame{height:190px;display:flex;align-items:center;justify-content:center;padding:8px}
-.pic-frame img{max-width:100%;max-height:100%;object-fit:contain;filter:sepia(.25) contrast(1.05);border:1px solid var(--rule)}
-.pic-msg{font-style:italic;color:var(--ink-soft);font-size:14px;text-align:center;padding:0 12px}
-.pic figcaption{border-top:1px solid var(--rule);padding:4px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;gap:8px}
-.pic figcaption a{color:var(--ink-soft)}
-@media (max-width:560px){.pic-frame{height:150px}}
-button[aria-pressed="false"]{color:var(--ink-soft);border-color:var(--rule)}
-
-.legend{font-size:12px;color:var(--ink-soft);text-align:center;max-width:46ch}
-
-/* Definiciones */
-.clues{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;min-width:0}
-@media (max-width:560px){.clues{grid-template-columns:minmax(0,1fr)}}
-.clues section{min-width:0}
-.clues h2{font-size:14px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid var(--ink);text-align:center}
-.clues ol{list-style:none;margin:0 0 18px;padding:0;font-size:15px}
-.clues li{padding:3px 6px;cursor:pointer;display:flex;gap:6px;border-bottom:1px dotted var(--rule)}
-.clues li b{min-width:2.2ch;text-align:right;font-variant-numeric:tabular-nums}
-.clues li:hover{background:var(--paper-2)}
-.clues li.on{background:var(--hi)}
-.clues li.ok span{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--rule)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;padding-top:4px;border-top:1px dashed var(--rule)}
+.actions .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);align-self:center;margin-right:2px}
+.actions .sp{flex-basis:100%;height:0}
 
 .stamp{
-  display:none;margin:4px auto 0;padding:8px 16px;border:3px double var(--mark);color:var(--mark);
-  font-weight:700;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-2deg);text-align:center
+  margin:2px auto 0;padding:8px 18px;border:3px double var(--accent);color:var(--accent);background:var(--card);
+  font-weight:700;letter-spacing:.16em;text-transform:uppercase;transform:rotate(-3deg);text-align:center;
+  animation:stamp .45s cubic-bezier(.2,1.6,.4,1)
 }
-.stamp.show{display:block}
-.foot{margin-top:18px;border-top:3px double var(--ink);padding-top:8px;font-size:12px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@keyframes stamp{0%{transform:rotate(-3deg) scale(2.2);opacity:0}100%{transform:rotate(-3deg) scale(1);opacity:1}}
+.legend{font-size:12px;color:var(--ink-soft);text-align:center;max-width:48ch;margin:0}
+
+/* Columna derecha */
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px}
+@media (max-width:560px){.top{grid-template-columns:minmax(0,1fr)}}
+
+.prog{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.prog h3,.pic h3{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.prog .big{font-size:34px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.prog .big small{font-size:16px;color:var(--ink-soft);font-weight:400}
+.bar{height:10px;background:var(--paper-2);border:1px solid var(--rule);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--neon));transition:width .5s ease}
+.prog .row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums;gap:8px;flex-wrap:wrap}
+.prog .timer{font-size:22px;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+.pic{margin:0;display:flex;flex-direction:column}
+.pic h3{padding:10px 14px 0}
+.pic-frame{height:170px;display:flex;align-items:center;justify-content:center;padding:8px 12px}
+.pic-frame img{max-width:100%;max-height:100%;object-fit:contain;filter:sepia(.18) contrast(1.05);border:4px solid var(--cell);box-shadow:0 4px 12px -4px rgba(0,0,0,.45);transform:rotate(-1deg);animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:rotate(-1deg) translateY(6px)}to{opacity:1}}
+.pic-msg{font-style:italic;color:var(--ink-soft);font-size:14px;text-align:center}
+.pic figcaption{padding:0 14px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);text-align:right}
+.pic figcaption a{color:var(--ink-soft)}
+
+/* Definiciones */
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;padding:16px;min-width:0}
+@media (max-width:560px){.clues{grid-template-columns:minmax(0,1fr)}}
+.clues section{min-width:0}
+.clues h2{font-size:14px;letter-spacing:.2em;text-transform:uppercase;margin:0 0 6px;padding:6px 8px;background:var(--band);color:var(--band-ink);text-align:center}
+.clues ol{list-style:none;margin:0 0 14px;padding:0;font-size:15px}
+.clues li{padding:5px 8px;cursor:pointer;display:flex;gap:8px;border-bottom:1px dotted var(--rule);transition:background .12s ease}
+.clues li b{min-width:2.2ch;text-align:right;font-variant-numeric:tabular-nums;color:var(--accent)}
+.clues li:hover{background:var(--paper-2)}
+.clues li.on{background:var(--hi);box-shadow:inset 4px 0 0 var(--accent)}
+.clues li.ok span{color:var(--ok)}
+.clues li.ok b::after{content:" ✓";color:var(--ok)}
+
+.foot{margin-top:22px;border-top:3px double var(--ink);padding-top:8px;font-size:12px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="page">
-  <header class="mast">
-    <div class="mast-top"><span>Pasatiempos</span><span>Edición de la tarde</span><span id="saveState">Guardado</span></div>
-    <h1>El Crucigrama de la Tarde</h1>
-    <div class="mast-sub"><span id="today"></span><b id="puzNo">Crucigrama Nº —</b><span>Dificultad: media</span></div>
-  </header>
-
-  <div class="tools">
-    <div class="grp">
-      <span class="lbl">Comprobar</span>
-      <button id="chkCell" type="button">Letra</button>
-      <button id="chkWord" type="button">Palabra</button>
-      <button id="chkAll" type="button">Todo</button>
-    </div>
-    <div class="grp">
-      <span class="lbl">Revelar</span>
-      <button id="revCell" type="button">Letra</button>
-      <button id="revWord" type="button">Palabra</button>
-      <button id="revAll" type="button">Solución</button>
-    </div>
-    <div class="grp">
-      <button id="clearAll" type="button">Borrar</button>
-      <button id="newPuz" type="button">Nuevo crucigrama</button>
+  <div class="strip">
+    <span class="sec">Pasatiempos · Edición de la tarde</span>
+    <span class="prefs">
       <button id="picToggle" type="button" aria-pressed="true">Imagen: sí</button>
       <button id="themeBtn" type="button" title="Cambiar entre automático, claro y oscuro">Tema: automático</button>
-      <span class="timer" id="timer" title="Tiempo de juego">00:00</span>
-    </div>
+    </span>
   </div>
+  <header class="mast">
+    <h1>El Crucigrama <span>de la</span> Tarde</h1>
+    <div class="mast-sub">
+      <span id="today"></span>
+      <b id="puzNo">Crucigrama Nº —</b>
+      <span class="chip">Dificultad media</span>
+      <span class="saved" id="saveState">Guardado</span>
+    </div>
+  </header>
+
   <div class="confirm" id="confirm" hidden>
     <span id="confirmMsg"></span>
-    <button id="confirmYes" type="button">Sí</button>
+    <button id="confirmYes" type="button" class="primary">Sí</button>
     <button id="confirmNo" type="button">No</button>
   </div>
 
   <main class="body">
-    <div class="board">
+    <div class="board card">
       <div class="current">
         <button id="prevClue" type="button" aria-label="Definición anterior">‹</button>
         <span class="num" id="curNum">1 H</span>
         <span class="txt" id="curTxt"></span>
         <button id="nextClue" type="button" aria-label="Definición siguiente">›</button>
       </div>
-      <figure class="pic" id="pic" hidden>
-        <div class="pic-frame"><img id="picImg" alt="Imagen de pista para la palabra activa" hidden><span class="pic-msg" id="picMsg"></span></div>
-        <figcaption><span>Pista visual</span><a id="picSrc" href="https://es.wikipedia.org" target="_blank" rel="noopener">Fuente: Wikipedia</a></figcaption>
-      </figure>
       <div class="grid" id="grid" role="grid" aria-label="Grilla del crucigrama"></div>
-      <div class="stamp" id="stamp">Resuelto</div>
-      <p class="legend">Clic en una casilla para escribir. Clic de nuevo, Espacio o Enter cambian entre horizontal y vertical. Las tildes se ignoran; la Ñ cuenta como letra.</p>
+      <div class="stamp" id="stamp" hidden>Resuelto</div>
+      <div class="actions">
+        <span class="lbl">Revelar</span>
+        <button id="revCell" type="button">Letra</button>
+        <button id="revWord" type="button">Palabra</button>
+        <button id="revAll" type="button">Solución</button>
+        <span class="sp"></span>
+        <button id="clearAll" type="button">Borrar todo</button>
+        <button id="newPuz" type="button" class="primary">Nuevo crucigrama</button>
+      </div>
+      <p class="legend">Toca una casilla para escribir; tócala de nuevo, o usa Espacio, para cambiar de dirección. Las letras erradas se marcan en rojo y cada palabra correcta se ilumina.</p>
     </div>
-    <div class="clues">
-      <section><h2>Horizontales</h2><ol id="acrossList"></ol></section>
-      <section><h2>Verticales</h2><ol id="downList"></ol></section>
+
+    <div class="side">
+      <div class="top">
+        <div class="prog card">
+          <h3>Tu avance</h3>
+          <div class="big" id="progTxt">0 <small>de 0 palabras</small></div>
+          <div class="bar"><i id="progBar"></i></div>
+          <div class="row"><span>Tiempo</span><span class="timer" id="timer" title="Tiempo de juego">00:00</span></div>
+          <div class="row" id="stats"></div>
+        </div>
+        <figure class="pic card" id="pic" hidden>
+          <h3>Pista visual</h3>
+          <div class="pic-frame"><img id="picImg" alt="Imagen de pista para la palabra activa" hidden><span class="pic-msg" id="picMsg"></span></div>
+          <figcaption><a id="picSrc" href="https://es.wikipedia.org" target="_blank" rel="noopener">Fuente: Wikipedia</a></figcaption>
+        </figure>
+      </div>
+      <div class="clues card">
+        <section><h2>Horizontales</h2><ol id="acrossList"></ol></section>
+        <section><h2>Verticales</h2><ol id="downList"></ol></section>
+      </div>
     </div>
   </main>
 
   <footer class="foot">
     <span>Tu avance se guarda solo en este navegador.</span>
-    <span id="stats"></span>
+    <span>Las tildes se ignoran; la Ñ cuenta como letra.</span>
   </footer>
 </div>
 
@@ -1004,19 +1083,22 @@ function render(){
 function paint(){
   const wd = cur.k>=0 ? (wordAt(cur.k,cur.dir)||wordAt(cur.k,cur.dir==="A"?"D":"A")) : null;
   const on = new Set(wd?cellsOf(wd):[]);
+  const okWords = P.words.filter(isCorrect);
+  const okCells = new Set(okWords.flatMap(cellsOf));
   P.sol.forEach((ch,k)=>{
     if(!ch) return;
     const c = inputs[k].parentNode;
     c.classList.toggle("word", on.has(k));
     c.classList.toggle("cur", k===cur.k);
-    c.classList.toggle("bad", !!bad[k]);
+    c.classList.toggle("bad", !!entries[k] && entries[k]!==ch);
+    c.classList.toggle("okw", okCells.has(k));
     c.classList.toggle("rev", !!revealed[k]);
     if(inputs[k].value!==entries[k]) inputs[k].value = entries[k];
   });
   document.querySelectorAll(".clues li").forEach(li=>{
     const w = P.words.find(x=>x.dir+x.num===li.dataset.key);
     li.classList.toggle("on", !!wd && li.dataset.key===wd.dir+wd.num);
-    li.classList.toggle("ok", cellsOf(w).every(k=>entries[k]));
+    li.classList.toggle("ok", isCorrect(w));
   });
   if(wd){
     $("curNum").textContent = wd.num + (wd.dir==="A"?" H":" V");
@@ -1024,9 +1106,11 @@ function paint(){
   }
   showPic(wd);
   $("grid").classList.toggle("solved", done);
-  $("stamp").classList.toggle("show", done);
+  $("stamp").hidden = !done;
+  $("progTxt").innerHTML = okWords.length + " <small>de " + P.words.length + " palabras</small>";
+  $("progBar").style.width = Math.round(100*okWords.length/P.words.length) + "%";
   if(done) $("stamp").textContent = "Resuelto en " + fmtTime(elapsed);
-  $("stats").textContent = "Crucigramas resueltos: " + (stats.solved||0) + (stats.best ? " · Mejor tiempo: "+fmtTime(stats.best) : "");
+  $("stats").innerHTML = "<span>Resueltos: " + (stats.solved||0) + "</span>" + (stats.best ? "<span>Mejor tiempo: "+fmtTime(stats.best)+"</span>" : "");
 }
 
 /* ---------- Interacción ---------- */
@@ -1065,9 +1149,21 @@ function nextWord(delta){
 function setEntry(k,ch,fromReveal){
   if(done) return;
   if(revealed[k] && !fromReveal) return;
-  entries[k]=ch; bad[k]=false;
+  const touching = ["A","D"].map(d=>wordAt(k,d)).filter(Boolean);
+  const before = touching.map(isCorrect);
+  entries[k]=ch;
   if(fromReveal) revealed[k]=true;
+  if(ch){ animate([k], ch===P.sol[k] ? "pop" : "shake", 350); }
+  touching.forEach((w,i)=>{ if(!before[i] && isCorrect(w)) animate(cellsOf(w), "flash", 1300); });
   checkSolved(); save();
+}
+function isCorrect(w){ return cellsOf(w).every(c=>entries[c]===P.sol[c]); }
+function animate(ks, cls, ms){
+  ks.forEach(c=>{
+    const el = inputs[c] && inputs[c].parentNode; if(!el) return;
+    el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+    setTimeout(()=>el.classList.remove(cls), ms);
+  });
 }
 function onInput(k){
   const v = inputs[k].value;
@@ -1107,7 +1203,6 @@ function checkSolved(){
 
 /* Comprobar / revelar */
 function curWordCells(){ const wd=wordAt(cur.k,cur.dir); return wd?cellsOf(wd):[]; }
-function checkCells(ks){ ks.forEach(k=>{ bad[k] = !!entries[k] && entries[k]!==P.sol[k]; }); paint(); save(); }
 function revealCells(ks){ if(done) return; ks.forEach(k=>{ if(entries[k]!==P.sol[k]) setEntry(k,P.sol[k],true); }); paint(); }
 
 let pending = null;
@@ -1115,9 +1210,6 @@ function ask(msg,fn){ pending=fn; $("confirmMsg").innerHTML=msg; $("confirm").hi
 $("confirmYes").onclick=()=>{ $("confirm").hidden=true; const f=pending; pending=null; if(f) f(); };
 $("confirmNo").onclick=()=>{ $("confirm").hidden=true; pending=null; };
 
-$("chkCell").onclick=()=>checkCells([cur.k]);
-$("chkWord").onclick=()=>checkCells(curWordCells());
-$("chkAll").onclick=()=>checkCells(P.sol.map((c,k)=>c?k:-1).filter(k=>k>=0));
 $("revCell").onclick=()=>revealCells([cur.k]);
 $("revWord").onclick=()=>revealCells(curWordCells());
 $("revAll").onclick=()=>ask("<b>¿Ver la solución completa?</b> El crucigrama no contará como resuelto.",()=>revealCells(P.sol.map((c,k)=>c?k:-1).filter(k=>k>=0)));
