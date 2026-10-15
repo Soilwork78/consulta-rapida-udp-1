@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "crucigrama-de-la-tarde.vercel.app" }],
+      "destination": "/mente/",
+      "permanent": false
+    }
+  ]
+}
