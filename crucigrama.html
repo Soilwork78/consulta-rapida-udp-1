@@ -202,7 +202,8 @@ button.primary:hover{background:var(--ink);border-color:var(--ink);color:var(--p
 .picker-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .picker-head h2{margin:0;font-size:20px}
 .picker-head p{margin:0;color:var(--ink-soft);font-size:14px}
-.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}
+@media (max-width:560px){.theme{padding:10px}.theme b{font-size:15px}.theme .meta{font-size:12px}}
 .theme{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--rule);background:var(--paper);text-align:left}
 .theme b{font-size:17px}
 .theme .meta{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
@@ -407,7 +408,7 @@ MEXICO|País de los mariachis|País azteca|Antigua Nueva España|
 PERU|País vecino del norte|País de Machu Picchu|Tierra de los incas, al norte de la Concordia|
 BOLIVIA|País sin mar|País del salar de Uyuni|Lleva el nombre del Libertador|
 ARGENTINA|País del tango|País vecino del otro lado de los Andes|Tierra de plata, por su nombre latino|
-URUGUAY|País de Montevideo|País de la Banda Oriental|Primer campeón mundial de fútbol|
+URUGUAY|País de Montevideo|País de la Banda Oriental|Primer campeón mundial de fútbol|fmu
 CANADA|País de la hoja de arce|País de Ottawa|Segundo país más extenso del mundo|
 SUIZA|País de los relojes|País de los Alpes y el chocolate|Confederación helvética|
 NORUEGA|País de los fiordos|País de Oslo|Reino del sol de medianoche|
@@ -871,7 +872,7 @@ ZARZUELA|Teatro musical español|Género lírico español|Plato de mariscos cata
 VIOLETA|Flor morada|Nombre de la autora de Gracias a la vida|Color entre el azul y el rojo|mus
 GARDEL|Cantor de tangos|El Zorzal criollo|Cada día canta mejor|mus
 JARA|Víctor, cantautor|Apellido del autor de Te recuerdo Amanda|Arbusto mediterráneo|mus
-FUTBOL|Deporte con pelota y arcos|El deporte rey|Juego de once contra once|dep
+FUTBOL|Deporte con pelota y arcos|El deporte rey|Juego de once contra once|dep,fch,fmu
 TENIS|Deporte con raqueta|Deporte de raqueta y red|Zapatillas, en algunos países|dep
 GOLF|Deporte de hoyos|Deporte de hoyos y palos|Su meta es el hoyo en uno|dep
 AJEDREZ|Juego de tablero blanco y negro|Juego de reyes, damas y peones|Juego ciencia de Kasparov|dep
@@ -881,9 +882,9 @@ TORRE|Edificio alto|Pieza de ajedrez que avanza en línea recta|La de Pisa está
 ALFIL|Pieza que va en diagonal|Pieza de ajedrez que se mueve en diagonal|Antiguo elefante del ajedrez persa|dep
 MARATON|Carrera larga|Carrera de 42 kilómetros|Llanura griega de una famosa carrera|dep
 PODIO|Lugar de los ganadores|Plataforma de los ganadores|Tarima de tres alturas|dep
-ARBITRO|Juez del partido|Juez de un partido|Lleva silbato y tarjetas|dep
-PENAL|Tiro de once metros|Tiro desde los once metros|Relativo a las penas, o cárcel|dep
-CORNER|Tiro de esquina|Saque desde la esquina|Anglicismo de la bandera de esquina|dep
+ARBITRO|Juez del partido|Juez de un partido|Lleva silbato y tarjetas|dep,fch,fmu
+PENAL|Tiro de once metros|Tiro desde los once metros|Relativo a las penas, o cárcel|dep,fch,fmu
+CORNER|Tiro de esquina|Saque desde la esquina|Anglicismo de la bandera de esquina|dep,fch,fmu
 RODEO|Deporte de huasos|Deporte nacional de Chile|Atajada de novillo en medialuna|dep
 ESGRIMA|Deporte de espadas|Deporte de florete, espada y sable|Arte de defenderse con argumentos|dep
 REMO|Pala para mover un bote|Deporte de botes y palas|Castigo del galeote|dep
@@ -892,15 +893,15 @@ OLIMPIADA|Juegos Olímpicos|Período de cuatro años entre juegos olímpicos|Com
 RECORD|Mejor marca|Mejor marca registrada|En tiempo ___: muy rápido|dep
 EMPATE|Igualdad en el marcador|Igualdad de puntos en una competencia|Tablas, en el ajedrez|dep
 RAQUETA|Pala de tenis|Pala del tenista|Calzado para caminar en la nieve|dep
-ESTADIO|Cancha con graderías|Recinto deportivo con graderías|El Nacional de Ñuñoa|dep
-GOL|Punto en el fútbol|Tanto en el fútbol|Grito máximo de la tribuna|dep
-ARQUERO|Cuida el arco|Portero de fútbol|Tirador con arco|dep
-DELANTERO|Jugador que ataca|Jugador de ataque|El que va adelante|dep
-DEFENSA|Jugador que protege|Jugador que protege el arco|Abogado del acusado|dep
-CAMISETA|Polera del equipo|Prenda con los colores del club|Ponerse la ___: comprometerse|dep
-CANCHA|Lugar de juego|Terreno de juego|Experiencia, en Chile|dep
-BALON|Pelota|Pelota de fútbol|De oxígeno, en el hospital|dep
-TROFEO|Premio de copa|Copa del campeón|Botín de guerra|dep
+ESTADIO|Cancha con graderías|Recinto deportivo con graderías|El Nacional de Ñuñoa|dep,fch
+GOL|Punto en el fútbol|Tanto en el fútbol|Grito máximo de la tribuna|dep,fch,fmu
+ARQUERO|Cuida el arco|Portero de fútbol|Tirador con arco|dep,fch,fmu
+DELANTERO|Jugador que ataca|Jugador de ataque|El que va adelante|dep,fch,fmu
+DEFENSA|Jugador que protege|Jugador que protege el arco|Abogado del acusado|dep,fch
+CAMISETA|Polera del equipo|Prenda con los colores del club|Ponerse la ___: comprometerse|dep,fch,fmu
+CANCHA|Lugar de juego|Terreno de juego|Experiencia, en Chile|dep,fch
+BALON|Pelota|Pelota de fútbol|De oxígeno, en el hospital|dep,fch,fmu
+TROFEO|Premio de copa|Copa del campeón|Botín de guerra|dep,fmu
 MEDALLA|Premio olímpico|Distinción que se cuelga al cuello|Dorada, plateada o de bronce|dep
 BOXEO|Pelea con guantes|Deporte de puños|El noble arte|dep
 KARATE|Arte marcial de golpes|Arte marcial de mano vacía|De Okinawa a todo el mundo|dep
@@ -920,10 +921,10 @@ JABALINA|Lanza del atletismo|Lanza del atletismo|Hembra del jabalí|dep
 PESAS|Barra con discos|Halterofilia|Usadas en el gimnasio|dep
 GIMNASIO|Lugar para hacer ejercicio|Lugar para entrenar|Liceo, en Alemania|dep
 ENTRENADOR|Dirige al equipo|Director técnico de un equipo|Coach, en inglés|dep
-HINCHA|Fanático de un equipo|Seguidor apasionado de un club|Molestar, como verbo|dep
-CAMPEON|Ganador del torneo|Ganador de una competencia|Defensor de una causa|dep
-TORNEO|Campeonato|Competencia deportiva|Justa medieval de caballeros|dep
-COPA|Vaso de vino; trofeo|Trofeo de un campeonato|La América se juega cada cuatro años|dep
+HINCHA|Fanático de un equipo|Seguidor apasionado de un club|Molestar, como verbo|dep,fch,fmu
+CAMPEON|Ganador del torneo|Ganador de una competencia|Defensor de una causa|dep,fch,fmu
+TORNEO|Campeonato|Competencia deportiva|Justa medieval de caballeros|dep,fch
+COPA|Vaso de vino; trofeo|Trofeo de un campeonato|La América se juega cada cuatro años|dep,fch,fmu
 PELOTA|Bola de juego|Objeto redondo para jugar|Hacer ___: hacer caso|dep
 SILBATO|Pito del árbitro|Pito del árbitro|Da el pitazo final|dep
 DOMINO|Juego de fichas con puntos|Juego de 28 fichas|Disfraz con capucha|dep
@@ -1731,32 +1732,32 @@ ESTRIBILLO|Parte que se repite|Coro que vuelve|Muletilla|mus
 LETRA|Signo del alfabeto|Texto de una canción|Al pie de la ___|mus
 DISQUERA|Sello musical|Compañía de discos|Industria de los sellos|mus
 CASETE|Cinta de música|Cinta magnética|Se rebobinaba con lápiz|mus
-ALEXIS|Sánchez, futbolista|El niño maravilla de Tocopilla|Goleador histórico de la Roja|dep
-ZAMORANO|Bam bam|Goleador del Real Madrid|Delantero de la dupla Za-Sa|dep
-SALAS|Marcelo, el Matador|Goleador de la dupla Za-Sa|Delantero temuquense|dep
+ALEXIS|Sánchez, futbolista|El niño maravilla de Tocopilla|Goleador histórico de la Roja|dep,fch
+ZAMORANO|Bam bam|Goleador del Real Madrid|Delantero de la dupla Za-Sa|dep,fch
+SALAS|Marcelo, el Matador|Goleador de la dupla Za-Sa|Delantero temuquense|dep,fch
 RIOS|Marcelo, tenista|Primer número uno latino de la ATP|Chino de Vitacura|dep
 MASSU|Nicolás, tenista|Doble oro en Atenas 2004|Vamos, que se puede|dep
-PELE|Rey del fútbol|Edson Arantes|Tres veces campeón del mundo|dep
-MARADONA|Diego, crack argentino|La mano de Dios|Barrilete cósmico|dep
-MESSI|Lionel, crack argentino|Campeón del mundo en Qatar|La Pulga|dep
+PELE|Rey del fútbol|Edson Arantes|Tres veces campeón del mundo|dep,fmu
+MARADONA|Diego, crack argentino|La mano de Dios|Barrilete cósmico|dep,fmu
+MESSI|Lionel, crack argentino|Campeón del mundo en Qatar|La Pulga|dep,fmu
 FEDERER|Roger, tenista suizo|Rey de Wimbledon|Su revés a una mano|dep
 NADAL|Rafael, tenista español|Rey de Roland Garros|Manacorí de la arcilla|dep
 BOLT|Usain, velocista|Hombre más rápido del mundo|Rayo jamaicano|dep
 JORDAN|Michael, del básquetbol|Leyenda de los Bulls|Air|dep
 ALI|Muhammad, boxeador|Flota como mariposa, pica como abeja|Cassius Clay|dep
-COLOCOLO|Club popular chileno|Club del Monumental|Toqui y gato montés|dep
-TARJETA|Cartón del árbitro|Amarilla o roja|De crédito|dep
-EXPULSION|Salir echado|Tarjeta roja|Destierro|dep
-CAMPEONATO|Torneo|Competencia por un título|Acción de campeones|dep
-LIGA|Torneo de clubes|Competencia por puntos|Cinta elástica|dep
-FINAL|Último partido|Partido decisivo|Fin, término|dep
-SEMIFINAL|Antes de la final|Penúltima ronda|Paso previo al título|dep
-MARCADOR|Tablero de goles|Resultado del partido|Plumón|dep
-ALARGUE|Tiempo extra|Prórroga|Minutos de suplementario|dep
-PASE|Entrega del balón|Envío a un compañero|Permiso|dep
-REMATE|Tiro al arco|Golpe final|Venta al mejor postor|dep
-CABEZAZO|Golpe con la cabeza|Remate de cabeza|Choque frontal de ideas|dep
-CHILENA|Tiro de espaldas en el aire|Remate de chalaca, en Chile|Gentilicio nacional femenino|dep
+COLOCOLO|Club popular chileno|Club del Monumental|Toqui y gato montés|dep,fch
+TARJETA|Cartón del árbitro|Amarilla o roja|De crédito|dep,fch,fmu
+EXPULSION|Salir echado|Tarjeta roja|Destierro|dep,fmu
+CAMPEONATO|Torneo|Competencia por un título|Acción de campeones|dep,fch
+LIGA|Torneo de clubes|Competencia por puntos|Cinta elástica|dep,fmu
+FINAL|Último partido|Partido decisivo|Fin, término|dep,fch
+SEMIFINAL|Antes de la final|Penúltima ronda|Paso previo al título|dep,fmu
+MARCADOR|Tablero de goles|Resultado del partido|Plumón|dep,fch
+ALARGUE|Tiempo extra|Prórroga|Minutos de suplementario|dep,fmu
+PASE|Entrega del balón|Envío a un compañero|Permiso|dep,fmu
+REMATE|Tiro al arco|Golpe final|Venta al mejor postor|dep,fmu
+CABEZAZO|Golpe con la cabeza|Remate de cabeza|Choque frontal de ideas|dep,fch,fmu
+CHILENA|Tiro de espaldas en el aire|Remate de chalaca, en Chile|Gentilicio nacional femenino|dep,fch
 VOLEA|Golpe antes del bote|Tiro sin dejar caer la pelota|Golpe en el aire|dep
 SAQUE|Inicio del juego|Lanzamiento inicial|De esquina, el córner|dep
 ACE|Saque ganador|Saque que no se devuelve|As, en inglés|dep
@@ -2113,6 +2114,165 @@ LINNEO|Padre de la clasificación|Creador de la nomenclatura binomial|Botánico 
 TAXONOMIA|Clasificación|Ciencia que clasifica los seres vivos|Orden y nomenclatura|bio
 GENOMA|Todos los genes|Conjunto de genes de un ser|El humano se secuenció en 2003|bio
 ARN|Ácido mensajero (sigla)|Ácido ribonucleico (sigla)|Vacunas de mensajero (sigla)|bio
+WANDERERS|Club de Valparaíso|Santiago ___, decano del fútbol chileno|Caturros del Playa Ancha|fch
+EVERTON|Club de Viña del Mar|Club viñamarino del Sausalito|Ruleteros, con nombre de club inglés|fch
+COBRELOA|Club de Calama|Zorros del desierto|Finalista de la Libertadores en 1981 y 1982|fch
+COBRESAL|Club de El Salvador|Club minero de Atacama|Campeón sorpresa del Clausura 2015|fch
+HUACHIPATO|Club de Talcahuano|Acereros del CAP|Campeón en 2012 y 2023|fch
+PALESTINO|Club tricolor de La Cisterna|Club de la colonia palestina|Campeón en 1955 y 1978|fch
+AUDAX|___ Italiano, club de La Florida|Club de los tanos|Club itálico de verde|fch
+RANGERS|Club de Talca|Club rojinegro del Maule|Piducanos|fch
+ÑUBLENSE|Club de Chillán|Diablos rojos de Chillán|Club del estadio Nelson Oyarzún|fch
+CRUZADOS|Hinchas de la Católica|Apodo de la Universidad Católica|Caballeros de la cruz en San Carlos de Apoquindo|fch
+UNIVERSIDAD|La ___ de Chile, club azul|Club de los chunchos|Casa de estudios, y club del Romántico Viajero|fch
+BULLANGUERO|Hincha de la U|Seguidor ruidoso del club azul|Escandaloso, que mete bulla|fch
+BALLET|___ Azul de los sesenta|Equipo de la U campeón en los sesenta|Danza clásica|fch
+ALBO|Hincha de Colo-Colo|Del club blanco y negro|Blanco, en lenguaje culto|fch
+CACIQUE|Apodo de Colo-Colo|El club más popular de Chile|Jefe indígena|fch
+CHUNCHO|Mascota de la U|Búho del club azul|Lechuza chilena|fch
+ACERERO|Hincha de Huachipato|Del club de la siderúrgica|Trabajador del acero|fch
+CATURRO|Hincha de Wanderers|Seguidor del decano porteño|Loro pequeño chileno|fch
+MONUMENTAL|Estadio de Colo-Colo|Estadio David Arellano|Enorme, colosal|fch
+NACIONAL|Estadio de Ñuñoa|Estadio de la final de 1962|Del país|fch
+SAUSALITO|Estadio de Everton|Estadio de Viña del Mar|Junto a la laguna viñamarina|fch
+PLAYANCHA|Cerro y estadio de Wanderers|Barrio porteño del estadio caturro|Cerro de la Universidad de Playa Ancha|fch
+ROJA|La ___, selección chilena|Apodo de la selección de Chile|Tarjeta de expulsión|fch
+CASZELY|Chino, el rey del metro cuadrado|Primer expulsado con tarjeta roja en un Mundial|Carlos, ídolo albo de los setenta|fch
+FIGUEROA|Don Elías|Mejor jugador de América tres veces|Defensa del Internacional de Porto Alegre|fch
+ROJAS|Cóndor ___, arquero|Arquero de la bengala del Maracaná|Apellido del arquero suspendido de por vida en 1989|fch
+BENGALA|Fuego artificial|Fogonazo del Maracaná en 1989|Tigre de la India|fch
+VIDAL|Arturo, el Rey|Volante de la Juventus y el Bayern|Celia Punk|fch
+BRAVO|Claudio, arquero|Capitán que levantó dos Copas América|Valiente, o grito del público|fch
+MEDEL|Gary, el Pitbull|Defensa de los mundiales 2010 y 2014|Defensa chileno del Inter apodado como un perro de pelea|fch
+ARANGUIZ|Charles, el Príncipe|Volante del Leverkusen|Volante del Internacional de Porto Alegre y de la U|fch
+VARGAS|Eduardo, el Turbo|Goleador de la Copa América 2016|Delantero apodado como un motor sobrealimentado|fch
+BEAUSEJOUR|Jean, volante|Hizo el gol a Honduras en 2010|Primer gol chileno que ganó un partido mundialista desde 1962|fch
+LIVINGSTONE|Sapo, arquero y relator|Arquero de la Católica de los cuarenta|Explorador de África, y arquero chileno|fch
+ESCUTI|Misael, arquero del 62|Arquero de Colo-Colo en el Mundial|Guardián del arco en el tercer lugar|fch
+SANCHEZ|Leonel, figura del 62|Goleador chileno del Mundial 1962|Apellido de Alexis y de Leonel|fch
+ARAVENA|Jorge, el Mortero|Especialista en tiros libres de los ochenta|Mortero de la Católica|fch
+SUAZO|Humberto, Chupete|Goleador del Colo-Colo de 2006|Chupete de San Antonio|fch
+PINILLA|Mauricio, delantero|Su remate dio en el travesaño en 2014|Se tatuó el palo del Mineirão|fch
+TRAVESAÑO|Palo horizontal|Barra superior del arco|El que salvó a Brasil en 2014|fch
+BIELSA|El Loco, entrenador|DT de la Roja en Sudáfrica 2010|Rosarino que entrena mirando una conservadora|fch
+SAMPAOLI|DT campeón de América 2015|Entrenador de la primera Copa América chilena|Casildense que dirigió a la U y a la Roja|fch
+PIZZI|DT de la Copa Centenario|Entrenador campeón en 2016|Juan Antonio, ex goleador del Barcelona|fch
+RIERA|Fernando, DT del 62|Entrenador del tercer lugar|Apellido del técnico de la Batalla de Santiago|fch
+PELLEGRINI|El Ingeniero|Campeón de la Premier con el City|Manuel, DT del Villarreal y el Real Madrid|fch
+DITTBORN|Organizador del Mundial 62|Porque nada tenemos, lo haremos todo|Da nombre al estadio de Arica y murió antes del torneo|fch
+ARELLANO|David, fundador albo|Fundador de Colo-Colo|Murió en España en 1927; da nombre al Monumental|fch
+ANFP|Asociación de clubes (sigla)|Asociación Nacional de Fútbol Profesional|Sede de Quilín (sigla)|fch
+CLASICO|Partido entre rivales históricos|Colo-Colo contra la U|De estilo tradicional|fch
+LIGUILLA|Torneo corto|Minitorneo de clasificación chileno|Pequeña liga|fch
+DESCENSO|Bajar de categoría|Pérdida de la división|Bajada|fch
+ASCENSO|Subir de categoría|Paso a la división superior|Subida|fch
+TERCERO|Lugar de Chile en 1962|Puesto del podio de bronce|Número ordinal tras segundo|fch
+BATALLA|Combate|La de Santiago, Chile e Italia en 1962|Lucha armada|fch
+JOZIC|Mirko, DT de 1991|Técnico de Colo-Colo campeón de América|Croata de la Copa Libertadores alba|fch
+ENDLER|Christiane, arquera|Arquera estrella de la selección femenina|Arquera chilena del PSG y del Olympique de Lyon|fch
+BICAMPEON|Dos veces campeón|Chile en 2015 y 2016|Ganador de dos títulos seguidos|fch
+CENTENARIO|Cien años|Copa América que ganó Chile en 2016|Estadio de Montevideo de 1930|fch,fmu
+CHILE|País de la Roja|Selección campeona de América en 2015|País del Mundial de 1962|fch
+GARRA|___ Blanca, barra alba|Barra de Colo-Colo|Uña de un felino|fch
+BARRA|Hinchada|Grupo organizado de hinchas|Pieza de metal alargada|fch
+VIAL|Fernández ___, club de Concepción|Club ferroviario penquista|Almirante Arturo Fernández ___|fch
+CALERA|Unión La ___|Club de los cementeros|Horno de cal|fch
+HISPANO|Hincha de Unión Española|Del club rojo de Independencia|De España|fch
+PAPAYERO|Hincha de La Serena|Seguidor del club granate serenense|Vendedor de papayas|fch
+BOHEMIO|Hincha de Santiago Morning|Del club microbusero|Que lleva vida libre y nocturna|fch
+ACADEMIA|Apodo de Magallanes|Club carabelero de San Bernardo|Institución de enseñanza|fch
+CELESTE|Color de O'Higgins|Club rancagüino, por su color|Del cielo|fch
+SIDNEY|Bronce olímpico de Zamorano|Ciudad del bronce de la Roja en 2000|Ciudad de la Ópera australiana|fch
+PAREDES|Esteban, goleador|Máximo goleador del torneo chileno|Muros|fch
+CHAMACO|Valdés, ídolo albo|Francisco, volante de Colo-Colo en los setenta|Muchacho, en México|fch
+BONVALLET|Eduardo, volante y comentarista|Volante del Mundial 82|Comentarista de lenguaje encendido|fch
+OLIMPIA|Club paraguayo|Rival de Colo-Colo en la final de 1991|Ciudad de los primeros Juegos|fch,fmu
+MUNDIAL|Copa del Mundo|Torneo de selecciones cada cuatro años|Que abarca todo el planeta|fmu
+FIFA|Federación mundial (sigla)|Organizadora del Mundial|Sede en Zúrich (sigla)|fmu
+UEFA|Fútbol de Europa (sigla)|Organizadora de la Champions|Sede en Nyon (sigla)|fmu
+CONMEBOL|Fútbol de Sudamérica|Confederación sudamericana|Organizadora de la Libertadores|fmu
+MARACANA|Estadio de Río|Estadio más famoso de Brasil|Escenario de dos finales mundiales|fmu
+MARACANAZO|Derrota de Brasil en 1950|Triunfo uruguayo de 1950|Silencio de doscientas mil personas|fmu
+WEMBLEY|Estadio de Londres|Estadio de la final de 1966|Templo del fútbol inglés|fmu
+BERNABEU|Estadio del Real Madrid|Estadio Santiago ___|Presidente merengue que da nombre al estadio|fmu
+ANFIELD|Estadio de Liverpool|Estadio donde nunca caminarás solo|Casa del Kop|fmu
+BARCELONA|Club catalán|Club del Camp Nou|Más que un club|fmu
+JUVENTUS|Club de Turín|La Vecchia Signora|Club bianconero de la familia Agnelli|fmu
+MILAN|Club rossonero|Club italiano de San Siro|Ciudad de la moda|fmu
+INTER|Club neroazzurro|Internazionale de Milán|Entre, como prefijo latino|fmu
+LIVERPOOL|Club de los Reds|Club inglés de Anfield|Puerto de los Beatles|fmu
+ARSENAL|Club londinense|Los Gunners|Depósito de armas|fmu
+CHELSEA|Club londinense azul|Club de Stamford Bridge|Barrio de Londres|fmu
+BAYERN|Club de Múnich|Gigante de Baviera|Club rojo del Allianz Arena|fmu
+AJAX|Club de Ámsterdam|Club de Cruyff|Héroe griego de la Ilíada|fmu
+RIVER|Club de banda roja de Buenos Aires|Club millonario de Núñez|Río, en inglés|fmu
+PEÑAROL|Club de Montevideo|Club aurinegro uruguayo|Rival eterno de Nacional|fmu
+FLAMENGO|Club de Río de Janeiro|Club más popular de Brasil|Mengão|fmu
+SANTOS|Club de Pelé|Club brasileño del Peixe|Plural de santo|fmu
+BENFICA|Club de Lisboa|Club de Eusébio|Águilas de la Luz|fmu
+PORTO|Club portugués|Club de los dragones|Vino dulce portugués|fmu
+CELTIC|Club de Glasgow|Primer británico campeón de Europa|Los leones de Lisboa de 1967|fmu
+CRUYFF|Johan, crack holandés|Ídolo del Ajax y el Barcelona|Padre del fútbol total|fmu
+BECKENBAUER|El Kaiser|Campeón como jugador y como técnico|Líbero de Múnich|fmu
+ZIDANE|Zizou|Crack francés del cabezazo a Materazzi|Campeón del mundo en 1998|fmu
+RONALDO|El Fenómeno, o Cristiano|Goleador brasileño de 2002|Nombre de dos cracks de distinto país|fmu
+RONALDINHO|Crack brasileño sonriente|Gaúcho del Barcelona|Balón de Oro 2005|fmu
+ROMARIO|Goleador brasileño|Figura de Brasil en 1994|Baixinho|fmu
+GARRINCHA|Crack brasileño de piernas chuecas|Figura del Mundial de Chile|La alegría del pueblo|fmu
+EUSEBIO|Pantera negra|Goleador de Portugal en 1966|Crack mozambiqueño del Benfica|fmu
+PUSKAS|Crack húngaro|Da nombre al premio al mejor gol|Cañoncito pum|fmu
+DISTEFANO|La Saeta Rubia|Ídolo del Real Madrid de los cincuenta|Alfredo, de tres selecciones|fmu
+KEMPES|Goleador argentino de 1978|Matador del Mundial de Argentina|Mario Alberto|fmu
+BATISTUTA|Batigol|Goleador argentino de la Fiorentina|Rey León de Florencia|fmu
+PLATINI|Crack francés de los ochenta|Tres Balones de Oro seguidos|Expresidente de la UEFA|fmu
+BECKHAM|Crack inglés|Volante del Manchester United|Bend it like|fmu
+XAVI|Volante del Barcelona|Cerebro del tiki-taka|Hernández|fmu
+INIESTA|Volante español|Gol de la final de 2010|Don Andrés|fmu
+NEYMAR|Crack brasileño|Goleador del PSG y el Barcelona|Junior de Mogi das Cruzes|fmu
+MBAPPE|Crack francés|Campeón del mundo en 2018 de joven|Kylian|fmu
+HAALAND|Goleador noruego|Delantero del Manchester City|Robot de goles nórdico|fmu
+LEWANDOWSKI|Goleador polaco|Delantero del Bayern|Robert, de Varsovia|fmu
+MODRIC|Volante croata|Balón de Oro 2018|Luka|fmu
+MATTHAUS|Lothar, alemán|Capitán alemán campeón en 1990|Récord de partidos mundialistas|fmu
+YASHIN|Araña negra|Único arquero Balón de Oro|Lev, arquero soviético|fmu
+BUFFON|Arquero italiano|Campeón en 2006 bajo los palos|Gigi|fmu
+CASILLAS|Arquero español|San Iker|Capitán campeón en 2010|fmu
+MALDINI|Defensa italiano|Leyenda del Milan|Paolo, hijo de Cesare|fmu
+BAGGIO|Crack italiano|Falló el penal de 1994|Il divin codino|fmu
+KLOSE|Goleador alemán|Máximo goleador de los mundiales|Miroslav, de dieciséis goles|fmu
+MULLER|Goleador alemán|Gerd o Thomas|El Bombardero de la nación alemana|fmu
+FIGO|Crack portugués|Pasó del Barça al Madrid|Luís, de la cabeza de cerdo en el Camp Nou|fmu
+KAKA|Crack brasileño del Milan|Balón de Oro 2007|Ricardo Izecson|fmu
+PIRLO|Volante italiano|Arquitecto de la Juventus|Il maestro|fmu
+CHARLTON|Bobby, inglés|Campeón inglés de 1966|Sobreviviente de Múnich|fmu
+VALDERRAMA|El Pibe colombiano|Volante de melena rubia|Mono de Santa Marta|fmu
+FORLAN|Delantero uruguayo|Mejor jugador del Mundial 2010|Diego, del Atlético de Madrid|fmu
+CAVANI|Delantero uruguayo|Matador del PSG|El Matador de Salto|fmu
+CHILAVERT|Arquero paraguayo|Arquero goleador|José Luis, de tiros libres|fmu
+HIGUITA|Arquero colombiano|El del escorpión en Wembley|Loco del área|fmu
+GUARDIOLA|DT del Barcelona y el City|Pep|Filósofo del juego de posición|fmu
+MOURINHO|DT portugués|The Special One|José, del Porto y el Inter|fmu
+KLOPP|DT alemán|DT del Liverpool campeón|Heavy metal football|fmu
+FERGUSON|DT escocés|Leyenda del Manchester United|Sir Alex|fmu
+ANCELOTTI|DT italiano|Ganador de cinco Champions|Carlo de la ceja levantada|fmu
+MENOTTI|DT argentino de 1978|El Flaco|César Luis|fmu
+BILARDO|DT argentino de 1986|El Narigón|Carlos Salvador|fmu
+SCALONI|DT argentino de 2022|Campeón en Qatar|Lionel de Pujato|fmu
+ORSAY|Fuera de juego|Posición adelantada|Offside, castellanizado|fmu
+VAR|Árbitro por video|Videoarbitraje (sigla)|Revisión de jugadas (sigla)|fmu
+TRIPLETE|Tres goles o tres títulos|Hat-trick|Tres trofeos en una temporada|fmu
+PANENKA|Penal picado|Penal suave al centro|Checo de 1976|fmu
+CATENACCIO|Defensa cerrada|Cerrojo italiano|Candado táctico|fmu
+TIKITAKA|Toque corto|Estilo de pases cortos del Barcelona|Juego de posición, coloquial|fmu
+GOLEADOR|Hace muchos goles|Máximo anotador|Artillero|fmu
+PICHICHI|Goleador de la liga española|Premio al máximo goleador en España|Rafael Moreno, del Athletic|fmu
+RIMET|Jules, creador del Mundial|Nombre de la primera copa|Francés que impulsó el torneo de 1930|fmu
+QATAR|Sede del Mundial 2022|País del Mundial de diciembre|Emirato del golfo Pérsico|fmu
+BRASIL|Pentacampeón|País de Pelé|Verde amarela|fmu
+ALEMANIA|Cuatro veces campeón del mundo|Selección de la Mannschaft|Campeón en 2014 en el Maracaná|fmu
+HOLANDA|La Naranja Mecánica|Selección de Cruyff|Países Bajos|fmu
+VUVUZELA|Trompeta de Sudáfrica|Corneta ruidosa del Mundial 2010|Abejorro gigante de las tribunas|fmu
+EUROCOPA|Campeonato europeo|Torneo de selecciones de Europa|Euro|fmu
 `.trim().split("\n").map(l=>{const p=l.split("|").map(s=>s.trim());return{a:p[0],cs:p.slice(1,4),tags:(p[4]||"").split(",").filter(Boolean)}})
  .filter((w,i,arr)=>w.a.length>=3 && w.a.length<=11 && arr.findIndex(x=>x.a===w.a)===i);
 
@@ -2277,6 +2437,17 @@ const IMG = {
   MURALLA:"Gran Muralla China",PIRAMIDE:"Gran Pirámide de Guiza",CABILDO:"Cabildo colonial",FENICIO:"Fenicia",
   OZONO:"Capa de ozono",NUCLEO:"Núcleo celular",SISMO:"Terremoto",ASPIRINA:"Ácido acetilsalicílico",
   SUTURA:"Sutura quirúrgica",TIMPANO:"Membrana timpánica",ARBITRO:"Árbitro deporte",OLIMPIADA:"Juegos Olímpicos",
+  RONALDO:"Ronaldo Nazário",BRAVO:"Claudio Bravo",VIDAL:"Arturo Vidal",MEDEL:"Gary Medel",VARGAS:"Eduardo Vargas futbolista",
+  SANCHEZ:"Leonel Sánchez",ROJAS:"Roberto Rojas arquero",FIGUEROA:"Elías Figueroa",RIVER:"Club Atlético River Plate",
+  INTER:"Inter de Milán",MILAN:"Associazione Calcio Milan",SANTOS:"Santos Futebol Clube",PORTO:"Futebol Clube do Porto",
+  CELTIC:"Celtic Football Club",NACIONAL:"Estadio Nacional Julio Martínez Prádanos",ROJA:"Selección de fútbol de Chile",
+  BATALLA:"Batalla de Santiago fútbol 1962",MULLER:"Gerd Müller",CHARLTON:"Bobby Charlton",RIERA:"Fernando Riera",
+  PIZZI:"Juan Antonio Pizzi",ARAVENA:"Jorge Aravena",ESCUTI:"Misael Escuti",UNIVERSIDAD:"Club Universidad de Chile",
+  CRUZADOS:"Club Deportivo Universidad Católica",EVERTON:"Everton de Viña del Mar",WANDERERS:"Santiago Wanderers",
+  RANGERS:"Rangers de Talca",AUDAX:"Audax Italiano",PALESTINO:"Club Deportivo Palestino",PAREDES:"Esteban Paredes",
+  CHAMACO:"Francisco Valdés futbolista",VIAL:"Club Deportivo Arturo Fernández Vial",CALERA:"Unión La Calera",
+  ACADEMIA:"Club Deportivo Magallanes",CHUNCHO:"Club Universidad de Chile",CACIQUE:"Colo-Colo",ALBO:"Colo-Colo",
+  GARRA:"Garra Blanca",BARRA:"Barra brava",BALLET:"Ballet Azul",CLASICO:"Superclásico del fútbol chileno",
   ENANO:"Blancanieves y los siete enanitos",REINA:"Reina monarquía",PRINCIPE:"Príncipe",ODIN:"Odín",THOR:"Thor"
 };
 const picCache = {};
@@ -2361,7 +2532,8 @@ applyPrefs();
 const THEMES = [
   {k:"mix",n:"Misceláneo"},{k:"bio",n:"Biología"},{k:"dep",n:"Deportes"},{k:"cine",n:"Cine"},
   {k:"rock",n:"Rock y metal"},{k:"mus",n:"Música"},{k:"enf",n:"Enfermería"},{k:"med",n:"Medicina"},
-  {k:"hch",n:"Historia de Chile"},{k:"hun",n:"Historia universal"}
+  {k:"hch",n:"Historia de Chile"},{k:"hun",n:"Historia universal"},
+  {k:"fch",n:"Fútbol chileno"},{k:"fmu",n:"Fútbol mundial"}
 ];
 const themeName = k => (THEMES.find(t=>t.k===k)||THEMES[0]).n;
 const LEVEL_PTS = [100,200,300];
