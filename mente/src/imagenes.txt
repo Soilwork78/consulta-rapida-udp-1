@@ -1,0 +1,1229 @@
+# Artículo exacto de Wikipedia en español para la imagen de cada palabra del crucigrama.
+# "Título|CLAVE" cuando difieren; solo "Título" cuando el título normalizado es la clave.
+# Palabras abstractas o ambiguas no van: el juego muestra "sin imagen" en vez de una imagen dudosa.
+
+# Geografía
+Cordillera de los Andes|ANDES
+Desierto de Atacama|ATACAMA
+Río Biobío|BIOBIO
+Lago Titicaca|TITICACA
+Río Nilo|NILO
+Río Danubio|DANUBIO
+Desierto del Sahara|SAHARA
+Istmo de Panamá|ISTMO
+Estrecho de Magallanes|ESTRECHO
+Península
+Volcán
+Géiser
+Delta del Nilo|DELTA
+Oasis
+Tundra
+Estepa
+Fiordo
+Monzón
+Trópico de Capricornio|TROPICO
+Meridiano de Greenwich|MERIDIANO
+Oslo
+Lima
+Quito
+Roma
+París
+Londres
+Madrid
+Tokio
+Egipto
+Grecia
+India
+Cuba
+Isla Grande de Chiloé|CHILOE
+Isla de Pascua|RAPANUI
+Valparaíso
+Arica
+Volcán Osorno|OSORNO
+Región del Maule|MAULE
+Río Amazonas|AMAZONAS
+Montes Urales|URAL
+Alpes
+Monte Everest|EVEREST
+Cataratas del Iguazú|IGUAZU
+Golfo de Penas|GOLFO
+Cabo de Hornos|CABO
+Cascada
+Glaciar
+Meseta
+Duna
+Selva
+Pantano
+Arrecife de coral|ARRECIFE
+Playa
+Acantilado
+Salar de Uyuni|SALAR
+Altiplano
+Pampa
+Gran Chaco|CHACO
+Canal de Suez|CANAL
+Bruselas
+Berlín
+Viena
+Atenas
+Moscú
+Pekín
+El Cairo|CAIRO
+Bogotá
+Caracas
+Montevideo
+Asunción
+Sucre
+Brasilia
+México
+Perú
+Bolivia
+Argentina
+Uruguay
+Canadá
+Suiza
+Noruega
+Escocia
+Irlanda
+Italia
+Francia
+Japón
+China
+Rusia
+Australia
+Santiago de Chile|SANTIAGO
+Temuco
+Talca
+Chillán
+Iquique
+Antofagasta
+Coquimbo
+Calama
+Región de Ñuble|ÑUBLE
+Región de Aysén del General Carlos Ibáñez del Campo|AYSEN
+Región de Magallanes y de la Antártica Chilena|MAGALLANES
+Río Huasco|HUASCO
+Lago Llanquihue|LLANQUIHUE
+Volcán Villarrica|VILLARRICA
+Aconcagua
+Parque nacional Torres del Paine|PAINE
+Laguna
+Valle
+Colina
+Islote
+Costa
+
+# Historia
+Imperio incaico|INCA
+Mexicas|AZTECA
+Cultura maya|MAYA
+Faraón
+Julio César|CESAR
+Napoleón Bonaparte|NAPOLEON
+Cristóbal Colón|COLON
+Bernardo O'Higgins|OHIGGINS
+Lautaro
+Pedro de Valdivia|VALDIVIA
+Caupolicán
+Vikingo
+Cruzadas|CRUZADA
+Cabildo colonial|CABILDO
+Troya
+Esparta
+Fenicia|FENICIO
+Gran Muralla China|MURALLA
+Gran Pirámide de Guiza|PIRAMIDE
+Gladiador
+Legión romana|LEGION
+Senado romano|SENADO
+Momia
+Jeroglífico
+Papiro
+Gran Esfinge de Guiza|ESFINGE
+Piedra de Rosetta|ROSETA
+Caballero
+Armadura
+Monje
+Abadía
+Johannes Gutenberg|GUTENBERG
+Martín Lutero|LUTERO
+Carabela
+Galeón
+Pirata
+Corsario
+Batalla de Maipú|MAIPU
+Rancagua
+Batalla de Chacabuco|CHACABUCO
+José Miguel Carrera|CARRERA
+Arturo Prat|PRAT
+Huáscar (monitor)|HUASCAR
+Esmeralda (1855)|ESMERALDA
+José Manuel Balmaceda|BALMACEDA
+Diego Portales|PORTALES
+Nitrato de sodio|SALITRE
+Guillotina
+Toma de la Bastilla|BASTILLA
+Káiser
+Trinchera
+Tanque
+Mapuche
+Aimaras|AYMARA
+Diaguitas|DIAGUITA
+Selknam
+Quipu
+Cuzco|CUSCO
+Diego de Almagro|ALMAGRO
+Inés de Suárez|SUAREZ
+Alonso de Ercilla|ERCILLA
+Ramón Freire|FREIRE
+Manuel Rodríguez Erdoíza|RODRIGUEZ
+José de San Martín|SANMARTIN
+José Joaquín Prieto|PRIETO
+Manuel Bulnes|BULNES
+Manuel Montt|MONTT
+Andrés Bello|BELLO
+José Victorino Lastarria|LASTARRIA
+Juan Mackenna|MACKENNA
+Carlos Condell|CONDELL
+Combate naval de Angamos|ANGAMOS
+Tacna
+Pisagua
+Ignacio Domeyko|DOMEYKO
+Arturo Alessandri|ALESSANDRI
+Carlos Ibáñez del Campo|IBAÑEZ
+Pedro Aguirre Cerda|AGUIRRE
+Augusto Pinochet|PINOCHET
+Patricio Aylwin|AYLWIN
+Ricardo Lagos|LAGOS
+Michelle Bachelet|BACHELET
+Sebastián Piñera|PIÑERA
+Gabriel Boric|BORIC
+Congreso Nacional de Chile|CONGRESO
+Oficina salitrera Humberstone|HUMBERSTONE
+Lota
+Sewell
+Mesopotamia
+Sumeria|SUMERIO
+Babilonia
+Hammurabi
+Alejandro Magno|ALEJANDRO
+Pericles
+Sócrates
+Platón
+Aristóteles
+Augusto
+Nerón
+Calígula
+Pompeya
+Cartago
+Aníbal
+Mahoma
+Carlomagno
+Leonardo da Vinci|LEONARDO
+Nicolás Maquiavelo|MAQUIAVELO
+Voltaire
+Maximilien Robespierre|ROBESPIERRE
+Batalla de Waterloo|WATERLOO
+Lenin
+Iósif Stalin|STALIN
+Adolf Hitler|HITLER
+Winston Churchill|CHURCHILL
+Franklin D. Roosevelt|ROOSEVELT
+Hiroshima
+Desembarco de Normandía|NORMANDIA
+Nelson Mandela|MANDELA
+Mahatma Gandhi|GANDHI
+John F. Kennedy|KENNEDY
+Cleopatra
+Tutankamón
+Ramsés II|RAMSES
+Atila
+Juan Sebastián Elcano|ELCANO
+Hernán Cortés|CORTES
+Francisco Pizarro|PIZARRO
+Moctezuma Xocoyotzin|MOCTEZUMA
+Atahualpa
+Simón Bolívar|BOLIVAR
+
+# Ciencia, astronomía, química
+Átomo
+Protón
+Neutrón
+Electrón
+Oxígeno
+Hierro
+Cobre
+Litio
+Oro
+Plata
+Neón
+Helio
+Capa de ozono|OZONO
+Ácido desoxirribonucleico|ADN
+Célula
+Núcleo celular|NUCLEO
+Mitosis
+Ósmosis
+Fotón
+Prisma (óptica)|PRISMA
+Imán
+Cometa
+Eclipse solar|ECLIPSE
+Galaxia
+Marte (planeta)|MARTE
+Venus (planeta)|VENUS
+Saturno (planeta)|SATURNO
+Júpiter (planeta)|JUPITER
+Luna
+Nebulosa
+Fósil
+Magma
+Terremoto
+Tsunami
+Molécula
+Sodio
+Potasio
+Calcio
+Carbono
+Azufre
+Mercurio (planeta)|MERCURIO
+Uranio
+Plomo
+Estaño
+Aluminio
+Hidrógeno
+Nitrógeno
+Carbón
+Petróleo
+Hielo
+Rayo
+Palanca
+Polea
+Motor de combustión interna|MOTOR
+Telescopio
+Microscopio
+Termómetro
+Barómetro
+Astronauta
+Cohete
+Estrella
+Planeta
+Asteroide
+Meteorito
+Orión (constelación)|ORION
+Dinosaurio
+Gregor Mendel|MENDEL
+Oveja Dolly|CLON
+Embrión
+Proteína
+Glucosa
+Mitocondria
+Ribosoma
+Cromosoma
+Membrana plasmática|MEMBRANA
+Citoplasma
+Meiosis
+Fungi|HONGO
+Saccharomyces cerevisiae|LEVADURA
+Alga
+Plancton
+Mamífero
+Reptil
+Amphibia|ANFIBIO
+Insecto
+Arachnida|ARACNIDO
+Mollusca|MOLUSCO
+Crustacea|CRUSTACEO
+Carlos Linneo|LINNEO
+Charles Darwin|DARWIN
+Isaac Newton|NEWTON
+Albert Einstein|EINSTEIN
+Marie Curie|CURIE
+Louis Pasteur|PASTEUR
+Galileo Galilei|GALILEO
+Euclides
+Pitágoras
+Nicolás Copérnico|COPERNICO
+Johannes Kepler|KEPLER
+Nikola Tesla|TESLA
+Thomas Alva Edison|EDISON
+Alexander Fleming|FLEMING
+Hipócrates
+Arquímedes
+Círculo
+Triángulo
+Cuadrado
+Octágono
+Hexágono
+Rombo
+Cubo (geometría)|CUBO
+Esfera
+
+# Cuerpo y salud
+Neurona
+Arteria
+Vena
+Pulmón
+Riñón
+Hígado
+Corazón
+Insulina
+Ácido acetilsalicílico|ASPIRINA
+Vacuna
+Virus
+Bacteria
+Plaqueta
+Hueso
+Fémur
+Cráneo
+Retina
+Membrana timpánica|TIMPANO
+Estómago
+Intestino
+Páncreas
+Bazo
+Glándula tiroides|TIROIDES
+Cerebro
+Columna vertebral|COLUMNA
+Vértebra
+Costilla
+Músculo
+Tendón
+Sangre
+Eritrocito|GLOBULO
+Pulsioxímetro|OXIMETRO
+Jeringa
+Catéter
+Venda
+Camilla
+Hospital
+Florence Nightingale|NIGHTINGALE
+Jarabe
+Comprimido|PASTILLA
+Penicilina
+Morfina
+Fonendoscopio|FONENDO
+Bisturí
+Radiografía
+Ecografía
+Resonancia magnética|RESONANCIA
+Hemoglobina
+Alvéolo pulmonar|ALVEOLO
+Bronquio
+Tráquea
+Laringe
+Faringe
+Esófago
+Duodeno
+Nefrona
+Uréter
+Vejiga urinaria|VEJIGA
+Próstata
+Útero
+Ovario
+Placenta
+Feto
+Hipófisis
+Pupila
+Córnea
+Cristalino
+Epidermis
+Dermis
+Aorta
+Válvula cardíaca|VALVULA
+Miocardio
+Apéndice vermiforme|APENDICE
+Vesícula biliar|VESICULA
+Páncreas
+Sonda Foley|FOLEY
+Autoclave
+Quirófano|PABELLON
+Mascarilla quirúrgica|MASCARILLA
+Bolsa autoinflable|AMBU
+Desfibrilador externo automático|DEA
+Escala de Glasgow|GLASGOW
+Inhalador
+Gasa
+Hisopo|TORULA
+Povidona yodada|POVIDONA
+Bomba de infusión|BOMBA
+Virginia Henderson|HENDERSON
+Dorothea Orem|OREM
+Hildegard Peplau|PEPLAU
+Jean Watson|WATSON
+Ojo|OJO
+Nariz
+Labio
+Codo
+Rodilla
+Tobillo
+Ombligo
+Iris (anatomía)|IRIS
+Oído
+Diente
+Mano
+Pie
+Piel
+Uña
+Lengua (anatomía)|LENGUA
+Boca
+Dedo
+
+# Literatura y arte
+Pablo Neruda|NERUDA
+Gabriela Mistral|MISTRAL
+Vicente Huidobro|HUIDOBRO
+Violeta Parra|PARRA
+Don Quijote de la Mancha|QUIJOTE
+Sancho Panza|SANCHO
+Dulcinea del Toboso|DULCINEA
+Miguel de Cervantes|CERVANTES
+Hamlet
+Odisea
+Ilíada
+Odiseo|ULISES
+La Araucana|ARAUCANA
+Cien años de soledad|MACONDO
+Jorge Luis Borges|BORGES
+Dante Alighieri|DANTE
+Francisco de Goya|GOYA
+Pablo Picasso|PICASSO
+Salvador Dalí|DALI
+Claude Monet|MONET
+Fresco
+Mosaico
+Mural
+Escultura
+Paleta de pintor|PALETA
+Arquitectura gótica|GOTICO
+Barroco
+Ópera
+Orquesta
+Tenor
+Soprano
+Piano
+Violín
+Arpa
+Cueca
+Tango
+Vals
+Charango
+Quena
+Ludwig van Beethoven|BEETHOVEN
+Wolfgang Amadeus Mozart|MOZART
+Telón
+Mimo
+Romeo y Julieta|ROMEO
+Otelo
+Macbeth
+Fausto (Goethe)|FAUSTO
+Drácula
+Alicia en el país de las maravillas|ALICIA
+Pinocho
+El principito|PRINCIPITO
+Quimera (mitología)|QUIMERA
+Homero
+Virgilio
+William Shakespeare|SHAKESPEARE
+Federico García Lorca|LORCA
+Rubén Darío|DARIO
+César Vallejo|VALLEJO
+Julio Cortázar|CORTAZAR
+Isabel Allende|ALLENDE
+José Donoso|DONOSO
+María Luisa Bombal|BOMBAL
+Retrato
+Paisaje
+Acuarela
+Pincel
+Caballete
+Museo del Louvre|MUSEO
+Estatua
+Mármol
+Bronce
+Catedral
+Vitral
+Cúpula
+Fotografía
+Guitarra
+Flauta
+Trompeta
+Tambor
+Acordeón
+Batuta
+Partitura
+Coro
+Cumbia
+Bolero
+Jazz
+Rock
+Zarzuela
+Carlos Gardel|GARDEL
+Víctor Jara|JARA
+Pentagrama
+Corchea
+Contrabajo
+Violonchelo|CHELO
+Viola
+Oboe
+Clarinete
+Fagot
+Saxofón
+Tuba
+Trombón
+Trompa (instrumento)|CORNO
+Timbal
+Marimba
+Xilófono
+Bandoneón
+Cajón peruano|CAJON
+Zampoña
+Kultrún|CULTRUN
+Trutruca
+Johann Sebastian Bach|BACH
+Antonio Vivaldi|VIVALDI
+Frédéric Chopin|CHOPIN
+Giuseppe Verdi|VERDI
+Richard Wagner|WAGNER
+Piotr Ilich Chaikovski|CHAIKOVSKI
+Claudio Arrau|ARRAU
+Merengue (género musical)|MERENGUE
+Reggae
+Samba
+Quilapayún
+Illapu
+Shakira
+Madonna
+Karaoke
+Disco de vinilo|VINILO
+Casete
+Micrófono
+Altavoz|PARLANTE
+Escenario
+Concierto
+Platillo (instrumento musical)|PLATILLO
+Bombo
+Púa (música)|PUA
+
+# Rock y metal
+Metallica
+Queen
+The Beatles|BEATLES
+The Rolling Stones|STONES
+Nirvana (banda)|NIRVANA
+Megadeth
+Slayer
+Anthrax (banda)|ANTHRAX
+Pantera (banda)|PANTERA
+Sepultura (banda)|SEPULTURA
+Kiss (banda)|KISS
+AC/DC|ACDC
+Scorpions
+Ozzy Osbourne|OZZY
+Ronnie James Dio|DIO
+Lemmy Kilmister|LEMMY
+Motörhead|MOTORHEAD
+Black Sabbath|SABBATH
+Led Zeppelin|ZEPPELIN
+Pink Floyd|FLOYD
+The Doors|DOORS
+Ramones
+The Clash|CLASH
+Blur
+Radiohead
+Muse
+Coldplay
+Aerosmith
+Slash (músico)|SLASH
+Jimi Hendrix|HENDRIX
+Eric Clapton|CLAPTON
+David Bowie|BOWIE
+John Lennon|LENNON
+Paul McCartney|MCCARTNEY
+Mick Jagger|JAGGER
+Elvis Presley|ELVIS
+Freddie Mercury|MERCURY
+Kurt Cobain|COBAIN
+James Hetfield|HETFIELD
+Bruce Dickinson|DICKINSON
+Rob Halford|HALFORD
+Carlos Santana|SANTANA
+Los Jaivas|JAIVAS
+Los Prisioneros|PRISIONEROS
+Jorge González|GONZALEZ
+Festival de Woodstock|WOODSTOCK
+Marshall Amplification|MARSHALL
+Fender
+Gibson
+Tatuaje
+Baquetas|BAQUETA
+Redoblante
+
+# Cine
+Cine
+Claqueta
+Premios Óscar|OSCAR
+Festival de Cannes|CANNES
+Hollywood
+Bollywood
+Proyector cinematográfico|PROYECTOR
+Palomitas de maíz|CABRITAS
+Charles Chaplin|CHAPLIN
+Alfred Hitchcock|HITCHCOCK
+Stanley Kubrick|KUBRICK
+Steven Spielberg|SPIELBERG
+Quentin Tarantino|TARANTINO
+Martin Scorsese|SCORSESE
+Francis Ford Coppola|COPPOLA
+Federico Fellini|FELLINI
+Ingmar Bergman|BERGMAN
+Akira Kurosawa|KUROSAWA
+Pedro Almodóvar|ALMODOVAR
+Luis Buñuel|BUÑUEL
+Pablo Larraín|LARRAIN
+Alejandro Jodorowsky|JODOROWSKY
+Raúl Ruiz|RUIZ
+Miguel Littín|LITTIN
+Machuca (película)|MACHUCA
+Gloria (película de 2013)|GLORIA
+Casablanca (película)|CASABLANCA
+Titanic (película de 1997)|TITANIC
+Alien (película)|ALIEN
+Rocky
+Psicosis (película de 1960)|PSICOSIS
+Godzilla
+Batman
+Superman
+Tarzán
+James Bond|BOND
+The Matrix|MATRIX
+Avatar (película)|AVATAR
+Terminator (película)|TERMINATOR
+Rambo
+Indiana Jones|INDIANA
+Darth Vader|VADER
+Yoda
+Jedi
+Luke Skywalker|SKYWALKER
+Gandalf
+Frodo Bolsón|FRODO
+Shrek
+Buscando a Nemo|NEMO
+El rey león|SIMBA
+Bambi
+Dumbo
+Walt Disney|DISNEY
+Pixar
+Mickey Mouse|MICKEY
+Marilyn Monroe|MONROE
+Humphrey Bogart|BOGART
+Marlon Brando|BRANDO
+Al Pacino|PACINO
+Robert De Niro|DENIRO
+Meryl Streep|STREEP
+Audrey Hepburn|HEPBURN
+Cantinflas
+Fotograma
+Alfombra roja|ALFOMBRA
+Cámara de cine|CAMARA
+
+# Deportes
+Fútbol
+Tenis
+Golf
+Ajedrez
+Enroque
+Torre (ajedrez)|TORRE
+Alfil
+Maratón
+Podio
+Rodeo chileno|RODEO
+Esgrima
+Remo (deporte)|REMO
+Yudo|JUDO
+Juegos Olímpicos|OLIMPIADA
+Raqueta
+Estadio
+Medalla olímpica|MEDALLA
+Boxeo
+Karate
+Natación
+Ciclismo
+Atletismo
+Voleibol
+Béisbol
+Hockey sobre hielo|HOCKEY
+Rugby
+Surf
+Esquí
+Patinaje artístico sobre hielo|PATINAJE
+Escalada
+Lanzamiento de jabalina|JABALINA
+Gimnasio
+Dominó
+Naipe
+Dado
+Bingo
+Trompo
+Rayuela
+Emboque
+Volantín|VOLANTIN
+Alexis Sánchez|ALEXIS
+Iván Zamorano|ZAMORANO
+Marcelo Salas|SALAS
+Marcelo Ríos|RIOS
+Nicolás Massú|MASSU
+Pelé
+Diego Maradona|MARADONA
+Lionel Messi|MESSI
+Roger Federer|FEDERER
+Rafael Nadal|NADAL
+Usain Bolt|BOLT
+Michael Jordan|JORDAN
+Muhammad Ali|ALI
+Club Social y Deportivo Colo-Colo|COLOCOLO
+Silbato
+Piscina
+Trampolín
+Salto con pértiga|PERTIGA
+Decatlón
+Triatlón
+Velódromo
+Medialuna (rodeo)|MEDIALUNA
+Huaso
+Espuela
+Club de Deportes Santiago Wanderers|WANDERERS
+Everton de Viña del Mar|EVERTON
+Club de Deportes Cobreloa|COBRELOA
+Club de Deportes Cobresal|COBRESAL
+Club Deportivo Huachipato|HUACHIPATO
+Club Deportivo Palestino|PALESTINO
+Audax Italiano|AUDAX
+Rangers de Talca|RANGERS
+Club Deportivo Ñublense|ÑUBLENSE
+Club Deportivo Universidad Católica|CRUZADOS
+Club Universidad de Chile|UNIVERSIDAD
+Estadio Monumental David Arellano|MONUMENTAL
+Estadio Nacional Julio Martínez Prádanos|NACIONAL
+Estadio Sausalito|SAUSALITO
+Selección de fútbol de Chile|ROJA
+Carlos Caszely|CASZELY
+Elías Figueroa|FIGUEROA
+Roberto Rojas|ROJAS
+Arturo Vidal|VIDAL
+Claudio Bravo|BRAVO
+Gary Medel|MEDEL
+Charles Aránguiz|ARANGUIZ
+Eduardo Vargas|VARGAS
+Jean Beausejour|BEAUSEJOUR
+Sergio Livingstone|LIVINGSTONE
+Misael Escuti|ESCUTI
+Leonel Sánchez|SANCHEZ
+Humberto Suazo|SUAZO
+Mauricio Pinilla|PINILLA
+Marcelo Bielsa|BIELSA
+Jorge Sampaoli|SAMPAOLI
+Juan Antonio Pizzi|PIZZI
+Fernando Riera|RIERA
+Manuel Pellegrini|PELLEGRINI
+Carlos Dittborn|DITTBORN
+David Arellano|ARELLANO
+Mirko Jozić|JOZIC
+Christiane Endler|ENDLER
+Garra Blanca|GARRA
+Club Olimpia|OLIMPIA
+Esteban Paredes|PAREDES
+Eduardo Bonvallet|BONVALLET
+Copa Mundial de la FIFA|MUNDIAL
+FIFA
+UEFA
+Conmebol
+Estadio Maracaná|MARACANA
+Maracanazo
+Estadio de Wembley|WEMBLEY
+Estadio Santiago Bernabéu|BERNABEU
+Anfield
+Fútbol Club Barcelona|BARCELONA
+Juventus de Turín|JUVENTUS
+Associazione Calcio Milan|MILAN
+Inter de Milán|INTER
+Liverpool Football Club|LIVERPOOL
+Arsenal Football Club|ARSENAL
+Chelsea Football Club|CHELSEA
+Bayern de Múnich|BAYERN
+Ajax de Ámsterdam|AJAX
+Club Atlético River Plate|RIVER
+Club Atlético Peñarol|PEÑAROL
+Clube de Regatas do Flamengo|FLAMENGO
+Santos Futebol Clube|SANTOS
+Sport Lisboa e Benfica|BENFICA
+Futebol Clube do Porto|PORTO
+Celtic Football Club|CELTIC
+Johan Cruyff|CRUYFF
+Franz Beckenbauer|BECKENBAUER
+Zinedine Zidane|ZIDANE
+Ronaldo Nazário|RONALDO
+Ronaldinho
+Romário|ROMARIO
+Garrincha
+Eusébio|EUSEBIO
+Ferenc Puskás|PUSKAS
+Alfredo Di Stéfano|DISTEFANO
+Mario Kempes|KEMPES
+Gabriel Batistuta|BATISTUTA
+Michel Platini|PLATINI
+David Beckham|BECKHAM
+Xavi Hernández|XAVI
+Andrés Iniesta|INIESTA
+Neymar
+Kylian Mbappé|MBAPPE
+Erling Haaland|HAALAND
+Robert Lewandowski|LEWANDOWSKI
+Luka Modrić|MODRIC
+Lothar Matthäus|MATTHAUS
+Lev Yashin|YASHIN
+Gianluigi Buffon|BUFFON
+Iker Casillas|CASILLAS
+Paolo Maldini|MALDINI
+Roberto Baggio|BAGGIO
+Miroslav Klose|KLOSE
+Gerd Müller|MULLER
+Luís Figo|FIGO
+Kaká|KAKA
+Andrea Pirlo|PIRLO
+Bobby Charlton|CHARLTON
+Carlos Valderrama|VALDERRAMA
+Diego Forlán|FORLAN
+Edinson Cavani|CAVANI
+José Luis Chilavert|CHILAVERT
+René Higuita|HIGUITA
+Pep Guardiola|GUARDIOLA
+José Mourinho|MOURINHO
+Jürgen Klopp|KLOPP
+Alex Ferguson|FERGUSON
+Carlo Ancelotti|ANCELOTTI
+César Luis Menotti|MENOTTI
+Carlos Bilardo|BILARDO
+Lionel Scaloni|SCALONI
+Antonín Panenka|PANENKA
+Jules Rimet|RIMET
+Catar|QATAR
+Brasil
+Alemania
+Países Bajos|HOLANDA
+Vuvuzela
+Eurocopa
+
+# Naturaleza
+Vultur gryphus|CONDOR
+Hippocamelus bisulcus|HUEMUL
+Pudu puda|PUDU
+Lapageria rosea|COPIHUE
+Araucaria araucana|ARAUCARIA
+Fitzroya cupressoides|ALERCE
+Quillaja saponaria|QUILLAY
+Peumus boldus|BOLDO
+Lama glama|LLAMA
+Vicugna vicugna|VICUÑA
+Vicugna pacos|ALPACA
+Puma concolor|PUMA
+Vulpes vulpes|ZORRO
+Bubo bubo|BUHO
+Trochilidae|COLIBRI
+Spheniscidae|PINGUINO
+Balaenoptera musculus|BALLENA
+Tursiops truncatus|DELFIN
+Octopus vulgaris|PULPO
+Carcharodon carcharias|TIBURON
+Apis mellifera|ABEJA
+Formicidae|HORMIGA
+Lepidoptera|MARIPOSA
+Oruga
+Chamaeleonidae|CAMALEON
+Testudines|TORTUGA
+Panthera leo|LEON
+Panthera tigris|TIGRE
+Giraffa camelopardalis|JIRAFA
+Cebra
+Elephantidae|ELEFANTE
+Camelus bactrianus|CAMELLO
+Quercus robur|ROBLE
+Cedrus libani|CEDRO
+Salix babylonica|SAUCE
+Polypodiophyta|HELECHO
+Cactaceae|CACTUS
+Bryophyta sensu stricto|MUSGO
+Semilla
+Polen
+Clorofila
+Nido
+Colmena
+Nieve
+Niebla
+Rocío
+Arcoíris
+Canis lupus|LOBO
+Equus ferus caballus|CABALLO
+Bos taurus|VACA
+Sus scrofa domestica|CERDO
+Oryctolagus cuniculus|CONEJO
+Mus musculus|RATON
+Felis catus|GATO
+Canis familiaris|PERRO
+Columba livia|PALOMA
+Ramphastidae|TUCAN
+Phoenicopteridae|FLAMENCO
+Pelecanus|PELICANO
+Aquila chrysaetos|AGUILA
+Falco peregrinus|HALCON
+Leistes loyca|LOICA
+Caracara plancus|TRARO
+Scelorchilus rubecula|CHUCAO
+Mimus thenca|TENCA
+Vanellus chilensis|QUELTEHUE
+Diuca diuca|DIUCA
+Turdus falcklandii|ZORZAL
+Zonotrichia capensis|CHINCOL
+Serpentes|SERPIENTE
+Crocodylidae|COCODRILO
+Anura|RANA
+Bufonidae|SAPO
+Araneae|ARAÑA
+Scorpiones|ESCORPION
+Musca domestica|MOSCA
+Culicidae|MOSQUITO
+Gryllidae|GRILLO
+Cicadidae|CIGARRA
+Lampyridae|LUCIERNAGA
+Erinaceinae|ERIZO
+Lithodes santolla|CENTOLLA
+Concholepas concholepas|LOCO
+Choromytilus chorus|CHORO
+Merluccius gayi|MERLUZA
+Genypterus chilensis|CONGRIO
+Salmo salar|SALMON
+Thunnus|ATUN
+Sardina pilchardus|SARDINA
+Engraulis ringens|ANCHOA
+Phocidae|FOCA
+Lontra provocax|NUTRIA
+Lama guanicoe|GUANACO
+Chinchilla
+Octodon degus|DEGU
+Chaetophractus nationi|QUIRQUINCHO
+Arecaceae|PALMA
+Chenopodium quinoa|QUINOA
+Lavandula|LAVANDA
+Helianthus annuus|GIRASOL
+Dianthus caryophyllus|CLAVEL
+Tulipa|TULIPAN
+Leucanthemum vulgare|MARGARITA
+Orchidaceae|ORQUIDEA
+Lilium|LIRIO
+Papaver rhoeas|AMAPOLA
+Jasminum|JAZMIN
+Hedera helix|HIEDRA
+Vachellia caven|ESPINO
+Drimys winteri|CANELO
+Maytenus boaria|MAITEN
+Cryptocarya alba|PEUMO
+Eucalyptus|EUCALIPTO
+Pinus|PINO
+Bosque
+Huracán
+Tornado
+Granizo
+Relámpago
+Camanchaca
+Orcinus orca|ORCA
+Ursus arctos|OSO
+Cygnus olor|CISNE
+Ovis orientalis aries|OVEJA
+Gallus gallus domesticus|GALLO
+Equus africanus asinus|ASNO
+Rosa|ROSA
+Aloe vera|ALOE
+Ulmus minor|OLMO
+Larus|GAVIOTA
+Psittaciformes|LORO
+
+# Mitología y fantasía
+Zeus
+Hermes
+Atenea
+Apolo
+Neptuno (mitología)|NEPTUNO
+Odín
+Thor
+Medusa (mitología)|MEDUSA
+Centauro
+Minotauro
+Fénix|FENIX
+Sirena (mitología)|SIRENA
+Trauco
+Caleuche
+Pincoya
+Heracles|HERCULES
+Aquiles
+Narciso (mitología)|NARCISO
+Prometeo
+Pandora
+Ícaro
+Cupido
+Afrodita
+Poseidón
+Hades
+Monte Olimpo|OLIMPO
+Hada
+Duende
+Dragón
+Castillo
+Trono
+Corona (heráldica)|CORONA
+Espada
+Escudo de Chile|ESCUDO
+Bandera de Chile|BANDERA
+Bruja
+Escoba
+Vampiro
+
+# Vida cotidiana, comida y objetos
+Empanada
+Humita
+Cazuela (gastronomía de Chile)|CAZUELA
+Mote con huesillo|MOTE
+Zea mays|CHOCLO
+Pebre
+Asado
+Pan
+Queso
+Vino
+Carménère|CEPA
+Tetera
+Cuchara
+Mantel
+Espejo
+Reloj
+Brújula
+Faro
+Ancla
+Velero
+Timón
+Puerto
+Tren
+Avión
+Tranvía
+Carreta
+Bicicleta
+Telégrafo
+Periódico
+Imprenta
+Pluma estilográfica|PLUMA
+Lápiz
+Cuaderno
+Pizarra (enseñanza)|PIZARRA
+Tiza
+Diploma
+Biblioteca
+Libro
+Moneda
+Bolsa de valores|BOLSA
+Robot
+Píxel
+Teclado (informática)|TECLADO
+Antena
+Satélite artificial|SATELITE
+Circuito integrado|CHIP
+Mapa
+Cebolla
+Tomate
+Persea americana|PALTA
+Lechuga
+Zanahoria
+Phaseolus vulgaris|POROTO
+Lenteja
+Garbanzo
+Arroz
+Trigo
+Harina
+Azúcar
+Miel
+Leche
+Manzana
+Naranja (fruta)|NARANJA
+Limón
+Banana|PLATANO
+Prunus persica|DURAZNO
+Ciruela
+Fragaria chiloensis|FRUTILLA
+Citrullus lanatus|SANDIA
+Cucumis melo|MELON
+Annona cherimola|CHIRIMOYA
+Pouteria lucuma|LUCUMA
+Sopaipilla
+Curanto
+Charqui
+Pisco
+Chicha
+Mermelada
+Chocolate
+Galleta
+Helado
+Café
+Taza
+Vaso
+Sartén
+Olla
+Horno
+Cuchillo
+Tenedor
+Vela (iluminación)|VELA
+Lámpara
+Silla
+Mesa
+Sofá
+Cama
+Almohada
+Paraguas
+Bufanda
+Sombrero
+Zapato
+Corbata
+Llave
+Ventana
+Puerta
+Escalera
+Chimenea
+Ajo
+Cuerda
+Huevo
+Nuez
+Papa (tubérculo)|PAPA
+Puente
+Zapallo
+Avena
+Barco
+Bota
+Carta
+Arco y flecha|ARCO
+Arca de Noé|ARCA
+Lira (instrumento)|LIRA
+Peso chileno|PESO
+Red de pesca|RED
+Bombero
+Cartero
+Panadero
+Pescador
+Minero
+Carpintero
+Herrero
+Piloto
+Marinero
+Soldado
+Payaso
+Circo
+Títere
+Juego de la oca|OCA
+Sal común|SAL
+Sol
+Uva
