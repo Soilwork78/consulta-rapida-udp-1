@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>El Crucigrama de la Tarde</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaincook:wght@700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: página de diario — cabecera gótica, grilla a la izquierda, definiciones en columnas a la derecha */
+:root{
+  --paper:#f2ecdc;      /* papel de diario */
+  --paper-2:#e8e0ca;    /* sombra del papel */
+  --ink:#1d1b17;        /* tinta */
+  --ink-soft:#5a5446;   /* tinta gastada */
+  --rule:#8b8370;       /* filetes */
+  --mark:#b3261e;       /* lápiz rojo del corrector */
+  --hi:#efd98a;         /* palabra activa */
+  --hi-cur:#e2b93b;     /* casilla activa */
+  --cell:#fbf8ef;       /* casilla en blanco */
+  --block:#1d1b17;      /* casilla negra */
+  --f-mast:"UnifrakturMaincook","Old English Text MT",Georgia,serif;
+  --f-body:"Old Standard TT",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
+    --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#2c2a25;--block:#0c0b0a;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1c1b18;--paper-2:#24221e;--ink:#e9e3d2;--ink-soft:#a9a28f;--rule:#5d5747;
+  --mark:#ff7b6e;--hi:#4a4227;--hi-cur:#7a6624;--cell:#2c2a25;--block:#0c0b0a;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.4;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:20px 40px;
+}
+.page{max-width:1080px;margin:0 auto}
+
+/* Cabecera */
+.mast{text-align:center;border-bottom:3px double var(--ink);padding-bottom:8px}
+.mast-top{display:flex;justify-content:space-between;gap:12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--rule);padding-bottom:4px;flex-wrap:wrap}
+.mast h1{font-family:var(--f-mast);font-weight:700;font-size:clamp(34px,7vw,64px);line-height:1.05;margin:10px 0 4px;text-wrap:balance}
+.mast-sub{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-top:1px solid var(--ink);padding-top:5px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.mast-sub b{letter-spacing:.06em;text-transform:uppercase}
+
+/* Barra de herramientas */
+.tools{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tools .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tools .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-right:2px}
+button{
+  font-family:var(--f-body);font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--ink);
+  padding:4px 10px;cursor:pointer;border-radius:0;
+}
+button:hover{background:var(--ink);color:var(--paper)}
+button:focus-visible{outline:2px solid var(--hi-cur);outline-offset:2px}
+.timer{font-variant-numeric:tabular-nums;font-size:15px;min-width:5.5ch;text-align:right}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 10px;margin-top:8px;border:1px solid var(--mark);color:var(--ink);font-size:14px}
+.confirm b{color:var(--mark)}
+[hidden]{display:none!important}
+
+/* Cuerpo */
+.body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;padding-top:16px;align-items:start}
+@media (max-width:860px){.body{grid-template-columns:minmax(0,1fr)}}
+
+.board{display:flex;flex-direction:column;gap:10px;align-items:center;min-width:0}
+.current{
+  width:100%;display:flex;align-items:stretch;gap:0;border:1px solid var(--ink);background:var(--paper-2);min-height:44px
+}
+.current .num{font-weight:700;padding:10px 12px;border-right:1px solid var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.current .txt{padding:10px 12px;flex:1;min-width:0;font-style:italic}
+.current button{border:0;border-left:1px solid var(--ink);padding:0 12px;font-size:18px}
+
+.grid{
+  --c:min(38px,calc((100vw - 40px) / var(--cols)));
+  display:grid;grid-template-columns:repeat(var(--cols),var(--c));grid-auto-rows:var(--c);
+  border:2px solid var(--ink);background:var(--block);gap:1px;padding:0;
+  box-shadow:3px 3px 0 var(--paper-2);
+}
+.cell{position:relative;background:var(--cell)}
+.cell.block{background:var(--block)}
+.cell input{
+  position:absolute;inset:0;width:100%;height:100%;border:0;margin:0;padding:0;padding-top:calc(var(--c) * .18);
+  background:transparent;color:var(--ink);text-align:center;font-family:var(--f-body);font-weight:700;
+  font-size:calc(var(--c) * .56);text-transform:uppercase;caret-color:transparent;border-radius:0;outline:none;cursor:pointer;
+}
+.cell .n{position:absolute;top:1px;left:2px;font-size:calc(var(--c) * .27);line-height:1;color:var(--ink);pointer-events:none;font-variant-numeric:tabular-nums}
+.cell.word{background:var(--hi)}
+.cell.cur{background:var(--hi-cur)}
+.cell.bad::after{
+  content:"";position:absolute;inset:12%;pointer-events:none;
+  background:linear-gradient(to top right,transparent calc(50% - 1.5px),var(--mark) calc(50% - 1.5px),var(--mark) calc(50% + 1.5px),transparent calc(50% + 1.5px));
+}
+.cell.rev::before{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 calc(var(--c) * .26) calc(var(--c) * .26) 0;border-color:transparent var(--mark) transparent transparent;pointer-events:none}
+.grid.solved .cell input{color:var(--ink)}
+
+.legend{font-size:12px;color:var(--ink-soft);text-align:center;max-width:46ch}
+
+/* Definiciones */
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;min-width:0}
+@media (max-width:560px){.clues{grid-template-columns:minmax(0,1fr)}}
+.clues section{min-width:0}
+.clues h2{font-size:14px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid var(--ink);text-align:center}
+.clues ol{list-style:none;margin:0 0 18px;padding:0;font-size:15px}
+.clues li{padding:3px 6px;cursor:pointer;display:flex;gap:6px;border-bottom:1px dotted var(--rule)}
+.clues li b{min-width:2.2ch;text-align:right;font-variant-numeric:tabular-nums}
+.clues li:hover{background:var(--paper-2)}
+.clues li.on{background:var(--hi)}
+.clues li.ok span{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--rule)}
+
+.stamp{
+  display:none;margin:4px auto 0;padding:8px 16px;border:3px double var(--mark);color:var(--mark);
+  font-weight:700;letter-spacing:.14em;text-transform:uppercase;transform:rotate(-2deg);text-align:center
+}
+.stamp.show{display:block}
+.foot{margin-top:18px;border-top:3px double var(--ink);padding-top:8px;font-size:12px;color:var(--ink-soft);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="mast">
+    <div class="mast-top"><span>Pasatiempos</span><span>Edición de la tarde</span><span id="saveState">Guardado</span></div>
+    <h1>El Crucigrama de la Tarde</h1>
+    <div class="mast-sub"><span id="today"></span><b id="puzNo">Crucigrama Nº —</b><span>Dificultad: media</span></div>
+  </header>
+
+  <div class="tools">
+    <div class="grp">
+      <span class="lbl">Comprobar</span>
+      <button id="chkCell" type="button">Letra</button>
+      <button id="chkWord" type="button">Palabra</button>
+      <button id="chkAll" type="button">Todo</button>
+    </div>
+    <div class="grp">
+      <span class="lbl">Revelar</span>
+      <button id="revCell" type="button">Letra</button>
+      <button id="revWord" type="button">Palabra</button>
+      <button id="revAll" type="button">Solución</button>
+    </div>
+    <div class="grp">
+      <button id="clearAll" type="button">Borrar</button>
+      <button id="newPuz" type="button">Nuevo crucigrama</button>
+      <span class="timer" id="timer" title="Tiempo de juego">00:00</span>
+    </div>
+  </div>
+  <div class="confirm" id="confirm" hidden>
+    <span id="confirmMsg"></span>
+    <button id="confirmYes" type="button">Sí</button>
+    <button id="confirmNo" type="button">No</button>
+  </div>
+
+  <main class="body">
+    <div class="board">
+      <div class="current">
+        <button id="prevClue" type="button" aria-label="Definición anterior">‹</button>
+        <span class="num" id="curNum">1 H</span>
+        <span class="txt" id="curTxt"></span>
+        <button id="nextClue" type="button" aria-label="Definición siguiente">›</button>
+      </div>
+      <div class="grid" id="grid" role="grid" aria-label="Grilla del crucigrama"></div>
+      <div class="stamp" id="stamp">Resuelto</div>
+      <p class="legend">Clic en una casilla para escribir. Clic de nuevo, Espacio o Enter cambian entre horizontal y vertical. Las tildes se ignoran; la Ñ cuenta como letra.</p>
+    </div>
+    <div class="clues">
+      <section><h2>Horizontales</h2><ol id="acrossList"></ol></section>
+      <section><h2>Verticales</h2><ol id="downList"></ol></section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span>Tu avance se guarda solo en este navegador.</span>
+    <span id="stats"></span>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Banco de palabras: RESPUESTA|Definición ---------- */
+const BANK = `
+ANDES|Cordillera que recorre Sudamérica de norte a sur
+ATACAMA|Desierto más árido del planeta
+BIOBIO|Río que desemboca junto a Concepción
+TITICACA|Lago navegable más alto del mundo
+NILO|Río que atraviesa Egipto
+DANUBIO|Río que pasa por Viena y Budapest
+SAHARA|Mayor desierto cálido del mundo
+ISTMO|Franja de tierra que une dos continentes
+BAHIA|Entrada del mar en la costa, menor que un golfo
+ESTRECHO|El de Magallanes une dos océanos
+PENINSULA|Tierra rodeada de agua por todas partes menos por una
+VOLCAN|Montaña que expulsa lava
+GEISER|Fuente termal que lanza agua a intervalos
+DELTA|Desembocadura triangular de un río; también letra griega
+OASIS|Lugar con agua y vegetación en medio del desierto
+TUNDRA|Bioma frío y sin árboles del Ártico
+ESTEPA|Llanura extensa de hierbas y arbustos
+FIORDO|Golfo estrecho entre montañas, típico de Noruega
+MONZON|Viento estacional del sur de Asia
+ECUADOR|Línea imaginaria que divide la Tierra en dos hemisferios
+TROPICO|El de Capricornio cruza el norte de Chile
+MERIDIANO|El de Greenwich marca la longitud cero
+ATLAS|Libro de mapas; también titán que sostenía el cielo
+OSLO|Capital de Noruega
+LIMA|Capital del Perú
+QUITO|Capital de Ecuador
+ROMA|Ciudad de las siete colinas
+PARIS|Ciudad del Sena
+LONDRES|Ciudad del Támesis
+MADRID|Capital de España
+TOKIO|Capital de Japón
+EGIPTO|País de las pirámides de Giza
+GRECIA|Cuna de la democracia
+INDIA|País del Taj Mahal
+CUBA|Isla mayor de las Antillas
+CHILOE|Isla de los palafitos y las iglesias de madera
+RAPANUI|Pueblo y lengua de Isla de Pascua
+VALPARAISO|Puerto de ascensores y cerros
+ARICA|Ciudad de la eterna primavera
+OSORNO|Volcán y ciudad del sur de Chile
+MAULE|Región y río del centro de Chile
+AMAZONAS|Río más caudaloso del mundo
+URAL|Montes que separan Europa de Asia
+ALPES|Cordillera del Mont Blanc
+EVEREST|Cumbre más alta del mundo
+IGUAZU|Cataratas entre Argentina y Brasil
+INCA|Imperio cuya capital fue Cusco
+AZTECA|Pueblo fundador de Tenochtitlan
+MAYA|Civilización del Yucatán de célebre calendario
+FARAON|Rey del antiguo Egipto
+CESAR|Título de los emperadores romanos
+NAPOLEON|Emperador derrotado en Waterloo
+COLON|Navegante que llegó a América en 1492
+OHIGGINS|Padre de la Patria chileno
+LAUTARO|Toqui mapuche que venció a Valdivia
+VALDIVIA|Fundador de Santiago del Nuevo Extremo
+CAUPOLICAN|Toqui cantado por Ercilla
+FEUDO|Tierra que un señor concedía a su vasallo
+VIKINGO|Navegante escandinavo de la Edad Media
+CRUZADA|Expedición militar medieval a Tierra Santa
+IMPERIO|Conjunto de territorios bajo un emperador
+REPUBLICA|Forma de gobierno sin monarca
+TRATADO|Acuerdo formal entre Estados
+ARMISTICIO|Suspensión de hostilidades entre ejércitos
+COLONIA|Período entre la Conquista y la Independencia
+CABILDO|Ayuntamiento de la época colonial
+TROYA|Ciudad del famoso caballo de madera
+ESPARTA|Ciudad griega de guerreros
+FENICIO|Pueblo navegante al que se atribuye el alfabeto
+MURALLA|La china supera los veinte mil kilómetros
+PIRAMIDE|Monumento funerario de Keops
+ATOMO|Unidad básica de la materia
+PROTON|Partícula de carga positiva del núcleo
+NEUTRON|Partícula sin carga del núcleo
+ELECTRON|Partícula negativa que rodea al núcleo
+ISOTOPO|Átomo con distinto número de neutrones
+OXIGENO|Elemento de símbolo O
+HIERRO|Metal de símbolo Fe
+COBRE|Metal rojizo, principal exportación chilena
+LITIO|Metal de las baterías, abundante en los salares
+ORO|Metal precioso de símbolo Au
+PLATA|Metal de símbolo Ag
+NEON|Gas noble de los letreros luminosos
+HELIO|Gas noble que hace flotar los globos
+OZONO|Capa que filtra la radiación ultravioleta
+ENZIMA|Proteína que acelera reacciones químicas
+GEN|Unidad de la herencia
+ADN|Molécula de la doble hélice (sigla)
+CELULA|Unidad básica de los seres vivos
+NUCLEO|Centro del átomo o de la célula
+MITOSIS|División celular que da dos células idénticas
+OSMOSIS|Paso de agua a través de una membrana semipermeable
+FOTON|Partícula de luz
+GRAVEDAD|Fuerza que nos mantiene en el suelo
+INERCIA|Tendencia de un cuerpo a conservar su estado de movimiento
+ENERGIA|Capacidad de realizar trabajo
+VOLTIO|Unidad de tensión eléctrica
+VATIO|Unidad de potencia
+JULIO|Unidad de energía, o séptimo mes
+PRISMA|Cuerpo que descompone la luz blanca
+LENTE|Cristal que desvía la luz, como el de las gafas
+IMAN|Cuerpo que atrae el hierro
+ORBITA|Trayectoria de un planeta alrededor del Sol
+COMETA|Astro con cola luminosa
+ECLIPSE|Ocultación de un astro por otro
+GALAXIA|La Vía Láctea es una
+MARTE|Planeta rojo
+VENUS|Lucero del alba
+SATURNO|Planeta de los anillos más vistosos
+JUPITER|Planeta más grande del sistema solar
+LUNA|Satélite natural de la Tierra
+NEBULOSA|Nube de gas y polvo interestelar
+FOSIL|Resto petrificado de un ser vivo antiguo
+MAGMA|Roca fundida bajo la corteza terrestre
+SISMO|Movimiento de la corteza terrestre
+TSUNAMI|Ola gigante causada por un terremoto submarino
+CLIMA|Conjunto de condiciones atmosféricas de una zona
+NEURONA|Célula del sistema nervioso
+ARTERIA|Vaso que lleva sangre desde el corazón
+VENA|Vaso que devuelve sangre al corazón
+PULMON|Órgano donde ocurre la hematosis
+RIÑON|Órgano que filtra la sangre y produce orina
+HIGADO|Órgano que produce la bilis
+CORAZON|Bomba del sistema circulatorio
+INSULINA|Hormona que baja la glicemia
+ASPIRINA|Ácido acetilsalicílico, por su nombre comercial
+VACUNA|Preparado que genera inmunidad
+VIRUS|Agente infeccioso que solo se replica dentro de células
+BACTERIA|Microorganismo procariota
+FIEBRE|Elevación de la temperatura corporal
+PULSO|Latido que se palpa en la muñeca
+SUTURA|Costura de una herida
+ALERGIA|Reacción exagerada del sistema inmune
+ANEMIA|Disminución de la hemoglobina
+PLAQUETA|Célula sanguínea clave en la coagulación
+HUESO|Pieza dura del esqueleto
+FEMUR|Hueso más largo del cuerpo
+CRANEO|Caja ósea que protege el encéfalo
+RETINA|Capa del ojo sensible a la luz
+TIMPANO|Membrana del oído medio
+DARWIN|Autor de El origen de las especies
+NEWTON|Físico de la manzana y la gravitación
+EINSTEIN|Físico de la relatividad
+CURIE|Marie, doble premio Nobel
+PASTEUR|Científico que da nombre a la pasteurización
+GALILEO|Astrónomo que defendió el heliocentrismo
+EUCLIDES|Padre de la geometría
+PITAGORAS|Matemático del teorema del triángulo rectángulo
+ALGEBRA|Rama de las matemáticas que usa letras como incógnitas
+PRIMO|Número divisible solo por sí mismo y por uno
+CERO|Elemento neutro de la suma
+CIRCULO|Figura cuyos puntos equidistan del centro
+RADIO|Mitad del diámetro; también elemento químico
+VECTOR|Magnitud con módulo, dirección y sentido
+ANGULO|Abertura entre dos rectas que se cortan
+ROMBO|Cuadrilátero de lados iguales y ángulos oblicuos
+CUBO|Hexaedro regular
+ESFERA|Cuerpo redondo de superficie equidistante del centro
+DOCENA|Conjunto de doce
+MILLON|Mil veces mil
+NERUDA|Autor de Veinte poemas de amor
+MISTRAL|Primera latinoamericana premio Nobel de Literatura
+HUIDOBRO|Poeta chileno creador del creacionismo
+PARRA|Apellido de Nicanor y Violeta
+QUIJOTE|Hidalgo de La Mancha
+SANCHO|Escudero del caballero de la triste figura
+DULCINEA|Amada de don Quijote
+CERVANTES|El manco de Lepanto
+HAMLET|Príncipe de Dinamarca de Shakespeare
+ODISEA|Poema homérico del regreso de Ulises
+ILIADA|Poema homérico sobre la guerra de Troya
+ULISES|Rey de Ítaca
+SONETO|Poema de catorce versos
+ESTROFA|Grupo de versos
+RIMA|Coincidencia de sonidos al final de los versos
+FABULA|Relato breve con moraleja
+NOVELA|Obra narrativa extensa en prosa
+PROSA|Forma natural del lenguaje, opuesta al verso
+METAFORA|Figura retórica que identifica dos términos
+ARAUCANA|La ___, poema épico de Ercilla
+MACONDO|Pueblo de Cien años de soledad
+BORGES|Autor de El Aleph
+DANTE|Autor de la Divina comedia
+GOYA|Pintor de Los fusilamientos del 3 de mayo
+PICASSO|Pintor del Guernica
+DALI|Pintor surrealista de los relojes blandos
+MONET|Pintor de los nenúfares
+FRESCO|Pintura sobre muro húmedo
+OLEO|Pintura a base de aceite
+MOSAICO|Obra hecha con pequeñas piezas de colores
+MURAL|Pintura sobre una pared
+ESCULTURA|Arte de modelar o tallar
+LIENZO|Tela sobre la que se pinta
+PALETA|Tabla donde el pintor mezcla colores
+GOTICO|Estilo de catedrales con arcos ojivales
+BARROCO|Estilo artístico recargado del siglo XVII
+OPERA|Obra teatral cantada
+SINFONIA|Composición para orquesta en varios movimientos
+ORQUESTA|Conjunto de músicos con director
+SOLFEO|Lectura y entonación de las notas musicales
+TENOR|Voz masculina más aguda
+SOPRANO|Voz femenina más aguda
+PIANO|Instrumento de teclas y martillos
+VIOLIN|Instrumento de cuatro cuerdas y arco
+ARPA|Instrumento de cuerdas que se pulsa con los dedos
+CUECA|Danza nacional de Chile
+TANGO|Baile rioplatense
+VALS|Baile en compás de tres por cuatro
+CHARANGO|Pequeña guitarra andina
+QUENA|Flauta andina
+RITMO|Orden acompasado de sonidos
+MELODIA|Sucesión de sonidos con sentido musical
+BEETHOVEN|Compositor de la Novena Sinfonía
+MOZART|Compositor de La flauta mágica
+CINE|Séptimo arte
+GUION|Texto de una película
+TELON|Cortina del escenario
+ACTOR|Intérprete de un personaje
+MIMO|Actor que se expresa sin palabras
+POEMA|Obra en verso
+FUTBOL|El deporte rey
+TENIS|Deporte de raqueta y red
+GOLF|Deporte de hoyos y palos
+AJEDREZ|Juego de reyes, damas y peones
+ENROQUE|Movimiento conjunto de rey y torre
+JAQUE|Amenaza al rey
+TORRE|Pieza de ajedrez que avanza en línea recta
+ALFIL|Pieza de ajedrez que se mueve en diagonal
+MARATON|Carrera de 42 kilómetros
+PODIO|Plataforma de los ganadores
+ARBITRO|Juez de un partido
+PENAL|Tiro desde los once metros
+CORNER|Saque desde la esquina
+RODEO|Deporte nacional de Chile
+ESGRIMA|Deporte de florete, espada y sable
+REMO|Deporte de botes y palas
+JUDO|Arte marcial japonés de proyecciones
+OLIMPIADA|Período de cuatro años entre juegos olímpicos
+RECORD|Mejor marca registrada
+EMPATE|Igualdad de puntos en una competencia
+RAQUETA|Pala del tenista
+ESTADIO|Recinto deportivo con graderías
+CONDOR|Ave del escudo nacional
+HUEMUL|Ciervo del escudo nacional
+PUDU|Ciervo más pequeño del mundo
+COPIHUE|Flor nacional de Chile
+ARAUCARIA|Árbol que da el piñón
+ALERCE|Árbol milenario del sur de Chile
+PEHUEN|Nombre mapuche de la araucaria
+QUILLAY|Árbol cuya corteza hace espuma
+BOLDO|Arbusto de hojas para infusión digestiva
+LLAMA|Camélido andino de carga; también fuego
+VICUÑA|Camélido de lana finísima
+ALPACA|Camélido criado por su fibra
+PUMA|León americano
+ZORRO|Cánido astuto de las fábulas
+BUHO|Ave rapaz nocturna
+COLIBRI|Picaflor
+PINGUINO|Ave que no vuela, de Humboldt o de Magallanes
+BALLENA|Mayor mamífero marino
+DELFIN|Cetáceo inteligente y juguetón
+PULPO|Molusco de ocho brazos
+TIBURON|Pez cartilaginoso de mala fama
+ABEJA|Insecto productor de miel
+HORMIGA|Insecto social que trabaja en colonia
+MARIPOSA|Insecto que antes fue oruga
+ORUGA|Larva de la mariposa
+CAMALEON|Reptil que cambia de color
+TORTUGA|Reptil de caparazón
+LEON|Rey de la selva
+TIGRE|Felino de rayas
+JIRAFA|Mamífero de cuello más largo
+CEBRA|Équido de rayas blancas y negras
+ELEFANTE|Paquidermo de trompa
+CAMELLO|Rumiante de dos jorobas
+ROBLE|Árbol de madera dura
+CEDRO|Árbol emblema del Líbano
+SAUCE|Árbol llorón de las riberas
+HELECHO|Planta sin flores que se reproduce por esporas
+CACTUS|Planta del desierto con espinas
+MUSGO|Planta pequeña de lugares húmedos
+SEMILLA|Origen de una nueva planta
+POLEN|Polvo fecundante de las flores
+RAIZ|Parte de la planta bajo tierra
+SAVIA|Líquido que circula por las plantas
+CLOROFILA|Pigmento verde de las plantas
+NIDO|Casa del pájaro
+CARDUMEN|Banco de peces
+MANADA|Grupo de animales de una especie
+COLMENA|Casa de las abejas
+NIEVE|Precipitación blanca y fría
+NIEBLA|Nube a ras de suelo
+ROCIO|Gotas de la madrugada sobre las plantas
+ARCOIRIS|Fenómeno de siete colores tras la lluvia
+TRUENO|Ruido del rayo
+BRISA|Viento suave
+ALBA|Primera luz del día
+OCASO|Puesta del sol
+ECO|Sonido que vuelve reflejado
+ENIGMA|Misterio de difícil solución
+ACERTIJO|Adivinanza
+REFRAN|Dicho popular sentencioso
+SINONIMO|Palabra de igual significado
+ANTONIMO|Palabra de significado opuesto
+PALINDROMO|Palabra que se lee igual al revés
+VERBO|Palabra que expresa acción
+ADJETIVO|Palabra que califica al sustantivo
+ACENTO|Mayor intensidad de una sílaba
+ALFABETO|Abecedario
+IDIOMA|Lengua de un pueblo
+DIALOGO|Conversación entre dos o más personas
+NOSTALGIA|Pena por la lejanía de la patria o del pasado
+PACIENCIA|Virtud de saber esperar
+TERNURA|Afecto suave y delicado
+ORGULLO|Exceso de estima propia
+AVARO|Que acumula dinero y no lo gasta
+TACAÑO|Mezquino, que escatima en todo
+ENVIDIA|Pecado capital del que desea lo ajeno
+PEREZA|Pecado capital del ocioso
+IRA|Pecado capital del enojo
+GULA|Pecado capital del glotón
+LEAL|Fiel a sus compromisos
+AUDAZ|Osado, atrevido
+SAGAZ|Astuto y perspicaz
+TENAZ|Firme, que no desiste
+NOBLE|De ilustre linaje, o de buenos sentimientos
+ETERNO|Que no tiene fin
+EFIMERO|Que dura muy poco
+ARDUO|Muy difícil, trabajoso
+SUTIL|Delicado, tenue
+OCIO|Tiempo libre
+SIESTA|Descanso después de almorzar
+ALMUERZO|Comida del mediodía
+EMPANADA|Masa rellena típica de las Fiestas Patrias
+HUMITA|Pasta de choclo envuelta en sus hojas
+CAZUELA|Sopa chilena con presa y papa
+MOTE|Trigo cocido que acompaña al huesillo
+CHOCLO|Mazorca de maíz tierno
+PEBRE|Salsa chilena de tomate, cebolla y cilantro
+ASADO|Carne a la parrilla
+PAN|Alimento de harina horneada
+QUESO|Producto lácteo cuajado
+VINO|Bebida de uva fermentada
+CEPA|Variedad de vid, como la carménère
+ONCE|Merienda chilena de la tarde
+TETERA|Recipiente para hervir el agua del té
+CUCHARA|Cubierto para la sopa
+MANTEL|Tela que cubre la mesa
+ESPEJO|Superficie que refleja la imagen
+RELOJ|Instrumento para medir el tiempo
+BRUJULA|Instrumento que señala el norte
+FARO|Torre con luz que guía a los navegantes
+ANCLA|Pieza que fija el barco al fondo
+VELERO|Barco impulsado por el viento
+TIMON|Pieza para gobernar la nave
+PUERTO|Lugar de atraque de barcos
+TREN|Convoy sobre rieles
+AVION|Aeronave con alas
+TRANVIA|Vehículo eléctrico urbano sobre rieles
+CARRETA|Carro tirado por bueyes
+BICICLETA|Vehículo de dos ruedas a pedales
+TELEGRAFO|Aparato que transmitía mensajes en código Morse
+PERIODICO|Diario impreso
+TITULAR|Encabezado de una noticia
+EDITOR|Responsable de una publicación
+IMPRENTA|Invento de Gutenberg
+TINTA|Líquido para escribir o imprimir
+PLUMA|Antiguo instrumento de escritura
+LAPIZ|Barra de grafito para escribir
+CUADERNO|Conjunto de hojas para apuntes
+PIZARRA|Superficie donde escribe el profesor
+TIZA|Barra blanca para escribir en la pizarra
+AULA|Sala de clases
+RECREO|Pausa entre clases
+EXAMEN|Prueba de conocimientos
+RUBRICA|Pauta de evaluación con criterios y niveles
+DIPLOMA|Título que acredita estudios
+TESIS|Trabajo de investigación para obtener un grado
+CATEDRA|Asignatura a cargo de un profesor titular
+DECANO|Autoridad máxima de una facultad
+RECTOR|Autoridad máxima de una universidad
+MAESTRO|Profesor, o experto en su oficio
+ALUMNO|Estudiante
+BIBLIOTECA|Lugar donde se guardan y prestan libros
+LIBRO|Conjunto de hojas impresas y encuadernadas
+INDICE|Lista ordenada del contenido de un libro
+PROLOGO|Texto introductorio de un libro
+EPILOGO|Parte final que cierra una obra
+CAPITULO|División de un libro
+MONEDA|Pieza de metal acuñada como dinero
+BANCO|Entidad financiera, o asiento largo
+CREDITO|Préstamo de dinero
+DEUDA|Obligación de pagar
+INTERES|Rédito de un capital prestado
+BOLSA|Mercado de valores
+ACCION|Parte del capital de una sociedad anónima
+DIVISA|Moneda extranjera
+INFLACION|Alza sostenida de los precios
+IMPUESTO|Tributo que se paga al Estado
+TRUEQUE|Intercambio sin dinero
+SALARIO|Pago por el trabajo
+ROBOT|Máquina automática programable
+PIXEL|Punto mínimo de una imagen digital
+CODIGO|Conjunto de instrucciones de un programa
+TECLADO|Periférico para escribir
+PANTALLA|Superficie donde se ve la imagen
+ANTENA|Dispositivo que capta ondas
+SATELITE|Cuerpo que orbita un planeta
+CHIP|Circuito integrado de pequeño tamaño
+INTERNET|Red mundial de computadores
+CORREO|Servicio de cartas
+MAPA|Representación de un territorio
+ZEUS|Padre de los dioses del Olimpo
+HERMES|Mensajero de los dioses griegos
+ATENEA|Diosa griega de la sabiduría
+APOLO|Dios griego del sol y la música
+NEPTUNO|Dios romano del mar, y planeta
+ODIN|Dios supremo nórdico
+THOR|Dios nórdico del martillo
+MEDUSA|Gorgona de cabellos de serpiente
+CENTAURO|Mitad hombre y mitad caballo
+MINOTAURO|Monstruo del laberinto de Creta
+FENIX|Ave que renace de sus cenizas
+SIRENA|Mitad mujer y mitad pez
+TRAUCO|Ser mitológico del bosque chilote
+CALEUCHE|Barco fantasma de Chiloé
+PINCOYA|Sirena chilota que trae abundancia de mariscos
+OSO|Plantígrado amante de la miel
+ASA|Agarradera de una taza
+ERA|Período histórico
+ALA|Extremidad para volar
+ARO|Anillo; en Chile, pendiente
+RIO|Corriente de agua que va al mar
+MAR|Gran masa de agua salada
+SOL|Estrella del sistema solar
+SAL|Cloruro de sodio
+OLA|Onda del mar
+UVA|Fruto de la vid
+EJE|Línea alrededor de la cual gira algo
+OCA|Juego de mesa con dados y casillas
+NUDO|Lazo apretado; unidad de velocidad náutica
+LAGO|Masa de agua rodeada de tierra
+ISLA|Tierra rodeada de agua
+OLMO|Árbol de sombra de hojas aserradas
+AMOR|Sentimiento de afecto profundo
+RED|Malla para pescar
+ARCO|Arma que lanza flechas
+NAVE|Barco o embarcación
+PESO|Moneda chilena
+ROSA|Flor con espinas
+LIRA|Instrumento de Orfeo
+ODA|Poema lírico de alabanza
+EDEN|Paraíso terrenal
+ARCA|La de Noé
+ALOE|Planta medicinal de hojas carnosas
+TORO|Macho de la vaca
+ASNO|Burro
+CISNE|Ave acuática de cuello largo
+GALLO|Ave que canta al amanecer
+OVEJA|Animal que da lana
+IRIS|Parte coloreada del ojo
+OIDO|Sentido de la audición
+OLFATO|Sentido que percibe los olores
+TACTO|Sentido de la piel
+NARIZ|Órgano del olfato
+LABIO|Borde de la boca
+CODO|Articulación del brazo
+RODILLA|Articulación de la rótula
+TOBILLO|Articulación entre pie y pierna
+OMBLIGO|Cicatriz del cordón umbilical
+ENERO|Primer mes del año
+ABRIL|Mes de aguas mil
+OTOÑO|Estación en que caen las hojas
+INVIERNO|Estación más fría
+VERANO|Estación de las vacaciones de enero, en Chile
+LUNES|Primer día de la semana laboral
+SABADO|Día anterior al domingo
+SIGLO|Cien años
+LUSTRO|Cinco años
+DECADA|Diez años
+MILENIO|Mil años
+ALBUM|Libro de fotos, o colección de canciones
+ENANO|Cada uno de los siete de Blancanieves
+HADA|Ser fantástico con varita mágica
+DUENDE|Ser travieso de los cuentos
+GIGANTE|De estatura descomunal
+DRAGON|Monstruo alado que echa fuego
+CASTILLO|Fortaleza con torres y foso
+REINA|Esposa del rey
+PRINCIPE|Hijo del rey
+TRONO|Asiento del monarca
+CORONA|Símbolo del poder real
+ESPADA|Arma blanca de hoja larga
+ESCUDO|Arma defensiva; emblema de un país
+BANDERA|Símbolo patrio de tela
+HIMNO|Canción patria
+CENSO|Recuento de la población
+`.trim().split("\n").map(l=>{const i=l.indexOf("|");return{a:l.slice(0,i).trim(),c:l.slice(i+1).trim()}})
+ .filter((w,i,arr)=>w.a.length>=3 && w.a.length<=11 && arr.findIndex(x=>x.a===w.a)===i);
+
+/* ---------- Utilidades ---------- */
+const N = 13;                     // tamaño máximo de la grilla
+const KEY = "crucigrama.tarde.v1";
+const $ = id => document.getElementById(id);
+
+function rng32(seed){
+  let a = seed >>> 0;
+  return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+}
+function shuffle(arr,r){for(let i=arr.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function norm(ch){
+  if(!ch) return "";
+  const up = ch.toUpperCase();
+  if(up==="Ñ") return "Ñ";
+  const base = up.normalize("NFD").replace(/[̀-ͯ]/g,"");
+  return /^[A-Z]$/.test(base) ? base : "";
+}
+function letters(s){return Array.from(s);} // respeta la Ñ
+function fmtTime(s){const m=Math.floor(s/60),x=s%60;return (m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+
+/* ---------- Generador ---------- */
+function tryBuild(r){
+  const g = new Array(N*N).fill(null);
+  const useA = new Array(N*N).fill(false), useD = new Array(N*N).fill(false);
+  const placed = [];
+  const used = new Set();
+  const pool = shuffle(BANK.slice(), r);
+  const at = (y,x) => (y<0||x<0||y>=N||x>=N) ? null : g[y*N+x];
+
+  function check(L,y,x,dir){
+    const dy = dir==="D"?1:0, dx = dir==="A"?1:0, n=L.length;
+    if(y<0||x<0||y+dy*(n-1)>=N||x+dx*(n-1)>=N) return -1;
+    if(at(y-dy,x-dx) || at(y+dy*n,x+dx*n)) return -1;
+    let cross=0;
+    for(let i=0;i<n;i++){
+      const yy=y+dy*i, xx=x+dx*i, k=yy*N+xx, ch=g[k];
+      if(ch){
+        if(ch!==L[i]) return -1;
+        if(dir==="A"?useA[k]:useD[k]) return -1;
+        cross++;
+      }else{
+        if(at(yy+dx,xx+dy) || at(yy-dx,xx-dy)) return -1;
+      }
+    }
+    if(cross===0 || cross===n) return -1;
+    return cross;
+  }
+  function put(w,L,y,x,dir){
+    const dy = dir==="D"?1:0, dx = dir==="A"?1:0;
+    for(let i=0;i<L.length;i++){const k=(y+dy*i)*N+(x+dx*i);g[k]=L[i];(dir==="A"?useA:useD)[k]=true;}
+    placed.push({a:w.a,c:w.c,y,x,dir,len:L.length});
+    used.add(w.a);
+  }
+
+  const first = pool.find(w=>{const n=letters(w.a).length;return n>=8&&n<=11;});
+  const fL = letters(first.a);
+  put(first, fL, Math.floor(N/2)-2+Math.floor(r()*4), Math.floor((N-fL.length)*r()), "A");
+
+  for(let step=0; step<60 && placed.length<34; step++){
+    const pos = {};
+    for(let k=0;k<N*N;k++) if(g[k]) (pos[g[k]]=pos[g[k]]||[]).push(k);
+    const cands=[];
+    const start = Math.floor(r()*pool.length);
+    let tested=0;
+    for(let t=0;t<pool.length && tested<160;t++){
+      const w = pool[(start+t)%pool.length];
+      if(used.has(w.a)) continue;
+      tested++;
+      const L = letters(w.a);
+      let best=null;
+      for(let i=0;i<L.length;i++){
+        const ks = pos[L[i]]; if(!ks) continue;
+        for(const k of ks){
+          const yy=Math.floor(k/N), xx=k%N;
+          for(const dir of ["A","D"]){
+            const y = dir==="D"?yy-i:yy, x = dir==="A"?xx-i:xx;
+            const c = check(L,y,x,dir);
+            if(c>0){
+              const s = c*9 + L.length*1.2 + r()*4;
+              if(!best||s>best.s) best={w,L,y,x,dir,s};
+            }
+          }
+        }
+      }
+      if(best) cands.push(best);
+    }
+    if(!cands.length) break;
+    cands.sort((p,q)=>q.s-p.s);
+    const pick = cands[Math.floor(r()*Math.min(3,cands.length))];
+    put(pick.w,pick.L,pick.y,pick.x,pick.dir);
+  }
+
+  // Recorte al rectángulo ocupado
+  let y0=N,y1=-1,x0=N,x1=-1,filled=0;
+  for(let k=0;k<N*N;k++) if(g[k]){filled++;const y=Math.floor(k/N),x=k%N;y0=Math.min(y0,y);y1=Math.max(y1,y);x0=Math.min(x0,x);x1=Math.max(x1,x);}
+  const h=y1-y0+1, w=x1-x0+1;
+  const sol=[]; for(let y=y0;y<=y1;y++) for(let x=x0;x<=x1;x++) sol.push(g[y*N+x]||"");
+  const words = placed.map(p=>({ans:p.a,clue:p.c,y:p.y-y0,x:p.x-x0,dir:p.dir,len:p.len}));
+  return {w,h,sol,words,filled};
+}
+
+function generate(seed){
+  const r = rng32(seed);
+  let best=null, bestScore=-1;
+  for(let i=0;i<36;i++){
+    const p = tryBuild(r);
+    if(p.w<11||p.h<11) continue;
+    const score = p.filled/(p.w*p.h) + p.words.length*0.012;
+    if(score>bestScore){best=p;bestScore=score;}
+  }
+  if(!best) best = tryBuild(r);
+  // Numeración al estilo de diario
+  const starts = {};
+  best.words.forEach(wd=>{const k=wd.y*best.w+wd.x;starts[k]=true;});
+  const numAt = {}; let n=0;
+  for(let k=0;k<best.w*best.h;k++) if(starts[k]) numAt[k]=++n;
+  best.words.forEach(wd=>{wd.num=numAt[wd.y*best.w+wd.x];});
+  best.words.sort((a,b)=>a.dir===b.dir? a.num-b.num : (a.dir==="A"?-1:1));
+  best.seed = seed;
+  best.no = 1000 + (seed % 9000);
+  return best;
+}
+
+/* ---------- Estado ---------- */
+let P, entries, revealed, bad, elapsed, done, stats;
+let cur = {k:-1, dir:"A"};
+let inputs = [];
+
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(KEY)||"null"); return s; }catch(e){ return null; }
+}
+function save(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify({P,entries,revealed,elapsed,done,stats}));
+    $("saveState").textContent = "Guardado " + new Date().toLocaleTimeString("es-CL",{hour:"2-digit",minute:"2-digit"});
+  }catch(e){ $("saveState").textContent = "Sin guardado en este navegador"; }
+}
+
+function startNew(){
+  const seed = (Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0;
+  P = generate(seed);
+  entries = P.sol.map(()=> "");
+  revealed = P.sol.map(()=> false);
+  bad = P.sol.map(()=> false);
+  elapsed = 0; done = false;
+  cur = {k:-1,dir:"A"};
+  render(); save();
+}
+
+/* ---------- Render ---------- */
+function wordAt(k,dir){
+  const y=Math.floor(k/P.w), x=k%P.w;
+  return P.words.find(wd=>wd.dir===dir && (dir==="A" ? (wd.y===y && x>=wd.x && x<wd.x+wd.len) : (wd.x===x && y>=wd.y && y<wd.y+wd.len)));
+}
+function cellsOf(wd){const out=[];for(let i=0;i<wd.len;i++) out.push((wd.y+(wd.dir==="D"?i:0))*P.w + wd.x+(wd.dir==="A"?i:0));return out;}
+
+function render(){
+  const grid = $("grid");
+  grid.innerHTML = "";
+  grid.style.setProperty("--cols", P.w);
+  inputs = [];
+  const nums = {};
+  P.words.forEach(wd=>{nums[wd.y*P.w+wd.x]=wd.num;});
+  P.sol.forEach((ch,k)=>{
+    const d = document.createElement("div");
+    d.className = "cell" + (ch ? "" : " block");
+    if(ch){
+      if(nums[k]){const s=document.createElement("span");s.className="n";s.textContent=nums[k];d.appendChild(s);}
+      const inp = document.createElement("input");
+      inp.id = "c"+k; inp.maxLength = 2; inp.autocomplete="off"; inp.spellcheck=false;
+      inp.setAttribute("autocapitalize","characters"); inp.setAttribute("aria-label","Casilla");
+      inp.value = entries[k];
+      inp.addEventListener("focus",()=>onFocus(k));
+      inp.addEventListener("mousedown",e=>{ if(cur.k===k && document.activeElement===inp){ e.preventDefault(); toggleDir(); } });
+      inp.addEventListener("input",()=>onInput(k));
+      inp.addEventListener("keydown",e=>onKey(e,k));
+      d.appendChild(inp);
+      inputs[k]=inp;
+    }
+    grid.appendChild(d);
+  });
+  const mk = (dir,el)=>{
+    el.innerHTML="";
+    P.words.filter(w=>w.dir===dir).forEach(wd=>{
+      const li=document.createElement("li");
+      li.dataset.key = wd.dir+wd.num;
+      const b=document.createElement("b");b.textContent=wd.num+".";
+      const s=document.createElement("span");s.textContent=wd.clue+".";
+      li.append(b,s);
+      li.addEventListener("click",()=>gotoWord(wd));
+      el.appendChild(li);
+    });
+  };
+  mk("A",$("acrossList")); mk("D",$("downList"));
+  $("puzNo").textContent = "Crucigrama Nº " + P.no.toLocaleString("es-CL");
+  $("timer").textContent = fmtTime(elapsed);
+  paint();
+  if(cur.k<0){ gotoWord(P.words[0], true); }
+}
+
+function paint(){
+  const wd = cur.k>=0 ? (wordAt(cur.k,cur.dir)||wordAt(cur.k,cur.dir==="A"?"D":"A")) : null;
+  const on = new Set(wd?cellsOf(wd):[]);
+  P.sol.forEach((ch,k)=>{
+    if(!ch) return;
+    const c = inputs[k].parentNode;
+    c.classList.toggle("word", on.has(k));
+    c.classList.toggle("cur", k===cur.k);
+    c.classList.toggle("bad", !!bad[k]);
+    c.classList.toggle("rev", !!revealed[k]);
+    if(inputs[k].value!==entries[k]) inputs[k].value = entries[k];
+  });
+  document.querySelectorAll(".clues li").forEach(li=>{
+    const w = P.words.find(x=>x.dir+x.num===li.dataset.key);
+    li.classList.toggle("on", !!wd && li.dataset.key===wd.dir+wd.num);
+    li.classList.toggle("ok", cellsOf(w).every(k=>entries[k]));
+  });
+  if(wd){
+    $("curNum").textContent = wd.num + (wd.dir==="A"?" H":" V");
+    $("curTxt").textContent = wd.clue + ".";
+  }
+  $("grid").classList.toggle("solved", done);
+  $("stamp").classList.toggle("show", done);
+  if(done) $("stamp").textContent = "Resuelto en " + fmtTime(elapsed);
+  $("stats").textContent = "Crucigramas resueltos: " + (stats.solved||0) + (stats.best ? " · Mejor tiempo: "+fmtTime(stats.best) : "");
+}
+
+/* ---------- Interacción ---------- */
+function setCur(k,dir){
+  cur.k = k;
+  if(dir) cur.dir = dir;
+  if(!wordAt(k,cur.dir)) cur.dir = cur.dir==="A"?"D":"A";
+  if(document.activeElement!==inputs[k]) inputs[k].focus({preventScroll:true});
+  paint();
+}
+function onFocus(k){ if(cur.k!==k) setCur(k); }
+function toggleDir(){
+  const o = cur.dir==="A"?"D":"A";
+  if(wordAt(cur.k,o)){ cur.dir=o; paint(); }
+}
+function gotoWord(wd, silent){
+  const cs = cellsOf(wd);
+  const k = cs.find(c=>!entries[c]) ?? cs[0];
+  cur.dir = wd.dir;
+  if(silent){ cur.k=k; paint(); } else setCur(k, wd.dir);
+}
+function step(k,delta){
+  const wd = wordAt(k,cur.dir); if(!wd) return k;
+  const cs = cellsOf(wd), i = cs.indexOf(k);
+  return cs[Math.min(cs.length-1,Math.max(0,i+delta))];
+}
+function moveArrow(k,dy,dx){
+  let y=Math.floor(k/P.w), x=k%P.w;
+  for(;;){ y+=dy; x+=dx; if(y<0||x<0||y>=P.h||x>=P.w) return; const kk=y*P.w+x; if(P.sol[kk]){ setCur(kk); return; } }
+}
+function nextWord(delta){
+  const wd = wordAt(cur.k,cur.dir) || P.words[0];
+  const i = P.words.indexOf(wd);
+  gotoWord(P.words[(i+delta+P.words.length)%P.words.length]);
+}
+function setEntry(k,ch,fromReveal){
+  if(done) return;
+  if(revealed[k] && !fromReveal) return;
+  entries[k]=ch; bad[k]=false;
+  if(fromReveal) revealed[k]=true;
+  checkSolved(); save();
+}
+function onInput(k){
+  const v = inputs[k].value;
+  const ch = norm(letters(v).pop()||"");
+  if(!ch){ inputs[k].value = entries[k]; return; }
+  setEntry(k,ch);
+  const wd = wordAt(k,cur.dir);
+  if(wd){ const cs=cellsOf(wd); const i=cs.indexOf(k); const nx=cs.slice(i+1).find(c=>!entries[c]) ?? cs[Math.min(i+1,cs.length-1)]; setCur(nx); }
+  else paint();
+}
+function onKey(e,k){
+  const key = e.key;
+  if(key==="ArrowRight"||key==="ArrowLeft"){ e.preventDefault(); if(cur.dir!=="A"&&wordAt(k,"A")){cur.dir="A";paint();} else moveArrow(k,0,key==="ArrowRight"?1:-1); }
+  else if(key==="ArrowDown"||key==="ArrowUp"){ e.preventDefault(); if(cur.dir!=="D"&&wordAt(k,"D")){cur.dir="D";paint();} else moveArrow(k,key==="ArrowDown"?1:-1,0); }
+  else if(key===" "||key==="Enter"){ e.preventDefault(); toggleDir(); }
+  else if(key==="Tab"){ e.preventDefault(); nextWord(e.shiftKey?-1:1); }
+  else if(key==="Backspace"){
+    e.preventDefault();
+    if(entries[k] && !revealed[k]){ setEntry(k,""); paint(); }
+    else { const p=step(k,-1); if(p!==k){ if(!revealed[p]) setEntry(p,""); setCur(p); } }
+  }
+  else if(key==="Delete"){ e.preventDefault(); if(!revealed[k]){ setEntry(k,""); paint(); } }
+  else if(key.length===1 && !e.ctrlKey && !e.metaKey && !e.altKey){
+    e.preventDefault();
+    const ch = norm(key);
+    if(ch){ inputs[k].value = ch; onInput(k); }
+  }
+}
+function checkSolved(){
+  const ok = P.sol.every((ch,k)=>!ch || entries[k]===ch);
+  if(ok && !done){
+    done = true;
+    const helped = revealed.some(Boolean);
+    if(!helped){ stats.solved=(stats.solved||0)+1; if(!stats.best||elapsed<stats.best) stats.best=elapsed; }
+  }
+}
+
+/* Comprobar / revelar */
+function curWordCells(){ const wd=wordAt(cur.k,cur.dir); return wd?cellsOf(wd):[]; }
+function checkCells(ks){ ks.forEach(k=>{ bad[k] = !!entries[k] && entries[k]!==P.sol[k]; }); paint(); save(); }
+function revealCells(ks){ if(done) return; ks.forEach(k=>{ if(entries[k]!==P.sol[k]) setEntry(k,P.sol[k],true); }); paint(); }
+
+let pending = null;
+function ask(msg,fn){ pending=fn; $("confirmMsg").innerHTML=msg; $("confirm").hidden=false; $("confirmYes").focus(); }
+$("confirmYes").onclick=()=>{ $("confirm").hidden=true; const f=pending; pending=null; if(f) f(); };
+$("confirmNo").onclick=()=>{ $("confirm").hidden=true; pending=null; };
+
+$("chkCell").onclick=()=>checkCells([cur.k]);
+$("chkWord").onclick=()=>checkCells(curWordCells());
+$("chkAll").onclick=()=>checkCells(P.sol.map((c,k)=>c?k:-1).filter(k=>k>=0));
+$("revCell").onclick=()=>revealCells([cur.k]);
+$("revWord").onclick=()=>revealCells(curWordCells());
+$("revAll").onclick=()=>ask("<b>¿Ver la solución completa?</b> El crucigrama no contará como resuelto.",()=>revealCells(P.sol.map((c,k)=>c?k:-1).filter(k=>k>=0)));
+$("clearAll").onclick=()=>ask("<b>¿Borrar todas tus letras?</b> Se conservan las reveladas.",()=>{ entries=entries.map((v,k)=>revealed[k]?v:""); bad=bad.map(()=>false); paint(); save(); });
+$("newPuz").onclick=()=>{
+  if(done || entries.every(v=>!v)) startNew();
+  else ask("<b>¿Empezar un crucigrama nuevo?</b> Perderás el avance de este.",startNew);
+};
+$("prevClue").onclick=()=>nextWord(-1);
+$("nextClue").onclick=()=>nextWord(1);
+
+/* Reloj: corre solo con la página visible */
+setInterval(()=>{
+  if(document.hidden || done || !P) return;
+  elapsed++; $("timer").textContent = fmtTime(elapsed);
+  if(elapsed%10===0) save();
+},1000);
+document.addEventListener("visibilitychange",()=>{ if(document.hidden && P) save(); });
+window.addEventListener("pagehide",()=>{ if(P) save(); });
+
+/* Fecha de la edición */
+const hoy = new Date().toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+$("today").textContent = hoy.charAt(0).toUpperCase()+hoy.slice(1);
+
+/* Arranque: retoma lo guardado o crea uno nuevo */
+const saved = load();
+stats = (saved && saved.stats) || {solved:0,best:0};
+if(saved && saved.P && saved.entries){
+  P = saved.P; entries = saved.entries; revealed = saved.revealed || P.sol.map(()=>false);
+  bad = P.sol.map(()=>false); elapsed = saved.elapsed||0; done = !!saved.done;
+  render();
+  $("saveState").textContent = "Avance recuperado";
+}else{
+  startNew();
+}
+})();
+</script>
+</body>
+</html>
