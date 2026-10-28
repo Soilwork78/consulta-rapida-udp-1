@@ -1,0 +1,254 @@
+ENF 802 · Semana 13 · Lectura previa
+
+TOMA DE MUESTRAS DE LABORATORIO EN PEDIATRÍA
+============================================
+
+  Resumen para estudiar antes del taller. Sigue el orden de las cuatro estaciones y termina con preguntas de repaso. Los valores son referenciales: cada centro tiene su protocolo.
+
+1. FASE PREANALÍTICA
+--------------------
+
+  Es todo lo que ocurre antes de que la muestra llegue al laboratorio: indicación, identificación, preparación, toma, rotulado y transporte. Concentra la mayoría de los errores de laboratorio, y casi todos dependen de enfermería.
+
+Errores más frecuentes:
+
+  - Muestra mal identificada o rotulada lejos del paciente.
+
+  - Hemólisis: ligadura más de 1 minuto, aguja muy fina con aspiración fuerte, agitar el tubo, alcohol aún húmedo.
+
+  - Coágulos en tubos con anticoagulante por no mezclar.
+
+  - Volumen insuficiente o proporción sangre-anticoagulante incorrecta.
+
+  - Contaminación: con solución endovenosa (tomar del brazo contrario a la vía) o con flora de la piel en el hemocultivo.
+
+  - Demora o mal transporte: gases sin hielo, orina a temperatura ambiente por horas.
+
+>> Regla práctica: dos identificadores (nombre completo y RUN o número de ficha) y rotular junto al paciente, nunca antes ni en el mesón.
+
+2. PREPARAR AL NIÑO SEGÚN SU EDAD
+---------------------------------
+
+  Explicar siempre al niño, con palabras de su edad, y al cuidador, que participa como apoyo y no como quien sujeta a la fuerza.
+
+  · Edad | Cómo piensa | Qué hacer
+  · RN y lactante | Se calma con contacto, succión y voz conocida. | Contención envolvente, succión no nutritiva, sacarosa oral o pecho materno según protocolo, ambiente tibio.
+  · Preescolar (2 a 5 años) | Pensamiento mágico; puede creer que es un castigo. | Frases cortas justo antes, mostrar el material en un muñeco, permitir llorar, distracción (burbujas, video).
+  · Escolar (6 a 11 años) | Pensamiento concreto; quiere saber qué va a pasar. | Explicar paso a paso con honestidad ("va a apretar y a pinchar un poco"), dejarlo elegir el brazo o ayudar con la tórula, felicitarlo al final.
+  · Adolescente | Valora la privacidad y el control. | Explicación completa, pedir su colaboración, resguardar la privacidad.
+
+  La anestesia tópica (por ejemplo crema de lidocaína-prilocaína) necesita cerca de 60 minutos para actuar: solo sirve si se planifica antes.
+
+3. CUÁNTA SANGRE SE PUEDE EXTRAER
+---------------------------------
+
+  En un niño pequeño cada mililitro cuenta. Se calcula la volemia y se respeta el máximo que fija el protocolo del centro.
+
+  · Edad | Volemia aproximada | Ejemplo
+  · RN de término | 80–90 mL/kg | Agustín, 3,4 kg: cerca de 290 mL
+  · Lactante | 75–80 mL/kg | Elisa, 7,8 kg: cerca de 600 mL
+  · Escolar | 70–75 mL/kg | Tomás, 20 kg: cerca de 1.450 mL
+
+>> Las referencias más usadas limitan la extracción a un porcentaje pequeño de la volemia en 24 horas (habitualmente entre 1 y 5 %, muchos centros usan 3 %). Para Agustín, 3 % son unos 9 mL en 24 horas, sumando todos los exámenes.
+
+4. TUBOS Y ORDEN DE EXTRACCIÓN
+------------------------------
+
+  El orden evita que el aditivo de un tubo contamine al siguiente. Para venopunción, el orden recomendado es:
+
+  · Orden | Tubo | Uso típico | Mezcla
+  · 1 | Hemocultivo | Bacteriemia, sepsis | Suave
+  · 2 | Citrato (celeste) | Coagulación | 3–4 veces
+  · 3 | Suero, con o sin gel (rojo o amarillo) | Bioquímica, PCR | 5 veces
+  · 4 | Heparina (verde) | Bioquímica en plasma; gases en jeringa heparinizada | 8–10 veces
+  · 5 | EDTA (lila) | Hemograma | 8–10 veces
+  · 6 | Fluoruro (gris) | Glucosa, lactato | 8–10 veces
+
+  Mezclar es invertir suavemente, nunca agitar. En microtubos por punción capilar el orden cambia (EDTA primero, porque la sangre coagula rápido): seguir lo que indique el laboratorio.
+
+5. VENOPUNCIÓN PEDIÁTRICA
+-------------------------
+
+Antes:
+
+  - Revisar indicación, exámenes, ayuno si corresponde (hemograma y PCR no lo requieren) y alergias (látex, antisépticos).
+
+  - Elegir sitio: fosa antecubital o dorso de la mano en el escolar; dorso de la mano o del pie en el lactante que no camina. Evitar extremidad con vía venosa, lesiones, edema o punciones previas.
+
+  - Dispositivo: mariposa 23 G para venas pequeñas; aguja 21 G en el niño mayor con buena vena.
+
+Durante:
+
+  - Contención segura, sin apretar tórax ni cuello.
+
+  - Ligadura menos de 1 minuto; palpar la vena sin golpearla.
+
+  - Antiséptico según protocolo y dejar secar.
+
+  - Bisel hacia arriba, ángulo bajo, sin movimientos de búsqueda.
+
+  - Llenar los tubos en orden y con el volumen justo.
+
+  - Soltar la ligadura antes de retirar la aguja; activar el seguro y desechar sin reencapsular.
+
+Después:
+
+  - Comprimir con tórula sin flexionar el brazo hasta que no sangre.
+
+  - Vigilar dolor, hematoma, palidez o lipotimia.
+
+  - Registrar la conducta del niño, reacciones y signos vitales.
+
+>> Caso de la estación 2: Tomás tiene palidez y fiebre. Un hemograma con hemoglobina bajo 11,5 g/dL confirma anemia a esa edad. La PCR sube más en las infecciones bacterianas que en las virales, pero no las distingue por sí sola.
+
+6. ORINA EN EL LACTANTE
+-----------------------
+
+  En un lactante febril sin foco, la infección urinaria es una de las causas bacterianas más frecuentes. La técnica de recolección define cuánto se puede confiar en el resultado.
+
+  · Técnica | Cuándo | Confiabilidad del urocultivo
+  · Bolsa recolectora | Lactante sin control de esfínter, para orina completa de tamizaje | Baja: alta contaminación. Solo es útil si sale negativo.
+  · Chorro medio | Niño con control de esfínter | Buena con aseo correcto.
+  · Cateterismo vesical | Lactante febril que requiere confirmar ITU | Alta (técnica de elección en menores de 2 años).
+  · Punción suprapúbica | Casos seleccionados, la hace el médico | La más alta.
+
+Técnica de la bolsa (lo que pide la lista):
+
+  - Aseo genital: en el varón sin forzar el prepucio; en la niña separar labios y limpiar del meato hacia el ano.
+
+  - Secar, cambiar guantes, abrir la bolsa sin tocar el adhesivo interno.
+
+  - Pegar desde el periné hacia el pubis, sin pliegues; pañal holgado.
+
+  - Revisar seguido y cambiar la bolsa si hay deposición, despegue o se cumple el tiempo del protocolo (habitualmente 30 a 60 minutos).
+
+  - Pasar la orina a frasco estéril, rotular y enviar. Si no se envía antes de 1 a 2 horas, refrigerar.
+
+Cómo leer la orina completa:
+
+  - Nitritos (+): muy específicos de infección, pero en lactantes suelen salir negativos porque orinan seguido.
+
+  - Leucocito esterasa (+) y piuria: sugieren inflamación urinaria.
+
+  - Densidad alta y orina concentrada, como la de Elisa: orientan a deshidratación.
+
+7. SOSPECHA DE CETOACIDOSIS
+---------------------------
+
+  Falta insulina: la glucosa no entra a las células, el cuerpo quema grasa y produce cuerpos cetónicos, que acidifican la sangre. La glucosa alta arrastra agua por la orina y deshidrata. Es la forma de debut más frecuente de la diabetes tipo 1 en niños.
+
+Cómo se ve:
+
+  - Poliuria, polidipsia, baja de peso, decaimiento (como Emilia).
+
+  - Vómitos, dolor abdominal, aliento cetónico (a manzana).
+
+  - Respiración profunda y rápida (Kussmaul) y compromiso de conciencia en los casos graves.
+
+  · Criterio (ISPAD) | Valor
+  · Glicemia | > 200 mg/dL
+  · pH venoso | < 7,30
+  · o bicarbonato | < 18 mEq/L
+  · Cetonemia (β-hidroxibutirato) | ≥ 3 mmol/L
+
+  · Cetonemia capilar | Interpretación habitual
+  · < 0,6 mmol/L | Normal
+  · 0,6–1,4 | Elevada, vigilar
+  · 1,5–2,9 | Riesgo de cetoacidosis
+  · ≥ 3,0 | Cetoacidosis probable: avisar de inmediato
+
+Técnica y cuidados:
+
+  - Primero evaluar ABCDE y signos vitales; si hay gravedad, avisar antes de seguir.
+
+  - Glucómetro limpio, vigente y bien codificado; tira compatible.
+
+  - Punción en el costado del pulpejo (escolar) o del talón (lactante), con piel tibia y sana. Limpiar con tórula seca: el alcohol húmedo altera el resultado.
+
+  - No exprimir con fuerza: diluye la muestra con líquido de los tejidos.
+
+  - Gases venosos en jeringa heparinizada, sin burbujas, sellada y en hielo.
+
+  - Resultado crítico: comunicar con SBAR y preparar la hidratación endovenosa.
+
+>> Signos de alarma de edema cerebral durante el tratamiento: cefalea, vómitos nuevos, bradicardia, presión alta o cambio de conciencia. Avisar de inmediato.
+
+8. SOSPECHA DE SEPSIS NEONATAL
+------------------------------
+
+  Infección grave del recién nacido. Se llama precoz si aparece en las primeras 72 horas y tardía si aparece después; Agustín, con 12 días, es un caso tardío. Los signos son poco específicos y por eso hay que pensar en ella.
+
+Signos de alerta:
+
+  - Rechazo alimentario, letargia, irritabilidad.
+
+  - Temperatura inestable (en el RN es más común la hipotermia que la fiebre).
+
+  - Taquipnea, quejido, apneas, desaturación.
+
+  - Mala perfusión, piel moteada, ictericia, distensión abdominal.
+
+Exámenes y técnica:
+
+  - Hemocultivo primero, con asepsia estricta: mascarilla, piel y tapón desinfectados según protocolo, respetar el tiempo de secado, no tocar puntos críticos. Volumen mínimo en RN: alrededor de 1 mL por frasco pediátrico; menos volumen aumenta los falsos negativos.
+
+  - PCR: sube entre 6 y 12 horas después del inicio; un valor normal temprano no descarta la infección y suele repetirse.
+
+  - Gases venosos: buscar acidosis metabólica; sellar, sin burbujas y en hielo.
+
+  - Sumar todos los volúmenes y no pasar el máximo calculado.
+
+Cuidados:
+
+  - Mantener la temperatura todo el tiempo (cuna radiante, sin corrientes de aire).
+
+  - Analgesia no farmacológica: contención, succión no nutritiva, sacarosa oral según protocolo.
+
+  - Después de la toma: vigilar apnea, saturación, temperatura y sangrado.
+
+  - Acompañar e informar al cuidador.
+
+9. ROTULADO, TRANSPORTE, REAS Y REGISTRO
+----------------------------------------
+
+  - Rotulado: junto al paciente, con dos identificadores, tipo de muestra, fecha, hora y responsable. Verificar que coincida con la solicitud.
+
+  - Transporte: contenedor bioseguro, con la solicitud aparte. Gases en hielo e inmediato; hemocultivo a temperatura ambiente y pronto; orina refrigerada si se demora.
+
+  - REAS: cortopunzantes al contenedor rígido sin reencapsular; residuos contaminados y EPP en su contenedor, sin compactar.
+
+  - Comunicación de resultados críticos (SBAR): Situación, Antecedentes, Evaluación y Recomendación. Confirmar que el otro recibió el mensaje y registrar a quién y a qué hora se avisó.
+
+  - Registro: indicación, sitio, técnica, número de intentos, muestras obtenidas, tolerancia del niño, incidentes, cuidados y hora de envío.
+
+10. PREGUNTAS DE REPASO
+-----------------------
+
+P: ¿Por qué el urocultivo por bolsa no confirma una infección urinaria?
+R: Porque se contamina con facilidad con flora de la piel y del periné. Un resultado negativo descarta ITU; uno positivo hay que confirmarlo con cateterismo.
+
+P: ¿Qué tubo va antes, el lila o el rojo?
+R: El rojo (suero). El EDTA del tubo lila puede contaminar las muestras siguientes y alterar, por ejemplo, el calcio y el potasio.
+
+P: ¿Cuántas veces se invierte un tubo con EDTA?
+R: Entre 8 y 10 veces, con suavidad. Agitar causa hemólisis.
+
+P: ¿Por qué se limpia el dedo con tórula seca antes del HGT?
+R: El alcohol húmedo diluye o altera la gota y da un resultado falso.
+
+P: Emilia tiene cetonemia de 3,4 mmol/L. ¿Qué hace?
+R: Es compatible con cetoacidosis: avisar de inmediato con SBAR, mantener la monitorización y preparar la hidratación endovenosa.
+
+P: ¿Cuánta sangre se le puede sacar a Agustín en un día?
+R: Su volemia es cerca de 290 mL; con un límite de 3 %, unos 9 mL en 24 horas, sumando todos los exámenes.
+
+P: ¿Qué se toma primero en la estación de sepsis neonatal?
+R: El hemocultivo, para evitar su contaminación; después PCR y gases.
+
+P: ¿Por qué los gases van en hielo y de inmediato?
+R: Las células siguen consumiendo oxígeno y produciendo CO₂; la demora altera el pH, la PO₂ y la PCO₂.
+
+P: ¿Qué le dice a un niño de 6 años antes de pincharlo?
+R: La verdad, en palabras concretas: qué va a sentir, cuánto dura y qué puede hacer él (elegir el brazo, apretar la mano del cuidador).
+
+  Basado en la guía de la semana 13 del Manual Docente ENF 802, 2026-20 (UDLA), y en conocimiento clínico general (criterios ISPAD para cetoacidosis, recomendaciones habituales de orden de extracción y volúmenes pediátricos). Contrastar los valores con el protocolo del centro de práctica.
