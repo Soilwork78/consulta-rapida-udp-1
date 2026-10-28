@@ -1,0 +1,193 @@
+<title>Audio repaso ENF802</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: reproductor fijo arriba (controles) y guion en pistas debajo, una columna */
+:root{
+  --bg:#f6f8f8; --surface:#ffffff; --fg:#17262a; --muted:#56686c; --line:#d5dfe0;
+  --accent:#e2661b; --accent-soft:#fdeee4; --teal:#0f7b7b; --teal-soft:#e2f2f1;
+  --f-display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --surface:#162124; --fg:#e4eced; --muted:#9db0b3; --line:#2a3a3e;
+  --accent:#f08a4b; --accent-soft:#3a2416; --teal:#4cc2bf; --teal-soft:#12302f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --surface:#162124; --fg:#e4eced; --muted:#9db0b3; --line:#2a3a3e;
+  --accent:#f08a4b; --accent-soft:#3a2416; --teal:#4cc2bf; --teal-soft:#12302f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:17px/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:720px;margin:0 auto;display:grid;gap:20px}
+h1,h2{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(28px,6vw,38px)}
+h2{font-size:20px}
+p{margin:0}
+.eyebrow{font:600 13px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted);font-size:15px}
+.player{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px;box-shadow:0 4px 18px rgba(0,0,0,.06)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:600 16px var(--f-body);border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:10px 18px;cursor:pointer;min-height:44px}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:disabled{opacity:.5;cursor:default}
+label{font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+select{font:15px var(--f-body);padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);max-width:100%;min-width:0;flex:1}
+input[type=range]{accent-color:var(--accent);width:140px}
+.now{font-size:15px;min-height:1.5em}
+.now b{color:var(--teal)}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar div{height:100%;width:0;background:var(--accent);transition:width .3s}
+.voicehint{font-size:14px;border-left:3px solid var(--accent);background:var(--accent-soft);padding:8px 10px;border-radius:0 6px 6px 0}
+.tracks{display:grid;gap:12px}
+.track{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:10px}
+.track header{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.track header button{padding:6px 14px;min-height:36px;font-size:14px}
+.n{font:600 13px var(--f-body);color:var(--accent);letter-spacing:.06em}
+.track p{color:var(--fg)}
+.track p.on{background:var(--teal-soft);border-radius:4px;box-shadow:0 0 0 4px var(--teal-soft)}
+details{font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+details summary{cursor:pointer;font-weight:600}
+details ol{margin:8px 0 0;padding-left:1.2em;display:grid;gap:6px}
+code{font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:2px 5px;word-break:break-all}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <span class="eyebrow">ENF 802 · Semana 13 · Repaso en audio</span>
+    <h1>Exámenes de laboratorio pediátricos</h1>
+    <p class="muted">Unos 9 minutos en 9 pistas. La lectura usa las voces instaladas en tu dispositivo: en Microsoft Edge aparecen las voces chilenas Catalina y Lorenzo.</p>
+  </header>
+
+  <div class="player" role="region" aria-label="Reproductor">
+    <div class="row">
+      <button class="primary" id="play">▶ Escuchar todo</button>
+      <button id="pause" disabled>Pausa</button>
+      <button id="stop" disabled>Detener</button>
+    </div>
+    <div class="row">
+      <label for="voice">Voz</label>
+      <select id="voice"><option>Cargando voces…</option></select>
+    </div>
+    <div class="row">
+      <label for="rate">Velocidad <span id="rateVal">1,0×</span></label>
+      <input type="range" id="rate" min="0.7" max="1.4" step="0.05" value="1">
+    </div>
+    <div class="bar" aria-hidden="true"><div id="prog"></div></div>
+    <p class="now" id="now">Listo para escuchar.</p>
+    <p class="voicehint" id="hint" hidden></p>
+  </div>
+
+  <div class="tracks" id="tracks"></div>
+
+  <details>
+    <summary>Cómo obtener un archivo MP3 con voz chilena</summary>
+    <ol>
+      <li>En un computador con Python, instala la herramienta: <code>pip install edge-tts</code></li>
+      <li>Descarga el guion en texto (Guion_audio_repaso_ENF802_S13.txt) a la misma carpeta.</li>
+      <li>Voz de mujer: <code>edge-tts --voice es-CL-CatalinaNeural --rate=-5% -f Guion_audio_repaso_ENF802_S13.txt --write-media repaso_catalina.mp3</code></li>
+      <li>Voz de hombre: cambia la voz por <code>es-CL-LorenzoNeural</code>.</li>
+    </ol>
+  </details>
+</div>
+
+<script>
+const GUION = [{"t":"Introducción","x":["Hola. Este es el repaso para el taller de exámenes de laboratorio pediátricos de Salud del Niño y Adolescente dos, semana trece.","Son dos horas en la sala de habilidades, con veinticuatro estudiantes. Los primeros veinte minutos son de apertura: cinco para el contexto y los resultados de aprendizaje, diez para que el docente muestre la técnica con la lista de cotejo, y cinco para explicar cómo se rota. Después vienen noventa minutos de práctica en cuatro estaciones, y se cierra con diez minutos de retroalimentación.","La idea es simple: que los estudiantes reconozcan los insumos y el tipo de muestra, que sepan qué cuidados van antes y después del examen según la edad del niño, y que hagan la técnica bien. No hay nota, pero sí lista de cotejo."]},{"t":"Lo que se repite en todas las estaciones","x":["Antes de entrar a cada estación, hay seis cosas que se repiten siempre y que hay que mirar en todos los estudiantes.","Uno: higiene de manos según la norma del MINSAL, y no una vez, sino dos o tres veces por procedimiento.","Dos: identificación correcta. Nombre completo y RUN, o número de ficha clínica. En el recién nacido, dos identificadores, más la edad gestacional y el peso.","Tres: explicarle el procedimiento al niño con palabras de su edad, y al cuidador, que en el taller lo hace el compañero.","Cuatro: el cortopunzante va directo al contenedor REAS, sin reencapsular.","Cinco: rotular la muestra al lado del paciente, nunca antes ni en el mesón.","Y seis: registrar todo. Sitio, técnica, número de intentos, cómo lo toleró el niño y a qué hora se envió."]},{"t":"Preparar al niño","x":["Un niño no es un adulto chico, y eso se nota sobre todo en cómo se le prepara.","Con la guagua y el lactante funciona la contención envolvente, la succión no nutritiva, el pecho de la mamá o la sacarosa oral, según el protocolo, y mantenerlo abrigado.","El preescolar tiene pensamiento mágico: puede creer que el pinchazo es un castigo. Hay que explicarle justo antes, con frases cortas, dejarlo llorar y distraerlo.","El escolar quiere saber qué va a pasar. Hay que ser honesto: le va a apretar y le va a doler un poquito. Ayuda mucho dejarlo elegir el brazo y felicitarlo al final.","Y un dato práctico: la crema anestésica tópica demora más o menos una hora en hacer efecto, así que solo sirve si se planifica con tiempo."]},{"t":"Volumen de sangre y orden de los tubos","x":["En pediatría cada mililitro cuenta. El recién nacido tiene entre ochenta y noventa mililitros de sangre por kilo. Agustín, el de la estación cuatro, pesa tres coma cuatro kilos: tiene cerca de doscientos noventa mililitros en total. Si el protocolo permite sacar un tres por ciento en veinticuatro horas, son unos nueve mililitros, sumando todos los exámenes.","El orden de llenado de los tubos evita que el aditivo de uno contamine al siguiente. Primero el hemocultivo. Después el citrato, tapa celeste, para coagulación. Luego el suero, tapa roja o amarilla, para bioquímica y PCR. Después la heparina, tapa verde. Luego el EDTA, tapa lila, para el hemograma. Y al final el fluoruro, tapa gris.","Los tubos se mezclan invirtiéndolos suavemente, nunca agitándolos. El de tapa lila, entre ocho y diez veces."]},{"t":"Estación 1: orina en el lactante","x":["Estación uno. Elisa, ocho meses, siete coma ocho kilos. Tiene fiebre de treinta y ocho coma cinco, está irritable y el pañal tiene orina concentrada. Le piden orina completa y urocultivo.","Hay que evaluar la hidratación y la temperatura. Después viene el aseo genital con técnica limpia: en el niño, sin forzar el prepucio; en la niña, separando los labios y limpiando desde el meato hacia el ano.","Luego se cambian los guantes y se lavan las manos antes de poner la bolsa. La bolsa se pega desde el periné hacia el pubis, sin pliegues, y el pañal va suelto. Hay que revisarla seguido, y si se ensucia con deposición, se despega o se cumple el tiempo del protocolo, se saca, se repite el aseo y se pone una nueva.","Una pregunta buena para la discusión: ¿sirve el urocultivo por bolsa para confirmar una infección urinaria? La respuesta es no. Se contamina con mucha facilidad. Si sale negativo, descarta; si sale positivo, hay que confirmarlo con cateterismo vesical."]},{"t":"Estación 2: venopunción en el escolar","x":["Estación dos. Tomás, seis años, veinte kilos. Está pálido, decaído y con fiebre que va y viene. Le piden hemograma y PCR. No necesita ayuno.","Lo clave aquí es la contención segura, sin apretarle el tórax ni el cuello. La ligadura no debe estar puesta más de un minuto. La vena se palpa, no se golpea. La punción va con el bisel hacia arriba y sin andar buscando con la aguja.","Se llena primero el tubo sin anticoagulante y después el de tapa lila. La ligadura se suelta antes de sacar la aguja, se activa el seguro y se bota al contenedor sin reencapsular. Después se comprime con tórula, sin doblar el brazo.","Y se educa a la mamá o al papá sobre los cuidados y los signos de alarma, como sangrado o un hematoma que crece."]},{"t":"Estación 3: sospecha de cetoacidosis","x":["Estación tres. Emilia, nueve años, treinta kilos. Tiene poliuria, polidipsia y está decaída. Le piden HGT, cetonemia y gases venosos.","El orden es importante: primero se evalúa ABCDE y se toman signos vitales. Si hay signos de gravedad, se avisa antes de seguir pinchando.","Para el HGT, el glucómetro tiene que estar limpio, vigente y bien codificado. Se elige el costado del pulpejo, con la piel tibia y sana, y se limpia con tórula seca, porque el alcohol húmedo altera el resultado. Tampoco se exprime fuerte el dedo, porque se diluye la muestra.","Los gases van en jeringa heparinizada, sin burbujas, sellada y en hielo, al laboratorio de inmediato.","Hay que manejar los números. La cetoacidosis se confirma con glicemia sobre doscientos, pH bajo siete coma treinta o bicarbonato bajo dieciocho, y cetonas en sangre o en orina. Una cetonemia de tres o más es muy probablemente cetoacidosis.","Ante un resultado crítico se avisa con SBAR: situación, antecedentes, evaluación y recomendación. Se confirma que el otro recibió el mensaje, se registra a quién y a qué hora, y se prepara la hidratación endovenosa."]},{"t":"Estación 4: sospecha de sepsis neonatal","x":["Estación cuatro. Agustín, doce días de vida, tres coma cuatro kilos. Está inapetente, letárgico y con taquipnea. Le piden hemocultivos, PCR y gases.","Como tiene más de setenta y dos horas de vida, es una sospecha de sepsis tardía. Los signos en el recién nacido son poco específicos: rechazo alimentario, letargia, temperatura inestable, que en la guagua es más frecuente hacia la hipotermia que hacia la fiebre, taquipnea, apneas y mala perfusión.","Aquí la asepsia es estricta. Se usa mascarilla, se desinfecta el tapón del frasco, se respeta el tiempo de secado y no se tocan los puntos críticos. El hemocultivo va primero, con alrededor de un mililitro por frasco pediátrico; después la PCR y los gases.","Durante todo el procedimiento hay que mantener la temperatura, con la cuna radiante y sin corrientes de aire. Se usa analgesia no farmacológica: contención, succión no nutritiva y sacarosa, según protocolo.","Y después de la toma se vigila apnea, saturación, temperatura y sangrado, y se acompaña e informa al cuidador."]},{"t":"Cierre","x":["Para cerrar, tres ideas.","Primero, la mayoría de los errores de laboratorio se producen antes de que la muestra llegue al laboratorio: mala identificación, hemólisis, tubos sin mezclar, volumen insuficiente o mal transporte. Casi todos dependen de enfermería.","Segundo, cada estación tiene su punto crítico. En la uno, el aseo y la bolsa. En la dos, la contención y el orden de los tubos. En la tres, evaluar antes de pinchar y comunicar el resultado crítico. Y en la cuatro, la asepsia, la temperatura y no pasarse del volumen.","Y tercero, los valores que mencionamos son referencias generales. Siempre hay que contrastarlos con el protocolo del centro.","Éxito mañana en el taller."]}];
+const synth = window.speechSynthesis;
+const $ = id => document.getElementById(id);
+let voices = [], queue = [], qi = 0, playing = false, paused = false;
+
+// Pistas
+const tracksEl = $('tracks');
+GUION.forEach((s, i) => {
+  const art = document.createElement('article'); art.className = 'track';
+  const head = document.createElement('header');
+  const hg = document.createElement('div');
+  hg.innerHTML = '<span class="n">PISTA ' + (i + 1) + '</span>';
+  const h = document.createElement('h2'); h.textContent = s.t; hg.appendChild(h);
+  const b = document.createElement('button'); b.textContent = '▶ Escuchar'; b.setAttribute('aria-label', 'Escuchar pista ' + (i + 1));
+  b.addEventListener('click', () => start(i, i));
+  head.append(hg, b); art.appendChild(head);
+  s.x.forEach((t, j) => { const p = document.createElement('p'); p.textContent = t; p.id = 'p' + i + '_' + j; art.appendChild(p); });
+  tracksEl.appendChild(art);
+});
+const total = GUION.reduce((a, s) => a + s.x.length, 0);
+
+function rank(v) {
+  const l = (v.lang || '').toLowerCase().replace('_', '-'), n = (v.name || '').toLowerCase();
+  let r = 0;
+  if (l === 'es-cl' || n.includes('chile')) r = 100;
+  else if (l === 'es-419' || l === 'es-us' || l === 'es-mx' || l === 'es-ar' || l === 'es-co' || l === 'es-pe') r = 60;
+  else if (l.startsWith('es')) r = 40;
+  else return -1;
+  if (n.includes('natural') || n.includes('online') || n.includes('neural')) r += 20;
+  if (n.includes('catalina') || n.includes('lorenzo')) r += 5;
+  return r;
+}
+function loadVoices() {
+  if (!synth) return;
+  const all = synth.getVoices().filter(v => rank(v) >= 0).sort((a, b) => rank(b) - rank(a));
+  if (!all.length) return;
+  voices = all;
+  const sel = $('voice'); sel.innerHTML = '';
+  all.forEach((v, i) => { const o = document.createElement('option'); o.value = i; o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o); });
+  let saved = null; try { saved = localStorage.getItem('enf802-voz'); } catch (e) {}
+  const si = saved ? all.findIndex(v => v.name === saved) : -1;
+  sel.value = si >= 0 ? si : 0;
+  const best = all[sel.value];
+  const hint = $('hint');
+  if (rank(all[0]) < 100) {
+    hint.hidden = false;
+    hint.textContent = 'Este navegador no tiene voz chilena; se usa la mejor voz en español disponible. Para escuchar a Catalina o Lorenzo (Chile), abre esta página en Microsoft Edge.';
+  } else hint.hidden = true;
+}
+if (!synth) {
+  $('play').disabled = true;
+  $('now').textContent = 'Este navegador no permite lectura en voz alta. Usa el guion en texto o el comando para generar el MP3.';
+} else {
+  loadVoices();
+  synth.onvoiceschanged = loadVoices;
+  setTimeout(loadVoices, 600);
+}
+$('voice').addEventListener('change', e => { try { localStorage.setItem('enf802-voz', voices[e.target.value].name); } catch (_) {} });
+$('rate').addEventListener('input', e => { $('rateVal').textContent = Number(e.target.value).toFixed(2).replace(/0$/, '').replace('.', ',') + '×'; });
+
+function start(from, to) {
+  synth.cancel();
+  queue = [];
+  for (let i = from; i <= to; i++) GUION[i].x.forEach((t, j) => queue.push({ i, j, t }));
+  qi = 0; playing = true; paused = false; ui();
+  speakNext();
+}
+function speakNext() {
+  document.querySelectorAll('.track p.on').forEach(p => p.classList.remove('on'));
+  if (!playing || qi >= queue.length) { playing = false; ui(); $('now').textContent = 'Fin del repaso.'; $('prog').style.width = '100%'; return; }
+  const it = queue[qi];
+  const u = new SpeechSynthesisUtterance(it.t);
+  const v = voices[$('voice').value];
+  if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'es-CL';
+  u.rate = Number($('rate').value);
+  u.onend = () => { if (playing) { qi++; speakNext(); } };
+  u.onerror = () => { if (playing) { qi++; speakNext(); } };
+  const p = $('p' + it.i + '_' + it.j); if (p) { p.classList.add('on'); p.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  $('now').innerHTML = 'Pista ' + (it.i + 1) + ': <b>' + GUION[it.i].t + '</b>';
+  const done = GUION.slice(0, it.i).reduce((a, s) => a + s.x.length, 0) + it.j;
+  $('prog').style.width = (100 * done / total) + '%';
+  synth.speak(u);
+}
+function ui() {
+  $('pause').disabled = !playing; $('stop').disabled = !playing;
+  $('pause').textContent = paused ? 'Continuar' : 'Pausa';
+  $('play').textContent = playing ? '↺ Desde el inicio' : '▶ Escuchar todo';
+}
+$('play').addEventListener('click', () => start(0, GUION.length - 1));
+$('pause').addEventListener('click', () => {
+  if (!playing) return;
+  if (paused) { synth.resume(); paused = false; } else { synth.pause(); paused = true; }
+  ui();
+});
+$('stop').addEventListener('click', () => { playing = false; paused = false; synth.cancel(); ui(); $('now').textContent = 'Detenido.'; document.querySelectorAll('.track p.on').forEach(p => p.classList.remove('on')); });
+</script>

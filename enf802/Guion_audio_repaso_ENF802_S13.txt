@@ -1,0 +1,83 @@
+Hola. Este es el repaso para el taller de exámenes de laboratorio pediátricos de Salud del Niño y Adolescente dos, semana trece.
+
+Son dos horas en la sala de habilidades, con veinticuatro estudiantes. Los primeros veinte minutos son de apertura: cinco para el contexto y los resultados de aprendizaje, diez para que el docente muestre la técnica con la lista de cotejo, y cinco para explicar cómo se rota. Después vienen noventa minutos de práctica en cuatro estaciones, y se cierra con diez minutos de retroalimentación.
+
+La idea es simple: que los estudiantes reconozcan los insumos y el tipo de muestra, que sepan qué cuidados van antes y después del examen según la edad del niño, y que hagan la técnica bien. No hay nota, pero sí lista de cotejo.
+
+Antes de entrar a cada estación, hay seis cosas que se repiten siempre y que hay que mirar en todos los estudiantes.
+
+Uno: higiene de manos según la norma del MINSAL, y no una vez, sino dos o tres veces por procedimiento.
+
+Dos: identificación correcta. Nombre completo y RUN, o número de ficha clínica. En el recién nacido, dos identificadores, más la edad gestacional y el peso.
+
+Tres: explicarle el procedimiento al niño con palabras de su edad, y al cuidador, que en el taller lo hace el compañero.
+
+Cuatro: el cortopunzante va directo al contenedor REAS, sin reencapsular.
+
+Cinco: rotular la muestra al lado del paciente, nunca antes ni en el mesón.
+
+Y seis: registrar todo. Sitio, técnica, número de intentos, cómo lo toleró el niño y a qué hora se envió.
+
+Un niño no es un adulto chico, y eso se nota sobre todo en cómo se le prepara.
+
+Con la guagua y el lactante funciona la contención envolvente, la succión no nutritiva, el pecho de la mamá o la sacarosa oral, según el protocolo, y mantenerlo abrigado.
+
+El preescolar tiene pensamiento mágico: puede creer que el pinchazo es un castigo. Hay que explicarle justo antes, con frases cortas, dejarlo llorar y distraerlo.
+
+El escolar quiere saber qué va a pasar. Hay que ser honesto: le va a apretar y le va a doler un poquito. Ayuda mucho dejarlo elegir el brazo y felicitarlo al final.
+
+Y un dato práctico: la crema anestésica tópica demora más o menos una hora en hacer efecto, así que solo sirve si se planifica con tiempo.
+
+En pediatría cada mililitro cuenta. El recién nacido tiene entre ochenta y noventa mililitros de sangre por kilo. Agustín, el de la estación cuatro, pesa tres coma cuatro kilos: tiene cerca de doscientos noventa mililitros en total. Si el protocolo permite sacar un tres por ciento en veinticuatro horas, son unos nueve mililitros, sumando todos los exámenes.
+
+El orden de llenado de los tubos evita que el aditivo de uno contamine al siguiente. Primero el hemocultivo. Después el citrato, tapa celeste, para coagulación. Luego el suero, tapa roja o amarilla, para bioquímica y PCR. Después la heparina, tapa verde. Luego el EDTA, tapa lila, para el hemograma. Y al final el fluoruro, tapa gris.
+
+Los tubos se mezclan invirtiéndolos suavemente, nunca agitándolos. El de tapa lila, entre ocho y diez veces.
+
+Estación uno. Elisa, ocho meses, siete coma ocho kilos. Tiene fiebre de treinta y ocho coma cinco, está irritable y el pañal tiene orina concentrada. Le piden orina completa y urocultivo.
+
+Hay que evaluar la hidratación y la temperatura. Después viene el aseo genital con técnica limpia: en el niño, sin forzar el prepucio; en la niña, separando los labios y limpiando desde el meato hacia el ano.
+
+Luego se cambian los guantes y se lavan las manos antes de poner la bolsa. La bolsa se pega desde el periné hacia el pubis, sin pliegues, y el pañal va suelto. Hay que revisarla seguido, y si se ensucia con deposición, se despega o se cumple el tiempo del protocolo, se saca, se repite el aseo y se pone una nueva.
+
+Una pregunta buena para la discusión: ¿sirve el urocultivo por bolsa para confirmar una infección urinaria? La respuesta es no. Se contamina con mucha facilidad. Si sale negativo, descarta; si sale positivo, hay que confirmarlo con cateterismo vesical.
+
+Estación dos. Tomás, seis años, veinte kilos. Está pálido, decaído y con fiebre que va y viene. Le piden hemograma y PCR. No necesita ayuno.
+
+Lo clave aquí es la contención segura, sin apretarle el tórax ni el cuello. La ligadura no debe estar puesta más de un minuto. La vena se palpa, no se golpea. La punción va con el bisel hacia arriba y sin andar buscando con la aguja.
+
+Se llena primero el tubo sin anticoagulante y después el de tapa lila. La ligadura se suelta antes de sacar la aguja, se activa el seguro y se bota al contenedor sin reencapsular. Después se comprime con tórula, sin doblar el brazo.
+
+Y se educa a la mamá o al papá sobre los cuidados y los signos de alarma, como sangrado o un hematoma que crece.
+
+Estación tres. Emilia, nueve años, treinta kilos. Tiene poliuria, polidipsia y está decaída. Le piden HGT, cetonemia y gases venosos.
+
+El orden es importante: primero se evalúa ABCDE y se toman signos vitales. Si hay signos de gravedad, se avisa antes de seguir pinchando.
+
+Para el HGT, el glucómetro tiene que estar limpio, vigente y bien codificado. Se elige el costado del pulpejo, con la piel tibia y sana, y se limpia con tórula seca, porque el alcohol húmedo altera el resultado. Tampoco se exprime fuerte el dedo, porque se diluye la muestra.
+
+Los gases van en jeringa heparinizada, sin burbujas, sellada y en hielo, al laboratorio de inmediato.
+
+Hay que manejar los números. La cetoacidosis se confirma con glicemia sobre doscientos, pH bajo siete coma treinta o bicarbonato bajo dieciocho, y cetonas en sangre o en orina. Una cetonemia de tres o más es muy probablemente cetoacidosis.
+
+Ante un resultado crítico se avisa con SBAR: situación, antecedentes, evaluación y recomendación. Se confirma que el otro recibió el mensaje, se registra a quién y a qué hora, y se prepara la hidratación endovenosa.
+
+Estación cuatro. Agustín, doce días de vida, tres coma cuatro kilos. Está inapetente, letárgico y con taquipnea. Le piden hemocultivos, PCR y gases.
+
+Como tiene más de setenta y dos horas de vida, es una sospecha de sepsis tardía. Los signos en el recién nacido son poco específicos: rechazo alimentario, letargia, temperatura inestable, que en la guagua es más frecuente hacia la hipotermia que hacia la fiebre, taquipnea, apneas y mala perfusión.
+
+Aquí la asepsia es estricta. Se usa mascarilla, se desinfecta el tapón del frasco, se respeta el tiempo de secado y no se tocan los puntos críticos. El hemocultivo va primero, con alrededor de un mililitro por frasco pediátrico; después la PCR y los gases.
+
+Durante todo el procedimiento hay que mantener la temperatura, con la cuna radiante y sin corrientes de aire. Se usa analgesia no farmacológica: contención, succión no nutritiva y sacarosa, según protocolo.
+
+Y después de la toma se vigila apnea, saturación, temperatura y sangrado, y se acompaña e informa al cuidador.
+
+Para cerrar, tres ideas.
+
+Primero, la mayoría de los errores de laboratorio se producen antes de que la muestra llegue al laboratorio: mala identificación, hemólisis, tubos sin mezclar, volumen insuficiente o mal transporte. Casi todos dependen de enfermería.
+
+Segundo, cada estación tiene su punto crítico. En la uno, el aseo y la bolsa. En la dos, la contención y el orden de los tubos. En la tres, evaluar antes de pinchar y comunicar el resultado crítico. Y en la cuatro, la asepsia, la temperatura y no pasarse del volumen.
+
+Y tercero, los valores que mencionamos son referencias generales. Siempre hay que contrastarlos con el protocolo del centro.
+
+Éxito mañana en el taller.
