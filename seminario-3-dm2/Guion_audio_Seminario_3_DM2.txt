@@ -59,6 +59,7 @@ Antes de administrar, enfermería verifica: la paciente correcta, la indicación
 La NPH es intermedia. Empieza en una a dos horas, su pico es de cuatro a doce horas, y dura de doce a dieciocho.
 La cristalina, o regular, es de acción corta. Empieza en treinta a sesenta minutos, su pico es de dos a cuatro horas, y dura de cinco a ocho. Es transparente. Por vía subcutánea se pone unos treinta minutos antes de comer. Es la única de las tres que puede ir por vía endovenosa, en el hospital y con protocolo.
 La glargina es basal prolongada. Empieza en una a dos horas, no tiene un pico marcado, y dura cerca de veinticuatro horas. Es transparente y no depende del horario de las comidas.
+Un riesgo real: la cristalina y la glargina son las dos transparentes, y se pueden confundir. Por eso siempre se lee la etiqueta.
 ¿Por qué no son intercambiables? Porque cada una se absorbe distinto, tiene su propio pico, su propia duración y su propio horario. Cambiar una por otra es otra indicación.
 Y la cristalina no se pone por una glicemia alta aislada. Se necesita mirar el patrón de varios días, lo que come la paciente, sus metas y una indicación médica concreta. En el caso, todavía no está indicada.
 
@@ -68,6 +69,7 @@ La hija le dio solo agua y la dejó descansar. Veinte minutos después seguía c
 
 # Pregunta siete. Reconocer y tratar la hipoglicemia.
 Cincuenta y tres es una hipoglicemia nivel dos, porque está bajo cincuenta y cuatro. Es clínicamente importante. ¿La causa? El pico de la NPH en la noche, más una cena escasa. Insulina sin comida.
+Recuerda: el nivel tres no se define por un número, sino porque la persona necesita ayuda de otro.
 Si está consciente y puede tragar: se le dan quince a veinte gramos de azúcar de absorción rápida. Por ejemplo, tabletas de glucosa, tres cucharaditas de azúcar en agua, o medio vaso de jugo. A los quince minutos se repite el hemoglucotest. Si sigue bajo setenta, se repite la dosis. Esa es la regla quince quince.
 Una vez que sube, se le da una colación, porque la insulina sigue actuando. Se vigila que no vuelva a bajar, y se avisa al equipo para revisar la dosis.
 El agua sola no sirve. No tiene azúcar.
