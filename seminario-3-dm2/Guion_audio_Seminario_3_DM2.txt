@@ -1,0 +1,87 @@
+# Seminario tres. Diabetes tipo dos. Repaso en audio para el docente.
+Hola. En este audio vamos a repasar el seminario tres de diabetes tipo dos, pregunta por pregunta, con palabras simples. La idea es que tengas clara la respuesta esperada y qué mirar en los grupos.
+El seminario sigue a una misma paciente en cuatro etapas. Primero el diagnóstico y la metformina. Después se agrega empagliflozina. Luego se inicia insulina. Y al final, una hipoglicemia y la educación a la familia.
+Los objetivos son tres: relacionar lo que pasa en el cuerpo con el tratamiento, explicar cómo actúan los fármacos y sus efectos adversos, y priorizar los cuidados de enfermería.
+
+# Etapa uno. Diagnóstico y tratamiento inicial.
+La paciente tiene setenta y dos años, diabetes tipo dos hace seis años, hipertensión y sobrepeso. Vive con su hija, que la ayuda en sus cuidados. Toma metformina, ochocientos cincuenta miligramos cada doce horas. En los últimos meses tiene diarrea y se siente hinchada, y por eso a veces se salta dosis.
+Sus exámenes: glicemia en ayunas de ciento ochenta y seis. Hemoglobina glicosilada de ocho coma siete por ciento. Creatinina normal, cero coma ochenta y cinco. Filtración glomerular de setenta y dos. Presión de ciento treinta y seis sobre ochenta y dos. E índice de masa corporal de veintinueve.
+
+# Pregunta uno. El mapa fisiopatológico.
+Aquí se pide un mapa conceptual. La idea central es simple: en la diabetes tipo dos fallan tres cosas a la vez.
+Primero, el músculo y la grasa no responden bien a la insulina. Eso es la resistencia a la insulina. La glucosa queda dando vueltas en la sangre en vez de entrar a las células.
+Segundo, el hígado tampoco obedece a la insulina. La insulina debería decirle al hígado que deje de fabricar glucosa, pero el hígado sigue fabricando. Por eso la glicemia sube en ayunas, aunque la paciente no haya comido nada.
+Tercero, el páncreas se va cansando. Las células beta producen cada vez menos insulina para lo que el cuerpo necesita.
+La suma de las tres da la hiperglicemia.
+¿Cómo se ve en los exámenes? La glicemia de ciento ochenta y seis muestra cómo está hoy. La hemoglobina glicosilada de ocho coma siete muestra cómo ha estado los últimos dos a tres meses. Es como la foto versus la película.
+Para preguntar a los grupos: ¿qué tejidos dejan de responder a la insulina? ¿Por qué sube la glicemia en ayunas? ¿Qué período refleja la hemoglobina glicosilada?
+Se considera logrado si el mapa tiene relaciones de causa y efecto, al menos tres mecanismos, y lo conecta con los dos exámenes.
+
+# Pregunta dos. La metformina.
+La metformina es una biguanida. Su efecto principal es que el hígado fabrique menos glucosa. Además mejora un poco la sensibilidad a la insulina.
+Un punto clave: la metformina no obliga al páncreas a soltar insulina. Por eso, sola, casi no produce hipoglicemia. Es una pregunta típica para hacer a los estudiantes.
+¿Cómo se relaciona con lo anterior? Ataca justo el problema del hígado que fabrica de más. Pero no detiene el cansancio del páncreas. Por eso la diabetes avanza igual con los años.
+Los efectos gastrointestinales son muy comunes: diarrea, hinchazón, náuseas. Pasan sobre todo al inicio o cuando se sube la dosis. ¿Qué hace enfermería? Evalúa qué tan fuertes son, si la paciente está hidratada, y en qué horario la toma. Sugiere tomarla con las comidas. Y avisa al médico, que puede subir la dosis más lento o cambiar a metformina de liberación prolongada.
+Lo que no se hace es suspenderla o cambiar la dosis por cuenta propia. Esa es la diferencia entre educar para la adherencia y modificar la indicación.
+Sobre el riñón: la metformina se elimina por la orina. Si el riñón falla, se acumula, y puede aparecer acidosis láctica, que es rara pero grave. Por eso se controla la filtración glomerular. Y hay que estar atento a la deshidratación, a una falla renal aguda, a la falta de oxígeno, a una enfermedad grave, o a un examen con medio de contraste.
+
+# Etapa dos. Se agrega empagliflozina.
+Tres meses después, la paciente toma mejor la metformina, pero sus glicemias en la casa siguen entre ciento sesenta y ciento noventa y cinco. El equipo mantiene la metformina y agrega empagliflozina, diez miligramos una vez al día.
+A las dos semanas, la paciente orina más seguido y se marea al ponerse de pie.
+
+# Pregunta tres. La empagliflozina.
+La empagliflozina es un inhibidor del cotransportador sodio glucosa tipo dos. Actúa en el riñón, en el túbulo proximal.
+Dicho fácil: normalmente el riñón rescata la glucosa y la devuelve a la sangre. Este fármaco bloquea ese rescate. Entonces la glucosa se va por la orina.
+¿Por qué combinarla con metformina? Porque atacan el problema por dos lados distintos. La metformina hace que el hígado fabrique menos. La empagliflozina hace que el riñón bote más. Y la empagliflozina no depende de la insulina para funcionar.
+Tres efectos adversos, y su explicación. Uno: orina más, porque la glucosa en la orina arrastra agua. Dos: deshidratación y mareos al pararse, porque pierde agua y sodio. Tres: infecciones por hongos en la zona genital, porque hay azúcar en la orina, y eso alimenta a los hongos.
+Hay un cuarto efecto, raro pero grave: la cetoacidosis. Lo importante es que puede aparecer con glicemias no tan altas. Por eso se le llama cetoacidosis euglicémica.
+¿Qué vigila enfermería? Cuatro cosas. La ingesta de líquidos y el balance hídrico. La presión arterial acostada y de pie. La función renal. Y los signos de infección genital o urinaria. Además, las glicemias, y revisar si toma diuréticos, porque suman pérdida de líquido.
+Y si la paciente tiene vómitos, diarrea o casi no come, ¿qué hace? Llama al equipo, y sigue su plan de días de enfermedad. Muchas veces se suspende la empagliflozina por unos días, pero solo según indicación. Se hidrata si puede, controla su glicemia y, si corresponde, las cetonas.
+
+# Pregunta cuatro. Los síntomas de la paciente.
+La paciente orina más y se marea. ¿Calza con el fármaco? Sí. Más glucosa en la orina significa más orina. Más orina significa menos volumen en los vasos. Y en una persona mayor, eso se nota como mareo al ponerse de pie.
+Pero antes de culpar al fármaco, hay que valorar. Tomar la presión acostada y de pie, y el pulso. Ver si está hidratada, cuánto come y cuánto orina. Pesarla. Hacer un hemoglucotest. Revisar la función renal y los otros remedios para la presión. Y descartar otras causas, como una infección urinaria.
+¿Cuándo se deriva con urgencia? Si se desmaya, si tiene la presión muy baja, si está confundida, si no puede tomar líquido, si orina muy poco, o si tiene dolor abdominal, vómitos o respiración rara. Eso último hace sospechar cetoacidosis.
+
+# Etapa tres. Se inicia insulina.
+Cuatro meses después, la paciente tiene mucha sed, orina mucho, está cansada y bajó cuatro kilos sin querer. Su glicemia en ayunas es de doscientos noventa y ocho, y la hemoglobina glicosilada de diez coma cuatro. Se descartan las crisis agudas, o sea, la cetoacidosis y el estado hiperosmolar.
+El médico indica insulina NPH, diez unidades, subcutánea, en la noche. Se conversa sobre la glargina como alternativa, y más adelante sobre la insulina cristalina. Pero ojo: ninguna de las dos está indicada todavía.
+
+# Pregunta cinco. Por qué insulina, y cómo es la NPH.
+¿Por qué insulina? Porque la glicemia está muy alta, la hemoglobina glicosilada sobre diez, y además hay síntomas y baja de peso. Eso indica que el páncreas ya no da abasto. El cuerpo está quemando reservas.
+La NPH es una insulina humana de acción intermedia. Lleva protamina, una sustancia que hace que se absorba más lento.
+Su perfil es así. Empieza a actuar en una a dos horas. Tiene su efecto máximo entre las cuatro y las doce horas. Y dura de doce a dieciocho horas, aproximadamente.
+Aquí está el punto clave. Si se pone en la noche, su pico cae en la madrugada, mientras la paciente duerme. Si cenó poco, puede hacer una hipoglicemia nocturna.
+Antes de administrar, enfermería verifica: la paciente correcta, la indicación, el tipo de insulina, la concentración de cien unidades por mililitro, la dosis en unidades, la glicemia y si comió. La NPH es turbia: hay que mezclarla suavemente, rodándola entre las manos, sin agitarla fuerte. Usar la jeringa correcta, rotar los sitios de punción, y revisar la fecha de apertura del frasco.
+¿NPH o glargina? La glargina es transparente, casi no tiene pico, y dura cerca de veinticuatro horas. Por eso produce menos hipoglicemia nocturna, aunque no la elimina. La NPH es más barata, pero tiene pico y es más variable. La glargina no se mezcla con nada. Y nunca se cambia una por otra sin orden médica.
+
+# Pregunta seis. La tabla de las tres insulinas.
+La NPH es intermedia. Empieza en una a dos horas, su pico es de cuatro a doce horas, y dura de doce a dieciocho.
+La cristalina, o regular, es de acción corta. Empieza en treinta a sesenta minutos, su pico es de dos a cuatro horas, y dura de cinco a ocho. Es transparente. Por vía subcutánea se pone unos treinta minutos antes de comer. Es la única de las tres que puede ir por vía endovenosa, en el hospital y con protocolo.
+La glargina es basal prolongada. Empieza en una a dos horas, no tiene un pico marcado, y dura cerca de veinticuatro horas. Es transparente y no depende del horario de las comidas.
+¿Por qué no son intercambiables? Porque cada una se absorbe distinto, tiene su propio pico, su propia duración y su propio horario. Cambiar una por otra es otra indicación.
+Y la cristalina no se pone por una glicemia alta aislada. Se necesita mirar el patrón de varios días, lo que come la paciente, sus metas y una indicación médica concreta. En el caso, todavía no está indicada.
+
+# Etapa cuatro. Hipoglicemia y educación.
+Un mes después de iniciar la NPH, la paciente se puso su dosis de la noche, pero cenó mucho menos que lo habitual. Horas después estaba sudorosa, con temblor, palpitaciones y débil. El hemoglucotest dio cincuenta y tres. Estaba consciente, orientada y podía tragar.
+La hija le dio solo agua y la dejó descansar. Veinte minutos después seguía con síntomas. Además, las dos dicen que no se sienten seguras leyendo la jeringa, y que tienen miedo de que vuelva a pasar.
+
+# Pregunta siete. Reconocer y tratar la hipoglicemia.
+Cincuenta y tres es una hipoglicemia nivel dos, porque está bajo cincuenta y cuatro. Es clínicamente importante. ¿La causa? El pico de la NPH en la noche, más una cena escasa. Insulina sin comida.
+Si está consciente y puede tragar: se le dan quince a veinte gramos de azúcar de absorción rápida. Por ejemplo, tabletas de glucosa, tres cucharaditas de azúcar en agua, o medio vaso de jugo. A los quince minutos se repite el hemoglucotest. Si sigue bajo setenta, se repite la dosis. Esa es la regla quince quince.
+Una vez que sube, se le da una colación, porque la insulina sigue actuando. Se vigila que no vuelva a bajar, y se avisa al equipo para revisar la dosis.
+El agua sola no sirve. No tiene azúcar.
+Si no puede tragar, o está con compromiso de conciencia: nada por boca, porque se puede aspirar. Se pide ayuda urgente, se protege la vía aérea, y se usa glucagón, o suero glucosado por vena, si lo hace el equipo de salud.
+
+# Pregunta ocho. Seguridad y educación.
+¿Qué errores y riesgos hay en el caso? Al menos cuatro. Se puso insulina y comió poco. La hija no supo tratar la hipoglicemia. Pueden equivocarse al leer la jeringa. Pueden confundir tipos de insulina. No tenían un plan de qué hacer. Y el miedo puede hacer que la paciente deje de ponerse la insulina.
+¿Qué se educa? Verificar el nombre y el tipo de insulina. Leer bien la jeringa de cien unidades. Y algo muy importante: no confundir unidades con mililitros. Diez unidades no son diez mililitros. También se enseña la técnica subcutánea, rotar los sitios, el horario, comer después de la dosis, registrar las glicemias, y guardar bien la insulina. Las cerradas van al refrigerador, nunca al congelador. La abierta se guarda según lo que diga el fabricante. Y nunca cambiar la dosis por su cuenta.
+Sobre la hipoglicemia: enseñar los síntomas, como sudor, temblor, palpitaciones, hambre, confusión. Andar siempre con azúcar. Aplicar la regla quince quince. Y consultar urgente si hay compromiso de conciencia, convulsiones, si no puede tragar, o si la hipoglicemia se repite.
+Y cómo comprobar que aprendieron: la técnica de enséñeme cómo lo haría. La paciente y la hija eligen la jeringa, cargan una dosis de prueba, explican el horario y cómo guardan la insulina, y dicen qué harían con una glicemia de cincuenta y tres. Con una lista de cotejo. Si se equivocan, se corrige y se repite hasta que lo hagan bien.
+
+# Cierre.
+Para cerrar, tres ideas que el estudiante debería llevarse.
+Uno. Cada fármaco ataca un problema distinto. La metformina, el hígado. La empagliflozina, el riñón. La insulina, la falta de insulina.
+Dos. Enfermería no cambia la indicación, pero valora, vigila y avisa a tiempo.
+Y tres. La educación se comprueba. No basta con explicar. Hay que ver a la paciente y a su familia hacerlo.
+Éxito con el seminario.
