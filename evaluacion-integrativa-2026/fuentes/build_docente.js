@@ -7,6 +7,13 @@ const {
 
 const [, , DATA, LOGO, OUT_DOCX, OUT_HTML] = process.argv;
 const casos = require(DATA);
+// La sección 5 (proceso de enfermería) se reemplaza por el desarrollo completo D1–D7 de pae_data.js
+const pae = require(path.join(path.dirname(path.resolve(DATA)), 'pae_data.js'));
+for (const c of casos) {
+  const i = c.blocks.findIndex(b => b.h && b.h.startsWith('5. '));
+  const j = c.blocks.findIndex(b => b.h && b.h.startsWith('6. '));
+  c.blocks.splice(i, j - i, ...pae[c.n]);
+}
 const FONT = 'Calibri';
 const W = 9360;
 const GREY = 'E7E6E6';
@@ -32,10 +39,10 @@ const cell = (text, width, o = {}) => new TableCell({
   shading: o.fill ? { fill: o.fill, type: ShadingType.CLEAR, color: 'auto' } : undefined,
   margins: { top: 60, bottom: 60, left: 100, right: 100 },
 });
-const COLS = { 2: [3700, W - 3700], 3: [2600, 3000, W - 5600] };
+const COLS = { 2: [3700, W - 3700], 3: [2000, 3900, W - 5900] };
 function table({ head, rows }) {
   const C = COLS[head.length];
-  const keep = rows.length <= 10;
+  const keep = rows.length <= 6;
   return new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: C, rows: [
     new TableRow({ tableHeader: true, children: head.map((h, i) => cell(h, C[i], { bold: true, fill: GREY })) }),
     ...rows.map((r, j) => new TableRow({ cantSplit: true, children: r.map((v, i) => cell(v, C[i], { bold: i === 0, last: !keep || j === rows.length - 1 })) })),
